@@ -36,6 +36,8 @@ backups/
 !tests/dados_sinteticos/**/*.xlsx
 !tests/dados_sinteticos/**/*.xls
 !tests/dados_sinteticos/**/*.ods
+# A base completa (500 alunos/ano) é gerada sob demanda e não é versionada.
+tests/dados_sinteticos/completa/
 
 # --- Python / uv ------------------------------------------------------
 __pycache__/
