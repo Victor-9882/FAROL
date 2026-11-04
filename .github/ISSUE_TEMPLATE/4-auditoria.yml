@@ -1,0 +1,52 @@
+name: Auditoria de linha de base
+description: Verificação independente antes de estabelecer uma linha de base ou criar uma tag (GConfig, Seção 7).
+title: "[Auditoria] vX.Y.Z"
+labels: ["auditoria"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Conduzida pelo **engenheiro de testes**. O gerente de configuração só cria a tag depois desta issue fechada com resultado aprovado.
+        Ao final, anote o resultado no Registro de Configuração (IC-05).
+  - type: input
+    id: linha-base
+    attributes:
+      label: Linha de base / versão auditada
+      placeholder: "v0.2.0 (Ingestão)"
+    validations:
+      required: true
+  - type: input
+    id: commit
+    attributes:
+      label: Commit da main auditado
+      placeholder: "SHA do commit"
+    validations:
+      required: false
+  - type: checkboxes
+    id: verificacoes
+    attributes:
+      label: Verificações
+      options:
+        - label: Os ICs previstos existem na versão e no local declarados
+        - label: Cada PDF entregue corresponde à sua fonte (.tex / .drawio / .pptx)
+        - label: Todas as SMs aprovadas para esta versão foram incorporadas
+        - label: Não há dados reais fora da pasta restrita do Drive (nem no repositório, issues ou PRs)
+        - label: "A partir da v0.1.0: o commit a ser marcado está na main e tem a CI aprovada"
+        - label: CHANGELOG / notas da release revisados
+  - type: dropdown
+    id: resultado
+    attributes:
+      label: Resultado
+      options:
+        - Aprovada
+        - Aprovada com ressalvas
+        - Reprovada
+    validations:
+      required: true
+  - type: textarea
+    id: nao-conformidades
+    attributes:
+      label: Não conformidades e ações
+      description: Abra um Defeito ou SM para cada não conformidade e liste os números aqui.
+    validations:
+      required: false

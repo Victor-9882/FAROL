@@ -1,0 +1,7 @@
+# Desliga issues em branco: toda issue usa um dos formulários desta pasta.
+blank_issues_enabled: false
+contact_links:
+  - name: Documentos do projeto (Google Drive)
+    # TODO: substituir pelo link da pasta FAROL/ no Drive (acesso restrito à equipe)
+    url: https://drive.google.com/drive/u/0/folders/1mWMvM95qavdnnAcuxPt_zUPwd3PA4aJT
+    about: Proposta, Documento de Requisitos, Relatório Descritivo, atas e Registro de Configuração (IC-05).

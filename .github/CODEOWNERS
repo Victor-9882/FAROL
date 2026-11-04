@@ -1,0 +1,32 @@
+# Revisores pedidos automaticamente (GConfig, Tabela 4).
+# TODO: trocar cada @SUBSTITUIR-<nome> pelo usuário real do GitHub.
+# A última regra que casar com o arquivo é a que vale.
+#
+# Victor  -> @SUBSTITUIR-victor   (gerente de configuração)
+# Eduardo -> @SUBSTITUIR-eduardo  (analista de sistemas)
+# Matheus -> @SUBSTITUIR-matheus  (programador; revisa PRs do Pietro)
+# Pietro  -> @SUBSTITUIR-pietro   (programador; dependências e contêineres)
+# Yuri    -> @SUBSTITUIR-yuri     (engenheiro de testes; CI e dados sintéticos)
+
+# Configuração do repositório (templates, CODEOWNERS, Dependabot)
+/.github/                    @SUBSTITUIR-victor
+
+# CI (IC-09)
+/.github/workflows/          @SUBSTITUIR-yuri
+
+# Testes e bases sintéticas (IC-09)
+/tests/                      @SUBSTITUIR-yuri
+
+# Ingestão: implementada pelo Pietro, revisada pelo Matheus
+/ingestao/                   @SUBSTITUIR-matheus
+
+# Dependências e contêineres (IC-08)
+/pyproject.toml              @SUBSTITUIR-pietro
+/uv.lock                     @SUBSTITUIR-pietro
+/Dockerfile                  @SUBSTITUIR-pietro
+/docker-compose*.yml         @SUBSTITUIR-pietro
+/.env.example                @SUBSTITUIR-pietro
+
+# Valores padrão das regras de alerta e documentação (IC-10)
+/config/regras_padrao.yaml   @SUBSTITUIR-eduardo
+/docs/                       @SUBSTITUIR-eduardo

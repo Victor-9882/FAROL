@@ -1,0 +1,82 @@
+# =====================================================================
+# FAROL — .gitignore
+# O repositório é PÚBLICO. Dados reais de alunos e credenciais nunca
+# podem entrar no histórico (NF017, LGPD; GConfig Seções 2 e 6).
+# =====================================================================
+
+# --- Credenciais e configuração local --------------------------------
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+credentials*.json
+service-account*.json
+*-service-account.json
+secrets/
+
+# --- Dados: planilhas, exportações e dumps ---------------------------
+# Bloqueados em qualquer lugar do repositório...
+*.csv
+*.tsv
+*.xlsx
+*.xlsm
+*.xls
+*.ods
+*.parquet
+*.dump
+*.backup
+*.sql.gz
+dados/
+backups/
+# ...exceto a base sintética usada em testes.
+!tests/dados_sinteticos/**/*.csv
+!tests/dados_sinteticos/**/*.tsv
+!tests/dados_sinteticos/**/*.xlsx
+!tests/dados_sinteticos/**/*.xls
+!tests/dados_sinteticos/**/*.ods
+
+# --- Python / uv ------------------------------------------------------
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+build/
+dist/
+.python-version
+
+# --- Django -----------------------------------------------------------
+db.sqlite3
+db.sqlite3-journal
+staticfiles/
+media/
+*.log
+
+# --- Testes e qualidade ----------------------------------------------
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+coverage.xml
+.ruff_cache/
+.mypy_cache/
+test-results/
+playwright-report/
+k6-resultados/
+
+# --- Relatórios gerados localmente -----------------------------------
+saida/
+
+# --- Node (caso algum utilitário de front precise) -------------------
+node_modules/
+
+# --- Editores e sistema operacional -----------------------------------
+.vscode/*
+!.vscode/extensions.json
+.idea/
+*.swp
+.DS_Store
+Thumbs.db
+desktop.ini

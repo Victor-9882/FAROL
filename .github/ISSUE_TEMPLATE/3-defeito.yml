@@ -1,0 +1,82 @@
+name: Defeito
+description: Comportamento que viola um requisito ou falha encontrada nos testes.
+title: "[Defeito] "
+labels: ["defeito"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        > ⚠️ **Repositório público.** Não anexe prints, logs ou arquivos com dados reais de alunos. Reproduza o defeito com a base sintética (NF017).
+
+        Na triagem, o engenheiro de testes aplica a label de severidade (`sev:critica`, `sev:alta`, `sev:media`, `sev:baixa`).
+  - type: dropdown
+    id: severidade
+    attributes:
+      label: Severidade
+      description: Defeito que expõe dados nominais a quem não pode vê-los é sempre **crítico** (Plano de Testes).
+      options:
+        - Crítica
+        - Alta
+        - Média
+        - Baixa
+    validations:
+      required: true
+  - type: dropdown
+    id: modulo
+    attributes:
+      label: Módulo
+      options:
+        - Ingestão
+        - Indicadores
+        - Alertas
+        - Intervenções/Relatórios
+        - Não sei
+    validations:
+      required: false
+  - type: dropdown
+    id: ambiente
+    attributes:
+      label: Ambiente
+      options:
+        - Desenvolvimento (local)
+        - Homologação
+        - Produção
+    validations:
+      required: true
+  - type: input
+    id: requisito
+    attributes:
+      label: Requisito violado
+      placeholder: "RN008"
+    validations:
+      required: false
+  - type: textarea
+    id: passos
+    attributes:
+      label: Passos para reproduzir
+      value: |
+        1.
+        2.
+        3.
+    validations:
+      required: true
+  - type: textarea
+    id: esperado
+    attributes:
+      label: Resultado esperado
+    validations:
+      required: true
+  - type: textarea
+    id: obtido
+    attributes:
+      label: Resultado obtido
+    validations:
+      required: true
+  - type: textarea
+    id: evidencias
+    attributes:
+      label: Evidências
+      description: Mensagens de erro, trechos de log ou prints feitos com dados sintéticos.
+      render: text
+    validations:
+      required: false

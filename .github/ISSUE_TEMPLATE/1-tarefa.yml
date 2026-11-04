@@ -1,0 +1,56 @@
+name: Tarefa
+description: Implementar algo já previsto no Documento de Requisitos v1.0 (não altera linha de base).
+title: "[Tarefa] "
+labels: ["tarefa"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        > ⚠️ **Repositório público.** Nunca cole dados reais de alunos (nomes, matrículas, notas, prints de planilhas) em issues, comentários ou anexos. Use apenas dados sintéticos (NF017).
+
+        Se a tarefa **muda** algo já aprovado (requisito, regra de negócio, arquitetura, diagrama entregue), use o formulário **Solicitação de Mudança**.
+  - type: textarea
+    id: descricao
+    attributes:
+      label: O que deve ser feito
+      description: Descreva a tarefa de forma objetiva.
+    validations:
+      required: true
+  - type: input
+    id: requisitos
+    attributes:
+      label: Requisitos relacionados
+      description: Identificadores do Documento de Requisitos.
+      placeholder: "RF003, RN001, RN005, NF006"
+    validations:
+      required: true
+  - type: dropdown
+    id: modulo
+    attributes:
+      label: Módulo
+      options:
+        - Ingestão
+        - Indicadores
+        - Alertas
+        - Intervenções/Relatórios
+    validations:
+      required: false
+  - type: textarea
+    id: criterio-pronto
+    attributes:
+      label: Critério de pronto
+      description: O card só vai para Concluído quando todos os itens estiverem atendidos e o PR for integrado com a CI aprovada.
+      value: |
+        - [ ] Comportamento descrito nos requisitos acima implementado
+        - [ ] Testes de unidade/integração cobrindo as regras envolvidas
+        - [ ] Apenas dados sintéticos usados nos testes
+        - [ ] Documentação atualizada, se aplicável
+    validations:
+      required: true
+  - type: textarea
+    id: notas
+    attributes:
+      label: Observações
+      description: Dependências, dúvidas, links para atas ou diagramas no Drive.
+    validations:
+      required: false

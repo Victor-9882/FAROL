@@ -1,0 +1,87 @@
+name: Solicitação de Mudança (SM)
+description: Alteração em um Item de Configuração de linha de base (GConfig, Seção 5).
+title: "[SM] "
+labels: ["solicitacao-mudanca", "sm:em-analise"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        > ⚠️ **Repositório público.** Nunca cole dados reais de alunos em issues, comentários ou anexos (NF017).
+
+        **Fluxo (GConfig, Figura 2):** registrar → analisar impacto (analista de sistemas) → se altera requisito, validar com a Direção do CASD → aprovar (gerente de configuração) → implementar em branch → revisar (outro integrante) → integrar, versionar e registrar.
+
+        **Labels de estado:** `sm:em-analise` → `sm:aguardando-direcao` (só se altera requisito) → `sm:aprovada` ou `sm:rejeitada`.
+        SM rejeitada é fechada como *not planned*, com a justificativa em comentário. O número desta issue é o identificador da SM.
+  - type: input
+    id: solicitante
+    attributes:
+      label: Solicitante
+      description: Quem pediu a mudança (integrante da equipe ou Direção do CASD).
+      placeholder: "Direção do CASD (reunião de dd/mm)"
+    validations:
+      required: true
+  - type: dropdown
+    id: tipo
+    attributes:
+      label: Tipo
+      options:
+        - Corretiva
+        - Evolutiva
+        - De requisito
+    validations:
+      required: true
+  - type: textarea
+    id: motivacao
+    attributes:
+      label: Motivação
+      description: Por que a mudança é necessária?
+    validations:
+      required: true
+  - type: checkboxes
+    id: ics
+    attributes:
+      label: Itens de Configuração afetados
+      options:
+        - label: IC-01 Proposta, Doc. de Requisitos e Relatório Descritivo
+        - label: IC-02 Fontes dos diagramas (arquitetura, classes, DER)
+        - label: IC-03 Atas de reunião com o cliente
+        - label: IC-05 Registro de Configuração e Mudanças
+        - label: IC-06 Plano de Controle de Configuração
+        - label: IC-07 Código-fonte, esquema do banco e migrações
+        - label: IC-08 Dependências, contêineres e .env.example
+        - label: IC-09 Pipeline de CI, testes e bases sintéticas
+        - label: IC-10 Valores padrão das regras de alerta e guia de uso
+        - label: IC-11 Hospedagem, banco de produção e backup
+  - type: input
+    id: requisitos
+    attributes:
+      label: Requisitos afetados
+      placeholder: "RF015, RN008"
+    validations:
+      required: false
+  - type: dropdown
+    id: altera-requisito
+    attributes:
+      label: A mudança altera requisito ou escopo?
+      description: Se sim, precisa de validação da Direção do CASD e gera nova versão maior do Documento de Requisitos.
+      options:
+        - Não
+        - Sim
+        - Ainda não sei
+    validations:
+      required: true
+  - type: textarea
+    id: impacto
+    attributes:
+      label: Análise de impacto
+      description: Preenchida pelo analista de sistemas (pode ficar em branco ao abrir). Use os identificadores RF/RN/NF.
+    validations:
+      required: false
+  - type: textarea
+    id: decisao
+    attributes:
+      label: Decisão e versão resultante
+      description: Preenchida pelo gerente de configuração (pode ficar em branco ao abrir).
+      placeholder: "Aprovada em dd/mm — incorporada na v0.3.0 / Doc. de Requisitos v2.0"
+    validations:
+      required: false
