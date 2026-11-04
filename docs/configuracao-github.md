@@ -65,6 +65,7 @@ Regras a marcar:
     - `Estilo (ruff)`
     - `Migrações em banco vazio`
     - `Testes`
+    - `Ambiente Docker Compose`
     - `Título em Conventional Commits`
 - [x] **Block force pushes**
 
@@ -170,5 +171,5 @@ gh release create v0.2.0 --generate-notes --title "v0.2.0 — Ingestão"
 - [x] `pyproject.toml`, `uv.lock` e projeto Django (`manage.py` na raiz). A CI roda migrações e testes.
 - [x] Marker `regras` registrado no `pyproject.toml`. Falta marcar os testes das RN001, RN002, RN005, RN008 e RN009 quando forem escritos.
 - [x] `fail_under` definido em `[tool.coverage.report]`.
-- [ ] `.env.example`, `Dockerfile` e `docker-compose.yml`.
+- [x] `.env.example`, `Dockerfile` e `docker-compose.yml`.
 - [ ] `config/regras_padrao.yaml`, quando os limiares forem definidos com o cliente.
