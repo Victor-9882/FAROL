@@ -1,0 +1,736 @@
+data_tema;tema;matricula;nome;entregue;c1;c2;c3;c4;c5;total
+04/02/2025;Desafios da mobilidade urbana;S250005;Carla Nogueira Santos;S;80;120;80;80;40;400
+04/02/2025;Desafios da mobilidade urbana;S250006;Nicolas Cardoso Esteves;N;;;;;;
+04/02/2025;Desafios da mobilidade urbana;S250007;Ana Martins Souza;S;120;160;160;160;200;800
+04/02/2025;Desafios da mobilidade urbana;S250008;Thiago Garcia Lopes;S;200;160;160;120;200;840
+04/02/2025;Desafios da mobilidade urbana;S250009;Nicolas Souza Pinto;N;;;;;;
+04/02/2025;Desafios da mobilidade urbana;S250010;Débora Ribeiro Vieira;S;80;160;120;120;120;600
+04/02/2025;Desafios da mobilidade urbana;S250012;Beatriz Lopes Batista;S;200;160;120;200;120;800
+04/02/2025;Desafios da mobilidade urbana;S250013;Pietra Dias Lopes;S;200;200;160;200;160;920
+04/02/2025;Desafios da mobilidade urbana;S250016;Wesley Lima Pereira;S;120;40;80;120;80;440
+04/02/2025;Desafios da mobilidade urbana;S250017;Valentina Lopes Nunes;N;;;;;;
+04/02/2025;Desafios da mobilidade urbana;S250020;Sofia Cardoso Santos;S;160;120;160;120;160;720
+11/02/2025;O acesso à cultura nas periferias;S250005;Carla Nogueira Santos;N;;;;;;
+11/02/2025;O acesso à cultura nas periferias;S250006;Nicolas Cardoso Esteves;S;120;80;80;120;80;480
+11/02/2025;O acesso à cultura nas periferias;S250007;Ana Martins Souza;S;120;160;200;120;160;760
+11/02/2025;O acesso à cultura nas periferias;S250008;Thiago Garcia Lopes;S;200;160;160;120;200;840
+11/02/2025;O acesso à cultura nas periferias;S250009;Nicolas Souza Pinto;S;120;40;40;120;80;400
+11/02/2025;O acesso à cultura nas periferias;S250010;Débora Ribeiro Vieira;S;80;80;160;160;160;640
+11/02/2025;O acesso à cultura nas periferias;S250012;Beatriz Lopes Batista;N;;;;;;
+11/02/2025;O acesso à cultura nas periferias;S250013;Pietra Dias Lopes;N;;;;;;
+11/02/2025;O acesso à cultura nas periferias;S250016;Wesley Lima Pereira;S;120;40;120;80;80;440
+11/02/2025;O acesso à cultura nas periferias;S250017;Valentina Lopes Nunes;N;;;;;;
+11/02/2025;O acesso à cultura nas periferias;S250020;Sofia Cardoso Santos;N;;;;;;
+18/02/2025;Saúde mental na juventude;S250005;Carla Nogueira Santos;S;80;120;80;120;80;480
+18/02/2025;Saúde mental na juventude;S250006;Nicolas Cardoso Esteves;N;;;;;;
+18/02/2025;Saúde mental na juventude;S250007;Ana Martins Souza;N;;;;;;
+18/02/2025;Saúde mental na juventude;S250008;Thiago Garcia Lopes;S;200;200;120;120;160;800
+18/02/2025;Saúde mental na juventude;S250009;Nicolas Souza Pinto;N;;;;;;
+18/02/2025;Saúde mental na juventude;S250010;Débora Ribeiro Vieira;S;80;80;120;80;160;520
+18/02/2025;Saúde mental na juventude;S250012;Beatriz Lopes Batista;N;;;;;;
+18/02/2025;Saúde mental na juventude;S250013;Pietra Dias Lopes;N;;;;;;
+18/02/2025;Saúde mental na juventude;S250016;Wesley Lima Pereira;N;;;;;;
+18/02/2025;Saúde mental na juventude;S250017;Valentina Lopes Nunes;N;;;;;;
+18/02/2025;Saúde mental na juventude;S250020;Sofia Cardoso Santos;S;80;80;80;160;120;520
+25/02/2025;A desinformação nas redes sociais;S250005;Carla Nogueira Santos;S;80;80;80;120;80;440
+25/02/2025;A desinformação nas redes sociais;S250006;Nicolas Cardoso Esteves;N;;;;;;
+25/02/2025;A desinformação nas redes sociais;S250007;Ana Martins Souza;S;200;160;200;200;120;880
+25/02/2025;A desinformação nas redes sociais;S250008;Thiago Garcia Lopes;S;120;120;160;120;160;680
+25/02/2025;A desinformação nas redes sociais;S250009;Nicolas Souza Pinto;S;80;40;80;80;120;400
+25/02/2025;A desinformação nas redes sociais;S250010;Débora Ribeiro Vieira;S;160;120;120;120;80;600
+25/02/2025;A desinformação nas redes sociais;S250012;Beatriz Lopes Batista;S;160;120;200;200;160;840
+25/02/2025;A desinformação nas redes sociais;S250013;Pietra Dias Lopes;S;200;120;120;120;160;720
+25/02/2025;A desinformação nas redes sociais;S250016;Wesley Lima Pereira;S;120;120;40;40;120;440
+25/02/2025;A desinformação nas redes sociais;S250017;Valentina Lopes Nunes;S;120;160;200;160;120;760
+25/02/2025;A desinformação nas redes sociais;S250020;Sofia Cardoso Santos;S;80;160;80;80;80;480
+04/03/2025;Trabalho e tecnologia;S250005;Carla Nogueira Santos;S;120;80;40;120;120;480
+04/03/2025;Trabalho e tecnologia;S250006;Nicolas Cardoso Esteves;S;80;160;80;80;80;480
+04/03/2025;Trabalho e tecnologia;S250007;Ana Martins Souza;S;160;120;120;200;160;760
+04/03/2025;Trabalho e tecnologia;S250008;Thiago Garcia Lopes;S;200;120;200;200;200;920
+04/03/2025;Trabalho e tecnologia;S250009;Nicolas Souza Pinto;S;40;80;40;40;40;240
+04/03/2025;Trabalho e tecnologia;S250010;Débora Ribeiro Vieira;S;80;160;120;120;80;560
+04/03/2025;Trabalho e tecnologia;S250012;Beatriz Lopes Batista;N;;;;;;
+04/03/2025;Trabalho e tecnologia;S250013;Pietra Dias Lopes;N;;;;;;
+04/03/2025;Trabalho e tecnologia;S250016;Wesley Lima Pereira;S;80;80;120;80;120;480
+04/03/2025;Trabalho e tecnologia;S250017;Valentina Lopes Nunes;N;;;;;;
+04/03/2025;Trabalho e tecnologia;S250020;Sofia Cardoso Santos;S;80;80;120;80;80;440
+11/03/2025;O papel da ciência na sociedade;S250002;Tatiane Gomes Nunes;S;120;120;120;120;120;600
+11/03/2025;O papel da ciência na sociedade;S250003;Carla Henriques Queiroz;N;;;;;;
+11/03/2025;O papel da ciência na sociedade;S250005;Carla Nogueira Santos;N;;;;;;
+11/03/2025;O papel da ciência na sociedade;S250006;Nicolas Cardoso Esteves;N;;;;;;
+11/03/2025;O papel da ciência na sociedade;S250007;Ana Martins Souza;S;120;200;120;160;160;760
+11/03/2025;O papel da ciência na sociedade;S250008;Thiago Garcia Lopes;S;120;160;160;160;160;760
+11/03/2025;O papel da ciência na sociedade;S250009;Nicolas Souza Pinto;N;;;;;;
+11/03/2025;O papel da ciência na sociedade;S250010;Débora Ribeiro Vieira;S;120;80;120;80;120;520
+11/03/2025;O papel da ciência na sociedade;S250012;Beatriz Lopes Batista;S;160;160;120;120;200;760
+11/03/2025;O papel da ciência na sociedade;S250013;Pietra Dias Lopes;S;200;200;160;160;200;920
+11/03/2025;O papel da ciência na sociedade;S250014;Paulo Cardoso Vieira;N;;;;;;
+11/03/2025;O papel da ciência na sociedade;S250016;Wesley Lima Pereira;S;80;80;120;120;120;520
+11/03/2025;O papel da ciência na sociedade;S250017;Valentina Lopes Nunes;S;120;160;200;120;160;760
+11/03/2025;O papel da ciência na sociedade;S250018;Nicolas Pinto Rocha;S;80;80;160;160;80;560
+11/03/2025;O papel da ciência na sociedade;S250019;Thiago Garcia Santos;N;;;;;;
+11/03/2025;O papel da ciência na sociedade;S250020;Sofia Cardoso Santos;N;;;;;;
+18/03/2025;Desperdício de alimentos;S250002;Tatiane Gomes Nunes;S;200;200;160;160;160;880
+18/03/2025;Desperdício de alimentos;S250003;Carla Henriques Queiroz;N;;;;;;
+18/03/2025;Desperdício de alimentos;S250005;Carla Nogueira Santos;S;80;40;120;120;80;440
+18/03/2025;Desperdício de alimentos;S250006;Nicolas Cardoso Esteves;S;80;80;160;160;120;600
+18/03/2025;Desperdício de alimentos;S250007;Ana Martins Souza;S;200;120;160;160;160;800
+18/03/2025;Desperdício de alimentos;S250008;Thiago Garcia Lopes;S;200;160;160;120;120;760
+18/03/2025;Desperdício de alimentos;S250009;Nicolas Souza Pinto;N;;;;;;
+18/03/2025;Desperdício de alimentos;S250010;Débora Ribeiro Vieira;S;120;160;160;160;120;720
+18/03/2025;Desperdício de alimentos;S250012;Beatriz Lopes Batista;N;;;;;;
+18/03/2025;Desperdício de alimentos;S250013;Pietra Dias Lopes;S;120;200;200;120;160;800
+18/03/2025;Desperdício de alimentos;S250014;Paulo Cardoso Vieira;S;200;120;160;200;120;800
+18/03/2025;Desperdício de alimentos;S250016;Wesley Lima Pereira;S;120;80;40;80;40;360
+18/03/2025;Desperdício de alimentos;S250017;Valentina Lopes Nunes;N;;;;;;
+18/03/2025;Desperdício de alimentos;S250018;Nicolas Pinto Rocha;S;80;120;120;160;80;560
+18/03/2025;Desperdício de alimentos;S250019;Thiago Garcia Santos;S;120;200;120;160;120;720
+18/03/2025;Desperdício de alimentos;S250020;Sofia Cardoso Santos;S;120;160;80;80;160;600
+25/03/2025;Inclusão digital de idosos;S250002;Tatiane Gomes Nunes;S;160;160;120;120;200;760
+25/03/2025;Inclusão digital de idosos;S250003;Carla Henriques Queiroz;N;;;;;;
+25/03/2025;Inclusão digital de idosos;S250005;Carla Nogueira Santos;S;120;120;80;80;40;440
+25/03/2025;Inclusão digital de idosos;S250006;Nicolas Cardoso Esteves;N;;;;;;
+25/03/2025;Inclusão digital de idosos;S250007;Ana Martins Souza;N;;;;;;
+25/03/2025;Inclusão digital de idosos;S250008;Thiago Garcia Lopes;N;;;;;;
+25/03/2025;Inclusão digital de idosos;S250009;Nicolas Souza Pinto;S;120;40;80;80;40;360
+25/03/2025;Inclusão digital de idosos;S250010;Débora Ribeiro Vieira;S;160;160;160;80;160;720
+25/03/2025;Inclusão digital de idosos;S250012;Beatriz Lopes Batista;N;;;;;;
+25/03/2025;Inclusão digital de idosos;S250013;Pietra Dias Lopes;S;120;120;160;160;160;720
+25/03/2025;Inclusão digital de idosos;S250014;Paulo Cardoso Vieira;S;120;120;120;120;160;640
+25/03/2025;Inclusão digital de idosos;S250016;Wesley Lima Pereira;S;80;40;120;120;120;480
+25/03/2025;Inclusão digital de idosos;S250017;Valentina Lopes Nunes;S;200;200;160;160;160;880
+25/03/2025;Inclusão digital de idosos;S250018;Nicolas Pinto Rocha;N;;;;;;
+25/03/2025;Inclusão digital de idosos;S250019;Thiago Garcia Santos;S;160;160;160;200;200;880
+25/03/2025;Inclusão digital de idosos;S250020;Sofia Cardoso Santos;N;;;;;;
+01/04/2025;Preservação dos recursos hídricos;S250002;Tatiane Gomes Nunes;S;120;120;160;200;200;800
+01/04/2025;Preservação dos recursos hídricos;S250003;Carla Henriques Queiroz;S;160;160;120;80;80;600
+01/04/2025;Preservação dos recursos hídricos;S250005;Carla Nogueira Santos;N;;;;;;
+01/04/2025;Preservação dos recursos hídricos;S250006;Nicolas Cardoso Esteves;N;;;;;;
+01/04/2025;Preservação dos recursos hídricos;S250007;Ana Martins Souza;S;200;200;200;120;200;920
+01/04/2025;Preservação dos recursos hídricos;S250008;Thiago Garcia Lopes;N;;;;;;
+01/04/2025;Preservação dos recursos hídricos;S250009;Nicolas Souza Pinto;S;80;80;120;80;80;440
+01/04/2025;Preservação dos recursos hídricos;S250010;Débora Ribeiro Vieira;S;160;120;160;80;160;680
+01/04/2025;Preservação dos recursos hídricos;S250012;Beatriz Lopes Batista;S;120;200;200;120;160;800
+01/04/2025;Preservação dos recursos hídricos;S250013;Pietra Dias Lopes;S;200;160;120;120;200;800
+01/04/2025;Preservação dos recursos hídricos;S250014;Paulo Cardoso Vieira;S;120;200;120;120;120;680
+01/04/2025;Preservação dos recursos hídricos;S250016;Wesley Lima Pereira;S;80;40;40;40;40;240
+01/04/2025;Preservação dos recursos hídricos;S250017;Valentina Lopes Nunes;N;;;;;;
+01/04/2025;Preservação dos recursos hídricos;S250018;Nicolas Pinto Rocha;S;120;120;160;80;160;640
+01/04/2025;Preservação dos recursos hídricos;S250019;Thiago Garcia Santos;N;;;;;;
+01/04/2025;Preservação dos recursos hídricos;S250020;Sofia Cardoso Santos;N;;;;;;
+08/04/2025;Educação financeira nas escolas;S250002;Tatiane Gomes Nunes;S;120;160;200;160;120;760
+08/04/2025;Educação financeira nas escolas;S250003;Carla Henriques Queiroz;S;160;160;120;120;80;640
+08/04/2025;Educação financeira nas escolas;S250005;Carla Nogueira Santos;N;;;;;;
+08/04/2025;Educação financeira nas escolas;S250006;Nicolas Cardoso Esteves;N;;;;;;
+08/04/2025;Educação financeira nas escolas;S250007;Ana Martins Souza;S;120;200;160;200;120;800
+08/04/2025;Educação financeira nas escolas;S250008;Thiago Garcia Lopes;S;160;160;120;160;160;760
+08/04/2025;Educação financeira nas escolas;S250009;Nicolas Souza Pinto;S;40;40;40;80;80;280
+08/04/2025;Educação financeira nas escolas;S250010;Débora Ribeiro Vieira;S;160;120;120;80;160;640
+08/04/2025;Educação financeira nas escolas;S250012;Beatriz Lopes Batista;N;;;;;;
+08/04/2025;Educação financeira nas escolas;S250013;Pietra Dias Lopes;N;;;;;;
+08/04/2025;Educação financeira nas escolas;S250014;Paulo Cardoso Vieira;S;160;160;120;120;120;680
+08/04/2025;Educação financeira nas escolas;S250016;Wesley Lima Pereira;S;80;80;40;120;120;440
+08/04/2025;Educação financeira nas escolas;S250017;Valentina Lopes Nunes;N;;;;;;
+08/04/2025;Educação financeira nas escolas;S250018;Nicolas Pinto Rocha;N;;;;;;
+08/04/2025;Educação financeira nas escolas;S250019;Thiago Garcia Santos;S;160;200;120;120;160;760
+08/04/2025;Educação financeira nas escolas;S250020;Sofia Cardoso Santos;S;80;80;120;160;80;520
+15/04/2025;Desafios da mobilidade urbana;S250001;Olívia Martins Freitas;N;;;;;;
+15/04/2025;Desafios da mobilidade urbana;S250002;Tatiane Gomes Nunes;S;200;160;200;160;120;840
+15/04/2025;Desafios da mobilidade urbana;S250003;Carla Henriques Queiroz;S;160;160;160;120;80;680
+15/04/2025;Desafios da mobilidade urbana;S250004;Mariana Queiroz Esteves;S;160;160;200;120;200;840
+15/04/2025;Desafios da mobilidade urbana;S250005;Carla Nogueira Santos;N;;;;;;
+15/04/2025;Desafios da mobilidade urbana;S250006;Nicolas Cardoso Esteves;S;80;160;80;160;160;640
+15/04/2025;Desafios da mobilidade urbana;S250007;Ana Martins Souza;N;;;;;;
+15/04/2025;Desafios da mobilidade urbana;S250008;Thiago Garcia Lopes;N;;;;;;
+15/04/2025;Desafios da mobilidade urbana;S250009;Nicolas Souza Pinto;N;;;;;;
+15/04/2025;Desafios da mobilidade urbana;S250010;Débora Ribeiro Vieira;S;160;80;160;120;120;640
+15/04/2025;Desafios da mobilidade urbana;S250011;Lucas Ferreira Oliveira;S;120;120;80;120;120;560
+15/04/2025;Desafios da mobilidade urbana;S250012;Beatriz Lopes Batista;S;200;200;160;160;120;840
+15/04/2025;Desafios da mobilidade urbana;S250013;Pietra Dias Lopes;S;200;120;200;160;200;880
+15/04/2025;Desafios da mobilidade urbana;S250014;Paulo Cardoso Vieira;S;200;160;160;160;120;800
+15/04/2025;Desafios da mobilidade urbana;S250015;Daniel Pinto Campos;N;;;;;;
+15/04/2025;Desafios da mobilidade urbana;S250016;Wesley Lima Pereira;S;80;80;80;120;80;440
+15/04/2025;Desafios da mobilidade urbana;S250017;Valentina Lopes Nunes;S;120;200;200;120;200;840
+15/04/2025;Desafios da mobilidade urbana;S250018;Nicolas Pinto Rocha;S;120;120;80;120;160;600
+15/04/2025;Desafios da mobilidade urbana;S250019;Thiago Garcia Santos;S;120;120;160;160;200;760
+15/04/2025;Desafios da mobilidade urbana;S250020;Sofia Cardoso Santos;S;80;160;120;120;80;560
+22/04/2025;O acesso à cultura nas periferias;S250001;Olívia Martins Freitas;S;120;120;80;40;80;440
+22/04/2025;O acesso à cultura nas periferias;S250002;Tatiane Gomes Nunes;N;;;;;;
+22/04/2025;O acesso à cultura nas periferias;S250003;Carla Henriques Queiroz;N;;;;;;
+22/04/2025;O acesso à cultura nas periferias;S250004;Mariana Queiroz Esteves;S;120;160;120;200;120;720
+22/04/2025;O acesso à cultura nas periferias;S250005;Carla Nogueira Santos;S;40;40;120;120;120;440
+22/04/2025;O acesso à cultura nas periferias;S250006;Nicolas Cardoso Esteves;S;120;80;120;120;120;560
+22/04/2025;O acesso à cultura nas periferias;S250007;Ana Martins Souza;N;;;;;;
+22/04/2025;O acesso à cultura nas periferias;S250008;Thiago Garcia Lopes;S;120;160;160;160;200;800
+22/04/2025;O acesso à cultura nas periferias;S250009;Nicolas Souza Pinto;N;;;;;;
+22/04/2025;O acesso à cultura nas periferias;S250010;Débora Ribeiro Vieira;S;120;160;80;160;120;640
+22/04/2025;O acesso à cultura nas periferias;S250011;Lucas Ferreira Oliveira;S;40;80;40;80;120;360
+22/04/2025;O acesso à cultura nas periferias;S250012;Beatriz Lopes Batista;N;;;;;;
+22/04/2025;O acesso à cultura nas periferias;S250013;Pietra Dias Lopes;N;;;;;;
+22/04/2025;O acesso à cultura nas periferias;S250014;Paulo Cardoso Vieira;S;120;200;120;200;200;840
+22/04/2025;O acesso à cultura nas periferias;S250015;Daniel Pinto Campos;N;;;;;;
+22/04/2025;O acesso à cultura nas periferias;S250016;Wesley Lima Pereira;S;80;40;40;40;80;280
+22/04/2025;O acesso à cultura nas periferias;S250017;Valentina Lopes Nunes;N;;;;;;
+22/04/2025;O acesso à cultura nas periferias;S250018;Nicolas Pinto Rocha;N;;;;;;
+22/04/2025;O acesso à cultura nas periferias;S250019;Thiago Garcia Santos;S;160;200;200;200;160;920
+22/04/2025;O acesso à cultura nas periferias;S250020;Sofia Cardoso Santos;N;;;;;;
+29/04/2025;Saúde mental na juventude;S250001;Olívia Martins Freitas;N;;;;;;
+29/04/2025;Saúde mental na juventude;S250002;Tatiane Gomes Nunes;S;120;200;160;120;120;720
+29/04/2025;Saúde mental na juventude;S250003;Carla Henriques Queiroz;S;120;80;120;80;80;480
+29/04/2025;Saúde mental na juventude;S250004;Mariana Queiroz Esteves;S;200;120;160;160;200;840
+29/04/2025;Saúde mental na juventude;S250005;Carla Nogueira Santos;S;40;80;80;40;80;320
+29/04/2025;Saúde mental na juventude;S250006;Nicolas Cardoso Esteves;S;160;160;80;120;160;680
+29/04/2025;Saúde mental na juventude;S250007;Ana Martins Souza;S;200;200;200;200;200;1000
+29/04/2025;Saúde mental na juventude;S250008;Thiago Garcia Lopes;S;160;200;120;200;200;880
+29/04/2025;Saúde mental na juventude;S250009;Nicolas Souza Pinto;S;80;40;40;80;80;320
+29/04/2025;Saúde mental na juventude;S250010;Débora Ribeiro Vieira;S;80;120;120;120;120;560
+29/04/2025;Saúde mental na juventude;S250011;Lucas Ferreira Oliveira;N;;;;;;
+29/04/2025;Saúde mental na juventude;S250012;Beatriz Lopes Batista;N;;;;;;
+29/04/2025;Saúde mental na juventude;S250013;Pietra Dias Lopes;N;;;;;;
+29/04/2025;Saúde mental na juventude;S250014;Paulo Cardoso Vieira;S;120;160;120;160;120;680
+29/04/2025;Saúde mental na juventude;S250015;Daniel Pinto Campos;N;;;;;;
+29/04/2025;Saúde mental na juventude;S250016;Wesley Lima Pereira;S;40;120;120;80;40;400
+29/04/2025;Saúde mental na juventude;S250017;Valentina Lopes Nunes;N;;;;;;
+29/04/2025;Saúde mental na juventude;S250018;Nicolas Pinto Rocha;S;120;80;80;120;160;560
+29/04/2025;Saúde mental na juventude;S250019;Thiago Garcia Santos;S;120;160;160;120;200;760
+29/04/2025;Saúde mental na juventude;S250020;Sofia Cardoso Santos;S;160;160;80;160;160;720
+06/05/2025;A desinformação nas redes sociais;S250001;Olívia Martins Freitas;N;;;;;;
+06/05/2025;A desinformação nas redes sociais;S250002;Tatiane Gomes Nunes;S;120;200;120;120;160;720
+06/05/2025;A desinformação nas redes sociais;S250003;Carla Henriques Queiroz;N;;;;;;
+06/05/2025;A desinformação nas redes sociais;S250004;Mariana Queiroz Esteves;S;200;120;120;160;200;800
+06/05/2025;A desinformação nas redes sociais;S250005;Carla Nogueira Santos;N;;;;;;
+06/05/2025;A desinformação nas redes sociais;S250006;Nicolas Cardoso Esteves;N;;;;;;
+06/05/2025;A desinformação nas redes sociais;S250007;Ana Martins Souza;S;200;120;120;120;120;680
+06/05/2025;A desinformação nas redes sociais;S250008;Thiago Garcia Lopes;S;200;160;160;160;200;880
+06/05/2025;A desinformação nas redes sociais;S250009;Nicolas Souza Pinto;S;80;120;40;120;40;400
+06/05/2025;A desinformação nas redes sociais;S250010;Débora Ribeiro Vieira;N;;;;;;
+06/05/2025;A desinformação nas redes sociais;S250011;Lucas Ferreira Oliveira;S;120;40;80;40;120;400
+06/05/2025;A desinformação nas redes sociais;S250012;Beatriz Lopes Batista;N;;;;;;
+06/05/2025;A desinformação nas redes sociais;S250013;Pietra Dias Lopes;S;120;200;160;200;120;800
+06/05/2025;A desinformação nas redes sociais;S250014;Paulo Cardoso Vieira;S;120;120;160;120;120;640
+06/05/2025;A desinformação nas redes sociais;S250015;Daniel Pinto Campos;S;40;120;120;80;80;440
+06/05/2025;A desinformação nas redes sociais;S250016;Wesley Lima Pereira;S;80;80;120;80;120;480
+06/05/2025;A desinformação nas redes sociais;S250017;Valentina Lopes Nunes;N;;;;;;
+06/05/2025;A desinformação nas redes sociais;S250018;Nicolas Pinto Rocha;N;;;;;;
+06/05/2025;A desinformação nas redes sociais;S250019;Thiago Garcia Santos;S;120;160;160;160;120;720
+06/05/2025;A desinformação nas redes sociais;S250020;Sofia Cardoso Santos;S;120;160;120;160;160;720
+13/05/2025;Trabalho e tecnologia;S250001;Olívia Martins Freitas;S;40;80;120;40;40;320
+13/05/2025;Trabalho e tecnologia;S250002;Tatiane Gomes Nunes;S;200;160;120;160;120;760
+13/05/2025;Trabalho e tecnologia;S250003;Carla Henriques Queiroz;S;80;120;80;160;80;520
+13/05/2025;Trabalho e tecnologia;S250004;Mariana Queiroz Esteves;S;200;160;160;160;160;840
+13/05/2025;Trabalho e tecnologia;S250005;Carla Nogueira Santos;S;40;120;40;80;40;320
+13/05/2025;Trabalho e tecnologia;S250006;Nicolas Cardoso Esteves;N;;;;;;
+13/05/2025;Trabalho e tecnologia;S250007;Ana Martins Souza;N;;;;;;
+13/05/2025;Trabalho e tecnologia;S250008;Thiago Garcia Lopes;S;160;120;160;120;200;760
+13/05/2025;Trabalho e tecnologia;S250009;Nicolas Souza Pinto;N;;;;;;
+13/05/2025;Trabalho e tecnologia;S250010;Débora Ribeiro Vieira;S;120;120;160;80;80;560
+13/05/2025;Trabalho e tecnologia;S250011;Lucas Ferreira Oliveira;S;80;120;40;40;120;400
+13/05/2025;Trabalho e tecnologia;S250012;Beatriz Lopes Batista;S;160;200;120;120;120;720
+13/05/2025;Trabalho e tecnologia;S250013;Pietra Dias Lopes;S;120;200;200;200;160;880
+13/05/2025;Trabalho e tecnologia;S250014;Paulo Cardoso Vieira;N;;;;;;
+13/05/2025;Trabalho e tecnologia;S250015;Daniel Pinto Campos;N;;;;;;
+13/05/2025;Trabalho e tecnologia;S250016;Wesley Lima Pereira;S;40;80;80;80;80;360
+13/05/2025;Trabalho e tecnologia;S250017;Valentina Lopes Nunes;S;120;120;160;200;200;800
+13/05/2025;Trabalho e tecnologia;S250018;Nicolas Pinto Rocha;S;80;80;160;120;80;520
+13/05/2025;Trabalho e tecnologia;S250019;Thiago Garcia Santos;S;120;120;120;200;160;720
+13/05/2025;Trabalho e tecnologia;S250020;Sofia Cardoso Santos;N;;;;;;
+20/05/2025;O papel da ciência na sociedade;S250001;Olívia Martins Freitas;S;40;120;120;40;120;440
+20/05/2025;O papel da ciência na sociedade;S250002;Tatiane Gomes Nunes;S;120;160;120;200;160;760
+20/05/2025;O papel da ciência na sociedade;S250003;Carla Henriques Queiroz;N;;;;;;
+20/05/2025;O papel da ciência na sociedade;S250004;Mariana Queiroz Esteves;S;160;120;120;200;160;760
+20/05/2025;O papel da ciência na sociedade;S250005;Carla Nogueira Santos;S;120;40;120;80;40;400
+20/05/2025;O papel da ciência na sociedade;S250006;Nicolas Cardoso Esteves;S;120;80;160;120;120;600
+20/05/2025;O papel da ciência na sociedade;S250007;Ana Martins Souza;N;;;;;;
+20/05/2025;O papel da ciência na sociedade;S250008;Thiago Garcia Lopes;S;200;120;120;200;200;840
+20/05/2025;O papel da ciência na sociedade;S250009;Nicolas Souza Pinto;S;80;80;80;80;80;400
+20/05/2025;O papel da ciência na sociedade;S250010;Débora Ribeiro Vieira;S;80;120;120;80;120;520
+20/05/2025;O papel da ciência na sociedade;S250011;Lucas Ferreira Oliveira;N;;;;;;
+20/05/2025;O papel da ciência na sociedade;S250012;Beatriz Lopes Batista;N;;;;;;
+20/05/2025;O papel da ciência na sociedade;S250013;Pietra Dias Lopes;N;;;;;;
+20/05/2025;O papel da ciência na sociedade;S250014;Paulo Cardoso Vieira;S;120;200;160;160;120;760
+20/05/2025;O papel da ciência na sociedade;S250015;Daniel Pinto Campos;N;;;;;;
+20/05/2025;O papel da ciência na sociedade;S250016;Wesley Lima Pereira;S;40;120;40;120;40;360
+20/05/2025;O papel da ciência na sociedade;S250017;Valentina Lopes Nunes;S;200;120;120;120;120;680
+20/05/2025;O papel da ciência na sociedade;S250018;Nicolas Pinto Rocha;S;160;120;80;160;80;600
+20/05/2025;O papel da ciência na sociedade;S250019;Thiago Garcia Santos;S;120;200;120;200;120;760
+20/05/2025;O papel da ciência na sociedade;S250020;Sofia Cardoso Santos;N;;;;;;
+27/05/2025;Desperdício de alimentos;S250001;Olívia Martins Freitas;N;;;;;;
+27/05/2025;Desperdício de alimentos;S250002;Tatiane Gomes Nunes;S;120;160;200;120;120;720
+27/05/2025;Desperdício de alimentos;S250003;Carla Henriques Queiroz;N;;;;;;
+27/05/2025;Desperdício de alimentos;S250004;Mariana Queiroz Esteves;S;120;120;200;200;160;800
+27/05/2025;Desperdício de alimentos;S250005;Carla Nogueira Santos;S;120;40;120;120;40;440
+27/05/2025;Desperdício de alimentos;S250006;Nicolas Cardoso Esteves;S;80;80;160;80;80;480
+27/05/2025;Desperdício de alimentos;S250007;Ana Martins Souza;S;200;120;120;200;120;760
+27/05/2025;Desperdício de alimentos;S250008;Thiago Garcia Lopes;S;160;160;160;120;120;720
+27/05/2025;Desperdício de alimentos;S250009;Nicolas Souza Pinto;S;120;40;120;120;80;480
+27/05/2025;Desperdício de alimentos;S250010;Débora Ribeiro Vieira;S;160;80;120;80;80;520
+27/05/2025;Desperdício de alimentos;S250011;Lucas Ferreira Oliveira;S;80;80;40;40;40;280
+27/05/2025;Desperdício de alimentos;S250012;Beatriz Lopes Batista;S;120;160;200;120;160;760
+27/05/2025;Desperdício de alimentos;S250013;Pietra Dias Lopes;N;;;;;;
+27/05/2025;Desperdício de alimentos;S250014;Paulo Cardoso Vieira;S;120;120;160;120;160;680
+27/05/2025;Desperdício de alimentos;S250015;Daniel Pinto Campos;S;120;120;80;80;40;440
+27/05/2025;Desperdício de alimentos;S250016;Wesley Lima Pereira;S;80;80;120;40;120;440
+27/05/2025;Desperdício de alimentos;S250017;Valentina Lopes Nunes;S;200;160;120;200;160;840
+27/05/2025;Desperdício de alimentos;S250018;Nicolas Pinto Rocha;S;120;160;120;120;80;600
+27/05/2025;Desperdício de alimentos;S250019;Thiago Garcia Santos;S;200;120;160;160;120;760
+27/05/2025;Desperdício de alimentos;S250020;Sofia Cardoso Santos;S;80;120;120;120;160;600
+03/06/2025;Inclusão digital de idosos;S250001;Olívia Martins Freitas;N;;;;;;
+03/06/2025;Inclusão digital de idosos;S250002;Tatiane Gomes Nunes;S;160;160;120;160;160;760
+03/06/2025;Inclusão digital de idosos;S250003;Carla Henriques Queiroz;N;;;;;;
+03/06/2025;Inclusão digital de idosos;S250004;Mariana Queiroz Esteves;N;;;;;;
+03/06/2025;Inclusão digital de idosos;S250005;Carla Nogueira Santos;S;80;80;40;120;40;360
+03/06/2025;Inclusão digital de idosos;S250006;Nicolas Cardoso Esteves;S;80;160;120;120;80;560
+03/06/2025;Inclusão digital de idosos;S250007;Ana Martins Souza;N;;;;;;
+03/06/2025;Inclusão digital de idosos;S250008;Thiago Garcia Lopes;N;;;;;;
+03/06/2025;Inclusão digital de idosos;S250009;Nicolas Souza Pinto;S;80;40;40;120;120;400
+03/06/2025;Inclusão digital de idosos;S250010;Débora Ribeiro Vieira;S;120;160;160;160;80;680
+03/06/2025;Inclusão digital de idosos;S250011;Lucas Ferreira Oliveira;S;80;40;120;80;120;440
+03/06/2025;Inclusão digital de idosos;S250012;Beatriz Lopes Batista;S;160;200;120;200;120;800
+03/06/2025;Inclusão digital de idosos;S250013;Pietra Dias Lopes;S;120;120;160;200;120;720
+03/06/2025;Inclusão digital de idosos;S250014;Paulo Cardoso Vieira;N;;;;;;
+03/06/2025;Inclusão digital de idosos;S250015;Daniel Pinto Campos;S;40;80;120;40;80;360
+03/06/2025;Inclusão digital de idosos;S250016;Wesley Lima Pereira;S;40;80;80;120;120;440
+03/06/2025;Inclusão digital de idosos;S250017;Valentina Lopes Nunes;N;;;;;;
+03/06/2025;Inclusão digital de idosos;S250018;Nicolas Pinto Rocha;S;160;160;120;160;120;720
+03/06/2025;Inclusão digital de idosos;S250019;Thiago Garcia Santos;N;;;;;;
+03/06/2025;Inclusão digital de idosos;S250020;Sofia Cardoso Santos;N;;;;;;
+10/06/2025;Preservação dos recursos hídricos;S250001;Olívia Martins Freitas;N;;;;;;
+10/06/2025;Preservação dos recursos hídricos;S250002;Tatiane Gomes Nunes;S;160;160;160;200;120;800
+10/06/2025;Preservação dos recursos hídricos;S250003;Carla Henriques Queiroz;S;80;80;120;120;120;520
+10/06/2025;Preservação dos recursos hídricos;S250004;Mariana Queiroz Esteves;S;160;160;120;200;120;760
+10/06/2025;Preservação dos recursos hídricos;S250005;Carla Nogueira Santos;S;40;80;80;80;80;360
+10/06/2025;Preservação dos recursos hídricos;S250006;Nicolas Cardoso Esteves;S;160;80;120;160;120;640
+10/06/2025;Preservação dos recursos hídricos;S250007;Ana Martins Souza;N;;;;;;
+10/06/2025;Preservação dos recursos hídricos;S250008;Thiago Garcia Lopes;N;;;;;;
+10/06/2025;Preservação dos recursos hídricos;S250009;Nicolas Souza Pinto;S;120;80;120;40;80;440
+10/06/2025;Preservação dos recursos hídricos;S250010;Débora Ribeiro Vieira;S;160;120;80;80;160;600
+10/06/2025;Preservação dos recursos hídricos;S250011;Lucas Ferreira Oliveira;N;;;;;;
+10/06/2025;Preservação dos recursos hídricos;S250012;Beatriz Lopes Batista;N;;;;;;
+10/06/2025;Preservação dos recursos hídricos;S250013;Pietra Dias Lopes;S;200;120;200;120;160;800
+10/06/2025;Preservação dos recursos hídricos;S250014;Paulo Cardoso Vieira;S;200;160;120;160;120;760
+10/06/2025;Preservação dos recursos hídricos;S250015;Daniel Pinto Campos;S;80;40;80;40;80;320
+10/06/2025;Preservação dos recursos hídricos;S250016;Wesley Lima Pereira;N;;;;;;
+10/06/2025;Preservação dos recursos hídricos;S250017;Valentina Lopes Nunes;S;200;120;120;160;120;720
+10/06/2025;Preservação dos recursos hídricos;S250018;Nicolas Pinto Rocha;S;120;160;160;80;120;640
+10/06/2025;Preservação dos recursos hídricos;S250019;Thiago Garcia Santos;S;160;160;160;160;120;760
+10/06/2025;Preservação dos recursos hídricos;S250020;Sofia Cardoso Santos;S;120;160;160;80;160;680
+17/06/2025;Educação financeira nas escolas;S250001;Olívia Martins Freitas;N;;;;;;
+17/06/2025;Educação financeira nas escolas;S250002;Tatiane Gomes Nunes;S;160;200;200;160;200;920
+17/06/2025;Educação financeira nas escolas;S250003;Carla Henriques Queiroz;S;160;160;80;160;160;720
+17/06/2025;Educação financeira nas escolas;S250004;Mariana Queiroz Esteves;N;;;;;;
+17/06/2025;Educação financeira nas escolas;S250005;Carla Nogueira Santos;S;120;120;40;40;40;360
+17/06/2025;Educação financeira nas escolas;S250006;Nicolas Cardoso Esteves;S;160;80;120;80;160;600
+17/06/2025;Educação financeira nas escolas;S250007;Ana Martins Souza;S;120;200;120;200;160;800
+17/06/2025;Educação financeira nas escolas;S250008;Thiago Garcia Lopes;S;120;200;160;200;160;840
+17/06/2025;Educação financeira nas escolas;S250009;Nicolas Souza Pinto;S;40;120;120;40;120;440
+17/06/2025;Educação financeira nas escolas;S250010;Débora Ribeiro Vieira;S;120;160;160;120;120;680
+17/06/2025;Educação financeira nas escolas;S250011;Lucas Ferreira Oliveira;N;;;;;;
+17/06/2025;Educação financeira nas escolas;S250012;Beatriz Lopes Batista;S;160;120;200;200;120;800
+17/06/2025;Educação financeira nas escolas;S250013;Pietra Dias Lopes;S;120;200;160;200;120;800
+17/06/2025;Educação financeira nas escolas;S250014;Paulo Cardoso Vieira;S;200;120;160;200;120;800
+17/06/2025;Educação financeira nas escolas;S250015;Daniel Pinto Campos;N;;;;;;
+17/06/2025;Educação financeira nas escolas;S250016;Wesley Lima Pereira;N;;;;;;
+17/06/2025;Educação financeira nas escolas;S250017;Valentina Lopes Nunes;S;200;160;200;200;200;960
+17/06/2025;Educação financeira nas escolas;S250018;Nicolas Pinto Rocha;S;120;120;120;80;160;600
+17/06/2025;Educação financeira nas escolas;S250019;Thiago Garcia Santos;S;200;200;120;120;160;800
+17/06/2025;Educação financeira nas escolas;S250020;Sofia Cardoso Santos;S;80;80;120;160;160;600
+24/06/2025;Desafios da mobilidade urbana;S250001;Olívia Martins Freitas;N;;;;;;
+24/06/2025;Desafios da mobilidade urbana;S250002;Tatiane Gomes Nunes;S;160;160;200;200;120;840
+24/06/2025;Desafios da mobilidade urbana;S250003;Carla Henriques Queiroz;N;;;;;;
+24/06/2025;Desafios da mobilidade urbana;S250004;Mariana Queiroz Esteves;S;200;200;160;200;160;920
+24/06/2025;Desafios da mobilidade urbana;S250005;Carla Nogueira Santos;N;;;;;;
+24/06/2025;Desafios da mobilidade urbana;S250006;Nicolas Cardoso Esteves;N;;;;;;
+24/06/2025;Desafios da mobilidade urbana;S250007;Ana Martins Souza;N;;;;;;
+24/06/2025;Desafios da mobilidade urbana;S250008;Thiago Garcia Lopes;S;160;160;200;200;120;840
+24/06/2025;Desafios da mobilidade urbana;S250009;Nicolas Souza Pinto;S;120;40;120;40;40;360
+24/06/2025;Desafios da mobilidade urbana;S250010;Débora Ribeiro Vieira;S;160;80;80;160;120;600
+24/06/2025;Desafios da mobilidade urbana;S250011;Lucas Ferreira Oliveira;N;;;;;;
+24/06/2025;Desafios da mobilidade urbana;S250012;Beatriz Lopes Batista;S;160;160;200;120;200;840
+24/06/2025;Desafios da mobilidade urbana;S250013;Pietra Dias Lopes;S;160;200;160;120;200;840
+24/06/2025;Desafios da mobilidade urbana;S250014;Paulo Cardoso Vieira;N;;;;;;
+24/06/2025;Desafios da mobilidade urbana;S250015;Daniel Pinto Campos;N;;;;;;
+24/06/2025;Desafios da mobilidade urbana;S250016;Wesley Lima Pereira;N;;;;;;
+24/06/2025;Desafios da mobilidade urbana;S250017;Valentina Lopes Nunes;N;;;;;;
+24/06/2025;Desafios da mobilidade urbana;S250018;Nicolas Pinto Rocha;N;;;;;;
+24/06/2025;Desafios da mobilidade urbana;S250019;Thiago Garcia Santos;S;200;120;200;200;160;880
+24/06/2025;Desafios da mobilidade urbana;S250020;Sofia Cardoso Santos;S;160;120;120;80;120;600
+01/07/2025;O acesso à cultura nas periferias;S250001;Olívia Martins Freitas;S;80;80;120;80;40;400
+01/07/2025;O acesso à cultura nas periferias;S250002;Tatiane Gomes Nunes;S;200;160;120;200;160;840
+01/07/2025;O acesso à cultura nas periferias;S250003;Carla Henriques Queiroz;N;;;;;;
+01/07/2025;O acesso à cultura nas periferias;S250004;Mariana Queiroz Esteves;S;120;120;200;200;120;760
+01/07/2025;O acesso à cultura nas periferias;S250005;Carla Nogueira Santos;N;;;;;;
+01/07/2025;O acesso à cultura nas periferias;S250006;Nicolas Cardoso Esteves;N;;;;;;
+01/07/2025;O acesso à cultura nas periferias;S250007;Ana Martins Souza;S;200;160;120;160;120;760
+01/07/2025;O acesso à cultura nas periferias;S250008;Thiago Garcia Lopes;S;160;120;120;160;200;760
+01/07/2025;O acesso à cultura nas periferias;S250009;Nicolas Souza Pinto;S;80;40;120;40;40;320
+01/07/2025;O acesso à cultura nas periferias;S250010;Débora Ribeiro Vieira;S;120;160;120;80;160;640
+01/07/2025;O acesso à cultura nas periferias;S250011;Lucas Ferreira Oliveira;N;;;;;;
+01/07/2025;O acesso à cultura nas periferias;S250012;Beatriz Lopes Batista;N;;;;;;
+01/07/2025;O acesso à cultura nas periferias;S250013;Pietra Dias Lopes;S;120;120;200;160;120;720
+01/07/2025;O acesso à cultura nas periferias;S250014;Paulo Cardoso Vieira;S;200;120;200;120;160;800
+01/07/2025;O acesso à cultura nas periferias;S250015;Daniel Pinto Campos;N;;;;;;
+01/07/2025;O acesso à cultura nas periferias;S250016;Wesley Lima Pereira;S;80;120;40;40;120;400
+01/07/2025;O acesso à cultura nas periferias;S250017;Valentina Lopes Nunes;N;;;;;;
+01/07/2025;O acesso à cultura nas periferias;S250018;Nicolas Pinto Rocha;S;160;160;160;160;160;800
+01/07/2025;O acesso à cultura nas periferias;S250019;Thiago Garcia Santos;S;120;120;120;160;120;640
+01/07/2025;O acesso à cultura nas periferias;S250020;Sofia Cardoso Santos;N;;;;;;
+22/07/2025;Saúde mental na juventude;S250001;Olívia Martins Freitas;N;;;;;;
+22/07/2025;Saúde mental na juventude;S250002;Tatiane Gomes Nunes;S;120;120;120;160;200;720
+22/07/2025;Saúde mental na juventude;S250003;Carla Henriques Queiroz;S;160;160;160;120;120;720
+22/07/2025;Saúde mental na juventude;S250004;Mariana Queiroz Esteves;N;;;;;;
+22/07/2025;Saúde mental na juventude;S250005;Carla Nogueira Santos;S;120;120;80;120;120;560
+22/07/2025;Saúde mental na juventude;S250006;Nicolas Cardoso Esteves;N;;;;;;
+22/07/2025;Saúde mental na juventude;S250007;Ana Martins Souza;S;160;160;200;200;120;840
+22/07/2025;Saúde mental na juventude;S250008;Thiago Garcia Lopes;N;;;;;;
+22/07/2025;Saúde mental na juventude;S250009;Nicolas Souza Pinto;S;80;40;80;80;40;320
+22/07/2025;Saúde mental na juventude;S250010;Débora Ribeiro Vieira;S;160;120;160;160;160;760
+22/07/2025;Saúde mental na juventude;S250011;Lucas Ferreira Oliveira;S;80;120;40;80;40;360
+22/07/2025;Saúde mental na juventude;S250012;Beatriz Lopes Batista;N;;;;;;
+22/07/2025;Saúde mental na juventude;S250013;Pietra Dias Lopes;S;120;160;200;120;200;800
+22/07/2025;Saúde mental na juventude;S250014;Paulo Cardoso Vieira;N;;;;;;
+22/07/2025;Saúde mental na juventude;S250015;Daniel Pinto Campos;S;80;120;80;120;40;440
+22/07/2025;Saúde mental na juventude;S250016;Wesley Lima Pereira;S;80;80;80;80;40;360
+22/07/2025;Saúde mental na juventude;S250017;Valentina Lopes Nunes;N;;;;;;
+22/07/2025;Saúde mental na juventude;S250018;Nicolas Pinto Rocha;S;80;80;160;120;160;600
+22/07/2025;Saúde mental na juventude;S250019;Thiago Garcia Santos;S;160;200;200;200;200;960
+22/07/2025;Saúde mental na juventude;S250020;Sofia Cardoso Santos;N;;;;;;
+29/07/2025;A desinformação nas redes sociais;S250001;Olívia Martins Freitas;S;120;40;80;80;80;400
+29/07/2025;A desinformação nas redes sociais;S250002;Tatiane Gomes Nunes;S;160;160;160;200;160;840
+29/07/2025;A desinformação nas redes sociais;S250003;Carla Henriques Queiroz;S;160;160;160;120;80;680
+29/07/2025;A desinformação nas redes sociais;S250004;Mariana Queiroz Esteves;S;120;200;120;120;200;760
+29/07/2025;A desinformação nas redes sociais;S250005;Carla Nogueira Santos;N;;;;;;
+29/07/2025;A desinformação nas redes sociais;S250006;Nicolas Cardoso Esteves;N;;;;;;
+29/07/2025;A desinformação nas redes sociais;S250007;Ana Martins Souza;S;200;120;120;120;200;760
+29/07/2025;A desinformação nas redes sociais;S250008;Thiago Garcia Lopes;S;200;120;120;200;200;840
+29/07/2025;A desinformação nas redes sociais;S250009;Nicolas Souza Pinto;S;80;40;80;120;40;360
+29/07/2025;A desinformação nas redes sociais;S250010;Débora Ribeiro Vieira;S;160;120;120;120;120;640
+29/07/2025;A desinformação nas redes sociais;S250011;Lucas Ferreira Oliveira;N;;;;;;
+29/07/2025;A desinformação nas redes sociais;S250012;Beatriz Lopes Batista;S;200;160;200;200;200;960
+29/07/2025;A desinformação nas redes sociais;S250013;Pietra Dias Lopes;S;200;200;160;200;200;960
+29/07/2025;A desinformação nas redes sociais;S250014;Paulo Cardoso Vieira;S;120;160;200;200;200;880
+29/07/2025;A desinformação nas redes sociais;S250015;Daniel Pinto Campos;S;120;80;80;120;80;480
+29/07/2025;A desinformação nas redes sociais;S250016;Wesley Lima Pereira;S;80;40;80;120;40;360
+29/07/2025;A desinformação nas redes sociais;S250017;Valentina Lopes Nunes;N;;;;;;
+29/07/2025;A desinformação nas redes sociais;S250018;Nicolas Pinto Rocha;S;120;80;160;80;120;560
+29/07/2025;A desinformação nas redes sociais;S250019;Thiago Garcia Santos;S;200;200;160;160;160;880
+29/07/2025;A desinformação nas redes sociais;S250020;Sofia Cardoso Santos;N;;;;;;
+05/08/2025;Trabalho e tecnologia;S250001;Olívia Martins Freitas;S;80;80;120;40;120;440
+05/08/2025;Trabalho e tecnologia;S250002;Tatiane Gomes Nunes;S;120;200;200;120;200;840
+05/08/2025;Trabalho e tecnologia;S250003;Carla Henriques Queiroz;N;;;;;;
+05/08/2025;Trabalho e tecnologia;S250004;Mariana Queiroz Esteves;S;160;200;200;120;200;880
+05/08/2025;Trabalho e tecnologia;S250005;Carla Nogueira Santos;S;120;80;120;40;80;440
+05/08/2025;Trabalho e tecnologia;S250006;Nicolas Cardoso Esteves;N;;;;;;
+05/08/2025;Trabalho e tecnologia;S250007;Ana Martins Souza;S;120;120;200;160;160;760
+05/08/2025;Trabalho e tecnologia;S250008;Thiago Garcia Lopes;S;200;120;120;200;200;840
+05/08/2025;Trabalho e tecnologia;S250009;Nicolas Souza Pinto;S;40;80;80;40;40;280
+05/08/2025;Trabalho e tecnologia;S250010;Débora Ribeiro Vieira;S;120;160;80;80;120;560
+05/08/2025;Trabalho e tecnologia;S250011;Lucas Ferreira Oliveira;N;;;;;;
+05/08/2025;Trabalho e tecnologia;S250012;Beatriz Lopes Batista;N;;;;;;
+05/08/2025;Trabalho e tecnologia;S250013;Pietra Dias Lopes;N;;;;;;
+05/08/2025;Trabalho e tecnologia;S250014;Paulo Cardoso Vieira;S;160;120;160;160;200;800
+05/08/2025;Trabalho e tecnologia;S250015;Daniel Pinto Campos;S;80;40;80;80;80;360
+05/08/2025;Trabalho e tecnologia;S250016;Wesley Lima Pereira;S;80;120;120;80;80;480
+05/08/2025;Trabalho e tecnologia;S250017;Valentina Lopes Nunes;N;;;;;;
+05/08/2025;Trabalho e tecnologia;S250018;Nicolas Pinto Rocha;N;;;;;;
+05/08/2025;Trabalho e tecnologia;S250019;Thiago Garcia Santos;N;;;;;;
+05/08/2025;Trabalho e tecnologia;S250020;Sofia Cardoso Santos;S;160;80;160;80;120;600
+12/08/2025;O papel da ciência na sociedade;S250001;Olívia Martins Freitas;N;;;;;;
+12/08/2025;O papel da ciência na sociedade;S250002;Tatiane Gomes Nunes;S;160;160;160;160;200;840
+12/08/2025;O papel da ciência na sociedade;S250003;Carla Henriques Queiroz;S;80;80;120;80;160;520
+12/08/2025;O papel da ciência na sociedade;S250004;Mariana Queiroz Esteves;S;120;160;120;200;200;800
+12/08/2025;O papel da ciência na sociedade;S250005;Carla Nogueira Santos;S;120;120;40;120;120;520
+12/08/2025;O papel da ciência na sociedade;S250006;Nicolas Cardoso Esteves;N;;;;;;
+12/08/2025;O papel da ciência na sociedade;S250007;Ana Martins Souza;N;;;;;;
+12/08/2025;O papel da ciência na sociedade;S250008;Thiago Garcia Lopes;S;200;200;200;200;200;1000
+12/08/2025;O papel da ciência na sociedade;S250009;Nicolas Souza Pinto;N;;;;;;
+12/08/2025;O papel da ciência na sociedade;S250010;Débora Ribeiro Vieira;S;120;80;160;160;120;640
+12/08/2025;O papel da ciência na sociedade;S250011;Lucas Ferreira Oliveira;S;120;40;80;80;40;360
+12/08/2025;O papel da ciência na sociedade;S250012;Beatriz Lopes Batista;N;;;;;;
+12/08/2025;O papel da ciência na sociedade;S250013;Pietra Dias Lopes;N;;;;;;
+12/08/2025;O papel da ciência na sociedade;S250014;Paulo Cardoso Vieira;N;;;;;;
+12/08/2025;O papel da ciência na sociedade;S250015;Daniel Pinto Campos;N;;;;;;
+12/08/2025;O papel da ciência na sociedade;S250016;Wesley Lima Pereira;S;120;80;80;80;120;480
+12/08/2025;O papel da ciência na sociedade;S250017;Valentina Lopes Nunes;N;;;;;;
+12/08/2025;O papel da ciência na sociedade;S250018;Nicolas Pinto Rocha;N;;;;;;
+12/08/2025;O papel da ciência na sociedade;S250019;Thiago Garcia Santos;S;120;120;200;160;160;760
+12/08/2025;O papel da ciência na sociedade;S250020;Sofia Cardoso Santos;S;80;160;160;120;120;640
+19/08/2025;Desperdício de alimentos;S250001;Olívia Martins Freitas;N;;;;;;
+19/08/2025;Desperdício de alimentos;S250002;Tatiane Gomes Nunes;S;160;160;200;160;120;800
+19/08/2025;Desperdício de alimentos;S250003;Carla Henriques Queiroz;S;80;80;160;120;80;520
+19/08/2025;Desperdício de alimentos;S250004;Mariana Queiroz Esteves;S;120;160;120;160;120;680
+19/08/2025;Desperdício de alimentos;S250005;Carla Nogueira Santos;N;;;;;;
+19/08/2025;Desperdício de alimentos;S250006;Nicolas Cardoso Esteves;N;;;;;;
+19/08/2025;Desperdício de alimentos;S250007;Ana Martins Souza;S;120;200;200;120;200;840
+19/08/2025;Desperdício de alimentos;S250008;Thiago Garcia Lopes;N;;;;;;
+19/08/2025;Desperdício de alimentos;S250009;Nicolas Souza Pinto;S;120;120;120;40;80;480
+19/08/2025;Desperdício de alimentos;S250010;Débora Ribeiro Vieira;S;160;80;120;160;120;640
+19/08/2025;Desperdício de alimentos;S250011;Lucas Ferreira Oliveira;S;40;120;40;40;40;280
+19/08/2025;Desperdício de alimentos;S250012;Beatriz Lopes Batista;N;;;;;;
+19/08/2025;Desperdício de alimentos;S250013;Pietra Dias Lopes;N;;;;;;
+19/08/2025;Desperdício de alimentos;S250014;Paulo Cardoso Vieira;S;160;200;120;200;160;840
+19/08/2025;Desperdício de alimentos;S250015;Daniel Pinto Campos;S;80;80;80;80;120;440
+19/08/2025;Desperdício de alimentos;S250016;Wesley Lima Pereira;S;120;120;80;40;40;400
+19/08/2025;Desperdício de alimentos;S250017;Valentina Lopes Nunes;S;160;120;160;120;120;680
+19/08/2025;Desperdício de alimentos;S250018;Nicolas Pinto Rocha;S;160;120;160;160;120;720
+19/08/2025;Desperdício de alimentos;S250019;Thiago Garcia Santos;S;120;200;120;160;120;720
+19/08/2025;Desperdício de alimentos;S250020;Sofia Cardoso Santos;N;;;;;;
+26/08/2025;Inclusão digital de idosos;S250001;Olívia Martins Freitas;N;;;;;;
+26/08/2025;Inclusão digital de idosos;S250002;Tatiane Gomes Nunes;S;200;200;200;160;160;920
+26/08/2025;Inclusão digital de idosos;S250003;Carla Henriques Queiroz;N;;;;;;
+26/08/2025;Inclusão digital de idosos;S250004;Mariana Queiroz Esteves;S;160;200;200;200;120;880
+26/08/2025;Inclusão digital de idosos;S250005;Carla Nogueira Santos;N;;;;;;
+26/08/2025;Inclusão digital de idosos;S250006;Nicolas Cardoso Esteves;S;120;80;120;80;120;520
+26/08/2025;Inclusão digital de idosos;S250007;Ana Martins Souza;S;120;160;200;200;200;880
+26/08/2025;Inclusão digital de idosos;S250008;Thiago Garcia Lopes;N;;;;;;
+26/08/2025;Inclusão digital de idosos;S250009;Nicolas Souza Pinto;S;80;120;120;80;80;480
+26/08/2025;Inclusão digital de idosos;S250010;Débora Ribeiro Vieira;S;120;160;80;160;80;600
+26/08/2025;Inclusão digital de idosos;S250011;Lucas Ferreira Oliveira;S;80;80;80;40;80;360
+26/08/2025;Inclusão digital de idosos;S250012;Beatriz Lopes Batista;N;;;;;;
+26/08/2025;Inclusão digital de idosos;S250013;Pietra Dias Lopes;S;200;120;200;160;160;840
+26/08/2025;Inclusão digital de idosos;S250014;Paulo Cardoso Vieira;N;;;;;;
+26/08/2025;Inclusão digital de idosos;S250015;Daniel Pinto Campos;N;;;;;;
+26/08/2025;Inclusão digital de idosos;S250016;Wesley Lima Pereira;S;40;120;40;80;80;360
+26/08/2025;Inclusão digital de idosos;S250017;Valentina Lopes Nunes;S;120;160;160;200;120;760
+26/08/2025;Inclusão digital de idosos;S250018;Nicolas Pinto Rocha;N;;;;;;
+26/08/2025;Inclusão digital de idosos;S250019;Thiago Garcia Santos;S;120;160;120;200;200;800
+26/08/2025;Inclusão digital de idosos;S250020;Sofia Cardoso Santos;S;160;80;80;80;120;520
+02/09/2025;Preservação dos recursos hídricos;S250001;Olívia Martins Freitas;S;120;120;120;40;80;480
+02/09/2025;Preservação dos recursos hídricos;S250002;Tatiane Gomes Nunes;N;;;;;;
+02/09/2025;Preservação dos recursos hídricos;S250003;Carla Henriques Queiroz;S;120;80;160;120;160;640
+02/09/2025;Preservação dos recursos hídricos;S250004;Mariana Queiroz Esteves;N;;;;;;
+02/09/2025;Preservação dos recursos hídricos;S250005;Carla Nogueira Santos;S;120;80;40;120;80;440
+02/09/2025;Preservação dos recursos hídricos;S250006;Nicolas Cardoso Esteves;S;160;120;80;80;80;520
+02/09/2025;Preservação dos recursos hídricos;S250007;Ana Martins Souza;S;200;200;200;200;120;920
+02/09/2025;Preservação dos recursos hídricos;S250008;Thiago Garcia Lopes;S;200;200;160;200;120;880
+02/09/2025;Preservação dos recursos hídricos;S250009;Nicolas Souza Pinto;S;120;120;80;80;120;520
+02/09/2025;Preservação dos recursos hídricos;S250010;Débora Ribeiro Vieira;S;80;120;160;120;120;600
+02/09/2025;Preservação dos recursos hídricos;S250011;Lucas Ferreira Oliveira;N;;;;;;
+02/09/2025;Preservação dos recursos hídricos;S250012;Beatriz Lopes Batista;S;160;200;200;200;120;880
+02/09/2025;Preservação dos recursos hídricos;S250013;Pietra Dias Lopes;S;200;120;120;160;200;800
+02/09/2025;Preservação dos recursos hídricos;S250014;Paulo Cardoso Vieira;S;120;200;120;160;160;760
+02/09/2025;Preservação dos recursos hídricos;S250015;Daniel Pinto Campos;S;120;80;40;40;80;360
+02/09/2025;Preservação dos recursos hídricos;S250016;Wesley Lima Pereira;N;;;;;;
+02/09/2025;Preservação dos recursos hídricos;S250017;Valentina Lopes Nunes;N;;;;;;
+02/09/2025;Preservação dos recursos hídricos;S250018;Nicolas Pinto Rocha;N;;;;;;
+02/09/2025;Preservação dos recursos hídricos;S250019;Thiago Garcia Santos;N;;;;;;
+02/09/2025;Preservação dos recursos hídricos;S250020;Sofia Cardoso Santos;S;80;120;160;120;120;600
+09/09/2025;Educação financeira nas escolas;S250001;Olívia Martins Freitas;N;;;;;;
+09/09/2025;Educação financeira nas escolas;S250002;Tatiane Gomes Nunes;S;120;120;160;160;120;680
+09/09/2025;Educação financeira nas escolas;S250003;Carla Henriques Queiroz;S;120;80;120;80;120;520
+09/09/2025;Educação financeira nas escolas;S250004;Mariana Queiroz Esteves;S;160;120;200;120;120;720
+09/09/2025;Educação financeira nas escolas;S250005;Carla Nogueira Santos;S;40;40;120;80;80;360
+09/09/2025;Educação financeira nas escolas;S250006;Nicolas Cardoso Esteves;S;80;120;120;120;160;600
+09/09/2025;Educação financeira nas escolas;S250007;Ana Martins Souza;S;200;160;160;120;160;800
+09/09/2025;Educação financeira nas escolas;S250008;Thiago Garcia Lopes;N;;;;;;
+09/09/2025;Educação financeira nas escolas;S250009;Nicolas Souza Pinto;S;80;120;120;40;80;440
+09/09/2025;Educação financeira nas escolas;S250010;Débora Ribeiro Vieira;S;120;160;120;160;160;720
+09/09/2025;Educação financeira nas escolas;S250011;Lucas Ferreira Oliveira;N;;;;;;
+09/09/2025;Educação financeira nas escolas;S250012;Beatriz Lopes Batista;S;160;160;160;160;200;840
+09/09/2025;Educação financeira nas escolas;S250013;Pietra Dias Lopes;N;;;;;;
+09/09/2025;Educação financeira nas escolas;S250014;Paulo Cardoso Vieira;S;200;200;200;200;200;1000
+09/09/2025;Educação financeira nas escolas;S250015;Daniel Pinto Campos;N;;;;;;
+09/09/2025;Educação financeira nas escolas;S250016;Wesley Lima Pereira;S;120;40;120;80;40;400
+09/09/2025;Educação financeira nas escolas;S250017;Valentina Lopes Nunes;N;;;;;;
+09/09/2025;Educação financeira nas escolas;S250018;Nicolas Pinto Rocha;S;160;80;160;80;80;560
+09/09/2025;Educação financeira nas escolas;S250019;Thiago Garcia Santos;N;;;;;;
+09/09/2025;Educação financeira nas escolas;S250020;Sofia Cardoso Santos;S;160;160;160;160;120;760
+16/09/2025;Desafios da mobilidade urbana;S250001;Olívia Martins Freitas;N;;;;;;
+16/09/2025;Desafios da mobilidade urbana;S250002;Tatiane Gomes Nunes;S;120;160;120;120;160;680
+16/09/2025;Desafios da mobilidade urbana;S250003;Carla Henriques Queiroz;N;;;;;;
+16/09/2025;Desafios da mobilidade urbana;S250004;Mariana Queiroz Esteves;S;160;120;120;120;160;680
+16/09/2025;Desafios da mobilidade urbana;S250005;Carla Nogueira Santos;N;;;;;;
+16/09/2025;Desafios da mobilidade urbana;S250006;Nicolas Cardoso Esteves;S;80;160;80;120;80;520
+16/09/2025;Desafios da mobilidade urbana;S250007;Ana Martins Souza;S;200;160;120;200;200;880
+16/09/2025;Desafios da mobilidade urbana;S250008;Thiago Garcia Lopes;S;160;160;120;160;200;800
+16/09/2025;Desafios da mobilidade urbana;S250009;Nicolas Souza Pinto;S;80;120;80;120;40;440
+16/09/2025;Desafios da mobilidade urbana;S250010;Débora Ribeiro Vieira;S;120;80;160;160;120;640
+16/09/2025;Desafios da mobilidade urbana;S250011;Lucas Ferreira Oliveira;N;;;;;;
+16/09/2025;Desafios da mobilidade urbana;S250012;Beatriz Lopes Batista;N;;;;;;
+16/09/2025;Desafios da mobilidade urbana;S250013;Pietra Dias Lopes;S;120;200;120;160;160;760
+16/09/2025;Desafios da mobilidade urbana;S250014;Paulo Cardoso Vieira;S;160;160;120;160;120;720
+16/09/2025;Desafios da mobilidade urbana;S250015;Daniel Pinto Campos;N;;;;;;
+16/09/2025;Desafios da mobilidade urbana;S250016;Wesley Lima Pereira;N;;;;;;
+16/09/2025;Desafios da mobilidade urbana;S250017;Valentina Lopes Nunes;S;160;120;200;200;200;880
+16/09/2025;Desafios da mobilidade urbana;S250018;Nicolas Pinto Rocha;S;80;80;120;120;160;560
+16/09/2025;Desafios da mobilidade urbana;S250019;Thiago Garcia Santos;S;160;200;120;160;120;760
+16/09/2025;Desafios da mobilidade urbana;S250020;Sofia Cardoso Santos;S;160;80;120;80;160;600
+23/09/2025;O acesso à cultura nas periferias;S250001;Olívia Martins Freitas;S;40;40;120;40;40;280
+23/09/2025;O acesso à cultura nas periferias;S250002;Tatiane Gomes Nunes;S;200;120;120;160;120;720
+23/09/2025;O acesso à cultura nas periferias;S250003;Carla Henriques Queiroz;S;80;80;120;160;160;600
+23/09/2025;O acesso à cultura nas periferias;S250004;Mariana Queiroz Esteves;S;160;200;200;120;200;880
+23/09/2025;O acesso à cultura nas periferias;S250005;Carla Nogueira Santos;N;;;;;;
+23/09/2025;O acesso à cultura nas periferias;S250006;Nicolas Cardoso Esteves;N;;;;;;
+23/09/2025;O acesso à cultura nas periferias;S250007;Ana Martins Souza;S;120;200;200;120;160;800
+23/09/2025;O acesso à cultura nas periferias;S250008;Thiago Garcia Lopes;S;200;200;200;120;160;880
+23/09/2025;O acesso à cultura nas periferias;S250009;Nicolas Souza Pinto;S;40;80;120;80;80;400
+23/09/2025;O acesso à cultura nas periferias;S250010;Débora Ribeiro Vieira;S;80;160;120;120;80;560
+23/09/2025;O acesso à cultura nas periferias;S250011;Lucas Ferreira Oliveira;S;80;80;120;40;80;400
+23/09/2025;O acesso à cultura nas periferias;S250012;Beatriz Lopes Batista;S;200;120;200;200;200;920
+23/09/2025;O acesso à cultura nas periferias;S250013;Pietra Dias Lopes;N;;;;;;
+23/09/2025;O acesso à cultura nas periferias;S250014;Paulo Cardoso Vieira;N;;;;;;
+23/09/2025;O acesso à cultura nas periferias;S250015;Daniel Pinto Campos;N;;;;;;
+23/09/2025;O acesso à cultura nas periferias;S250016;Wesley Lima Pereira;S;120;80;120;80;120;520
+23/09/2025;O acesso à cultura nas periferias;S250017;Valentina Lopes Nunes;S;200;200;200;160;160;920
+23/09/2025;O acesso à cultura nas periferias;S250018;Nicolas Pinto Rocha;S;160;120;80;160;120;640
+23/09/2025;O acesso à cultura nas periferias;S250019;Thiago Garcia Santos;S;120;200;200;160;200;880
+23/09/2025;O acesso à cultura nas periferias;S250020;Sofia Cardoso Santos;N;;;;;;
+30/09/2025;Saúde mental na juventude;S250001;Olívia Martins Freitas;N;;;;;;
+30/09/2025;Saúde mental na juventude;S250002;Tatiane Gomes Nunes;S;120;200;200;160;160;840
+30/09/2025;Saúde mental na juventude;S250003;Carla Henriques Queiroz;S;80;80;120;120;120;520
+30/09/2025;Saúde mental na juventude;S250004;Mariana Queiroz Esteves;S;200;120;120;200;120;760
+30/09/2025;Saúde mental na juventude;S250005;Carla Nogueira Santos;S;80;120;80;40;120;440
+30/09/2025;Saúde mental na juventude;S250006;Nicolas Cardoso Esteves;S;160;80;80;80;120;520
+30/09/2025;Saúde mental na juventude;S250007;Ana Martins Souza;S;120;200;120;160;200;800
+30/09/2025;Saúde mental na juventude;S250008;Thiago Garcia Lopes;N;;;;;;
+30/09/2025;Saúde mental na juventude;S250009;Nicolas Souza Pinto;S;80;80;80;40;80;360
+30/09/2025;Saúde mental na juventude;S250010;Débora Ribeiro Vieira;S;120;80;80;80;80;440
+30/09/2025;Saúde mental na juventude;S250011;Lucas Ferreira Oliveira;S;120;80;80;40;40;360
+30/09/2025;Saúde mental na juventude;S250012;Beatriz Lopes Batista;N;;;;;;
+30/09/2025;Saúde mental na juventude;S250013;Pietra Dias Lopes;N;;;;;;
+30/09/2025;Saúde mental na juventude;S250014;Paulo Cardoso Vieira;N;;;;;;
+30/09/2025;Saúde mental na juventude;S250015;Daniel Pinto Campos;S;80;40;40;40;40;240
+30/09/2025;Saúde mental na juventude;S250016;Wesley Lima Pereira;S;40;120;40;80;80;360
+30/09/2025;Saúde mental na juventude;S250017;Valentina Lopes Nunes;S;120;160;200;160;200;840
+30/09/2025;Saúde mental na juventude;S250018;Nicolas Pinto Rocha;S;160;160;160;160;120;760
+30/09/2025;Saúde mental na juventude;S250019;Thiago Garcia Santos;N;;;;;;
+30/09/2025;Saúde mental na juventude;S250020;Sofia Cardoso Santos;S;160;160;80;80;160;640
+07/10/2025;A desinformação nas redes sociais;S250001;Olívia Martins Freitas;N;;;;;;
+07/10/2025;A desinformação nas redes sociais;S250002;Tatiane Gomes Nunes;S;160;160;160;160;200;840
+07/10/2025;A desinformação nas redes sociais;S250003;Carla Henriques Queiroz;S;120;160;120;160;160;720
+07/10/2025;A desinformação nas redes sociais;S250004;Mariana Queiroz Esteves;S;200;120;120;200;120;760
+07/10/2025;A desinformação nas redes sociais;S250005;Carla Nogueira Santos;N;;;;;;
+07/10/2025;A desinformação nas redes sociais;S250006;Nicolas Cardoso Esteves;N;;;;;;
+07/10/2025;A desinformação nas redes sociais;S250007;Ana Martins Souza;S;200;120;160;160;200;840
+07/10/2025;A desinformação nas redes sociais;S250008;Thiago Garcia Lopes;S;160;160;120;160;200;800
+07/10/2025;A desinformação nas redes sociais;S250009;Nicolas Souza Pinto;S;40;80;120;40;80;360
+07/10/2025;A desinformação nas redes sociais;S250010;Débora Ribeiro Vieira;S;80;160;80;120;120;560
+07/10/2025;A desinformação nas redes sociais;S250011;Lucas Ferreira Oliveira;S;120;120;80;40;120;480
+07/10/2025;A desinformação nas redes sociais;S250012;Beatriz Lopes Batista;N;;;;;;
+07/10/2025;A desinformação nas redes sociais;S250013;Pietra Dias Lopes;S;160;120;200;160;120;760
+07/10/2025;A desinformação nas redes sociais;S250014;Paulo Cardoso Vieira;S;120;200;160;200;120;800
+07/10/2025;A desinformação nas redes sociais;S250015;Daniel Pinto Campos;N;;;;;;
+07/10/2025;A desinformação nas redes sociais;S250016;Wesley Lima Pereira;S;120;80;40;120;80;440
+07/10/2025;A desinformação nas redes sociais;S250017;Valentina Lopes Nunes;S;120;120;200;200;120;760
+07/10/2025;A desinformação nas redes sociais;S250018;Nicolas Pinto Rocha;S;160;120;160;160;120;720
+07/10/2025;A desinformação nas redes sociais;S250019;Thiago Garcia Santos;S;160;200;120;120;200;800
+07/10/2025;A desinformação nas redes sociais;S250020;Sofia Cardoso Santos;N;;;;;;
+14/10/2025;Trabalho e tecnologia;S250001;Olívia Martins Freitas;N;;;;;;
+14/10/2025;Trabalho e tecnologia;S250002;Tatiane Gomes Nunes;S;160;200;160;200;200;920
+14/10/2025;Trabalho e tecnologia;S250003;Carla Henriques Queiroz;S;120;160;160;160;120;720
+14/10/2025;Trabalho e tecnologia;S250004;Mariana Queiroz Esteves;S;200;120;120;200;200;840
+14/10/2025;Trabalho e tecnologia;S250005;Carla Nogueira Santos;S;120;120;40;40;120;440
+14/10/2025;Trabalho e tecnologia;S250006;Nicolas Cardoso Esteves;N;;;;;;
+14/10/2025;Trabalho e tecnologia;S250007;Ana Martins Souza;N;;;;;;
+14/10/2025;Trabalho e tecnologia;S250008;Thiago Garcia Lopes;N;;;;;;
+14/10/2025;Trabalho e tecnologia;S250009;Nicolas Souza Pinto;S;80;80;80;80;80;400
+14/10/2025;Trabalho e tecnologia;S250010;Débora Ribeiro Vieira;S;120;160;160;120;120;680
+14/10/2025;Trabalho e tecnologia;S250011;Lucas Ferreira Oliveira;S;40;80;120;40;80;360
+14/10/2025;Trabalho e tecnologia;S250012;Beatriz Lopes Batista;S;200;200;200;200;160;960
+14/10/2025;Trabalho e tecnologia;S250013;Pietra Dias Lopes;S;200;160;120;200;200;880
+14/10/2025;Trabalho e tecnologia;S250014;Paulo Cardoso Vieira;N;;;;;;
+14/10/2025;Trabalho e tecnologia;S250015;Daniel Pinto Campos;N;;;;;;
+14/10/2025;Trabalho e tecnologia;S250016;Wesley Lima Pereira;S;80;80;80;40;40;320
+14/10/2025;Trabalho e tecnologia;S250017;Valentina Lopes Nunes;S;160;200;200;120;200;880
+14/10/2025;Trabalho e tecnologia;S250018;Nicolas Pinto Rocha;S;80;120;120;80;80;480
+14/10/2025;Trabalho e tecnologia;S250019;Thiago Garcia Santos;N;;;;;;
+14/10/2025;Trabalho e tecnologia;S250020;Sofia Cardoso Santos;N;;;;;;
+21/10/2025;O papel da ciência na sociedade;S250001;Olívia Martins Freitas;S;80;40;80;40;120;360
+21/10/2025;O papel da ciência na sociedade;S250002;Tatiane Gomes Nunes;S;200;160;160;200;120;840
+21/10/2025;O papel da ciência na sociedade;S250003;Carla Henriques Queiroz;N;;;;;;
+21/10/2025;O papel da ciência na sociedade;S250004;Mariana Queiroz Esteves;S;120;120;120;200;200;760
+21/10/2025;O papel da ciência na sociedade;S250005;Carla Nogueira Santos;N;;;;;;
+21/10/2025;O papel da ciência na sociedade;S250006;Nicolas Cardoso Esteves;N;;;;;;
+21/10/2025;O papel da ciência na sociedade;S250007;Ana Martins Souza;N;;;;;;
+21/10/2025;O papel da ciência na sociedade;S250008;Thiago Garcia Lopes;S;160;120;120;120;200;720
+21/10/2025;O papel da ciência na sociedade;S250009;Nicolas Souza Pinto;N;;;;;;
+21/10/2025;O papel da ciência na sociedade;S250010;Débora Ribeiro Vieira;N;;;;;;
+21/10/2025;O papel da ciência na sociedade;S250011;Lucas Ferreira Oliveira;S;40;80;40;40;80;280
+21/10/2025;O papel da ciência na sociedade;S250012;Beatriz Lopes Batista;S;120;200;160;120;160;760
+21/10/2025;O papel da ciência na sociedade;S250013;Pietra Dias Lopes;S;160;120;160;160;120;720
+21/10/2025;O papel da ciência na sociedade;S250014;Paulo Cardoso Vieira;S;120;160;120;200;160;760
+21/10/2025;O papel da ciência na sociedade;S250015;Daniel Pinto Campos;S;80;80;80;40;120;400
+21/10/2025;O papel da ciência na sociedade;S250016;Wesley Lima Pereira;S;80;80;40;80;40;320
+21/10/2025;O papel da ciência na sociedade;S250017;Valentina Lopes Nunes;N;;;;;;
+21/10/2025;O papel da ciência na sociedade;S250018;Nicolas Pinto Rocha;S;160;160;80;120;120;640
+21/10/2025;O papel da ciência na sociedade;S250019;Thiago Garcia Santos;N;;;;;;
+21/10/2025;O papel da ciência na sociedade;S250020;Sofia Cardoso Santos;N;;;;;;
+28/10/2025;Desperdício de alimentos;S250001;Olívia Martins Freitas;S;120;120;80;40;80;440
+28/10/2025;Desperdício de alimentos;S250002;Tatiane Gomes Nunes;S;120;160;200;120;120;720
+28/10/2025;Desperdício de alimentos;S250003;Carla Henriques Queiroz;S;160;80;80;120;80;520
+28/10/2025;Desperdício de alimentos;S250004;Mariana Queiroz Esteves;S;160;160;120;120;120;680
+28/10/2025;Desperdício de alimentos;S250005;Carla Nogueira Santos;S;120;80;40;40;80;360
+28/10/2025;Desperdício de alimentos;S250006;Nicolas Cardoso Esteves;S;160;160;160;80;80;640
+28/10/2025;Desperdício de alimentos;S250007;Ana Martins Souza;N;;;;;;
+28/10/2025;Desperdício de alimentos;S250008;Thiago Garcia Lopes;S;120;160;200;200;120;800
+28/10/2025;Desperdício de alimentos;S250009;Nicolas Souza Pinto;S;120;40;120;40;120;440
+28/10/2025;Desperdício de alimentos;S250010;Débora Ribeiro Vieira;S;120;80;80;80;80;440
+28/10/2025;Desperdício de alimentos;S250011;Lucas Ferreira Oliveira;S;80;120;80;80;120;480
+28/10/2025;Desperdício de alimentos;S250012;Beatriz Lopes Batista;S;200;160;200;200;160;920
+28/10/2025;Desperdício de alimentos;S250013;Pietra Dias Lopes;N;;;;;;
+28/10/2025;Desperdício de alimentos;S250014;Paulo Cardoso Vieira;N;;;;;;
+28/10/2025;Desperdício de alimentos;S250015;Daniel Pinto Campos;S;80;120;40;40;120;400
+28/10/2025;Desperdício de alimentos;S250016;Wesley Lima Pereira;S;120;120;40;120;80;480
+28/10/2025;Desperdício de alimentos;S250017;Valentina Lopes Nunes;N;;;;;;
+28/10/2025;Desperdício de alimentos;S250018;Nicolas Pinto Rocha;S;80;160;160;80;160;640
+28/10/2025;Desperdício de alimentos;S250019;Thiago Garcia Santos;S;120;160;200;120;120;720
+28/10/2025;Desperdício de alimentos;S250020;Sofia Cardoso Santos;S;120;120;160;120;80;600
+04/11/2025;Inclusão digital de idosos;S250001;Olívia Martins Freitas;S;120;80;80;80;80;440
+04/11/2025;Inclusão digital de idosos;S250002;Tatiane Gomes Nunes;S;160;200;160;120;120;760
+04/11/2025;Inclusão digital de idosos;S250003;Carla Henriques Queiroz;S;80;80;80;160;120;520
+04/11/2025;Inclusão digital de idosos;S250004;Mariana Queiroz Esteves;S;200;120;120;200;120;760
+04/11/2025;Inclusão digital de idosos;S250005;Carla Nogueira Santos;N;;;;;;
+04/11/2025;Inclusão digital de idosos;S250006;Nicolas Cardoso Esteves;S;120;120;160;120;80;600
+04/11/2025;Inclusão digital de idosos;S250007;Ana Martins Souza;S;120;160;200;200;160;840
+04/11/2025;Inclusão digital de idosos;S250008;Thiago Garcia Lopes;N;;;;;;
+04/11/2025;Inclusão digital de idosos;S250009;Nicolas Souza Pinto;S;120;40;80;40;80;360
+04/11/2025;Inclusão digital de idosos;S250010;Débora Ribeiro Vieira;S;160;120;120;160;80;640
+04/11/2025;Inclusão digital de idosos;S250011;Lucas Ferreira Oliveira;N;;;;;;
+04/11/2025;Inclusão digital de idosos;S250012;Beatriz Lopes Batista;S;160;200;200;120;200;880
+04/11/2025;Inclusão digital de idosos;S250013;Pietra Dias Lopes;S;120;120;160;160;120;680
+04/11/2025;Inclusão digital de idosos;S250014;Paulo Cardoso Vieira;S;200;200;120;200;160;880
+04/11/2025;Inclusão digital de idosos;S250015;Daniel Pinto Campos;N;;;;;;
+04/11/2025;Inclusão digital de idosos;S250016;Wesley Lima Pereira;S;40;80;120;80;80;400
+04/11/2025;Inclusão digital de idosos;S250017;Valentina Lopes Nunes;S;200;120;160;200;120;800
+04/11/2025;Inclusão digital de idosos;S250018;Nicolas Pinto Rocha;S;80;120;80;120;120;520
+04/11/2025;Inclusão digital de idosos;S250019;Thiago Garcia Santos;S;160;200;120;120;200;800
+04/11/2025;Inclusão digital de idosos;S250020;Sofia Cardoso Santos;S;160;160;80;80;120;600
+11/11/2025;Preservação dos recursos hídricos;S250001;Olívia Martins Freitas;N;;;;;;
+11/11/2025;Preservação dos recursos hídricos;S250002;Tatiane Gomes Nunes;S;200;200;160;160;120;840
+11/11/2025;Preservação dos recursos hídricos;S250003;Carla Henriques Queiroz;S;120;80;80;80;120;480
+11/11/2025;Preservação dos recursos hídricos;S250004;Mariana Queiroz Esteves;N;;;;;;
+11/11/2025;Preservação dos recursos hídricos;S250005;Carla Nogueira Santos;S;80;40;40;40;120;320
+11/11/2025;Preservação dos recursos hídricos;S250006;Nicolas Cardoso Esteves;N;;;;;;
+11/11/2025;Preservação dos recursos hídricos;S250007;Ana Martins Souza;N;;;;;;
+11/11/2025;Preservação dos recursos hídricos;S250008;Thiago Garcia Lopes;N;;;;;;
+11/11/2025;Preservação dos recursos hídricos;S250009;Nicolas Souza Pinto;S;80;120;120;120;40;480
+11/11/2025;Preservação dos recursos hídricos;S250010;Débora Ribeiro Vieira;S;80;120;80;160;80;520
+11/11/2025;Preservação dos recursos hídricos;S250011;Lucas Ferreira Oliveira;N;;;;;;
+11/11/2025;Preservação dos recursos hídricos;S250012;Beatriz Lopes Batista;N;;;;;;
+11/11/2025;Preservação dos recursos hídricos;S250013;Pietra Dias Lopes;S;120;160;200;160;160;800
+11/11/2025;Preservação dos recursos hídricos;S250014;Paulo Cardoso Vieira;S;120;160;160;200;160;800
+11/11/2025;Preservação dos recursos hídricos;S250015;Daniel Pinto Campos;S;80;40;40;80;80;320
+11/11/2025;Preservação dos recursos hídricos;S250016;Wesley Lima Pereira;S;80;80;40;80;120;400
+11/11/2025;Preservação dos recursos hídricos;S250017;Valentina Lopes Nunes;S;120;200;200;160;120;800
+11/11/2025;Preservação dos recursos hídricos;S250018;Nicolas Pinto Rocha;N;;;;;;
+11/11/2025;Preservação dos recursos hídricos;S250019;Thiago Garcia Santos;S;160;200;120;160;200;840
+11/11/2025;Preservação dos recursos hídricos;S250020;Sofia Cardoso Santos;N;;;;;;
+18/11/2025;Educação financeira nas escolas;S250001;Olívia Martins Freitas;S;120;120;120;80;40;480
+18/11/2025;Educação financeira nas escolas;S250002;Tatiane Gomes Nunes;S;120;200;120;160;120;720
+18/11/2025;Educação financeira nas escolas;S250003;Carla Henriques Queiroz;S;160;120;80;120;120;600
+18/11/2025;Educação financeira nas escolas;S250004;Mariana Queiroz Esteves;S;120;200;120;120;200;760
+18/11/2025;Educação financeira nas escolas;S250005;Carla Nogueira Santos;N;;;;;;
+18/11/2025;Educação financeira nas escolas;S250006;Nicolas Cardoso Esteves;S;160;160;160;80;120;680
+18/11/2025;Educação financeira nas escolas;S250007;Ana Martins Souza;S;200;160;120;160;160;800
+18/11/2025;Educação financeira nas escolas;S250008;Thiago Garcia Lopes;N;;;;;;
+18/11/2025;Educação financeira nas escolas;S250009;Nicolas Souza Pinto;S;40;120;40;120;120;440
+18/11/2025;Educação financeira nas escolas;S250010;Débora Ribeiro Vieira;S;160;160;160;120;80;680
+18/11/2025;Educação financeira nas escolas;S250011;Lucas Ferreira Oliveira;N;;;;;;
+18/11/2025;Educação financeira nas escolas;S250012;Beatriz Lopes Batista;S;120;160;200;120;200;800
+18/11/2025;Educação financeira nas escolas;S250013;Pietra Dias Lopes;S;160;160;120;160;200;800
+18/11/2025;Educação financeira nas escolas;S250014;Paulo Cardoso Vieira;S;200;160;160;200;200;920
+18/11/2025;Educação financeira nas escolas;S250015;Daniel Pinto Campos;N;;;;;;
+18/11/2025;Educação financeira nas escolas;S250016;Wesley Lima Pereira;S;120;80;80;120;120;520
+18/11/2025;Educação financeira nas escolas;S250017;Valentina Lopes Nunes;S;160;160;120;200;160;800
+18/11/2025;Educação financeira nas escolas;S250018;Nicolas Pinto Rocha;S;160;160;120;160;160;760
+18/11/2025;Educação financeira nas escolas;S250019;Thiago Garcia Santos;S;160;120;160;200;120;760
+18/11/2025;Educação financeira nas escolas;S250020;Sofia Cardoso Santos;N;;;;;;

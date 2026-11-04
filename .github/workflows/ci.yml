@@ -2,9 +2,6 @@
 # Roda a cada PR para a main e a cada integração na main.
 # Os nomes dos jobs ("name:") são os status checks exigidos na proteção da main;
 # se mudar um nome aqui, atualize o ruleset.
-#
-# Enquanto não houver código (pyproject.toml / manage.py), as etapas de
-# migração e testes são puladas com um aviso e a CI passa.
 
 name: CI
 
@@ -58,21 +55,14 @@ jobs:
           --health-retries 10
     steps:
       - uses: actions/checkout@v7
-      - name: Projeto Django ainda não existe
-        if: hashFiles('manage.py') == ''
-        run: echo "::notice::manage.py não encontrado; verificação de migrações ignorada."
       - uses: astral-sh/setup-uv@v7
-        if: hashFiles('manage.py') != ''
         with:
           python-version: ${{ env.PYTHON_VERSION }}
       - name: Instalar dependências
-        if: hashFiles('manage.py') != ''
         run: uv sync --locked
       - name: Há mudança no modelo sem migração?
-        if: hashFiles('manage.py') != ''
         run: uv run python manage.py makemigrations --check --dry-run
       - name: Aplicar migrações no banco vazio
-        if: hashFiles('manage.py') != ''
         run: uv run python manage.py migrate --noinput
 
   testes:
@@ -94,20 +84,13 @@ jobs:
           --health-retries 10
     steps:
       - uses: actions/checkout@v7
-      - name: Projeto ainda não existe
-        if: hashFiles('pyproject.toml') == ''
-        run: echo "::notice::pyproject.toml não encontrado; testes ignorados."
       - uses: astral-sh/setup-uv@v7
-        if: hashFiles('pyproject.toml') != ''
         with:
           python-version: ${{ env.PYTHON_VERSION }}
       - name: Instalar dependências
-        if: hashFiles('pyproject.toml') != ''
         run: uv sync --locked
       # Regras de negócio dos alertas primeiro (RN001, RN002, RN005, RN008, RN009).
-      # TODO: marcar esses testes com @pytest.mark.regras no código.
       - name: Testes das regras de negócio
-        if: hashFiles('pyproject.toml') != ''
         run: |
           set +e
           uv run pytest -m regras --no-cov
@@ -118,7 +101,5 @@ jobs:
           fi
           exit "$codigo"
       - name: Suíte completa com cobertura
-        if: hashFiles('pyproject.toml') != ''
-        # TODO: definir fail_under em [tool.coverage.report] no pyproject.toml
-        # (Plano de Testes: ≥ 80% das linhas no módulo de Ingestão).
+        # Meta de cobertura em [tool.coverage.report] fail_under, no pyproject.toml.
         run: uv run pytest --cov --cov-report=term-missing
