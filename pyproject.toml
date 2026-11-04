@@ -1,0 +1,53 @@
+[project]
+name = "farol"
+version = "0.1.0"
+description = "FAROL: Ferramenta de Acompanhamento, Retenção e Orientação Longitudinal (CASD)"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "django>=5.2,<5.3",
+    "django-environ>=0.12",
+    "psycopg[binary]>=3.2",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=9.2.0",
+    "pytest-cov>=7.1.0",
+    "pytest-django>=4.14.0",
+    "ruff>=0.17.3",
+]
+
+# Aplicação Django, não uma biblioteca: o uv não instala o projeto como pacote.
+[tool.uv]
+package = false
+
+# --- Testes (Plano de Testes, Seção 3; IC-09) -------------------------
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "farol.settings"
+testpaths = ["tests"]
+addopts = "--strict-markers"
+markers = [
+    "regras: regras de negócio dos alertas (RN001, RN002, RN005, RN008, RN009), rodam primeiro na CI",
+]
+
+[tool.coverage.run]
+source = ["core", "ingestao", "inteligencia", "relatorios", "web", "farol"]
+omit = ["*/migrations/*", "farol/asgi.py", "farol/wsgi.py"]
+
+[tool.coverage.report]
+# Plano de Testes: ≥ 80% das linhas no módulo de Ingestão. Por ora vale para o projeto todo.
+fail_under = 80
+show_missing = true
+skip_covered = true
+
+# --- Estilo -------------------------------------------------------------
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "W", "F", "I", "B", "UP", "DJ"]
+
+[tool.ruff.lint.per-file-ignores]
+"*/migrations/*" = ["E501"]
