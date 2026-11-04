@@ -34,7 +34,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
-      - uses: astral-sh/setup-uv@v6
+      - uses: astral-sh/setup-uv@v7
       - name: Lint
         run: uvx ruff check .
       - name: Formatação
@@ -61,7 +61,7 @@ jobs:
       - name: Projeto Django ainda não existe
         if: hashFiles('manage.py') == ''
         run: echo "::notice::manage.py não encontrado; verificação de migrações ignorada."
-      - uses: astral-sh/setup-uv@v6
+      - uses: astral-sh/setup-uv@v7
         if: hashFiles('manage.py') != ''
         with:
           python-version: ${{ env.PYTHON_VERSION }}
@@ -97,7 +97,7 @@ jobs:
       - name: Projeto ainda não existe
         if: hashFiles('pyproject.toml') == ''
         run: echo "::notice::pyproject.toml não encontrado; testes ignorados."
-      - uses: astral-sh/setup-uv@v6
+      - uses: astral-sh/setup-uv@v7
         if: hashFiles('pyproject.toml') != ''
         with:
           python-version: ${{ env.PYTHON_VERSION }}
