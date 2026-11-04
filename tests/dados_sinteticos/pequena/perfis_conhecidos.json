@@ -1,0 +1,112 @@
+{
+  "semente": 28,
+  "anos": {
+    "2024": {
+      "alunos": 20,
+      "turmas": 5,
+      "dias_letivos": 192,
+      "ciclos": 19,
+      "temas_redacao": 40
+    },
+    "2025": {
+      "alunos": 20,
+      "turmas": 5,
+      "dias_letivos": 192,
+      "ciclos": 20,
+      "temas_redacao": 40
+    },
+    "2026": {
+      "alunos": 20,
+      "turmas": 5,
+      "dias_letivos": 193,
+      "ciclos": 20,
+      "temas_redacao": 41
+    }
+  },
+  "perfis": [
+    {
+      "perfil": "tres_faltas_na_semana",
+      "matricula": "S260001",
+      "descricao": "Presente em todos os dias letivos, exceto em três dias seguidos da mesma semana, sem justificativa.",
+      "esperado": {
+        "semana": "06/04/2026",
+        "faltas_nao_justificadas": 3,
+        "datas": [
+          "06/04/2026",
+          "07/04/2026",
+          "08/04/2026"
+        ]
+      }
+    },
+    {
+      "perfil": "falta_justificada",
+      "matricula": "S260002",
+      "descricao": "Três ausências na mesma semana, uma delas justificada e aprovada (RN002): só duas contam como falta.",
+      "esperado": {
+        "semana": "06/04/2026",
+        "ausencias": 3,
+        "faltas_nao_justificadas": 2,
+        "data_justificada": "08/04/2026"
+      }
+    },
+    {
+      "perfil": "ausente_no_simulado",
+      "matricula": "S260003",
+      "descricao": "Faltou a um simulado: não é avaliado em desempenho naquele ciclo (RN009). Nota 600 em todas as áreas nos demais.",
+      "esperado": {
+        "ciclo_ausente": 6,
+        "data_simulado": "26/04/2026"
+      }
+    },
+    {
+      "perfil": "mudou_de_turma",
+      "matricula": "S260004",
+      "descricao": "Mudou de turma no meio do ano; o histórico anterior deve ser preservado (RN011).",
+      "esperado": {
+        "turma_anterior": "Turma A",
+        "turma_nova": "Turma B",
+        "data_mudanca": "25/06/2026"
+      }
+    },
+    {
+      "perfil": "segunda_chamada",
+      "matricula": "S260005",
+      "descricao": "Ingressou na segunda chamada: não tem registros nem faltas antes do ingresso (RN004).",
+      "esperado": {
+        "data_ingresso": "09/03/2026"
+      }
+    },
+    {
+      "perfil": "queda_de_desempenho",
+      "matricula": "S260006",
+      "descricao": "Nota TRI 650 em todas as áreas até o ciclo 7 e 590 a partir do ciclo 8: queda de 60 pontos em relação ao próprio histórico (RN008).",
+      "esperado": {
+        "ciclo_queda": 8,
+        "delta_tri": -60.0
+      }
+    },
+    {
+      "perfil": "evolucao_consistente",
+      "matricula": "S260007",
+      "descricao": "Nota TRI sobe 15 pontos em todas as áreas a cada ciclo (RF016).",
+      "esperado": {
+        "delta_tri_por_ciclo": 15.0,
+        "nota_ciclo_1": 500.0
+      }
+    }
+  ],
+  "inconsistencias": [
+    {
+      "tipo": "matricula_desconhecida",
+      "arquivo": "2026/catraca_presencas.csv",
+      "matricula": "S999999",
+      "data": "18/02/2026"
+    },
+    {
+      "tipo": "matricula_em_branco",
+      "arquivo": "2026/corrija_me_redacoes.csv",
+      "nome": "Isabela Nunes Oliveira",
+      "data": "24/02/2026"
+    }
+  ]
+}

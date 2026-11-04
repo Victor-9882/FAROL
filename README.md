@@ -85,6 +85,8 @@ uv run pytest -m regras         # só as regras de negócio dos alertas
 uv run ruff check . && uv run ruff format --check .
 ```
 
+Os testes usam a base sintética em `tests/dados_sinteticos/pequena/`, gerada por `uv run python scripts/gerar_base_sintetica.py`. O formato dos arquivos e os perfis com resultado conhecido estão em [tests/dados_sinteticos/README.md](tests/dados_sinteticos/README.md).
+
 Marque com `@pytest.mark.regras` os testes das regras RN001, RN002, RN005, RN008 e RN009, que a CI roda primeiro.
 
 ## Contribuir

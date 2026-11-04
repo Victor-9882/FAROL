@@ -32,7 +32,7 @@ markers = [
 ]
 
 [tool.coverage.run]
-source = ["core", "ingestao", "inteligencia", "relatorios", "web", "farol"]
+source = ["core", "ingestao", "inteligencia", "relatorios", "web", "farol", "scripts"]
 omit = ["*/migrations/*", "farol/asgi.py", "farol/wsgi.py"]
 
 [tool.coverage.report]

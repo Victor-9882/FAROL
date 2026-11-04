@@ -1,0 +1,802 @@
+data_tema;tema;matricula;nome;entregue;c1;c2;c3;c4;c5;total
+03/02/2026;Desafios da mobilidade urbana;S260001;Nicolas Pereira Batista;S;120;120;120;120;120;600
+03/02/2026;Desafios da mobilidade urbana;S260002;Olívia Ferreira Lima;S;120;120;120;120;120;600
+03/02/2026;Desafios da mobilidade urbana;S260003;Daniel Garcia Rocha;S;120;120;120;120;120;600
+03/02/2026;Desafios da mobilidade urbana;S260004;Manuela Martins Cardoso;S;120;120;120;120;120;600
+03/02/2026;Desafios da mobilidade urbana;S260006;Daniel Pereira Dias;S;120;120;120;120;120;600
+03/02/2026;Desafios da mobilidade urbana;S260007;Vinícius Batista Duarte;S;120;120;120;120;120;600
+03/02/2026;Desafios da mobilidade urbana;S260009;Valentina Garcia Freitas;N;;;;;;
+03/02/2026;Desafios da mobilidade urbana;S260011;Yasmin Vieira Martins;S;120;160;80;80;160;600
+03/02/2026;Desafios da mobilidade urbana;S260012;Ana Dias Batista;N;;;;;;
+03/02/2026;Desafios da mobilidade urbana;S260013;Isabela Gomes Ribeiro;N;;;;;;
+03/02/2026;Desafios da mobilidade urbana;S260014;Fernanda Batista Pereira;N;;;;;;
+03/02/2026;Desafios da mobilidade urbana;S260015;Nicolas Ramos Pinto;N;;;;;;
+03/02/2026;Desafios da mobilidade urbana;S260016;Ana Pinto Dias;S;120;160;120;80;80;560
+03/02/2026;Desafios da mobilidade urbana;S260017;Gabriela Queiroz Vieira;S;160;120;200;160;120;760
+03/02/2026;Desafios da mobilidade urbana;S260018;Manuela Nogueira Dias;S;160;120;160;120;160;720
+03/02/2026;Desafios da mobilidade urbana;S260019;Leonardo Freitas Cardoso;S;80;80;160;160;80;560
+10/02/2026;O acesso à cultura nas periferias;S260001;Nicolas Pereira Batista;S;120;120;120;120;120;600
+10/02/2026;O acesso à cultura nas periferias;S260002;Olívia Ferreira Lima;S;120;120;120;120;120;600
+10/02/2026;O acesso à cultura nas periferias;S260003;Daniel Garcia Rocha;S;120;120;120;120;120;600
+10/02/2026;O acesso à cultura nas periferias;S260004;Manuela Martins Cardoso;S;120;120;120;120;120;600
+10/02/2026;O acesso à cultura nas periferias;S260006;Daniel Pereira Dias;S;120;120;120;120;120;600
+10/02/2026;O acesso à cultura nas periferias;S260007;Vinícius Batista Duarte;S;120;120;120;120;120;600
+10/02/2026;O acesso à cultura nas periferias;S260009;Valentina Garcia Freitas;S;120;160;200;160;200;840
+10/02/2026;O acesso à cultura nas periferias;S260011;Yasmin Vieira Martins;S;160;120;160;80;120;640
+10/02/2026;O acesso à cultura nas periferias;S260012;Ana Dias Batista;S;120;200;200;200;160;880
+10/02/2026;O acesso à cultura nas periferias;S260013;Isabela Gomes Ribeiro;N;;;;;;
+10/02/2026;O acesso à cultura nas periferias;S260014;Fernanda Batista Pereira;S;200;120;200;160;160;840
+10/02/2026;O acesso à cultura nas periferias;S260015;Nicolas Ramos Pinto;S;120;120;40;120;120;520
+10/02/2026;O acesso à cultura nas periferias;S260016;Ana Pinto Dias;N;;;;;;
+10/02/2026;O acesso à cultura nas periferias;S260017;Gabriela Queiroz Vieira;S;120;200;120;120;200;760
+10/02/2026;O acesso à cultura nas periferias;S260018;Manuela Nogueira Dias;S;160;200;160;200;160;880
+10/02/2026;O acesso à cultura nas periferias;S260019;Leonardo Freitas Cardoso;S;80;80;120;80;80;440
+17/02/2026;Saúde mental na juventude;S260001;Nicolas Pereira Batista;S;120;120;120;120;120;600
+17/02/2026;Saúde mental na juventude;S260002;Olívia Ferreira Lima;S;120;120;120;120;120;600
+17/02/2026;Saúde mental na juventude;S260003;Daniel Garcia Rocha;S;120;120;120;120;120;600
+17/02/2026;Saúde mental na juventude;S260004;Manuela Martins Cardoso;S;120;120;120;120;120;600
+17/02/2026;Saúde mental na juventude;S260006;Daniel Pereira Dias;S;120;120;120;120;120;600
+17/02/2026;Saúde mental na juventude;S260007;Vinícius Batista Duarte;S;120;120;120;120;120;600
+17/02/2026;Saúde mental na juventude;S260009;Valentina Garcia Freitas;S;200;120;120;200;120;760
+17/02/2026;Saúde mental na juventude;S260011;Yasmin Vieira Martins;N;;;;;;
+17/02/2026;Saúde mental na juventude;S260012;Ana Dias Batista;S;200;200;120;160;200;880
+17/02/2026;Saúde mental na juventude;S260013;Isabela Gomes Ribeiro;S;80;80;120;80;80;440
+17/02/2026;Saúde mental na juventude;S260014;Fernanda Batista Pereira;N;;;;;;
+17/02/2026;Saúde mental na juventude;S260015;Nicolas Ramos Pinto;N;;;;;;
+17/02/2026;Saúde mental na juventude;S260016;Ana Pinto Dias;N;;;;;;
+17/02/2026;Saúde mental na juventude;S260017;Gabriela Queiroz Vieira;S;200;120;120;120;120;680
+17/02/2026;Saúde mental na juventude;S260018;Manuela Nogueira Dias;N;;;;;;
+17/02/2026;Saúde mental na juventude;S260019;Leonardo Freitas Cardoso;S;160;120;160;80;160;680
+24/02/2026;A desinformação nas redes sociais;S260001;Nicolas Pereira Batista;S;120;120;120;120;120;600
+24/02/2026;A desinformação nas redes sociais;S260002;Olívia Ferreira Lima;S;120;120;120;120;120;600
+24/02/2026;A desinformação nas redes sociais;S260003;Daniel Garcia Rocha;S;120;120;120;120;120;600
+24/02/2026;A desinformação nas redes sociais;S260004;Manuela Martins Cardoso;S;120;120;120;120;120;600
+24/02/2026;A desinformação nas redes sociais;S260006;Daniel Pereira Dias;S;120;120;120;120;120;600
+24/02/2026;A desinformação nas redes sociais;S260007;Vinícius Batista Duarte;S;120;120;120;120;120;600
+24/02/2026;A desinformação nas redes sociais;S260009;Valentina Garcia Freitas;S;160;200;200;120;120;800
+24/02/2026;A desinformação nas redes sociais;S260011;Yasmin Vieira Martins;S;120;80;120;160;120;600
+24/02/2026;A desinformação nas redes sociais;S260012;Ana Dias Batista;N;;;;;;
+24/02/2026;A desinformação nas redes sociais;S260013;Isabela Gomes Ribeiro;N;;;;;;
+24/02/2026;A desinformação nas redes sociais;S260014;Fernanda Batista Pereira;S;200;120;160;120;200;800
+24/02/2026;A desinformação nas redes sociais;S260015;Nicolas Ramos Pinto;N;;;;;;
+24/02/2026;A desinformação nas redes sociais;S260016;Ana Pinto Dias;S;120;120;120;160;80;600
+24/02/2026;A desinformação nas redes sociais;S260017;Gabriela Queiroz Vieira;S;160;200;120;160;200;840
+24/02/2026;A desinformação nas redes sociais;S260018;Manuela Nogueira Dias;S;120;160;160;200;120;760
+24/02/2026;A desinformação nas redes sociais;S260019;Leonardo Freitas Cardoso;N;;;;;;
+03/03/2026;Trabalho e tecnologia;S260001;Nicolas Pereira Batista;S;120;120;120;120;120;600
+03/03/2026;Trabalho e tecnologia;S260002;Olívia Ferreira Lima;S;120;120;120;120;120;600
+03/03/2026;Trabalho e tecnologia;S260003;Daniel Garcia Rocha;S;120;120;120;120;120;600
+03/03/2026;Trabalho e tecnologia;S260004;Manuela Martins Cardoso;S;120;120;120;120;120;600
+03/03/2026;Trabalho e tecnologia;S260006;Daniel Pereira Dias;S;120;120;120;120;120;600
+03/03/2026;Trabalho e tecnologia;S260007;Vinícius Batista Duarte;S;120;120;120;120;120;600
+03/03/2026;Trabalho e tecnologia;S260009;Valentina Garcia Freitas;S;200;160;120;120;120;720
+03/03/2026;Trabalho e tecnologia;S260011;Yasmin Vieira Martins;S;160;120;80;80;80;520
+03/03/2026;Trabalho e tecnologia;S260012;Ana Dias Batista;S;120;200;120;160;120;720
+03/03/2026;Trabalho e tecnologia;S260013;Isabela Gomes Ribeiro;N;;;;;;
+03/03/2026;Trabalho e tecnologia;S260014;Fernanda Batista Pereira;N;;;;;;
+03/03/2026;Trabalho e tecnologia;S260015;Nicolas Ramos Pinto;S;40;80;120;40;40;320
+03/03/2026;Trabalho e tecnologia;S260016;Ana Pinto Dias;S;160;160;160;120;120;720
+03/03/2026;Trabalho e tecnologia;S260017;Gabriela Queiroz Vieira;S;200;200;120;200;160;880
+03/03/2026;Trabalho e tecnologia;S260018;Manuela Nogueira Dias;N;;;;;;
+03/03/2026;Trabalho e tecnologia;S260019;Leonardo Freitas Cardoso;N;;;;;;
+10/03/2026;O papel da ciência na sociedade;S260001;Nicolas Pereira Batista;S;120;120;120;120;120;600
+10/03/2026;O papel da ciência na sociedade;S260002;Olívia Ferreira Lima;S;120;120;120;120;120;600
+10/03/2026;O papel da ciência na sociedade;S260003;Daniel Garcia Rocha;S;120;120;120;120;120;600
+10/03/2026;O papel da ciência na sociedade;S260004;Manuela Martins Cardoso;S;120;120;120;120;120;600
+10/03/2026;O papel da ciência na sociedade;S260005;Pietra Ramos Nogueira;S;120;120;120;120;120;600
+10/03/2026;O papel da ciência na sociedade;S260006;Daniel Pereira Dias;S;120;120;120;120;120;600
+10/03/2026;O papel da ciência na sociedade;S260007;Vinícius Batista Duarte;S;120;120;120;120;120;600
+10/03/2026;O papel da ciência na sociedade;S260008;Eduarda Ramos Rocha;N;;;;;;
+10/03/2026;O papel da ciência na sociedade;S260009;Valentina Garcia Freitas;S;200;200;160;120;160;840
+10/03/2026;O papel da ciência na sociedade;S260010;Vinícius Pereira Cardoso;N;;;;;;
+10/03/2026;O papel da ciência na sociedade;S260011;Yasmin Vieira Martins;S;160;160;80;80;80;560
+10/03/2026;O papel da ciência na sociedade;S260012;Ana Dias Batista;S;200;200;120;200;120;840
+10/03/2026;O papel da ciência na sociedade;S260013;Isabela Gomes Ribeiro;S;120;120;40;40;80;400
+10/03/2026;O papel da ciência na sociedade;S260014;Fernanda Batista Pereira;S;160;200;200;200;200;960
+10/03/2026;O papel da ciência na sociedade;S260015;Nicolas Ramos Pinto;S;80;80;80;120;120;480
+10/03/2026;O papel da ciência na sociedade;S260016;Ana Pinto Dias;N;;;;;;
+10/03/2026;O papel da ciência na sociedade;S260017;Gabriela Queiroz Vieira;S;160;200;200;200;120;880
+10/03/2026;O papel da ciência na sociedade;S260018;Manuela Nogueira Dias;N;;;;;;
+10/03/2026;O papel da ciência na sociedade;S260019;Leonardo Freitas Cardoso;S;80;160;160;80;80;560
+10/03/2026;O papel da ciência na sociedade;S260020;Isabela Nunes Oliveira;S;120;40;120;40;80;400
+17/03/2026;Desperdício de alimentos;S260001;Nicolas Pereira Batista;S;120;120;120;120;120;600
+17/03/2026;Desperdício de alimentos;S260002;Olívia Ferreira Lima;S;120;120;120;120;120;600
+17/03/2026;Desperdício de alimentos;S260003;Daniel Garcia Rocha;S;120;120;120;120;120;600
+17/03/2026;Desperdício de alimentos;S260004;Manuela Martins Cardoso;S;120;120;120;120;120;600
+17/03/2026;Desperdício de alimentos;S260005;Pietra Ramos Nogueira;S;120;120;120;120;120;600
+17/03/2026;Desperdício de alimentos;S260006;Daniel Pereira Dias;S;120;120;120;120;120;600
+17/03/2026;Desperdício de alimentos;S260007;Vinícius Batista Duarte;S;120;120;120;120;120;600
+17/03/2026;Desperdício de alimentos;S260008;Eduarda Ramos Rocha;S;40;120;120;120;120;520
+17/03/2026;Desperdício de alimentos;S260009;Valentina Garcia Freitas;S;160;200;200;160;120;840
+17/03/2026;Desperdício de alimentos;S260010;Vinícius Pereira Cardoso;S;160;200;200;120;200;880
+17/03/2026;Desperdício de alimentos;S260011;Yasmin Vieira Martins;S;160;120;160;80;80;600
+17/03/2026;Desperdício de alimentos;S260012;Ana Dias Batista;S;160;120;200;160;160;800
+17/03/2026;Desperdício de alimentos;S260013;Isabela Gomes Ribeiro;S;80;80;40;120;120;440
+17/03/2026;Desperdício de alimentos;S260014;Fernanda Batista Pereira;N;;;;;;
+17/03/2026;Desperdício de alimentos;S260015;Nicolas Ramos Pinto;N;;;;;;
+17/03/2026;Desperdício de alimentos;S260016;Ana Pinto Dias;S;80;120;80;160;160;600
+17/03/2026;Desperdício de alimentos;S260017;Gabriela Queiroz Vieira;S;160;120;160;120;120;680
+17/03/2026;Desperdício de alimentos;S260018;Manuela Nogueira Dias;S;160;160;160;160;160;800
+17/03/2026;Desperdício de alimentos;S260019;Leonardo Freitas Cardoso;S;80;80;80;160;120;520
+17/03/2026;Desperdício de alimentos;S260020;Isabela Nunes Oliveira;S;120;40;120;80;120;480
+24/03/2026;Inclusão digital de idosos;S260001;Nicolas Pereira Batista;S;120;120;120;120;120;600
+24/03/2026;Inclusão digital de idosos;S260002;Olívia Ferreira Lima;S;120;120;120;120;120;600
+24/03/2026;Inclusão digital de idosos;S260003;Daniel Garcia Rocha;S;120;120;120;120;120;600
+24/03/2026;Inclusão digital de idosos;S260004;Manuela Martins Cardoso;S;120;120;120;120;120;600
+24/03/2026;Inclusão digital de idosos;S260005;Pietra Ramos Nogueira;S;120;120;120;120;120;600
+24/03/2026;Inclusão digital de idosos;S260006;Daniel Pereira Dias;S;120;120;120;120;120;600
+24/03/2026;Inclusão digital de idosos;S260007;Vinícius Batista Duarte;S;120;120;120;120;120;600
+24/03/2026;Inclusão digital de idosos;S260008;Eduarda Ramos Rocha;N;;;;;;
+24/03/2026;Inclusão digital de idosos;S260009;Valentina Garcia Freitas;N;;;;;;
+24/03/2026;Inclusão digital de idosos;S260010;Vinícius Pereira Cardoso;S;200;200;200;160;200;960
+24/03/2026;Inclusão digital de idosos;S260011;Yasmin Vieira Martins;S;120;80;120;120;120;560
+24/03/2026;Inclusão digital de idosos;S260012;Ana Dias Batista;S;200;120;120;160;120;720
+24/03/2026;Inclusão digital de idosos;S260013;Isabela Gomes Ribeiro;S;40;80;40;80;80;320
+24/03/2026;Inclusão digital de idosos;S260014;Fernanda Batista Pereira;S;120;120;120;120;160;640
+24/03/2026;Inclusão digital de idosos;S260015;Nicolas Ramos Pinto;N;;;;;;
+24/03/2026;Inclusão digital de idosos;S260016;Ana Pinto Dias;S;120;80;80;160;160;600
+24/03/2026;Inclusão digital de idosos;S260017;Gabriela Queiroz Vieira;N;;;;;;
+24/03/2026;Inclusão digital de idosos;S260018;Manuela Nogueira Dias;N;;;;;;
+24/03/2026;Inclusão digital de idosos;S260019;Leonardo Freitas Cardoso;N;;;;;;
+24/03/2026;Inclusão digital de idosos;S260020;Isabela Nunes Oliveira;S;40;120;120;40;40;360
+31/03/2026;Preservação dos recursos hídricos;S260001;Nicolas Pereira Batista;S;120;120;120;120;120;600
+31/03/2026;Preservação dos recursos hídricos;S260002;Olívia Ferreira Lima;S;120;120;120;120;120;600
+31/03/2026;Preservação dos recursos hídricos;S260003;Daniel Garcia Rocha;S;120;120;120;120;120;600
+31/03/2026;Preservação dos recursos hídricos;S260004;Manuela Martins Cardoso;S;120;120;120;120;120;600
+31/03/2026;Preservação dos recursos hídricos;S260005;Pietra Ramos Nogueira;S;120;120;120;120;120;600
+31/03/2026;Preservação dos recursos hídricos;S260006;Daniel Pereira Dias;S;120;120;120;120;120;600
+31/03/2026;Preservação dos recursos hídricos;S260007;Vinícius Batista Duarte;S;120;120;120;120;120;600
+31/03/2026;Preservação dos recursos hídricos;S260008;Eduarda Ramos Rocha;N;;;;;;
+31/03/2026;Preservação dos recursos hídricos;S260009;Valentina Garcia Freitas;N;;;;;;
+31/03/2026;Preservação dos recursos hídricos;S260010;Vinícius Pereira Cardoso;S;200;120;200;200;160;880
+31/03/2026;Preservação dos recursos hídricos;S260011;Yasmin Vieira Martins;S;160;160;80;80;80;560
+31/03/2026;Preservação dos recursos hídricos;S260012;Ana Dias Batista;N;;;;;;
+31/03/2026;Preservação dos recursos hídricos;S260013;Isabela Gomes Ribeiro;N;;;;;;
+31/03/2026;Preservação dos recursos hídricos;S260014;Fernanda Batista Pereira;N;;;;;;
+31/03/2026;Preservação dos recursos hídricos;S260015;Nicolas Ramos Pinto;N;;;;;;
+31/03/2026;Preservação dos recursos hídricos;S260016;Ana Pinto Dias;N;;;;;;
+31/03/2026;Preservação dos recursos hídricos;S260017;Gabriela Queiroz Vieira;S;160;120;160;200;120;760
+31/03/2026;Preservação dos recursos hídricos;S260018;Manuela Nogueira Dias;N;;;;;;
+31/03/2026;Preservação dos recursos hídricos;S260019;Leonardo Freitas Cardoso;S;160;120;80;120;160;640
+31/03/2026;Preservação dos recursos hídricos;S260020;Isabela Nunes Oliveira;S;80;40;40;120;40;320
+07/04/2026;Educação financeira nas escolas;S260001;Nicolas Pereira Batista;S;120;120;120;120;120;600
+07/04/2026;Educação financeira nas escolas;S260002;Olívia Ferreira Lima;S;120;120;120;120;120;600
+07/04/2026;Educação financeira nas escolas;S260003;Daniel Garcia Rocha;S;120;120;120;120;120;600
+07/04/2026;Educação financeira nas escolas;S260004;Manuela Martins Cardoso;S;120;120;120;120;120;600
+07/04/2026;Educação financeira nas escolas;S260005;Pietra Ramos Nogueira;S;120;120;120;120;120;600
+07/04/2026;Educação financeira nas escolas;S260006;Daniel Pereira Dias;S;120;120;120;120;120;600
+07/04/2026;Educação financeira nas escolas;S260007;Vinícius Batista Duarte;S;120;120;120;120;120;600
+07/04/2026;Educação financeira nas escolas;S260008;Eduarda Ramos Rocha;S;80;40;40;80;80;320
+07/04/2026;Educação financeira nas escolas;S260009;Valentina Garcia Freitas;S;120;160;200;120;160;760
+07/04/2026;Educação financeira nas escolas;S260010;Vinícius Pereira Cardoso;S;120;200;160;160;160;800
+07/04/2026;Educação financeira nas escolas;S260011;Yasmin Vieira Martins;S;80;120;160;80;160;600
+07/04/2026;Educação financeira nas escolas;S260012;Ana Dias Batista;S;200;120;120;200;120;760
+07/04/2026;Educação financeira nas escolas;S260013;Isabela Gomes Ribeiro;S;40;120;40;40;40;280
+07/04/2026;Educação financeira nas escolas;S260014;Fernanda Batista Pereira;S;160;160;200;120;120;760
+07/04/2026;Educação financeira nas escolas;S260015;Nicolas Ramos Pinto;N;;;;;;
+07/04/2026;Educação financeira nas escolas;S260016;Ana Pinto Dias;S;80;160;80;80;80;480
+07/04/2026;Educação financeira nas escolas;S260017;Gabriela Queiroz Vieira;S;200;200;120;160;160;840
+07/04/2026;Educação financeira nas escolas;S260018;Manuela Nogueira Dias;S;120;200;200;160;160;840
+07/04/2026;Educação financeira nas escolas;S260019;Leonardo Freitas Cardoso;S;120;160;160;80;80;600
+07/04/2026;Educação financeira nas escolas;S260020;Isabela Nunes Oliveira;N;;;;;;
+14/04/2026;Desafios da mobilidade urbana;S260001;Nicolas Pereira Batista;S;120;120;120;120;120;600
+14/04/2026;Desafios da mobilidade urbana;S260002;Olívia Ferreira Lima;S;120;120;120;120;120;600
+14/04/2026;Desafios da mobilidade urbana;S260003;Daniel Garcia Rocha;S;120;120;120;120;120;600
+14/04/2026;Desafios da mobilidade urbana;S260004;Manuela Martins Cardoso;S;120;120;120;120;120;600
+14/04/2026;Desafios da mobilidade urbana;S260005;Pietra Ramos Nogueira;S;120;120;120;120;120;600
+14/04/2026;Desafios da mobilidade urbana;S260006;Daniel Pereira Dias;S;120;120;120;120;120;600
+14/04/2026;Desafios da mobilidade urbana;S260007;Vinícius Batista Duarte;S;120;120;120;120;120;600
+14/04/2026;Desafios da mobilidade urbana;S260008;Eduarda Ramos Rocha;N;;;;;;
+14/04/2026;Desafios da mobilidade urbana;S260009;Valentina Garcia Freitas;S;160;120;160;120;160;720
+14/04/2026;Desafios da mobilidade urbana;S260010;Vinícius Pereira Cardoso;S;200;160;200;200;160;920
+14/04/2026;Desafios da mobilidade urbana;S260011;Yasmin Vieira Martins;S;80;80;160;160;120;600
+14/04/2026;Desafios da mobilidade urbana;S260012;Ana Dias Batista;S;160;160;160;120;200;800
+14/04/2026;Desafios da mobilidade urbana;S260013;Isabela Gomes Ribeiro;S;120;120;120;120;80;560
+14/04/2026;Desafios da mobilidade urbana;S260014;Fernanda Batista Pereira;S;160;200;120;160;200;840
+14/04/2026;Desafios da mobilidade urbana;S260015;Nicolas Ramos Pinto;S;80;120;80;120;120;520
+14/04/2026;Desafios da mobilidade urbana;S260016;Ana Pinto Dias;S;120;160;160;160;160;760
+14/04/2026;Desafios da mobilidade urbana;S260017;Gabriela Queiroz Vieira;S;160;120;120;120;120;640
+14/04/2026;Desafios da mobilidade urbana;S260018;Manuela Nogueira Dias;N;;;;;;
+14/04/2026;Desafios da mobilidade urbana;S260019;Leonardo Freitas Cardoso;S;80;160;80;120;160;600
+14/04/2026;Desafios da mobilidade urbana;S260020;Isabela Nunes Oliveira;S;80;120;80;120;40;440
+21/04/2026;O acesso à cultura nas periferias;S260001;Nicolas Pereira Batista;S;120;120;120;120;120;600
+21/04/2026;O acesso à cultura nas periferias;S260002;Olívia Ferreira Lima;S;120;120;120;120;120;600
+21/04/2026;O acesso à cultura nas periferias;S260003;Daniel Garcia Rocha;S;120;120;120;120;120;600
+21/04/2026;O acesso à cultura nas periferias;S260004;Manuela Martins Cardoso;S;120;120;120;120;120;600
+21/04/2026;O acesso à cultura nas periferias;S260005;Pietra Ramos Nogueira;S;120;120;120;120;120;600
+21/04/2026;O acesso à cultura nas periferias;S260006;Daniel Pereira Dias;S;120;120;120;120;120;600
+21/04/2026;O acesso à cultura nas periferias;S260007;Vinícius Batista Duarte;S;120;120;120;120;120;600
+21/04/2026;O acesso à cultura nas periferias;S260008;Eduarda Ramos Rocha;S;120;80;120;120;120;560
+21/04/2026;O acesso à cultura nas periferias;S260009;Valentina Garcia Freitas;S;160;160;200;160;160;840
+21/04/2026;O acesso à cultura nas periferias;S260010;Vinícius Pereira Cardoso;S;160;200;200;200;200;960
+21/04/2026;O acesso à cultura nas periferias;S260011;Yasmin Vieira Martins;S;120;80;80;120;120;520
+21/04/2026;O acesso à cultura nas periferias;S260012;Ana Dias Batista;S;200;120;200;160;160;840
+21/04/2026;O acesso à cultura nas periferias;S260013;Isabela Gomes Ribeiro;S;80;80;80;40;40;320
+21/04/2026;O acesso à cultura nas periferias;S260014;Fernanda Batista Pereira;S;120;120;120;160;160;680
+21/04/2026;O acesso à cultura nas periferias;S260015;Nicolas Ramos Pinto;N;;;;;;
+21/04/2026;O acesso à cultura nas periferias;S260016;Ana Pinto Dias;N;;;;;;
+21/04/2026;O acesso à cultura nas periferias;S260017;Gabriela Queiroz Vieira;S;120;200;160;160;120;760
+21/04/2026;O acesso à cultura nas periferias;S260018;Manuela Nogueira Dias;N;;;;;;
+21/04/2026;O acesso à cultura nas periferias;S260019;Leonardo Freitas Cardoso;S;160;120;160;160;160;760
+21/04/2026;O acesso à cultura nas periferias;S260020;Isabela Nunes Oliveira;S;80;40;120;40;120;400
+28/04/2026;Saúde mental na juventude;S260001;Nicolas Pereira Batista;S;120;120;120;120;120;600
+28/04/2026;Saúde mental na juventude;S260002;Olívia Ferreira Lima;S;120;120;120;120;120;600
+28/04/2026;Saúde mental na juventude;S260003;Daniel Garcia Rocha;S;120;120;120;120;120;600
+28/04/2026;Saúde mental na juventude;S260004;Manuela Martins Cardoso;S;120;120;120;120;120;600
+28/04/2026;Saúde mental na juventude;S260005;Pietra Ramos Nogueira;S;120;120;120;120;120;600
+28/04/2026;Saúde mental na juventude;S260006;Daniel Pereira Dias;S;120;120;120;120;120;600
+28/04/2026;Saúde mental na juventude;S260007;Vinícius Batista Duarte;S;120;120;120;120;120;600
+28/04/2026;Saúde mental na juventude;S260008;Eduarda Ramos Rocha;S;40;40;80;80;120;360
+28/04/2026;Saúde mental na juventude;S260009;Valentina Garcia Freitas;S;160;160;120;160;120;720
+28/04/2026;Saúde mental na juventude;S260010;Vinícius Pereira Cardoso;S;160;120;160;160;120;720
+28/04/2026;Saúde mental na juventude;S260011;Yasmin Vieira Martins;S;160;120;80;120;160;640
+28/04/2026;Saúde mental na juventude;S260012;Ana Dias Batista;S;200;200;200;160;120;880
+28/04/2026;Saúde mental na juventude;S260013;Isabela Gomes Ribeiro;N;;;;;;
+28/04/2026;Saúde mental na juventude;S260014;Fernanda Batista Pereira;S;160;160;160;200;120;800
+28/04/2026;Saúde mental na juventude;S260015;Nicolas Ramos Pinto;N;;;;;;
+28/04/2026;Saúde mental na juventude;S260016;Ana Pinto Dias;N;;;;;;
+28/04/2026;Saúde mental na juventude;S260017;Gabriela Queiroz Vieira;S;160;120;160;120;120;680
+28/04/2026;Saúde mental na juventude;S260018;Manuela Nogueira Dias;S;200;120;120;160;200;800
+28/04/2026;Saúde mental na juventude;S260019;Leonardo Freitas Cardoso;S;80;120;80;80;80;440
+28/04/2026;Saúde mental na juventude;S260020;Isabela Nunes Oliveira;N;;;;;;
+05/05/2026;A desinformação nas redes sociais;S260001;Nicolas Pereira Batista;S;120;120;120;120;120;600
+05/05/2026;A desinformação nas redes sociais;S260002;Olívia Ferreira Lima;S;120;120;120;120;120;600
+05/05/2026;A desinformação nas redes sociais;S260003;Daniel Garcia Rocha;S;120;120;120;120;120;600
+05/05/2026;A desinformação nas redes sociais;S260004;Manuela Martins Cardoso;S;120;120;120;120;120;600
+05/05/2026;A desinformação nas redes sociais;S260005;Pietra Ramos Nogueira;S;120;120;120;120;120;600
+05/05/2026;A desinformação nas redes sociais;S260006;Daniel Pereira Dias;S;120;120;120;120;120;600
+05/05/2026;A desinformação nas redes sociais;S260007;Vinícius Batista Duarte;S;120;120;120;120;120;600
+05/05/2026;A desinformação nas redes sociais;S260008;Eduarda Ramos Rocha;N;;;;;;
+05/05/2026;A desinformação nas redes sociais;S260009;Valentina Garcia Freitas;N;;;;;;
+05/05/2026;A desinformação nas redes sociais;S260010;Vinícius Pereira Cardoso;S;120;120;120;160;120;640
+05/05/2026;A desinformação nas redes sociais;S260011;Yasmin Vieira Martins;S;160;80;120;160;80;600
+05/05/2026;A desinformação nas redes sociais;S260012;Ana Dias Batista;S;200;160;200;120;160;840
+05/05/2026;A desinformação nas redes sociais;S260013;Isabela Gomes Ribeiro;S;40;120;80;120;40;400
+05/05/2026;A desinformação nas redes sociais;S260014;Fernanda Batista Pereira;N;;;;;;
+05/05/2026;A desinformação nas redes sociais;S260015;Nicolas Ramos Pinto;N;;;;;;
+05/05/2026;A desinformação nas redes sociais;S260016;Ana Pinto Dias;S;160;120;120;120;80;600
+05/05/2026;A desinformação nas redes sociais;S260017;Gabriela Queiroz Vieira;S;120;200;200;160;120;800
+05/05/2026;A desinformação nas redes sociais;S260018;Manuela Nogueira Dias;S;200;160;120;120;200;800
+05/05/2026;A desinformação nas redes sociais;S260019;Leonardo Freitas Cardoso;S;120;80;80;80;120;480
+05/05/2026;A desinformação nas redes sociais;S260020;Isabela Nunes Oliveira;N;;;;;;
+12/05/2026;Trabalho e tecnologia;S260001;Nicolas Pereira Batista;S;120;120;120;120;120;600
+12/05/2026;Trabalho e tecnologia;S260002;Olívia Ferreira Lima;S;120;120;120;120;120;600
+12/05/2026;Trabalho e tecnologia;S260003;Daniel Garcia Rocha;S;120;120;120;120;120;600
+12/05/2026;Trabalho e tecnologia;S260004;Manuela Martins Cardoso;S;120;120;120;120;120;600
+12/05/2026;Trabalho e tecnologia;S260005;Pietra Ramos Nogueira;S;120;120;120;120;120;600
+12/05/2026;Trabalho e tecnologia;S260006;Daniel Pereira Dias;S;120;120;120;120;120;600
+12/05/2026;Trabalho e tecnologia;S260007;Vinícius Batista Duarte;S;120;120;120;120;120;600
+12/05/2026;Trabalho e tecnologia;S260008;Eduarda Ramos Rocha;N;;;;;;
+12/05/2026;Trabalho e tecnologia;S260009;Valentina Garcia Freitas;S;160;160;200;160;200;880
+12/05/2026;Trabalho e tecnologia;S260010;Vinícius Pereira Cardoso;S;200;120;120;200;120;760
+12/05/2026;Trabalho e tecnologia;S260011;Yasmin Vieira Martins;S;80;80;80;120;160;520
+12/05/2026;Trabalho e tecnologia;S260012;Ana Dias Batista;S;120;200;120;120;200;760
+12/05/2026;Trabalho e tecnologia;S260013;Isabela Gomes Ribeiro;N;;;;;;
+12/05/2026;Trabalho e tecnologia;S260014;Fernanda Batista Pereira;S;200;160;120;160;120;760
+12/05/2026;Trabalho e tecnologia;S260015;Nicolas Ramos Pinto;N;;;;;;
+12/05/2026;Trabalho e tecnologia;S260016;Ana Pinto Dias;N;;;;;;
+12/05/2026;Trabalho e tecnologia;S260017;Gabriela Queiroz Vieira;S;120;160;160;120;120;680
+12/05/2026;Trabalho e tecnologia;S260018;Manuela Nogueira Dias;S;120;160;160;160;160;760
+12/05/2026;Trabalho e tecnologia;S260019;Leonardo Freitas Cardoso;S;80;80;120;160;80;520
+12/05/2026;Trabalho e tecnologia;S260020;Isabela Nunes Oliveira;N;;;;;;
+19/05/2026;O papel da ciência na sociedade;S260001;Nicolas Pereira Batista;S;120;120;120;120;120;600
+19/05/2026;O papel da ciência na sociedade;S260002;Olívia Ferreira Lima;S;120;120;120;120;120;600
+19/05/2026;O papel da ciência na sociedade;S260003;Daniel Garcia Rocha;S;120;120;120;120;120;600
+19/05/2026;O papel da ciência na sociedade;S260004;Manuela Martins Cardoso;S;120;120;120;120;120;600
+19/05/2026;O papel da ciência na sociedade;S260005;Pietra Ramos Nogueira;S;120;120;120;120;120;600
+19/05/2026;O papel da ciência na sociedade;S260006;Daniel Pereira Dias;S;120;120;120;120;120;600
+19/05/2026;O papel da ciência na sociedade;S260007;Vinícius Batista Duarte;S;120;120;120;120;120;600
+19/05/2026;O papel da ciência na sociedade;S260008;Eduarda Ramos Rocha;S;120;120;40;120;40;440
+19/05/2026;O papel da ciência na sociedade;S260009;Valentina Garcia Freitas;S;120;200;160;160;160;800
+19/05/2026;O papel da ciência na sociedade;S260010;Vinícius Pereira Cardoso;S;200;120;160;160;160;800
+19/05/2026;O papel da ciência na sociedade;S260011;Yasmin Vieira Martins;S;120;120;160;160;160;720
+19/05/2026;O papel da ciência na sociedade;S260012;Ana Dias Batista;N;;;;;;
+19/05/2026;O papel da ciência na sociedade;S260013;Isabela Gomes Ribeiro;S;120;40;120;40;80;400
+19/05/2026;O papel da ciência na sociedade;S260014;Fernanda Batista Pereira;N;;;;;;
+19/05/2026;O papel da ciência na sociedade;S260015;Nicolas Ramos Pinto;N;;;;;;
+19/05/2026;O papel da ciência na sociedade;S260016;Ana Pinto Dias;S;160;160;160;80;80;640
+19/05/2026;O papel da ciência na sociedade;S260017;Gabriela Queiroz Vieira;S;120;200;120;160;200;800
+19/05/2026;O papel da ciência na sociedade;S260018;Manuela Nogueira Dias;N;;;;;;
+19/05/2026;O papel da ciência na sociedade;S260019;Leonardo Freitas Cardoso;S;160;160;120;80;120;640
+19/05/2026;O papel da ciência na sociedade;S260020;Isabela Nunes Oliveira;N;;;;;;
+26/05/2026;Desperdício de alimentos;S260001;Nicolas Pereira Batista;S;120;120;120;120;120;600
+26/05/2026;Desperdício de alimentos;S260002;Olívia Ferreira Lima;S;120;120;120;120;120;600
+26/05/2026;Desperdício de alimentos;S260003;Daniel Garcia Rocha;S;120;120;120;120;120;600
+26/05/2026;Desperdício de alimentos;S260004;Manuela Martins Cardoso;S;120;120;120;120;120;600
+26/05/2026;Desperdício de alimentos;S260005;Pietra Ramos Nogueira;S;120;120;120;120;120;600
+26/05/2026;Desperdício de alimentos;S260006;Daniel Pereira Dias;S;120;120;120;120;120;600
+26/05/2026;Desperdício de alimentos;S260007;Vinícius Batista Duarte;S;120;120;120;120;120;600
+26/05/2026;Desperdício de alimentos;S260008;Eduarda Ramos Rocha;S;80;80;120;120;120;520
+26/05/2026;Desperdício de alimentos;S260009;Valentina Garcia Freitas;S;120;120;160;120;200;720
+26/05/2026;Desperdício de alimentos;S260010;Vinícius Pereira Cardoso;S;120;120;120;160;120;640
+26/05/2026;Desperdício de alimentos;S260011;Yasmin Vieira Martins;N;;;;;;
+26/05/2026;Desperdício de alimentos;S260012;Ana Dias Batista;S;200;120;160;160;160;800
+26/05/2026;Desperdício de alimentos;S260013;Isabela Gomes Ribeiro;S;80;40;120;120;40;400
+26/05/2026;Desperdício de alimentos;S260014;Fernanda Batista Pereira;S;160;160;160;160;120;760
+26/05/2026;Desperdício de alimentos;S260015;Nicolas Ramos Pinto;S;40;40;80;120;40;320
+26/05/2026;Desperdício de alimentos;S260016;Ana Pinto Dias;N;;;;;;
+26/05/2026;Desperdício de alimentos;S260017;Gabriela Queiroz Vieira;S;200;160;200;160;160;880
+26/05/2026;Desperdício de alimentos;S260018;Manuela Nogueira Dias;N;;;;;;
+26/05/2026;Desperdício de alimentos;S260019;Leonardo Freitas Cardoso;S;160;160;160;160;80;720
+26/05/2026;Desperdício de alimentos;S260020;Isabela Nunes Oliveira;N;;;;;;
+02/06/2026;Inclusão digital de idosos;S260001;Nicolas Pereira Batista;S;120;120;120;120;120;600
+02/06/2026;Inclusão digital de idosos;S260002;Olívia Ferreira Lima;S;120;120;120;120;120;600
+02/06/2026;Inclusão digital de idosos;S260003;Daniel Garcia Rocha;S;120;120;120;120;120;600
+02/06/2026;Inclusão digital de idosos;S260004;Manuela Martins Cardoso;S;120;120;120;120;120;600
+02/06/2026;Inclusão digital de idosos;S260005;Pietra Ramos Nogueira;S;120;120;120;120;120;600
+02/06/2026;Inclusão digital de idosos;S260006;Daniel Pereira Dias;S;120;120;120;120;120;600
+02/06/2026;Inclusão digital de idosos;S260007;Vinícius Batista Duarte;S;120;120;120;120;120;600
+02/06/2026;Inclusão digital de idosos;S260008;Eduarda Ramos Rocha;N;;;;;;
+02/06/2026;Inclusão digital de idosos;S260009;Valentina Garcia Freitas;S;160;120;160;120;120;680
+02/06/2026;Inclusão digital de idosos;S260010;Vinícius Pereira Cardoso;N;;;;;;
+02/06/2026;Inclusão digital de idosos;S260011;Yasmin Vieira Martins;S;120;120;160;120;80;600
+02/06/2026;Inclusão digital de idosos;S260012;Ana Dias Batista;S;120;160;200;160;120;760
+02/06/2026;Inclusão digital de idosos;S260013;Isabela Gomes Ribeiro;S;80;40;120;80;80;400
+02/06/2026;Inclusão digital de idosos;S260014;Fernanda Batista Pereira;N;;;;;;
+02/06/2026;Inclusão digital de idosos;S260015;Nicolas Ramos Pinto;N;;;;;;
+02/06/2026;Inclusão digital de idosos;S260016;Ana Pinto Dias;S;120;120;160;80;80;560
+02/06/2026;Inclusão digital de idosos;S260017;Gabriela Queiroz Vieira;S;200;200;200;120;200;920
+02/06/2026;Inclusão digital de idosos;S260018;Manuela Nogueira Dias;S;200;200;120;160;120;800
+02/06/2026;Inclusão digital de idosos;S260019;Leonardo Freitas Cardoso;S;120;80;80;160;120;560
+02/06/2026;Inclusão digital de idosos;S260020;Isabela Nunes Oliveira;N;;;;;;
+09/06/2026;Preservação dos recursos hídricos;S260001;Nicolas Pereira Batista;S;120;120;120;120;120;600
+09/06/2026;Preservação dos recursos hídricos;S260002;Olívia Ferreira Lima;S;120;120;120;120;120;600
+09/06/2026;Preservação dos recursos hídricos;S260003;Daniel Garcia Rocha;S;120;120;120;120;120;600
+09/06/2026;Preservação dos recursos hídricos;S260004;Manuela Martins Cardoso;S;120;120;120;120;120;600
+09/06/2026;Preservação dos recursos hídricos;S260005;Pietra Ramos Nogueira;S;120;120;120;120;120;600
+09/06/2026;Preservação dos recursos hídricos;S260006;Daniel Pereira Dias;S;120;120;120;120;120;600
+09/06/2026;Preservação dos recursos hídricos;S260007;Vinícius Batista Duarte;S;120;120;120;120;120;600
+09/06/2026;Preservação dos recursos hídricos;S260008;Eduarda Ramos Rocha;S;40;40;120;120;80;400
+09/06/2026;Preservação dos recursos hídricos;S260009;Valentina Garcia Freitas;S;200;160;120;160;120;760
+09/06/2026;Preservação dos recursos hídricos;S260010;Vinícius Pereira Cardoso;N;;;;;;
+09/06/2026;Preservação dos recursos hídricos;S260011;Yasmin Vieira Martins;N;;;;;;
+09/06/2026;Preservação dos recursos hídricos;S260012;Ana Dias Batista;N;;;;;;
+09/06/2026;Preservação dos recursos hídricos;S260013;Isabela Gomes Ribeiro;N;;;;;;
+09/06/2026;Preservação dos recursos hídricos;S260014;Fernanda Batista Pereira;N;;;;;;
+09/06/2026;Preservação dos recursos hídricos;S260015;Nicolas Ramos Pinto;S;120;40;40;40;120;360
+09/06/2026;Preservação dos recursos hídricos;S260016;Ana Pinto Dias;N;;;;;;
+09/06/2026;Preservação dos recursos hídricos;S260017;Gabriela Queiroz Vieira;S;160;200;120;160;200;840
+09/06/2026;Preservação dos recursos hídricos;S260018;Manuela Nogueira Dias;S;160;160;160;200;160;840
+09/06/2026;Preservação dos recursos hídricos;S260019;Leonardo Freitas Cardoso;S;80;80;80;80;80;400
+09/06/2026;Preservação dos recursos hídricos;S260020;Isabela Nunes Oliveira;N;;;;;;
+16/06/2026;Educação financeira nas escolas;S260001;Nicolas Pereira Batista;S;120;120;120;120;120;600
+16/06/2026;Educação financeira nas escolas;S260002;Olívia Ferreira Lima;S;120;120;120;120;120;600
+16/06/2026;Educação financeira nas escolas;S260003;Daniel Garcia Rocha;S;120;120;120;120;120;600
+16/06/2026;Educação financeira nas escolas;S260004;Manuela Martins Cardoso;S;120;120;120;120;120;600
+16/06/2026;Educação financeira nas escolas;S260005;Pietra Ramos Nogueira;S;120;120;120;120;120;600
+16/06/2026;Educação financeira nas escolas;S260006;Daniel Pereira Dias;S;120;120;120;120;120;600
+16/06/2026;Educação financeira nas escolas;S260007;Vinícius Batista Duarte;S;120;120;120;120;120;600
+16/06/2026;Educação financeira nas escolas;S260008;Eduarda Ramos Rocha;N;;;;;;
+16/06/2026;Educação financeira nas escolas;S260009;Valentina Garcia Freitas;N;;;;;;
+16/06/2026;Educação financeira nas escolas;S260010;Vinícius Pereira Cardoso;N;;;;;;
+16/06/2026;Educação financeira nas escolas;S260011;Yasmin Vieira Martins;S;120;120;120;160;160;680
+16/06/2026;Educação financeira nas escolas;S260012;Ana Dias Batista;N;;;;;;
+16/06/2026;Educação financeira nas escolas;S260013;Isabela Gomes Ribeiro;N;;;;;;
+16/06/2026;Educação financeira nas escolas;S260014;Fernanda Batista Pereira;N;;;;;;
+16/06/2026;Educação financeira nas escolas;S260015;Nicolas Ramos Pinto;S;40;120;120;120;120;520
+16/06/2026;Educação financeira nas escolas;S260016;Ana Pinto Dias;N;;;;;;
+16/06/2026;Educação financeira nas escolas;S260017;Gabriela Queiroz Vieira;S;160;120;120;160;160;720
+16/06/2026;Educação financeira nas escolas;S260018;Manuela Nogueira Dias;S;200;160;200;120;160;840
+16/06/2026;Educação financeira nas escolas;S260019;Leonardo Freitas Cardoso;S;160;120;160;120;160;720
+16/06/2026;Educação financeira nas escolas;S260020;Isabela Nunes Oliveira;S;40;80;40;120;40;320
+23/06/2026;Desafios da mobilidade urbana;S260001;Nicolas Pereira Batista;S;120;120;120;120;120;600
+23/06/2026;Desafios da mobilidade urbana;S260002;Olívia Ferreira Lima;S;120;120;120;120;120;600
+23/06/2026;Desafios da mobilidade urbana;S260003;Daniel Garcia Rocha;S;120;120;120;120;120;600
+23/06/2026;Desafios da mobilidade urbana;S260004;Manuela Martins Cardoso;S;120;120;120;120;120;600
+23/06/2026;Desafios da mobilidade urbana;S260005;Pietra Ramos Nogueira;S;120;120;120;120;120;600
+23/06/2026;Desafios da mobilidade urbana;S260006;Daniel Pereira Dias;S;120;120;120;120;120;600
+23/06/2026;Desafios da mobilidade urbana;S260007;Vinícius Batista Duarte;S;120;120;120;120;120;600
+23/06/2026;Desafios da mobilidade urbana;S260008;Eduarda Ramos Rocha;S;40;120;40;120;40;360
+23/06/2026;Desafios da mobilidade urbana;S260009;Valentina Garcia Freitas;S;160;160;200;160;120;800
+23/06/2026;Desafios da mobilidade urbana;S260010;Vinícius Pereira Cardoso;S;120;200;200;200;120;840
+23/06/2026;Desafios da mobilidade urbana;S260011;Yasmin Vieira Martins;S;80;80;120;120;120;520
+23/06/2026;Desafios da mobilidade urbana;S260012;Ana Dias Batista;N;;;;;;
+23/06/2026;Desafios da mobilidade urbana;S260013;Isabela Gomes Ribeiro;N;;;;;;
+23/06/2026;Desafios da mobilidade urbana;S260014;Fernanda Batista Pereira;S;200;200;120;160;120;800
+23/06/2026;Desafios da mobilidade urbana;S260015;Nicolas Ramos Pinto;N;;;;;;
+23/06/2026;Desafios da mobilidade urbana;S260016;Ana Pinto Dias;N;;;;;;
+23/06/2026;Desafios da mobilidade urbana;S260017;Gabriela Queiroz Vieira;S;160;200;200;160;160;880
+23/06/2026;Desafios da mobilidade urbana;S260018;Manuela Nogueira Dias;N;;;;;;
+23/06/2026;Desafios da mobilidade urbana;S260019;Leonardo Freitas Cardoso;N;;;;;;
+23/06/2026;Desafios da mobilidade urbana;S260020;Isabela Nunes Oliveira;S;80;80;80;40;40;320
+30/06/2026;O acesso à cultura nas periferias;S260001;Nicolas Pereira Batista;S;120;120;120;120;120;600
+30/06/2026;O acesso à cultura nas periferias;S260002;Olívia Ferreira Lima;S;120;120;120;120;120;600
+30/06/2026;O acesso à cultura nas periferias;S260003;Daniel Garcia Rocha;S;120;120;120;120;120;600
+30/06/2026;O acesso à cultura nas periferias;S260004;Manuela Martins Cardoso;S;120;120;120;120;120;600
+30/06/2026;O acesso à cultura nas periferias;S260005;Pietra Ramos Nogueira;S;120;120;120;120;120;600
+30/06/2026;O acesso à cultura nas periferias;S260006;Daniel Pereira Dias;S;120;120;120;120;120;600
+30/06/2026;O acesso à cultura nas periferias;S260007;Vinícius Batista Duarte;S;120;120;120;120;120;600
+30/06/2026;O acesso à cultura nas periferias;S260008;Eduarda Ramos Rocha;N;;;;;;
+30/06/2026;O acesso à cultura nas periferias;S260009;Valentina Garcia Freitas;S;120;120;120;200;120;680
+30/06/2026;O acesso à cultura nas periferias;S260010;Vinícius Pereira Cardoso;S;160;200;160;200;200;920
+30/06/2026;O acesso à cultura nas periferias;S260011;Yasmin Vieira Martins;S;120;80;120;80;120;520
+30/06/2026;O acesso à cultura nas periferias;S260012;Ana Dias Batista;S;120;160;120;120;200;720
+30/06/2026;O acesso à cultura nas periferias;S260013;Isabela Gomes Ribeiro;S;120;120;40;80;40;400
+30/06/2026;O acesso à cultura nas periferias;S260014;Fernanda Batista Pereira;N;;;;;;
+30/06/2026;O acesso à cultura nas periferias;S260015;Nicolas Ramos Pinto;N;;;;;;
+30/06/2026;O acesso à cultura nas periferias;S260016;Ana Pinto Dias;S;160;120;160;160;80;680
+30/06/2026;O acesso à cultura nas periferias;S260017;Gabriela Queiroz Vieira;S;120;200;120;120;120;680
+30/06/2026;O acesso à cultura nas periferias;S260018;Manuela Nogueira Dias;S;120;160;160;200;200;840
+30/06/2026;O acesso à cultura nas periferias;S260019;Leonardo Freitas Cardoso;S;80;80;160;80;80;480
+30/06/2026;O acesso à cultura nas periferias;S260020;Isabela Nunes Oliveira;S;120;80;40;40;80;360
+21/07/2026;Saúde mental na juventude;S260001;Nicolas Pereira Batista;S;120;120;120;120;120;600
+21/07/2026;Saúde mental na juventude;S260002;Olívia Ferreira Lima;S;120;120;120;120;120;600
+21/07/2026;Saúde mental na juventude;S260003;Daniel Garcia Rocha;S;120;120;120;120;120;600
+21/07/2026;Saúde mental na juventude;S260004;Manuela Martins Cardoso;S;120;120;120;120;120;600
+21/07/2026;Saúde mental na juventude;S260005;Pietra Ramos Nogueira;S;120;120;120;120;120;600
+21/07/2026;Saúde mental na juventude;S260006;Daniel Pereira Dias;S;120;120;120;120;120;600
+21/07/2026;Saúde mental na juventude;S260007;Vinícius Batista Duarte;S;120;120;120;120;120;600
+21/07/2026;Saúde mental na juventude;S260008;Eduarda Ramos Rocha;N;;;;;;
+21/07/2026;Saúde mental na juventude;S260009;Valentina Garcia Freitas;S;120;120;200;120;160;720
+21/07/2026;Saúde mental na juventude;S260010;Vinícius Pereira Cardoso;N;;;;;;
+21/07/2026;Saúde mental na juventude;S260011;Yasmin Vieira Martins;S;80;120;80;120;120;520
+21/07/2026;Saúde mental na juventude;S260012;Ana Dias Batista;S;160;200;120;160;200;840
+21/07/2026;Saúde mental na juventude;S260013;Isabela Gomes Ribeiro;N;;;;;;
+21/07/2026;Saúde mental na juventude;S260014;Fernanda Batista Pereira;S;120;200;120;200;160;800
+21/07/2026;Saúde mental na juventude;S260015;Nicolas Ramos Pinto;N;;;;;;
+21/07/2026;Saúde mental na juventude;S260016;Ana Pinto Dias;S;120;80;120;160;120;600
+21/07/2026;Saúde mental na juventude;S260017;Gabriela Queiroz Vieira;S;160;120;120;120;200;720
+21/07/2026;Saúde mental na juventude;S260018;Manuela Nogueira Dias;S;120;160;120;120;200;720
+21/07/2026;Saúde mental na juventude;S260019;Leonardo Freitas Cardoso;S;120;120;120;120;120;600
+21/07/2026;Saúde mental na juventude;S260020;Isabela Nunes Oliveira;S;120;120;40;80;80;440
+28/07/2026;A desinformação nas redes sociais;S260001;Nicolas Pereira Batista;S;120;120;120;120;120;600
+28/07/2026;A desinformação nas redes sociais;S260002;Olívia Ferreira Lima;S;120;120;120;120;120;600
+28/07/2026;A desinformação nas redes sociais;S260003;Daniel Garcia Rocha;S;120;120;120;120;120;600
+28/07/2026;A desinformação nas redes sociais;S260004;Manuela Martins Cardoso;S;120;120;120;120;120;600
+28/07/2026;A desinformação nas redes sociais;S260005;Pietra Ramos Nogueira;S;120;120;120;120;120;600
+28/07/2026;A desinformação nas redes sociais;S260006;Daniel Pereira Dias;S;120;120;120;120;120;600
+28/07/2026;A desinformação nas redes sociais;S260007;Vinícius Batista Duarte;S;120;120;120;120;120;600
+28/07/2026;A desinformação nas redes sociais;S260008;Eduarda Ramos Rocha;S;120;40;120;40;80;400
+28/07/2026;A desinformação nas redes sociais;S260009;Valentina Garcia Freitas;S;120;200;120;200;160;800
+28/07/2026;A desinformação nas redes sociais;S260010;Vinícius Pereira Cardoso;S;120;160;200;120;120;720
+28/07/2026;A desinformação nas redes sociais;S260011;Yasmin Vieira Martins;S;80;120;120;120;80;520
+28/07/2026;A desinformação nas redes sociais;S260012;Ana Dias Batista;N;;;;;;
+28/07/2026;A desinformação nas redes sociais;S260013;Isabela Gomes Ribeiro;S;120;40;120;80;40;400
+28/07/2026;A desinformação nas redes sociais;S260014;Fernanda Batista Pereira;S;200;120;200;200;200;920
+28/07/2026;A desinformação nas redes sociais;S260015;Nicolas Ramos Pinto;S;120;80;80;40;80;400
+28/07/2026;A desinformação nas redes sociais;S260016;Ana Pinto Dias;S;160;80;120;160;120;640
+28/07/2026;A desinformação nas redes sociais;S260017;Gabriela Queiroz Vieira;S;200;160;120;160;200;840
+28/07/2026;A desinformação nas redes sociais;S260018;Manuela Nogueira Dias;S;160;160;120;200;200;840
+28/07/2026;A desinformação nas redes sociais;S260019;Leonardo Freitas Cardoso;N;;;;;;
+28/07/2026;A desinformação nas redes sociais;S260020;Isabela Nunes Oliveira;N;;;;;;
+04/08/2026;Trabalho e tecnologia;S260001;Nicolas Pereira Batista;S;120;120;120;120;120;600
+04/08/2026;Trabalho e tecnologia;S260002;Olívia Ferreira Lima;S;120;120;120;120;120;600
+04/08/2026;Trabalho e tecnologia;S260003;Daniel Garcia Rocha;S;120;120;120;120;120;600
+04/08/2026;Trabalho e tecnologia;S260004;Manuela Martins Cardoso;S;120;120;120;120;120;600
+04/08/2026;Trabalho e tecnologia;S260005;Pietra Ramos Nogueira;S;120;120;120;120;120;600
+04/08/2026;Trabalho e tecnologia;S260006;Daniel Pereira Dias;S;120;120;120;120;120;600
+04/08/2026;Trabalho e tecnologia;S260007;Vinícius Batista Duarte;S;120;120;120;120;120;600
+04/08/2026;Trabalho e tecnologia;S260008;Eduarda Ramos Rocha;N;;;;;;
+04/08/2026;Trabalho e tecnologia;S260009;Valentina Garcia Freitas;N;;;;;;
+04/08/2026;Trabalho e tecnologia;S260010;Vinícius Pereira Cardoso;S;200;200;120;200;200;920
+04/08/2026;Trabalho e tecnologia;S260011;Yasmin Vieira Martins;S;160;160;80;160;120;680
+04/08/2026;Trabalho e tecnologia;S260012;Ana Dias Batista;S;120;120;200;200;160;800
+04/08/2026;Trabalho e tecnologia;S260013;Isabela Gomes Ribeiro;N;;;;;;
+04/08/2026;Trabalho e tecnologia;S260014;Fernanda Batista Pereira;N;;;;;;
+04/08/2026;Trabalho e tecnologia;S260015;Nicolas Ramos Pinto;N;;;;;;
+04/08/2026;Trabalho e tecnologia;S260016;Ana Pinto Dias;S;160;80;160;160;120;680
+04/08/2026;Trabalho e tecnologia;S260017;Gabriela Queiroz Vieira;S;120;120;160;200;160;760
+04/08/2026;Trabalho e tecnologia;S260018;Manuela Nogueira Dias;S;120;120;200;120;160;720
+04/08/2026;Trabalho e tecnologia;S260019;Leonardo Freitas Cardoso;N;;;;;;
+04/08/2026;Trabalho e tecnologia;S260020;Isabela Nunes Oliveira;N;;;;;;
+11/08/2026;O papel da ciência na sociedade;S260001;Nicolas Pereira Batista;S;120;120;120;120;120;600
+11/08/2026;O papel da ciência na sociedade;S260002;Olívia Ferreira Lima;S;120;120;120;120;120;600
+11/08/2026;O papel da ciência na sociedade;S260003;Daniel Garcia Rocha;S;120;120;120;120;120;600
+11/08/2026;O papel da ciência na sociedade;S260004;Manuela Martins Cardoso;S;120;120;120;120;120;600
+11/08/2026;O papel da ciência na sociedade;S260005;Pietra Ramos Nogueira;S;120;120;120;120;120;600
+11/08/2026;O papel da ciência na sociedade;S260006;Daniel Pereira Dias;S;120;120;120;120;120;600
+11/08/2026;O papel da ciência na sociedade;S260007;Vinícius Batista Duarte;S;120;120;120;120;120;600
+11/08/2026;O papel da ciência na sociedade;S260008;Eduarda Ramos Rocha;N;;;;;;
+11/08/2026;O papel da ciência na sociedade;S260009;Valentina Garcia Freitas;N;;;;;;
+11/08/2026;O papel da ciência na sociedade;S260010;Vinícius Pereira Cardoso;S;120;120;200;120;120;680
+11/08/2026;O papel da ciência na sociedade;S260011;Yasmin Vieira Martins;S;120;120;160;120;80;600
+11/08/2026;O papel da ciência na sociedade;S260012;Ana Dias Batista;N;;;;;;
+11/08/2026;O papel da ciência na sociedade;S260013;Isabela Gomes Ribeiro;S;120;80;80;40;120;440
+11/08/2026;O papel da ciência na sociedade;S260014;Fernanda Batista Pereira;N;;;;;;
+11/08/2026;O papel da ciência na sociedade;S260015;Nicolas Ramos Pinto;S;80;80;40;40;40;280
+11/08/2026;O papel da ciência na sociedade;S260016;Ana Pinto Dias;N;;;;;;
+11/08/2026;O papel da ciência na sociedade;S260017;Gabriela Queiroz Vieira;S;120;120;160;160;160;720
+11/08/2026;O papel da ciência na sociedade;S260018;Manuela Nogueira Dias;S;120;120;120;200;160;720
+11/08/2026;O papel da ciência na sociedade;S260019;Leonardo Freitas Cardoso;N;;;;;;
+11/08/2026;O papel da ciência na sociedade;S260020;Isabela Nunes Oliveira;S;40;40;120;80;120;400
+18/08/2026;Desperdício de alimentos;S260001;Nicolas Pereira Batista;S;120;120;120;120;120;600
+18/08/2026;Desperdício de alimentos;S260002;Olívia Ferreira Lima;S;120;120;120;120;120;600
+18/08/2026;Desperdício de alimentos;S260003;Daniel Garcia Rocha;S;120;120;120;120;120;600
+18/08/2026;Desperdício de alimentos;S260004;Manuela Martins Cardoso;S;120;120;120;120;120;600
+18/08/2026;Desperdício de alimentos;S260005;Pietra Ramos Nogueira;S;120;120;120;120;120;600
+18/08/2026;Desperdício de alimentos;S260006;Daniel Pereira Dias;S;120;120;120;120;120;600
+18/08/2026;Desperdício de alimentos;S260007;Vinícius Batista Duarte;S;120;120;120;120;120;600
+18/08/2026;Desperdício de alimentos;S260008;Eduarda Ramos Rocha;S;40;80;80;40;80;320
+18/08/2026;Desperdício de alimentos;S260009;Valentina Garcia Freitas;S;160;120;200;120;160;760
+18/08/2026;Desperdício de alimentos;S260010;Vinícius Pereira Cardoso;S;200;200;200;120;200;920
+18/08/2026;Desperdício de alimentos;S260011;Yasmin Vieira Martins;S;120;160;80;160;80;600
+18/08/2026;Desperdício de alimentos;S260012;Ana Dias Batista;S;160;120;120;200;200;800
+18/08/2026;Desperdício de alimentos;S260013;Isabela Gomes Ribeiro;N;;;;;;
+18/08/2026;Desperdício de alimentos;S260014;Fernanda Batista Pereira;S;200;120;160;120;160;760
+18/08/2026;Desperdício de alimentos;S260015;Nicolas Ramos Pinto;S;80;40;80;120;80;400
+18/08/2026;Desperdício de alimentos;S260016;Ana Pinto Dias;N;;;;;;
+18/08/2026;Desperdício de alimentos;S260017;Gabriela Queiroz Vieira;S;120;160;200;200;200;880
+18/08/2026;Desperdício de alimentos;S260018;Manuela Nogueira Dias;N;;;;;;
+18/08/2026;Desperdício de alimentos;S260019;Leonardo Freitas Cardoso;N;;;;;;
+18/08/2026;Desperdício de alimentos;S260020;Isabela Nunes Oliveira;S;40;80;120;80;120;440
+25/08/2026;Inclusão digital de idosos;S260001;Nicolas Pereira Batista;S;120;120;120;120;120;600
+25/08/2026;Inclusão digital de idosos;S260002;Olívia Ferreira Lima;S;120;120;120;120;120;600
+25/08/2026;Inclusão digital de idosos;S260003;Daniel Garcia Rocha;S;120;120;120;120;120;600
+25/08/2026;Inclusão digital de idosos;S260004;Manuela Martins Cardoso;S;120;120;120;120;120;600
+25/08/2026;Inclusão digital de idosos;S260005;Pietra Ramos Nogueira;S;120;120;120;120;120;600
+25/08/2026;Inclusão digital de idosos;S260006;Daniel Pereira Dias;S;120;120;120;120;120;600
+25/08/2026;Inclusão digital de idosos;S260007;Vinícius Batista Duarte;S;120;120;120;120;120;600
+25/08/2026;Inclusão digital de idosos;S260008;Eduarda Ramos Rocha;S;120;80;40;80;120;440
+25/08/2026;Inclusão digital de idosos;S260009;Valentina Garcia Freitas;N;;;;;;
+25/08/2026;Inclusão digital de idosos;S260010;Vinícius Pereira Cardoso;N;;;;;;
+25/08/2026;Inclusão digital de idosos;S260011;Yasmin Vieira Martins;S;160;80;80;80;160;560
+25/08/2026;Inclusão digital de idosos;S260012;Ana Dias Batista;S;200;200;200;200;200;1000
+25/08/2026;Inclusão digital de idosos;S260013;Isabela Gomes Ribeiro;S;80;40;80;40;80;320
+25/08/2026;Inclusão digital de idosos;S260014;Fernanda Batista Pereira;S;160;120;120;160;160;720
+25/08/2026;Inclusão digital de idosos;S260015;Nicolas Ramos Pinto;N;;;;;;
+25/08/2026;Inclusão digital de idosos;S260016;Ana Pinto Dias;N;;;;;;
+25/08/2026;Inclusão digital de idosos;S260017;Gabriela Queiroz Vieira;S;200;120;200;120;120;760
+25/08/2026;Inclusão digital de idosos;S260018;Manuela Nogueira Dias;N;;;;;;
+25/08/2026;Inclusão digital de idosos;S260019;Leonardo Freitas Cardoso;S;80;160;120;160;120;640
+25/08/2026;Inclusão digital de idosos;S260020;Isabela Nunes Oliveira;S;120;40;40;40;80;320
+01/09/2026;Preservação dos recursos hídricos;S260001;Nicolas Pereira Batista;S;120;120;120;120;120;600
+01/09/2026;Preservação dos recursos hídricos;S260002;Olívia Ferreira Lima;S;120;120;120;120;120;600
+01/09/2026;Preservação dos recursos hídricos;S260003;Daniel Garcia Rocha;S;120;120;120;120;120;600
+01/09/2026;Preservação dos recursos hídricos;S260004;Manuela Martins Cardoso;S;120;120;120;120;120;600
+01/09/2026;Preservação dos recursos hídricos;S260005;Pietra Ramos Nogueira;S;120;120;120;120;120;600
+01/09/2026;Preservação dos recursos hídricos;S260006;Daniel Pereira Dias;S;120;120;120;120;120;600
+01/09/2026;Preservação dos recursos hídricos;S260007;Vinícius Batista Duarte;S;120;120;120;120;120;600
+01/09/2026;Preservação dos recursos hídricos;S260008;Eduarda Ramos Rocha;S;120;40;40;120;80;400
+01/09/2026;Preservação dos recursos hídricos;S260009;Valentina Garcia Freitas;S;200;160;120;160;160;800
+01/09/2026;Preservação dos recursos hídricos;S260010;Vinícius Pereira Cardoso;S;200;200;120;200;160;880
+01/09/2026;Preservação dos recursos hídricos;S260011;Yasmin Vieira Martins;N;;;;;;
+01/09/2026;Preservação dos recursos hídricos;S260012;Ana Dias Batista;S;120;160;120;160;200;760
+01/09/2026;Preservação dos recursos hídricos;S260013;Isabela Gomes Ribeiro;N;;;;;;
+01/09/2026;Preservação dos recursos hídricos;S260014;Fernanda Batista Pereira;S;120;160;120;200;160;760
+01/09/2026;Preservação dos recursos hídricos;S260015;Nicolas Ramos Pinto;N;;;;;;
+01/09/2026;Preservação dos recursos hídricos;S260016;Ana Pinto Dias;N;;;;;;
+01/09/2026;Preservação dos recursos hídricos;S260017;Gabriela Queiroz Vieira;S;160;120;160;160;120;720
+01/09/2026;Preservação dos recursos hídricos;S260018;Manuela Nogueira Dias;S;120;160;160;120;120;680
+01/09/2026;Preservação dos recursos hídricos;S260019;Leonardo Freitas Cardoso;S;80;160;120;160;120;640
+01/09/2026;Preservação dos recursos hídricos;S260020;Isabela Nunes Oliveira;S;40;40;80;120;80;360
+08/09/2026;Educação financeira nas escolas;S260001;Nicolas Pereira Batista;S;120;120;120;120;120;600
+08/09/2026;Educação financeira nas escolas;S260002;Olívia Ferreira Lima;S;120;120;120;120;120;600
+08/09/2026;Educação financeira nas escolas;S260003;Daniel Garcia Rocha;S;120;120;120;120;120;600
+08/09/2026;Educação financeira nas escolas;S260004;Manuela Martins Cardoso;S;120;120;120;120;120;600
+08/09/2026;Educação financeira nas escolas;S260005;Pietra Ramos Nogueira;S;120;120;120;120;120;600
+08/09/2026;Educação financeira nas escolas;S260006;Daniel Pereira Dias;S;120;120;120;120;120;600
+08/09/2026;Educação financeira nas escolas;S260007;Vinícius Batista Duarte;S;120;120;120;120;120;600
+08/09/2026;Educação financeira nas escolas;S260008;Eduarda Ramos Rocha;S;40;120;40;80;80;360
+08/09/2026;Educação financeira nas escolas;S260009;Valentina Garcia Freitas;S;160;160;160;160;160;800
+08/09/2026;Educação financeira nas escolas;S260010;Vinícius Pereira Cardoso;S;200;200;120;160;160;840
+08/09/2026;Educação financeira nas escolas;S260011;Yasmin Vieira Martins;N;;;;;;
+08/09/2026;Educação financeira nas escolas;S260012;Ana Dias Batista;S;120;200;200;120;160;800
+08/09/2026;Educação financeira nas escolas;S260013;Isabela Gomes Ribeiro;S;120;80;40;80;40;360
+08/09/2026;Educação financeira nas escolas;S260014;Fernanda Batista Pereira;S;200;160;120;160;160;800
+08/09/2026;Educação financeira nas escolas;S260015;Nicolas Ramos Pinto;S;40;120;120;40;120;440
+08/09/2026;Educação financeira nas escolas;S260016;Ana Pinto Dias;S;80;160;160;80;80;560
+08/09/2026;Educação financeira nas escolas;S260017;Gabriela Queiroz Vieira;S;120;200;200;200;160;880
+08/09/2026;Educação financeira nas escolas;S260018;Manuela Nogueira Dias;S;120;200;200;160;120;800
+08/09/2026;Educação financeira nas escolas;S260019;Leonardo Freitas Cardoso;N;;;;;;
+08/09/2026;Educação financeira nas escolas;S260020;Isabela Nunes Oliveira;N;;;;;;
+15/09/2026;Desafios da mobilidade urbana;S260001;Nicolas Pereira Batista;S;120;120;120;120;120;600
+15/09/2026;Desafios da mobilidade urbana;S260002;Olívia Ferreira Lima;S;120;120;120;120;120;600
+15/09/2026;Desafios da mobilidade urbana;S260003;Daniel Garcia Rocha;S;120;120;120;120;120;600
+15/09/2026;Desafios da mobilidade urbana;S260004;Manuela Martins Cardoso;S;120;120;120;120;120;600
+15/09/2026;Desafios da mobilidade urbana;S260005;Pietra Ramos Nogueira;S;120;120;120;120;120;600
+15/09/2026;Desafios da mobilidade urbana;S260006;Daniel Pereira Dias;S;120;120;120;120;120;600
+15/09/2026;Desafios da mobilidade urbana;S260007;Vinícius Batista Duarte;S;120;120;120;120;120;600
+15/09/2026;Desafios da mobilidade urbana;S260008;Eduarda Ramos Rocha;N;;;;;;
+15/09/2026;Desafios da mobilidade urbana;S260009;Valentina Garcia Freitas;N;;;;;;
+15/09/2026;Desafios da mobilidade urbana;S260010;Vinícius Pereira Cardoso;N;;;;;;
+15/09/2026;Desafios da mobilidade urbana;S260011;Yasmin Vieira Martins;N;;;;;;
+15/09/2026;Desafios da mobilidade urbana;S260012;Ana Dias Batista;S;160;200;160;160;160;840
+15/09/2026;Desafios da mobilidade urbana;S260013;Isabela Gomes Ribeiro;S;80;120;120;40;80;440
+15/09/2026;Desafios da mobilidade urbana;S260014;Fernanda Batista Pereira;S;120;200;120;160;120;720
+15/09/2026;Desafios da mobilidade urbana;S260015;Nicolas Ramos Pinto;S;40;80;120;120;120;480
+15/09/2026;Desafios da mobilidade urbana;S260016;Ana Pinto Dias;N;;;;;;
+15/09/2026;Desafios da mobilidade urbana;S260017;Gabriela Queiroz Vieira;S;120;160;200;120;120;720
+15/09/2026;Desafios da mobilidade urbana;S260018;Manuela Nogueira Dias;S;160;160;200;120;120;760
+15/09/2026;Desafios da mobilidade urbana;S260019;Leonardo Freitas Cardoso;S;160;160;120;120;160;720
+15/09/2026;Desafios da mobilidade urbana;S260020;Isabela Nunes Oliveira;S;120;40;80;80;80;400
+22/09/2026;O acesso à cultura nas periferias;S260001;Nicolas Pereira Batista;S;120;120;120;120;120;600
+22/09/2026;O acesso à cultura nas periferias;S260002;Olívia Ferreira Lima;S;120;120;120;120;120;600
+22/09/2026;O acesso à cultura nas periferias;S260003;Daniel Garcia Rocha;S;120;120;120;120;120;600
+22/09/2026;O acesso à cultura nas periferias;S260004;Manuela Martins Cardoso;S;120;120;120;120;120;600
+22/09/2026;O acesso à cultura nas periferias;S260005;Pietra Ramos Nogueira;S;120;120;120;120;120;600
+22/09/2026;O acesso à cultura nas periferias;S260006;Daniel Pereira Dias;S;120;120;120;120;120;600
+22/09/2026;O acesso à cultura nas periferias;S260007;Vinícius Batista Duarte;S;120;120;120;120;120;600
+22/09/2026;O acesso à cultura nas periferias;S260008;Eduarda Ramos Rocha;S;80;40;80;40;40;280
+22/09/2026;O acesso à cultura nas periferias;S260009;Valentina Garcia Freitas;S;160;120;120;160;160;720
+22/09/2026;O acesso à cultura nas periferias;S260010;Vinícius Pereira Cardoso;S;160;160;160;160;160;800
+22/09/2026;O acesso à cultura nas periferias;S260011;Yasmin Vieira Martins;S;160;80;80;160;120;600
+22/09/2026;O acesso à cultura nas periferias;S260012;Ana Dias Batista;N;;;;;;
+22/09/2026;O acesso à cultura nas periferias;S260013;Isabela Gomes Ribeiro;S;80;120;40;120;120;480
+22/09/2026;O acesso à cultura nas periferias;S260014;Fernanda Batista Pereira;N;;;;;;
+22/09/2026;O acesso à cultura nas periferias;S260015;Nicolas Ramos Pinto;N;;;;;;
+22/09/2026;O acesso à cultura nas periferias;S260016;Ana Pinto Dias;S;120;80;160;120;160;640
+22/09/2026;O acesso à cultura nas periferias;S260017;Gabriela Queiroz Vieira;S;160;200;160;200;160;880
+22/09/2026;O acesso à cultura nas periferias;S260018;Manuela Nogueira Dias;N;;;;;;
+22/09/2026;O acesso à cultura nas periferias;S260019;Leonardo Freitas Cardoso;S;80;80;120;160;120;560
+22/09/2026;O acesso à cultura nas periferias;S260020;Isabela Nunes Oliveira;S;40;40;40;40;80;240
+29/09/2026;Saúde mental na juventude;S260001;Nicolas Pereira Batista;S;120;120;120;120;120;600
+29/09/2026;Saúde mental na juventude;S260002;Olívia Ferreira Lima;S;120;120;120;120;120;600
+29/09/2026;Saúde mental na juventude;S260003;Daniel Garcia Rocha;S;120;120;120;120;120;600
+29/09/2026;Saúde mental na juventude;S260004;Manuela Martins Cardoso;S;120;120;120;120;120;600
+29/09/2026;Saúde mental na juventude;S260005;Pietra Ramos Nogueira;S;120;120;120;120;120;600
+29/09/2026;Saúde mental na juventude;S260006;Daniel Pereira Dias;S;120;120;120;120;120;600
+29/09/2026;Saúde mental na juventude;S260007;Vinícius Batista Duarte;S;120;120;120;120;120;600
+29/09/2026;Saúde mental na juventude;S260008;Eduarda Ramos Rocha;S;40;120;120;120;80;480
+29/09/2026;Saúde mental na juventude;S260009;Valentina Garcia Freitas;N;;;;;;
+29/09/2026;Saúde mental na juventude;S260010;Vinícius Pereira Cardoso;N;;;;;;
+29/09/2026;Saúde mental na juventude;S260011;Yasmin Vieira Martins;S;120;160;160;160;120;720
+29/09/2026;Saúde mental na juventude;S260012;Ana Dias Batista;N;;;;;;
+29/09/2026;Saúde mental na juventude;S260013;Isabela Gomes Ribeiro;N;;;;;;
+29/09/2026;Saúde mental na juventude;S260014;Fernanda Batista Pereira;N;;;;;;
+29/09/2026;Saúde mental na juventude;S260015;Nicolas Ramos Pinto;N;;;;;;
+29/09/2026;Saúde mental na juventude;S260016;Ana Pinto Dias;N;;;;;;
+29/09/2026;Saúde mental na juventude;S260017;Gabriela Queiroz Vieira;N;;;;;;
+29/09/2026;Saúde mental na juventude;S260018;Manuela Nogueira Dias;S;200;120;120;160;160;760
+29/09/2026;Saúde mental na juventude;S260019;Leonardo Freitas Cardoso;N;;;;;;
+29/09/2026;Saúde mental na juventude;S260020;Isabela Nunes Oliveira;N;;;;;;
+06/10/2026;A desinformação nas redes sociais;S260001;Nicolas Pereira Batista;S;120;120;120;120;120;600
+06/10/2026;A desinformação nas redes sociais;S260002;Olívia Ferreira Lima;S;120;120;120;120;120;600
+06/10/2026;A desinformação nas redes sociais;S260003;Daniel Garcia Rocha;S;120;120;120;120;120;600
+06/10/2026;A desinformação nas redes sociais;S260004;Manuela Martins Cardoso;S;120;120;120;120;120;600
+06/10/2026;A desinformação nas redes sociais;S260005;Pietra Ramos Nogueira;S;120;120;120;120;120;600
+06/10/2026;A desinformação nas redes sociais;S260006;Daniel Pereira Dias;S;120;120;120;120;120;600
+06/10/2026;A desinformação nas redes sociais;S260007;Vinícius Batista Duarte;S;120;120;120;120;120;600
+06/10/2026;A desinformação nas redes sociais;S260008;Eduarda Ramos Rocha;N;;;;;;
+06/10/2026;A desinformação nas redes sociais;S260009;Valentina Garcia Freitas;N;;;;;;
+06/10/2026;A desinformação nas redes sociais;S260010;Vinícius Pereira Cardoso;S;120;200;160;200;160;840
+06/10/2026;A desinformação nas redes sociais;S260011;Yasmin Vieira Martins;S;80;160;80;120;160;600
+06/10/2026;A desinformação nas redes sociais;S260012;Ana Dias Batista;S;120;200;120;200;160;800
+06/10/2026;A desinformação nas redes sociais;S260013;Isabela Gomes Ribeiro;S;80;120;120;120;40;480
+06/10/2026;A desinformação nas redes sociais;S260014;Fernanda Batista Pereira;N;;;;;;
+06/10/2026;A desinformação nas redes sociais;S260015;Nicolas Ramos Pinto;S;80;80;120;80;120;480
+06/10/2026;A desinformação nas redes sociais;S260016;Ana Pinto Dias;S;120;120;80;80;80;480
+06/10/2026;A desinformação nas redes sociais;S260017;Gabriela Queiroz Vieira;S;120;200;120;200;160;800
+06/10/2026;A desinformação nas redes sociais;S260018;Manuela Nogueira Dias;S;160;200;160;160;120;800
+06/10/2026;A desinformação nas redes sociais;S260019;Leonardo Freitas Cardoso;S;120;160;120;120;160;680
+06/10/2026;A desinformação nas redes sociais;S260020;Isabela Nunes Oliveira;N;;;;;;
+13/10/2026;Trabalho e tecnologia;S260001;Nicolas Pereira Batista;S;120;120;120;120;120;600
+13/10/2026;Trabalho e tecnologia;S260002;Olívia Ferreira Lima;S;120;120;120;120;120;600
+13/10/2026;Trabalho e tecnologia;S260003;Daniel Garcia Rocha;S;120;120;120;120;120;600
+13/10/2026;Trabalho e tecnologia;S260004;Manuela Martins Cardoso;S;120;120;120;120;120;600
+13/10/2026;Trabalho e tecnologia;S260005;Pietra Ramos Nogueira;S;120;120;120;120;120;600
+13/10/2026;Trabalho e tecnologia;S260006;Daniel Pereira Dias;S;120;120;120;120;120;600
+13/10/2026;Trabalho e tecnologia;S260007;Vinícius Batista Duarte;S;120;120;120;120;120;600
+13/10/2026;Trabalho e tecnologia;S260008;Eduarda Ramos Rocha;N;;;;;;
+13/10/2026;Trabalho e tecnologia;S260009;Valentina Garcia Freitas;S;120;160;120;200;120;720
+13/10/2026;Trabalho e tecnologia;S260010;Vinícius Pereira Cardoso;N;;;;;;
+13/10/2026;Trabalho e tecnologia;S260011;Yasmin Vieira Martins;S;80;120;160;120;80;560
+13/10/2026;Trabalho e tecnologia;S260012;Ana Dias Batista;N;;;;;;
+13/10/2026;Trabalho e tecnologia;S260013;Isabela Gomes Ribeiro;S;80;40;40;40;120;320
+13/10/2026;Trabalho e tecnologia;S260014;Fernanda Batista Pereira;N;;;;;;
+13/10/2026;Trabalho e tecnologia;S260015;Nicolas Ramos Pinto;N;;;;;;
+13/10/2026;Trabalho e tecnologia;S260016;Ana Pinto Dias;S;120;160;80;160;160;680
+13/10/2026;Trabalho e tecnologia;S260017;Gabriela Queiroz Vieira;S;120;200;120;200;200;840
+13/10/2026;Trabalho e tecnologia;S260018;Manuela Nogueira Dias;S;120;160;120;200;120;720
+13/10/2026;Trabalho e tecnologia;S260019;Leonardo Freitas Cardoso;S;120;120;120;120;160;640
+13/10/2026;Trabalho e tecnologia;S260020;Isabela Nunes Oliveira;S;40;120;80;80;120;440
+20/10/2026;O papel da ciência na sociedade;S260001;Nicolas Pereira Batista;S;120;120;120;120;120;600
+20/10/2026;O papel da ciência na sociedade;S260002;Olívia Ferreira Lima;S;120;120;120;120;120;600
+20/10/2026;O papel da ciência na sociedade;S260003;Daniel Garcia Rocha;S;120;120;120;120;120;600
+20/10/2026;O papel da ciência na sociedade;S260004;Manuela Martins Cardoso;S;120;120;120;120;120;600
+20/10/2026;O papel da ciência na sociedade;S260005;Pietra Ramos Nogueira;S;120;120;120;120;120;600
+20/10/2026;O papel da ciência na sociedade;S260006;Daniel Pereira Dias;S;120;120;120;120;120;600
+20/10/2026;O papel da ciência na sociedade;S260007;Vinícius Batista Duarte;S;120;120;120;120;120;600
+20/10/2026;O papel da ciência na sociedade;S260008;Eduarda Ramos Rocha;S;40;40;120;40;40;280
+20/10/2026;O papel da ciência na sociedade;S260009;Valentina Garcia Freitas;N;;;;;;
+20/10/2026;O papel da ciência na sociedade;S260010;Vinícius Pereira Cardoso;S;160;160;160;200;120;800
+20/10/2026;O papel da ciência na sociedade;S260011;Yasmin Vieira Martins;S;160;80;160;120;80;600
+20/10/2026;O papel da ciência na sociedade;S260012;Ana Dias Batista;N;;;;;;
+20/10/2026;O papel da ciência na sociedade;S260013;Isabela Gomes Ribeiro;N;;;;;;
+20/10/2026;O papel da ciência na sociedade;S260014;Fernanda Batista Pereira;S;160;160;120;120;200;760
+20/10/2026;O papel da ciência na sociedade;S260015;Nicolas Ramos Pinto;S;80;40;80;120;80;400
+20/10/2026;O papel da ciência na sociedade;S260016;Ana Pinto Dias;N;;;;;;
+20/10/2026;O papel da ciência na sociedade;S260017;Gabriela Queiroz Vieira;N;;;;;;
+20/10/2026;O papel da ciência na sociedade;S260018;Manuela Nogueira Dias;S;120;120;160;200;200;800
+20/10/2026;O papel da ciência na sociedade;S260019;Leonardo Freitas Cardoso;N;;;;;;
+20/10/2026;O papel da ciência na sociedade;S260020;Isabela Nunes Oliveira;S;80;40;40;40;80;280
+27/10/2026;Desperdício de alimentos;S260001;Nicolas Pereira Batista;S;120;120;120;120;120;600
+27/10/2026;Desperdício de alimentos;S260002;Olívia Ferreira Lima;S;120;120;120;120;120;600
+27/10/2026;Desperdício de alimentos;S260003;Daniel Garcia Rocha;S;120;120;120;120;120;600
+27/10/2026;Desperdício de alimentos;S260004;Manuela Martins Cardoso;S;120;120;120;120;120;600
+27/10/2026;Desperdício de alimentos;S260005;Pietra Ramos Nogueira;S;120;120;120;120;120;600
+27/10/2026;Desperdício de alimentos;S260006;Daniel Pereira Dias;S;120;120;120;120;120;600
+27/10/2026;Desperdício de alimentos;S260007;Vinícius Batista Duarte;S;120;120;120;120;120;600
+27/10/2026;Desperdício de alimentos;S260008;Eduarda Ramos Rocha;S;120;120;120;80;40;480
+27/10/2026;Desperdício de alimentos;S260009;Valentina Garcia Freitas;S;160;120;160;160;120;720
+27/10/2026;Desperdício de alimentos;S260010;Vinícius Pereira Cardoso;S;160;160;200;160;120;800
+27/10/2026;Desperdício de alimentos;S260011;Yasmin Vieira Martins;N;;;;;;
+27/10/2026;Desperdício de alimentos;S260012;Ana Dias Batista;N;;;;;;
+27/10/2026;Desperdício de alimentos;S260013;Isabela Gomes Ribeiro;S;120;40;80;40;80;360
+27/10/2026;Desperdício de alimentos;S260014;Fernanda Batista Pereira;N;;;;;;
+27/10/2026;Desperdício de alimentos;S260015;Nicolas Ramos Pinto;S;40;80;40;80;120;360
+27/10/2026;Desperdício de alimentos;S260016;Ana Pinto Dias;N;;;;;;
+27/10/2026;Desperdício de alimentos;S260017;Gabriela Queiroz Vieira;S;160;160;200;200;200;920
+27/10/2026;Desperdício de alimentos;S260018;Manuela Nogueira Dias;S;160;200;120;120;160;760
+27/10/2026;Desperdício de alimentos;S260019;Leonardo Freitas Cardoso;S;120;120;120;120;160;640
+27/10/2026;Desperdício de alimentos;S260020;Isabela Nunes Oliveira;S;120;120;40;120;40;440
+03/11/2026;Inclusão digital de idosos;S260001;Nicolas Pereira Batista;S;120;120;120;120;120;600
+03/11/2026;Inclusão digital de idosos;S260002;Olívia Ferreira Lima;S;120;120;120;120;120;600
+03/11/2026;Inclusão digital de idosos;S260003;Daniel Garcia Rocha;S;120;120;120;120;120;600
+03/11/2026;Inclusão digital de idosos;S260004;Manuela Martins Cardoso;S;120;120;120;120;120;600
+03/11/2026;Inclusão digital de idosos;S260005;Pietra Ramos Nogueira;S;120;120;120;120;120;600
+03/11/2026;Inclusão digital de idosos;S260006;Daniel Pereira Dias;S;120;120;120;120;120;600
+03/11/2026;Inclusão digital de idosos;S260007;Vinícius Batista Duarte;S;120;120;120;120;120;600
+03/11/2026;Inclusão digital de idosos;S260008;Eduarda Ramos Rocha;S;80;120;40;40;120;400
+03/11/2026;Inclusão digital de idosos;S260009;Valentina Garcia Freitas;S;120;120;200;160;120;720
+03/11/2026;Inclusão digital de idosos;S260010;Vinícius Pereira Cardoso;N;;;;;;
+03/11/2026;Inclusão digital de idosos;S260011;Yasmin Vieira Martins;S;120;80;160;160;80;600
+03/11/2026;Inclusão digital de idosos;S260012;Ana Dias Batista;S;200;120;200;200;120;840
+03/11/2026;Inclusão digital de idosos;S260013;Isabela Gomes Ribeiro;N;;;;;;
+03/11/2026;Inclusão digital de idosos;S260014;Fernanda Batista Pereira;N;;;;;;
+03/11/2026;Inclusão digital de idosos;S260015;Nicolas Ramos Pinto;N;;;;;;
+03/11/2026;Inclusão digital de idosos;S260016;Ana Pinto Dias;S;120;120;120;120;160;640
+03/11/2026;Inclusão digital de idosos;S260017;Gabriela Queiroz Vieira;S;160;120;120;200;120;720
+03/11/2026;Inclusão digital de idosos;S260018;Manuela Nogueira Dias;S;120;120;200;120;200;760
+03/11/2026;Inclusão digital de idosos;S260019;Leonardo Freitas Cardoso;S;80;120;120;160;120;600
+03/11/2026;Inclusão digital de idosos;S260020;Isabela Nunes Oliveira;N;;;;;;
+10/11/2026;Preservação dos recursos hídricos;S260001;Nicolas Pereira Batista;S;120;120;120;120;120;600
+10/11/2026;Preservação dos recursos hídricos;S260002;Olívia Ferreira Lima;S;120;120;120;120;120;600
+10/11/2026;Preservação dos recursos hídricos;S260003;Daniel Garcia Rocha;S;120;120;120;120;120;600
+10/11/2026;Preservação dos recursos hídricos;S260004;Manuela Martins Cardoso;S;120;120;120;120;120;600
+10/11/2026;Preservação dos recursos hídricos;S260005;Pietra Ramos Nogueira;S;120;120;120;120;120;600
+10/11/2026;Preservação dos recursos hídricos;S260006;Daniel Pereira Dias;S;120;120;120;120;120;600
+10/11/2026;Preservação dos recursos hídricos;S260007;Vinícius Batista Duarte;S;120;120;120;120;120;600
+10/11/2026;Preservação dos recursos hídricos;S260008;Eduarda Ramos Rocha;N;;;;;;
+10/11/2026;Preservação dos recursos hídricos;S260009;Valentina Garcia Freitas;S;200;200;200;160;200;960
+10/11/2026;Preservação dos recursos hídricos;S260010;Vinícius Pereira Cardoso;S;120;120;200;200;120;760
+10/11/2026;Preservação dos recursos hídricos;S260011;Yasmin Vieira Martins;S;80;160;160;160;80;640
+10/11/2026;Preservação dos recursos hídricos;S260012;Ana Dias Batista;S;200;120;160;160;120;760
+10/11/2026;Preservação dos recursos hídricos;S260013;Isabela Gomes Ribeiro;S;80;120;80;40;120;440
+10/11/2026;Preservação dos recursos hídricos;S260014;Fernanda Batista Pereira;S;160;120;120;160;200;760
+10/11/2026;Preservação dos recursos hídricos;S260015;Nicolas Ramos Pinto;S;80;120;40;120;120;480
+10/11/2026;Preservação dos recursos hídricos;S260016;Ana Pinto Dias;S;80;160;80;160;160;640
+10/11/2026;Preservação dos recursos hídricos;S260017;Gabriela Queiroz Vieira;N;;;;;;
+10/11/2026;Preservação dos recursos hídricos;S260018;Manuela Nogueira Dias;S;200;160;160;160;200;880
+10/11/2026;Preservação dos recursos hídricos;S260019;Leonardo Freitas Cardoso;S;120;160;120;120;160;680
+10/11/2026;Preservação dos recursos hídricos;S260020;Isabela Nunes Oliveira;S;80;120;80;40;40;360
+17/11/2026;Educação financeira nas escolas;S260001;Nicolas Pereira Batista;S;120;120;120;120;120;600
+17/11/2026;Educação financeira nas escolas;S260002;Olívia Ferreira Lima;S;120;120;120;120;120;600
+17/11/2026;Educação financeira nas escolas;S260003;Daniel Garcia Rocha;S;120;120;120;120;120;600
+17/11/2026;Educação financeira nas escolas;S260004;Manuela Martins Cardoso;S;120;120;120;120;120;600
+17/11/2026;Educação financeira nas escolas;S260005;Pietra Ramos Nogueira;S;120;120;120;120;120;600
+17/11/2026;Educação financeira nas escolas;S260006;Daniel Pereira Dias;S;120;120;120;120;120;600
+17/11/2026;Educação financeira nas escolas;S260007;Vinícius Batista Duarte;S;120;120;120;120;120;600
+17/11/2026;Educação financeira nas escolas;S260008;Eduarda Ramos Rocha;N;;;;;;
+17/11/2026;Educação financeira nas escolas;S260009;Valentina Garcia Freitas;S;160;200;200;160;120;840
+17/11/2026;Educação financeira nas escolas;S260010;Vinícius Pereira Cardoso;S;120;120;200;160;160;760
+17/11/2026;Educação financeira nas escolas;S260011;Yasmin Vieira Martins;S;120;160;120;80;80;560
+17/11/2026;Educação financeira nas escolas;S260012;Ana Dias Batista;N;;;;;;
+17/11/2026;Educação financeira nas escolas;S260013;Isabela Gomes Ribeiro;S;40;40;80;40;40;240
+17/11/2026;Educação financeira nas escolas;S260014;Fernanda Batista Pereira;S;200;200;200;200;120;920
+17/11/2026;Educação financeira nas escolas;S260015;Nicolas Ramos Pinto;N;;;;;;
+17/11/2026;Educação financeira nas escolas;S260016;Ana Pinto Dias;S;80;120;120;80;120;520
+17/11/2026;Educação financeira nas escolas;S260017;Gabriela Queiroz Vieira;N;;;;;;
+17/11/2026;Educação financeira nas escolas;S260018;Manuela Nogueira Dias;S;160;200;160;160;160;840
+17/11/2026;Educação financeira nas escolas;S260019;Leonardo Freitas Cardoso;S;80;120;80;120;80;480
+17/11/2026;Educação financeira nas escolas;S260020;Isabela Nunes Oliveira;N;;;;;;
+24/11/2026;Desafios da mobilidade urbana;S260001;Nicolas Pereira Batista;S;120;120;120;120;120;600
+24/11/2026;Desafios da mobilidade urbana;S260002;Olívia Ferreira Lima;S;120;120;120;120;120;600
+24/11/2026;Desafios da mobilidade urbana;S260003;Daniel Garcia Rocha;S;120;120;120;120;120;600
+24/11/2026;Desafios da mobilidade urbana;S260004;Manuela Martins Cardoso;S;120;120;120;120;120;600
+24/11/2026;Desafios da mobilidade urbana;S260005;Pietra Ramos Nogueira;S;120;120;120;120;120;600
+24/11/2026;Desafios da mobilidade urbana;S260006;Daniel Pereira Dias;S;120;120;120;120;120;600
+24/11/2026;Desafios da mobilidade urbana;S260007;Vinícius Batista Duarte;S;120;120;120;120;120;600
+24/11/2026;Desafios da mobilidade urbana;S260008;Eduarda Ramos Rocha;N;;;;;;
+24/11/2026;Desafios da mobilidade urbana;S260009;Valentina Garcia Freitas;S;200;160;200;160;200;920
+24/11/2026;Desafios da mobilidade urbana;S260010;Vinícius Pereira Cardoso;S;160;120;120;160;200;760
+24/11/2026;Desafios da mobilidade urbana;S260011;Yasmin Vieira Martins;S;120;120;80;80;80;480
+24/11/2026;Desafios da mobilidade urbana;S260012;Ana Dias Batista;S;200;160;200;200;120;880
+24/11/2026;Desafios da mobilidade urbana;S260013;Isabela Gomes Ribeiro;S;80;120;40;120;80;440
+24/11/2026;Desafios da mobilidade urbana;S260014;Fernanda Batista Pereira;N;;;;;;
+24/11/2026;Desafios da mobilidade urbana;S260015;Nicolas Ramos Pinto;N;;;;;;
+24/11/2026;Desafios da mobilidade urbana;S260016;Ana Pinto Dias;N;;;;;;
+24/11/2026;Desafios da mobilidade urbana;S260017;Gabriela Queiroz Vieira;N;;;;;;
+24/11/2026;Desafios da mobilidade urbana;S260018;Manuela Nogueira Dias;N;;;;;;
+24/11/2026;Desafios da mobilidade urbana;S260019;Leonardo Freitas Cardoso;S;160;80;80;120;120;560
+24/11/2026;Desafios da mobilidade urbana;S260020;Isabela Nunes Oliveira;N;;;;;;
+24/02/2026;A desinformação nas redes sociais;;Isabela Nunes Oliveira;S;120;120;120;120;120;600

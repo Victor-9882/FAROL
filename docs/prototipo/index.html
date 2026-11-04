@@ -1,0 +1,589 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FAROL · Protótipo</title>
+<!--
+  Protótipo navegável de média fidelidade (issue #8; RF010, RF011, RF019, NF001, NF002).
+  Arquivo único, sem dependências externas. Todos os dados são sintéticos (NF017).
+  Abra no navegador do celular ou do computador; nada é gravado.
+-->
+<style>
+  :root {
+    --fundo: #f4f6f9;
+    --superficie: #ffffff;
+    --superficie-2: #eef1f6;
+    --texto: #18202c;
+    --texto-2: #566173;
+    --borda: #d9dee7;
+    --primaria: #1d4e89;
+    --primaria-texto: #ffffff;
+    --farol: #e8a317;
+    --critico: #c0392b;
+    --critico-fundo: #fbeceb;
+    --atencao: #b86e00;
+    --atencao-fundo: #fdf3e1;
+    --positivo: #1e7a46;
+    --positivo-fundo: #e7f5ed;
+    --neutro-fundo: #eef1f6;
+    --sombra: 0 1px 2px rgb(16 24 40 / 6%), 0 1px 3px rgb(16 24 40 / 10%);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --fundo: #10151d;
+      --superficie: #18202b;
+      --superficie-2: #212b38;
+      --texto: #e8edf4;
+      --texto-2: #9aa6b8;
+      --borda: #2d3949;
+      --primaria: #6ea8ff;
+      --primaria-texto: #0d1420;
+      --critico: #ff7b6e;
+      --critico-fundo: #3a1f1d;
+      --atencao: #f2b14c;
+      --atencao-fundo: #3a2c14;
+      --positivo: #5fcf8f;
+      --positivo-fundo: #173323;
+      --neutro-fundo: #212b38;
+      --sombra: none;
+    }
+  }
+  :root[data-theme="dark"] {
+    --fundo: #10151d;
+    --superficie: #18202b;
+    --superficie-2: #212b38;
+    --texto: #e8edf4;
+    --texto-2: #9aa6b8;
+    --borda: #2d3949;
+    --primaria: #6ea8ff;
+    --primaria-texto: #0d1420;
+    --critico: #ff7b6e;
+    --critico-fundo: #3a1f1d;
+    --atencao: #f2b14c;
+    --atencao-fundo: #3a2c14;
+    --positivo: #5fcf8f;
+    --positivo-fundo: #173323;
+    --neutro-fundo: #212b38;
+    --sombra: none;
+  }
+
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background: var(--fundo);
+    color: var(--texto);
+    font: 15px/1.45 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  button, input, select, textarea { font: inherit; color: inherit; }
+  a { color: var(--primaria); }
+
+  .barra {
+    position: sticky; top: 0; z-index: 5;
+    display: flex; align-items: center; gap: 8px;
+    padding: 10px 16px;
+    background: var(--superficie);
+    border-bottom: 1px solid var(--borda);
+  }
+  .barra h1 { font-size: 17px; margin: 0; flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .marca { display: inline-flex; align-items: center; gap: 6px; font-weight: 700; letter-spacing: .04em; }
+  .marca svg { flex: none; }
+  .voltar {
+    border: 0; background: none; padding: 6px 8px; margin-left: -8px;
+    font-size: 22px; line-height: 1; cursor: pointer; color: var(--primaria);
+  }
+  .perfil {
+    display: inline-flex; border: 1px solid var(--borda); border-radius: 999px; overflow: hidden; flex: none;
+  }
+  .perfil button {
+    border: 0; background: none; padding: 4px 10px; font-size: 12px; cursor: pointer; color: var(--texto-2);
+  }
+  .perfil button[aria-pressed="true"] { background: var(--primaria); color: var(--primaria-texto); }
+
+  main { max-width: 640px; margin: 0 auto; padding: 12px 16px 48px; }
+  .secao { margin: 20px 0 8px; font-size: 12px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--texto-2); }
+  .cartao {
+    background: var(--superficie); border: 1px solid var(--borda); border-radius: 12px;
+    box-shadow: var(--sombra); padding: 14px;
+  }
+  .cartao + .cartao { margin-top: 10px; }
+  .meta { font-size: 13px; color: var(--texto-2); }
+  .aviso {
+    margin-top: 16px; padding: 10px 12px; border-radius: 10px;
+    background: var(--neutro-fundo); color: var(--texto-2); font-size: 13px;
+  }
+
+  .resumo-alertas { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .alerta-card {
+    display: flex; flex-direction: column; gap: 2px; text-align: left; cursor: pointer;
+    border: 1px solid var(--borda); border-radius: 12px; padding: 12px 10px; background: var(--superficie);
+    box-shadow: var(--sombra); min-height: 96px;
+  }
+  .alerta-card[disabled] { cursor: default; }
+  .alerta-card .n { font-size: 28px; font-weight: 700; line-height: 1.1; }
+  .alerta-card .rotulo { font-size: 13px; font-weight: 600; }
+  .alerta-card .quando { font-size: 11px; color: var(--texto-2); }
+  .t-FREQUENCIA .n { color: var(--critico); }
+  .t-DESEMPENHO .n { color: var(--atencao); }
+  .t-EVOLUCAO .n { color: var(--positivo); }
+
+  .chips { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 2px; scrollbar-width: none; }
+  .chips::-webkit-scrollbar { display: none; }
+  .chip {
+    flex: none; border: 1px solid var(--borda); border-radius: 999px; padding: 5px 12px;
+    background: var(--superficie); cursor: pointer; font-size: 13px;
+  }
+  .chip[aria-pressed="true"] { background: var(--primaria); border-color: var(--primaria); color: var(--primaria-texto); }
+
+  .tabela { width: 100%; border-collapse: collapse; font-size: 14px; }
+  .tabela th, .tabela td { padding: 8px 6px; text-align: right; border-bottom: 1px solid var(--borda); }
+  .tabela th:first-child, .tabela td:first-child { text-align: left; }
+  .tabela th { font-size: 12px; color: var(--texto-2); font-weight: 600; }
+  .tabela tr:last-child td { border-bottom: 0; }
+  .tabela tr[data-link] { cursor: pointer; }
+
+  .lista { list-style: none; margin: 0; padding: 0; }
+  .item {
+    display: flex; align-items: flex-start; gap: 10px; padding: 12px 0; border-bottom: 1px solid var(--borda);
+    cursor: pointer;
+  }
+  .item:last-child { border-bottom: 0; }
+  .item .corpo { flex: 1; min-width: 0; }
+  .item .nome { font-weight: 600; }
+  .item .seta { color: var(--texto-2); font-size: 20px; line-height: 1; padding-top: 2px; }
+  .avatar {
+    flex: none; width: 36px; height: 36px; border-radius: 50%; display: grid; place-items: center;
+    background: var(--superficie-2); font-size: 13px; font-weight: 700; color: var(--texto-2);
+  }
+
+  .selo { display: inline-block; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 999px; }
+  .s-FREQUENCIA { background: var(--critico-fundo); color: var(--critico); }
+  .s-DESEMPENHO { background: var(--atencao-fundo); color: var(--atencao); }
+  .s-EVOLUCAO { background: var(--positivo-fundo); color: var(--positivo); }
+  .s-neutro { background: var(--neutro-fundo); color: var(--texto-2); }
+
+  .motivo { border-left: 3px solid var(--borda); padding: 8px 10px; border-radius: 0 8px 8px 0; background: var(--superficie-2); }
+  .motivo.m-FREQUENCIA { border-color: var(--critico); }
+  .motivo.m-DESEMPENHO { border-color: var(--atencao); }
+  .motivo.m-EVOLUCAO { border-color: var(--positivo); }
+  .motivo + .motivo { margin-top: 8px; }
+  .motivo strong { display: block; font-size: 14px; }
+
+  .numeros { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .numero { background: var(--superficie); border: 1px solid var(--borda); border-radius: 12px; padding: 10px; }
+  .numero .v { font-size: 20px; font-weight: 700; }
+  .numero .r { font-size: 12px; color: var(--texto-2); }
+
+  .grafico svg { display: block; width: 100%; height: auto; }
+  .grafico text { fill: var(--texto-2); font-size: 11px; }
+  .eixo { stroke: var(--borda); }
+  .quadrante-critico { fill: var(--critico-fundo); }
+  .quadrante-atencao { fill: var(--atencao-fundo); }
+  .quadrante-ok { fill: var(--positivo-fundo); }
+  .legenda { display: flex; gap: 14px; flex-wrap: wrap; font-size: 12px; color: var(--texto-2); margin-top: 6px; }
+  .legenda i { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 5px; vertical-align: -1px; }
+  .alternar { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 8px; }
+  .link { border: 0; background: none; color: var(--primaria); cursor: pointer; font-size: 13px; padding: 4px 0; }
+
+  .botao {
+    display: block; width: 100%; border: 0; border-radius: 10px; padding: 12px; cursor: pointer;
+    background: var(--primaria); color: var(--primaria-texto); font-weight: 600;
+  }
+  .botao.secundario { background: var(--superficie-2); color: var(--texto); }
+  form label { display: block; font-size: 13px; font-weight: 600; margin: 12px 0 4px; }
+  form input, form select, form textarea {
+    width: 100%; padding: 10px; border: 1px solid var(--borda); border-radius: 8px; background: var(--superficie);
+  }
+  form textarea { min-height: 80px; resize: vertical; }
+  .acoes { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 16px; }
+  .bloqueado { text-align: center; padding: 28px 16px; color: var(--texto-2); }
+  .visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+</style>
+</head>
+<body>
+<header class="barra">
+  <button class="voltar" id="voltar" aria-label="Voltar" hidden>‹</button>
+  <h1 id="titulo"></h1>
+  <div class="perfil" role="group" aria-label="Ver como (só no protótipo)">
+    <button type="button" data-perfil="DIRETOR" aria-pressed="true">Diretor</button>
+    <button type="button" data-perfil="MEMBRO" aria-pressed="false">Membro</button>
+  </div>
+</header>
+<main id="tela" tabindex="-1"></main>
+
+<script>
+"use strict";
+
+// ---------------------------------------------------------------------------
+// Dados sintéticos (NF017). Nomes e matrículas inventados.
+// ---------------------------------------------------------------------------
+const CICLOS = [
+  "02/02–15/02", "16/02–01/03", "02/03–15/03", "16/03–29/03",
+  "30/03–12/04", "13/04–26/04", "27/04–10/05", "11/05–24/05",
+];
+const CICLO_ATUAL = CICLOS.length; // ciclo 8
+const AREAS = { LC: "Linguagens", CH: "Humanas", CN: "Natureza", MT: "Matemática" };
+const LIMIAR_FREQUENCIA = 75; // % no ciclo: valor ilustrativo, a definir com a Direção (RF018)
+const IMPORTACOES = "Catraca 25/05 · P+ 24/05 · Corrija-me 26/05";
+
+// Série por ciclo: frequência (%) e nota TRI média. "areas" desloca a nota de cada área.
+function serie(freqs, tris) {
+  return freqs.map((f, i) => ({ ciclo: i + 1, freq: f, tri: tris[i] }));
+}
+const ALUNOS = [
+  { matricula: "S260001", nome: "Nicolas Pereira Batista", turma: "Turma A",
+    historicoTurmas: [["Turma A", "02/02/2026", null]],
+    serie: serie([96, 92, 100, 94, 90, 88, 70, 58], [602, 610, 598, 615, 607, 611, 604, 600]),
+    areas: { LC: 10, CH: 5, CN: -20, MT: 5 }, redacoes: [16, 16],
+    alertas: [{ tipo: "FREQUENCIA", motivo: "3 faltas não justificadas na semana de 18/05 (limiar: 3).", data: "25/05/2026" }],
+    intervencoes: [] },
+  { matricula: "S260006", nome: "Olívia Ferreira Lima", turma: "Turma A",
+    historicoTurmas: [["Turma A", "02/02/2026", null]],
+    serie: serie([94, 96, 92, 95, 93, 94, 92, 90], [650, 655, 648, 652, 650, 647, 651, 590]),
+    areas: { LC: 0, CH: 10, CN: -5, MT: -5 }, redacoes: [15, 16],
+    alertas: [{ tipo: "DESEMPENHO", motivo: "Queda de 60 pontos na média TRI em relação ao próprio histórico (650 → 590). Maior queda: Matemática.", data: "25/05/2026" }],
+    intervencoes: [] },
+  { matricula: "S260004", nome: "Caio Martins Rocha", turma: "Turma B",
+    historicoTurmas: [["Turma A", "02/02/2026", "25/03/2026"], ["Turma B", "25/03/2026", null]],
+    serie: serie([90, 72, 65, 60, 62, 58, 55, 50], [560, 548, 541, 530, 522, 515, 508, 470]),
+    areas: { LC: -10, CH: 0, CN: 5, MT: 5 }, redacoes: [6, 16],
+    alertas: [
+      { tipo: "FREQUENCIA", motivo: "4 faltas não justificadas na semana de 18/05 (limiar: 3).", data: "25/05/2026" },
+      { tipo: "DESEMPENHO", motivo: "Queda de 62 pontos na média TRI em relação ao próprio histórico (532 → 470). Maior queda: Linguagens.", data: "25/05/2026" },
+    ],
+    intervencoes: [{ tipo: "Contato", data: "14/04/2026", responsavel: "Diretor de RH", descricao: "Ligação após 3 semanas com faltas. Relatou mudança de horário no trabalho.", desfecho: "Em acompanhamento" }] },
+  { matricula: "S260007", nome: "Yasmin Andrade Souza", turma: "Turma B",
+    historicoTurmas: [["Turma B", "02/02/2026", null]],
+    serie: serie([98, 100, 96, 98, 100, 98, 100, 96], [500, 515, 530, 545, 560, 575, 590, 605]),
+    areas: { LC: 5, CH: -5, CN: 0, MT: 0 }, redacoes: [16, 16],
+    alertas: [{ tipo: "EVOLUCAO", motivo: "Nota TRI subiu nos últimos 7 ciclos seguidos (+105 pontos desde o ciclo 1).", data: "25/05/2026" }],
+    intervencoes: [] },
+  { matricula: "S260012", nome: "Renan Campos Duarte", turma: "Turma C",
+    historicoTurmas: [["Turma C", "09/03/2026", null]],
+    serie: serie([null, null, 88, 84, 80, 74, 66, 62], [null, null, 540, 548, 556, 551, 560, 563]),
+    areas: { LC: 0, CH: 0, CN: 10, MT: -10 }, redacoes: [7, 12],
+    alertas: [{ tipo: "FREQUENCIA", motivo: "3 faltas não justificadas na semana de 18/05 (limiar: 3).", data: "25/05/2026" }],
+    intervencoes: [] },
+  { matricula: "S260015", nome: "Helena Nogueira Pinto", turma: "Turma C",
+    historicoTurmas: [["Turma C", "02/02/2026", null]],
+    serie: serie([92, 94, 90, 92, 96, 94, 92, 94], [610, 618, 622, 619, 625, 628, 624, 630]),
+    areas: { LC: 15, CH: 5, CN: -10, MT: -10 }, redacoes: [14, 16],
+    alertas: [], intervencoes: [] },
+  { matricula: "S260018", nome: "Igor Teixeira Lopes", turma: "Turma D",
+    historicoTurmas: [["Turma D", "02/02/2026", null]],
+    serie: serie([88, 90, 86, 84, 88, 86, 84, 82], [575, 571, 580, 569, 574, 578, 572, 576]),
+    areas: { LC: -5, CH: 5, CN: 0, MT: 0 }, redacoes: [11, 16],
+    alertas: [], intervencoes: [] },
+  { matricula: "S260021", nome: "Manuela Ribeiro Gomes", turma: "Turma E",
+    historicoTurmas: [["Turma E", "02/02/2026", null]],
+    serie: serie([84, 80, 82, 78, 80, 76, 78, 80], [530, 538, 529, 535, 540, 533, 537, 498]),
+    areas: { LC: 0, CH: -10, CN: 5, MT: 5 }, redacoes: [9, 16],
+    alertas: [{ tipo: "DESEMPENHO", motivo: "Queda de 37 pontos na média TRI em relação ao próprio histórico (535 → 498). Maior queda: Humanas.", data: "25/05/2026" }],
+    intervencoes: [] },
+  { matricula: "S260024", nome: "Thiago Vieira Esteves", turma: "Turma E",
+    historicoTurmas: [["Turma E", "02/02/2026", null]],
+    serie: serie([100, 98, 100, 96, 98, 100, 96, 98], [640, 652, 661, 675, 684, 690, 702, 715]),
+    areas: { LC: -5, CH: 0, CN: 5, MT: 0 }, redacoes: [16, 16],
+    alertas: [{ tipo: "EVOLUCAO", motivo: "Nota TRI subiu nos últimos 7 ciclos seguidos (+75 pontos desde o ciclo 1).", data: "25/05/2026" }],
+    intervencoes: [] },
+];
+const TURMAS = ["Turma A", "Turma B", "Turma C", "Turma D", "Turma E"].map((nome, i) => ({
+  nome,
+  alunos: [102, 98, 100, 101, 99][i],
+  freq: [86, 79, 83, 88, 81][i],
+  tri: [584, 551, 572, 579, 563][i],
+  delta: [-4, -12, 3, 1, -7][i],
+}));
+const TIPOS = {
+  FREQUENCIA: { rotulo: "Frequência", quando: "semanal" },
+  DESEMPENHO: { rotulo: "Queda de desempenho", quando: "ciclo 8" },
+  EVOLUCAO: { rotulo: "Em evolução", quando: "ciclo 8" },
+};
+
+// ---------------------------------------------------------------------------
+// Estado e utilitários
+// ---------------------------------------------------------------------------
+const estado = { perfil: "DIRETOR", ciclo: CICLO_ATUAL, painelTabela: false, area: "geral" };
+const $tela = document.getElementById("tela");
+const $titulo = document.getElementById("titulo");
+const $voltar = document.getElementById("voltar");
+
+function esc(texto) {
+  return String(texto).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
+}
+function iniciais(nome) {
+  const partes = nome.split(" ");
+  return (partes[0][0] + partes[partes.length - 1][0]).toUpperCase();
+}
+function aluno(matricula) { return ALUNOS.find((a) => a.matricula === matricula); }
+function ponto(a, ciclo) { return a.serie[ciclo - 1]; }
+function mediaPropria(a, ate) {
+  const anteriores = a.serie.slice(0, ate - 1).filter((p) => p.tri != null);
+  return anteriores.length ? anteriores.reduce((s, p) => s + p.tri, 0) / anteriores.length : null;
+}
+function delta(a, ciclo) {
+  const media = mediaPropria(a, ciclo);
+  const atual = ponto(a, ciclo).tri;
+  return media == null || atual == null ? null : Math.round(atual - media);
+}
+function sinal(n) { return n > 0 ? `+${n}` : `${n}`; }
+function alertasDo(tipo) { return ALUNOS.filter((a) => a.alertas.some((x) => x.tipo === tipo)); }
+function ehDiretor() { return estado.perfil === "DIRETOR"; }
+function ir(hash) { location.hash = hash; }
+
+const RODAPE_RN012 =
+  '<p class="aviso">Alertas são <strong>indicativos</strong>: apoiam a conversa com o aluno e nunca servem para punição, classificação pública ou exclusão (RN012).</p>';
+const BLOQUEADO =
+  '<div class="cartao bloqueado"><p><strong>Disponível só para o perfil Diretor.</strong></p><p class="meta">Membros da diretoria veem apenas indicadores agregados, sem nomes (RN013).</p></div>';
+
+// ---------------------------------------------------------------------------
+// Gráficos (SVG)
+// ---------------------------------------------------------------------------
+function dispersao(alunos, ciclo, comNomes) {
+  const L = 340, A = 260, m = { e: 34, d: 10, t: 10, b: 30 };
+  const x = (f) => m.e + (f / 100) * (L - m.e - m.d);
+  const y = (d) => m.t + ((80 - d) / 160) * (A - m.t - m.b);
+  const xl = x(LIMIAR_FREQUENCIA), y0 = y(0);
+  let pontos = "";
+  for (const a of alunos) {
+    const p = ponto(a, ciclo), d = delta(a, ciclo);
+    if (p.freq == null || d == null) continue;
+    const dc = Math.max(-78, Math.min(78, d));
+    const cor = p.freq < LIMIAR_FREQUENCIA && d < 0 ? "var(--critico)" : d < 0 || p.freq < LIMIAR_FREQUENCIA ? "var(--atencao)" : "var(--positivo)";
+    const aDireita = p.freq < 80;
+    const rotulo = comNomes ? `<text x="${x(p.freq) + (aDireita ? 8 : -8)}" y="${y(dc) + 4}" text-anchor="${aDireita ? "start" : "end"}">${esc(a.nome.split(" ")[0])}</text>` : "";
+    const alvo = comNomes ? ` data-aluno="${a.matricula}" style="cursor:pointer"` : "";
+    pontos += `<g${alvo}><circle cx="${x(p.freq)}" cy="${y(dc)}" r="6" fill="${cor}"><title>${comNomes ? esc(a.nome) + ": " : ""}frequência ${p.freq}%, Δ ${sinal(d)}</title></circle>${rotulo}</g>`;
+  }
+  return `<div class="grafico"><svg viewBox="0 0 ${L} ${A}" role="img" aria-label="Frequência no ciclo versus variação de desempenho">
+    <rect class="quadrante-critico" x="${m.e}" y="${y0}" width="${xl - m.e}" height="${A - m.b - y0}"/>
+    <rect class="quadrante-atencao" x="${xl}" y="${y0}" width="${L - m.d - xl}" height="${A - m.b - y0}"/>
+    <rect class="quadrante-atencao" x="${m.e}" y="${m.t}" width="${xl - m.e}" height="${y0 - m.t}"/>
+    <rect class="quadrante-ok" x="${xl}" y="${m.t}" width="${L - m.d - xl}" height="${y0 - m.t}"/>
+    <line class="eixo" x1="${m.e}" x2="${L - m.d}" y1="${y0}" y2="${y0}"/>
+    <line class="eixo" x1="${xl}" x2="${xl}" y1="${m.t}" y2="${A - m.b}" stroke-dasharray="4 3"/>
+    <text x="${m.e + 4}" y="${A - m.b - 6}">baixa frequência e queda</text>
+    <text x="${L - m.d - 4}" y="${m.t + 14}" text-anchor="end">em dia</text>
+    <text x="${m.e}" y="${A - 8}">0%</text><text x="${xl}" y="${A - 8}" text-anchor="middle">${LIMIAR_FREQUENCIA}%</text><text x="${L - m.d}" y="${A - 8}" text-anchor="end">100%</text>
+    <text x="${m.e - 6}" y="${m.t + 8}" text-anchor="end">+80</text><text x="${m.e - 6}" y="${y0 + 4}" text-anchor="end">0</text><text x="${m.e - 6}" y="${A - m.b}" text-anchor="end">−80</text>
+    ${pontos}
+  </svg>
+  <p class="meta">Horizontal: frequência no ciclo. Vertical: variação da nota TRI em relação à <strong>própria média</strong> do aluno (RN008).</p></div>`;
+}
+
+function linhas(a, area) {
+  const L = 340, A = 200, m = { e: 34, d: 34, t: 12, b: 26 };
+  const n = a.serie.length;
+  const x = (i) => m.e + (i / (n - 1)) * (L - m.e - m.d);
+  const desloc = area === "geral" ? 0 : a.areas[area];
+  const tris = a.serie.map((p) => (p.tri == null ? null : p.tri + desloc));
+  const validos = tris.filter((t) => t != null);
+  const tmin = Math.floor((Math.min(...validos) - 20) / 10) * 10, tmax = Math.ceil((Math.max(...validos) + 20) / 10) * 10;
+  const yt = (t) => m.t + ((tmax - t) / (tmax - tmin)) * (A - m.t - m.b);
+  const yf = (f) => m.t + ((100 - f) / 100) * (A - m.t - m.b);
+  const caminho = (vals, fy) => vals.map((v, i) => (v == null ? null : `${x(i)},${fy(v)}`)).filter(Boolean).join(" ");
+  const marcas = (vals, fy, cor) => vals.map((v, i) => (v == null ? "" : `<circle cx="${x(i)}" cy="${fy(v)}" r="3.5" fill="${cor}"/>`)).join("");
+  const freqs = a.serie.map((p) => p.freq);
+  const rotulos = a.serie.map((p, i) => `<text x="${x(i)}" y="${A - 8}" text-anchor="middle">${p.ciclo}</text>`).join("");
+  return `<div class="grafico"><svg viewBox="0 0 ${L} ${A}" role="img" aria-label="Evolução entre ciclos">
+    <line class="eixo" x1="${m.e}" x2="${L - m.d}" y1="${A - m.b}" y2="${A - m.b}"/>
+    <line class="eixo" x1="${m.e}" x2="${L - m.d}" y1="${yf(LIMIAR_FREQUENCIA)}" y2="${yf(LIMIAR_FREQUENCIA)}" stroke-dasharray="4 3"/>
+    <text x="${m.e - 6}" y="${m.t + 8}" text-anchor="end">${tmax}</text><text x="${m.e - 6}" y="${A - m.b}" text-anchor="end">${tmin}</text>
+    <text x="${L - m.d + 6}" y="${m.t + 8}">100%</text><text x="${L - m.d + 6}" y="${A - m.b}">0%</text>
+    <polyline points="${caminho(freqs, yf)}" fill="none" stroke="var(--farol)" stroke-width="2.5"/>
+    ${marcas(freqs, yf, "var(--farol)")}
+    <polyline points="${caminho(tris, yt)}" fill="none" stroke="var(--primaria)" stroke-width="2.5"/>
+    ${marcas(tris, yt, "var(--primaria)")}
+    ${rotulos}
+  </svg>
+  <div class="legenda"><span><i style="background:var(--primaria)"></i>Nota TRI${area === "geral" ? " (média das áreas)" : " — " + AREAS[area]} (eixo esquerdo)</span><span><i style="background:var(--farol)"></i>Frequência (eixo direito)</span></div></div>`;
+}
+
+// ---------------------------------------------------------------------------
+// Telas
+// ---------------------------------------------------------------------------
+function telaPainel() {
+  const diretor = ehDiretor();
+  const ciclo = estado.ciclo;
+  const cards = Object.entries(TIPOS).map(([tipo, t]) =>
+    `<button class="alerta-card t-${tipo}" data-ir="#alertas/${tipo}" ${diretor ? "" : "disabled"}>
+       <span class="n">${alertasDo(tipo).length}</span><span class="rotulo">${t.rotulo}</span><span class="quando">${t.quando}</span>
+     </button>`).join("");
+  const chips = CICLOS.map((_, i) =>
+    `<button class="chip" data-ciclo="${i + 1}" aria-pressed="${i + 1 === ciclo}">Ciclo ${i + 1}</button>`).reverse().join("");
+  const tabelaAlunos = `<table class="tabela"><thead><tr><th>Aluno</th><th>Freq.</th><th>TRI</th><th>Δ</th></tr></thead><tbody>${
+    ALUNOS.filter((a) => ponto(a, ciclo).freq != null).map((a) => {
+      const p = ponto(a, ciclo), d = delta(a, ciclo);
+      return `<tr data-link="#aluno/${a.matricula}"><td>${esc(a.nome)}</td><td>${p.freq}%</td><td>${p.tri ?? "—"}</td><td>${d == null ? "—" : sinal(d)}</td></tr>`;
+    }).join("")}</tbody></table>`;
+  const turmas = TURMAS.map((t) =>
+    `<tr><td>${t.nome}</td><td>${t.alunos}</td><td>${t.freq}%</td><td>${t.tri}</td><td>${sinal(t.delta)}</td></tr>`).join("");
+
+  return `
+    <p class="meta">Ciclo ${CICLO_ATUAL} (${CICLOS[CICLO_ATUAL - 1]}) · Última importação: ${IMPORTACOES}</p>
+    <h2 class="secao">Alertas ativos</h2>
+    <div class="resumo-alertas">${cards}</div>
+    ${diretor ? "" : '<p class="meta" style="margin-top:8px">Perfil Membro: só contagens, sem nomes (RN013).</p>'}
+
+    <h2 class="secao">Frequência × desempenho</h2>
+    <div class="cartao">
+      <div class="chips" role="group" aria-label="Ciclo">${chips}</div>
+      <div class="alternar" style="margin-top:10px">
+        <span class="meta">Ciclo ${ciclo} · ${CICLOS[ciclo - 1]}</span>
+        ${diretor ? `<button class="link" data-alternar>${estado.painelTabela ? "Ver como gráfico" : "Ver como tabela"}</button>` : ""}
+      </div>
+      ${diretor && estado.painelTabela ? tabelaAlunos : dispersao(ALUNOS, ciclo, diretor)}
+      ${diretor ? '<p class="meta">Toque num ponto para abrir a ficha do aluno.</p>' : ""}
+    </div>
+
+    <h2 class="secao">Situação das turmas no ciclo</h2>
+    <div class="cartao"><table class="tabela">
+      <thead><tr><th>Turma</th><th>Alunos</th><th>Freq.</th><th>TRI</th><th>Δ</th></tr></thead>
+      <tbody>${turmas}</tbody></table>
+      <p class="meta">Δ: variação da nota TRI média da turma em relação ao ciclo anterior.</p>
+    </div>
+    ${RODAPE_RN012}`;
+}
+
+function telaAlertas(tipo) {
+  if (!ehDiretor()) return BLOQUEADO;
+  const alunos = alertasDo(tipo);
+  const itens = alunos.map((a) => {
+    const al = a.alertas.find((x) => x.tipo === tipo);
+    return `<li class="item" data-ir="#aluno/${a.matricula}">
+      <span class="avatar">${iniciais(a.nome)}</span>
+      <span class="corpo"><span class="nome">${esc(a.nome)}</span><br><span class="meta">${a.turma} · ${a.matricula}</span>
+      <div class="motivo m-${tipo}" style="margin-top:6px">${esc(al.motivo)}</div></span>
+      <span class="seta">›</span></li>`;
+  }).join("");
+  return `<p class="meta">${alunos.length} aluno(s) · gerado em ${alunos[0]?.alertas[0].data ?? "—"}</p>
+    <div class="cartao"><ul class="lista">${itens || '<li class="meta">Nenhum alerta deste tipo.</li>'}</ul></div>${RODAPE_RN012}`;
+}
+
+function telaAluno(matricula) {
+  if (!ehDiretor()) return BLOQUEADO;
+  const a = aluno(matricula);
+  if (!a) return '<p>Aluno não encontrado.</p>';
+  const p = ponto(a, CICLO_ATUAL), d = delta(a, CICLO_ATUAL);
+  const alertas = a.alertas.map((x) =>
+    `<div class="motivo m-${x.tipo}"><strong>${TIPOS[x.tipo].rotulo}</strong>${esc(x.motivo)}<br><span class="meta">${x.data}</span></div>`).join("")
+    || '<p class="meta">Nenhum alerta ativo.</p>';
+  const historico = a.historicoTurmas.map(([t, ini, fim]) => `${t} (${ini}${fim ? " a " + fim : " até hoje"})`).join(" → ");
+  const areas = [["geral", "Todas"], ...Object.entries(AREAS)].map(([k, v]) =>
+    `<button class="chip" data-area="${k}" aria-pressed="${estado.area === k}">${v}</button>`).join("");
+  const intervencoes = a.intervencoes.map((i) =>
+    `<li class="item" style="cursor:default"><span class="corpo"><span class="nome">${esc(i.tipo)} · ${i.data}</span>
+      <span class="selo ${i.desfecho ? "s-neutro" : "s-DESEMPENHO"}" style="margin-left:6px">${esc(i.desfecho || "Desfecho pendente")}</span><br>
+      <span class="meta">Responsável: ${esc(i.responsavel)}</span><br>${esc(i.descricao)}</span></li>`).join("")
+    || '<li class="meta">Nenhuma intervenção registrada.</li>';
+
+  return `
+    <div class="cartao" style="display:flex;gap:12px;align-items:center">
+      <span class="avatar" style="width:48px;height:48px;font-size:16px">${iniciais(a.nome)}</span>
+      <div><strong style="font-size:17px">${esc(a.nome)}</strong><br>
+      <span class="meta">${a.matricula} · ${a.turma}</span></div>
+    </div>
+    <p class="meta">Histórico de turmas: ${historico}</p>
+
+    <h2 class="secao">Alertas (${a.alertas.length})</h2>
+    ${alertas}
+
+    <h2 class="secao">Ciclo ${CICLO_ATUAL}</h2>
+    <div class="numeros">
+      <div class="numero"><div class="v">${p.freq}%</div><div class="r">frequência</div></div>
+      <div class="numero"><div class="v">${p.tri}</div><div class="r">TRI médio</div></div>
+      <div class="numero"><div class="v">${d == null ? "—" : sinal(d)}</div><div class="r">Δ vs. própria média</div></div>
+    </div>
+    <p class="meta">Redações entregues no ano: ${a.redacoes[0]} de ${a.redacoes[1]} · Média da turma no ciclo: TRI ${TURMAS.find((t) => t.nome === a.turma).tri} (RF013)</p>
+
+    <h2 class="secao">Evolução entre ciclos</h2>
+    <div class="cartao">
+      <div class="chips" role="group" aria-label="Área">${areas}</div>
+      ${linhas(a, estado.area)}
+    </div>
+
+    <h2 class="secao">Intervenções (${a.intervencoes.length})</h2>
+    <div class="cartao"><ul class="lista">${intervencoes}</ul></div>
+    <button class="botao" style="margin-top:12px" data-ir="#intervencao/${a.matricula}">Registrar intervenção</button>
+    ${RODAPE_RN012}`;
+}
+
+function telaIntervencao(matricula) {
+  if (!ehDiretor()) return BLOQUEADO;
+  const a = aluno(matricula);
+  const opcoesAlerta = a.alertas.map((x, i) => `<option value="${i}">${TIPOS[x.tipo].rotulo} (${x.data})</option>`).join("");
+  return `<p class="meta">${esc(a.nome)} · ${a.matricula}</p>
+    <form class="cartao" id="form-intervencao">
+      <label for="f-alerta">Alerta relacionado</label>
+      <select id="f-alerta">${opcoesAlerta}<option value="">Sem alerta associado</option></select>
+      <label for="f-tipo">Tipo</label>
+      <select id="f-tipo" required><option>Contato</option><option>Conversa</option><option>Encaminhamento</option><option>Outro</option></select>
+      <label for="f-data">Data</label>
+      <input id="f-data" type="date" value="2026-05-26" required>
+      <label for="f-resp">Responsável</label>
+      <input id="f-resp" value="Diretor de RH" required>
+      <label for="f-desc">O que foi feito</label>
+      <textarea id="f-desc" required placeholder="Ex.: conversa sobre as faltas da semana"></textarea>
+      <label for="f-desf">Desfecho (pode ser registrado depois)</label>
+      <select id="f-desf"><option value="">Ainda não</option><option>Resolvido</option><option>Em acompanhamento</option><option>Sem retorno</option></select>
+      <div class="acoes"><button type="button" class="botao secundario" data-ir="#aluno/${a.matricula}">Cancelar</button><button class="botao">Salvar</button></div>
+    </form>
+    <p class="aviso">Registre só o necessário para o acompanhamento. Não anote dados de saúde ou socioeconômicos (NF015).</p>`;
+}
+
+// ---------------------------------------------------------------------------
+// Roteamento e eventos
+// ---------------------------------------------------------------------------
+function render() {
+  const [rota, arg] = location.hash.replace(/^#/, "").split("/");
+  let titulo = "", html = "";
+  if (rota === "alertas" && TIPOS[arg]) { titulo = TIPOS[arg].rotulo; html = telaAlertas(arg); }
+  else if (rota === "aluno") { titulo = "Ficha do aluno"; html = telaAluno(arg); }
+  else if (rota === "intervencao" && aluno(arg)) { titulo = "Registrar intervenção"; html = telaIntervencao(arg); }
+  else { titulo = ""; html = telaPainel(); }
+  const inicio = !titulo;
+  $titulo.innerHTML = inicio
+    ? '<span class="marca"><svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path d="M10 22h4l-1-12h-2z" fill="var(--primaria)"/><path d="M9 8h6l-1-3h-4z" fill="var(--farol)"/><path d="M12 2v2M4 6l3 1M20 6l-3 1" stroke="var(--farol)" stroke-width="2" stroke-linecap="round"/></svg>FAROL</span>'
+    : esc(titulo);
+  $voltar.hidden = inicio;
+  $tela.innerHTML = html;
+  window.scrollTo(0, 0);
+}
+
+document.addEventListener("click", (e) => {
+  const alvo = e.target.closest("[data-ir],[data-link],[data-aluno],[data-ciclo],[data-area],[data-alternar],[data-perfil]");
+  if (!alvo || alvo.disabled) return;
+  if (alvo.dataset.perfil) {
+    estado.perfil = alvo.dataset.perfil;
+    document.querySelectorAll("[data-perfil]").forEach((b) => b.setAttribute("aria-pressed", String(b === alvo)));
+    render();
+  } else if (alvo.dataset.ir) { e.preventDefault(); ir(alvo.dataset.ir); }
+  else if (alvo.dataset.link) ir(alvo.dataset.link);
+  else if (alvo.dataset.aluno) ir(`#aluno/${alvo.dataset.aluno}`);
+  else if (alvo.dataset.ciclo) { estado.ciclo = Number(alvo.dataset.ciclo); render(); }
+  else if (alvo.dataset.area) { estado.area = alvo.dataset.area; render(); }
+  else if ("alternar" in alvo.dataset) { estado.painelTabela = !estado.painelTabela; render(); }
+});
+
+document.addEventListener("submit", (e) => {
+  if (e.target.id !== "form-intervencao") return;
+  e.preventDefault();
+  const matricula = location.hash.split("/")[1];
+  const [ano, mes, dia] = document.getElementById("f-data").value.split("-");
+  aluno(matricula).intervencoes.unshift({
+    tipo: document.getElementById("f-tipo").value,
+    data: `${dia}/${mes}/${ano}`,
+    responsavel: document.getElementById("f-resp").value,
+    descricao: document.getElementById("f-desc").value,
+    desfecho: document.getElementById("f-desf").value,
+  });
+  ir(`#aluno/${matricula}`);
+});
+
+$voltar.addEventListener("click", () => (history.length > 1 ? history.back() : ir("#")));
+window.addEventListener("hashchange", render);
+render();
+</script>
+</body>
+</html>
