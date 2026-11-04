@@ -33,7 +33,7 @@ jobs:
     name: Estilo (ruff)
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
       - uses: astral-sh/setup-uv@v6
       - name: Lint
         run: uvx ruff check .
@@ -57,7 +57,7 @@ jobs:
           --health-timeout 5s
           --health-retries 10
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
       - name: Projeto Django ainda não existe
         if: hashFiles('manage.py') == ''
         run: echo "::notice::manage.py não encontrado; verificação de migrações ignorada."
@@ -93,7 +93,7 @@ jobs:
           --health-timeout 5s
           --health-retries 10
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
       - name: Projeto ainda não existe
         if: hashFiles('pyproject.toml') == ''
         run: echo "::notice::pyproject.toml não encontrado; testes ignorados."
