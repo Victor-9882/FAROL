@@ -103,3 +103,26 @@ jobs:
       - name: Suíte completa com cobertura
         # Meta de cobertura em [tool.coverage.report] fail_under, no pyproject.toml.
         run: uv run pytest --cov --cov-report=term-missing
+
+  # Sobe o docker-compose.yml como um integrante faria e confere os três serviços (IC-08).
+  docker:
+    name: Ambiente Docker Compose
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - name: Criar .env a partir do exemplo
+        run: cp .env.example .env
+      - name: Subir aplicação, banco e Mailpit
+        run: docker compose up --build --detach --wait --wait-timeout 180
+      - name: Aplicação responde e alcança o banco
+        run: curl --fail --silent --show-error http://localhost:8000/saude/
+      - name: E-mail chega ao Mailpit
+        run: |
+          docker compose exec -T app python manage.py sendtestemail teste@exemplo.org
+          curl --fail --silent http://localhost:8025/api/v1/messages | grep -q 'teste@exemplo.org'
+      - name: Logs em caso de falha
+        if: failure()
+        run: docker compose logs
+      - name: Derrubar o ambiente
+        if: always()
+        run: docker compose down --volumes
