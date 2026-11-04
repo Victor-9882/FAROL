@@ -1,0 +1,776 @@
+data_tema;tema;matricula;nome;entregue;c1;c2;c3;c4;c5;total
+06/02/2024;Desafios da mobilidade urbana;S240001;Isabela Oliveira Ribeiro;S;80;40;40;80;40;280
+06/02/2024;Desafios da mobilidade urbana;S240002;Lucas Campos Lima;S;80;40;120;80;80;400
+06/02/2024;Desafios da mobilidade urbana;S240003;Otávio Teixeira Ferreira;S;160;160;80;120;80;600
+06/02/2024;Desafios da mobilidade urbana;S240006;Olívia Andrade Ramos;S;120;160;160;160;200;800
+06/02/2024;Desafios da mobilidade urbana;S240007;Olívia Garcia Ferreira;N;;;;;;
+06/02/2024;Desafios da mobilidade urbana;S240008;Manuela Ferreira Pinto;N;;;;;;
+06/02/2024;Desafios da mobilidade urbana;S240009;Arthur Garcia Ferreira;S;200;120;200;200;200;920
+06/02/2024;Desafios da mobilidade urbana;S240010;Júlia Lima Batista;N;;;;;;
+06/02/2024;Desafios da mobilidade urbana;S240011;Samuel Cardoso Dias;S;160;160;120;160;120;720
+06/02/2024;Desafios da mobilidade urbana;S240012;Henrique Duarte Henriques;S;80;80;120;80;120;480
+06/02/2024;Desafios da mobilidade urbana;S240014;Renan Campos Cardoso;N;;;;;;
+06/02/2024;Desafios da mobilidade urbana;S240015;Carla Lopes Almeida;S;120;120;80;160;160;640
+06/02/2024;Desafios da mobilidade urbana;S240016;Tatiane Esteves Pinto;N;;;;;;
+06/02/2024;Desafios da mobilidade urbana;S240017;Nicolas Lopes Vieira;S;80;120;120;40;80;440
+06/02/2024;Desafios da mobilidade urbana;S240018;Paulo Ribeiro Nogueira;S;160;120;120;200;160;760
+06/02/2024;Desafios da mobilidade urbana;S240019;Fernanda Andrade Garcia;N;;;;;;
+06/02/2024;Desafios da mobilidade urbana;S240020;João Santos Barbosa;N;;;;;;
+13/02/2024;O acesso à cultura nas periferias;S240001;Isabela Oliveira Ribeiro;S;40;40;80;40;120;320
+13/02/2024;O acesso à cultura nas periferias;S240002;Lucas Campos Lima;S;80;40;120;120;120;480
+13/02/2024;O acesso à cultura nas periferias;S240003;Otávio Teixeira Ferreira;S;80;160;160;120;120;640
+13/02/2024;O acesso à cultura nas periferias;S240006;Olívia Andrade Ramos;S;120;160;200;200;120;800
+13/02/2024;O acesso à cultura nas periferias;S240007;Olívia Garcia Ferreira;S;160;160;120;120;160;720
+13/02/2024;O acesso à cultura nas periferias;S240008;Manuela Ferreira Pinto;S;200;120;120;160;200;800
+13/02/2024;O acesso à cultura nas periferias;S240009;Arthur Garcia Ferreira;S;200;200;120;120;200;840
+13/02/2024;O acesso à cultura nas periferias;S240010;Júlia Lima Batista;N;;;;;;
+13/02/2024;O acesso à cultura nas periferias;S240011;Samuel Cardoso Dias;S;120;80;160;120;80;560
+13/02/2024;O acesso à cultura nas periferias;S240012;Henrique Duarte Henriques;S;80;160;80;120;80;520
+13/02/2024;O acesso à cultura nas periferias;S240014;Renan Campos Cardoso;S;120;200;160;160;160;800
+13/02/2024;O acesso à cultura nas periferias;S240015;Carla Lopes Almeida;S;160;160;80;160;120;680
+13/02/2024;O acesso à cultura nas periferias;S240016;Tatiane Esteves Pinto;N;;;;;;
+13/02/2024;O acesso à cultura nas periferias;S240017;Nicolas Lopes Vieira;N;;;;;;
+13/02/2024;O acesso à cultura nas periferias;S240018;Paulo Ribeiro Nogueira;S;200;160;160;160;120;800
+13/02/2024;O acesso à cultura nas periferias;S240019;Fernanda Andrade Garcia;S;40;120;80;120;40;400
+13/02/2024;O acesso à cultura nas periferias;S240020;João Santos Barbosa;N;;;;;;
+20/02/2024;Saúde mental na juventude;S240001;Isabela Oliveira Ribeiro;N;;;;;;
+20/02/2024;Saúde mental na juventude;S240002;Lucas Campos Lima;N;;;;;;
+20/02/2024;Saúde mental na juventude;S240003;Otávio Teixeira Ferreira;N;;;;;;
+20/02/2024;Saúde mental na juventude;S240006;Olívia Andrade Ramos;S;160;120;160;160;200;800
+20/02/2024;Saúde mental na juventude;S240007;Olívia Garcia Ferreira;S;120;80;120;80;160;560
+20/02/2024;Saúde mental na juventude;S240008;Manuela Ferreira Pinto;S;120;200;200;120;200;840
+20/02/2024;Saúde mental na juventude;S240009;Arthur Garcia Ferreira;S;200;160;120;120;200;800
+20/02/2024;Saúde mental na juventude;S240010;Júlia Lima Batista;S;40;40;80;40;120;320
+20/02/2024;Saúde mental na juventude;S240011;Samuel Cardoso Dias;S;80;120;160;120;120;600
+20/02/2024;Saúde mental na juventude;S240012;Henrique Duarte Henriques;S;160;160;160;80;120;680
+20/02/2024;Saúde mental na juventude;S240014;Renan Campos Cardoso;S;200;160;200;200;200;960
+20/02/2024;Saúde mental na juventude;S240015;Carla Lopes Almeida;S;160;160;160;80;80;640
+20/02/2024;Saúde mental na juventude;S240016;Tatiane Esteves Pinto;N;;;;;;
+20/02/2024;Saúde mental na juventude;S240017;Nicolas Lopes Vieira;S;120;40;80;120;80;440
+20/02/2024;Saúde mental na juventude;S240018;Paulo Ribeiro Nogueira;S;120;200;160;200;160;840
+20/02/2024;Saúde mental na juventude;S240019;Fernanda Andrade Garcia;N;;;;;;
+20/02/2024;Saúde mental na juventude;S240020;João Santos Barbosa;S;40;80;40;120;120;400
+27/02/2024;A desinformação nas redes sociais;S240001;Isabela Oliveira Ribeiro;S;120;40;120;40;120;440
+27/02/2024;A desinformação nas redes sociais;S240002;Lucas Campos Lima;S;120;40;80;120;120;480
+27/02/2024;A desinformação nas redes sociais;S240003;Otávio Teixeira Ferreira;S;120;120;160;160;160;720
+27/02/2024;A desinformação nas redes sociais;S240006;Olívia Andrade Ramos;S;200;200;120;120;120;760
+27/02/2024;A desinformação nas redes sociais;S240007;Olívia Garcia Ferreira;N;;;;;;
+27/02/2024;A desinformação nas redes sociais;S240008;Manuela Ferreira Pinto;S;160;120;120;120;200;720
+27/02/2024;A desinformação nas redes sociais;S240009;Arthur Garcia Ferreira;S;160;200;120;160;200;840
+27/02/2024;A desinformação nas redes sociais;S240010;Júlia Lima Batista;N;;;;;;
+27/02/2024;A desinformação nas redes sociais;S240011;Samuel Cardoso Dias;S;160;80;120;120;120;600
+27/02/2024;A desinformação nas redes sociais;S240012;Henrique Duarte Henriques;S;80;160;160;160;80;640
+27/02/2024;A desinformação nas redes sociais;S240014;Renan Campos Cardoso;S;160;200;120;200;160;840
+27/02/2024;A desinformação nas redes sociais;S240015;Carla Lopes Almeida;S;80;160;120;80;80;520
+27/02/2024;A desinformação nas redes sociais;S240016;Tatiane Esteves Pinto;N;;;;;;
+27/02/2024;A desinformação nas redes sociais;S240017;Nicolas Lopes Vieira;S;120;40;40;120;120;440
+27/02/2024;A desinformação nas redes sociais;S240018;Paulo Ribeiro Nogueira;S;120;160;160;120;200;760
+27/02/2024;A desinformação nas redes sociais;S240019;Fernanda Andrade Garcia;S;40;120;40;40;120;360
+27/02/2024;A desinformação nas redes sociais;S240020;João Santos Barbosa;S;120;40;40;80;40;320
+05/03/2024;Trabalho e tecnologia;S240001;Isabela Oliveira Ribeiro;N;;;;;;
+05/03/2024;Trabalho e tecnologia;S240002;Lucas Campos Lima;N;;;;;;
+05/03/2024;Trabalho e tecnologia;S240003;Otávio Teixeira Ferreira;S;80;160;160;160;80;640
+05/03/2024;Trabalho e tecnologia;S240006;Olívia Andrade Ramos;S;200;120;200;160;200;880
+05/03/2024;Trabalho e tecnologia;S240007;Olívia Garcia Ferreira;N;;;;;;
+05/03/2024;Trabalho e tecnologia;S240008;Manuela Ferreira Pinto;S;160;200;120;160;200;840
+05/03/2024;Trabalho e tecnologia;S240009;Arthur Garcia Ferreira;S;200;160;160;160;160;840
+05/03/2024;Trabalho e tecnologia;S240010;Júlia Lima Batista;S;40;120;80;40;80;360
+05/03/2024;Trabalho e tecnologia;S240011;Samuel Cardoso Dias;S;120;120;120;160;120;640
+05/03/2024;Trabalho e tecnologia;S240012;Henrique Duarte Henriques;S;120;80;160;80;120;560
+05/03/2024;Trabalho e tecnologia;S240014;Renan Campos Cardoso;N;;;;;;
+05/03/2024;Trabalho e tecnologia;S240015;Carla Lopes Almeida;S;120;80;80;160;80;520
+05/03/2024;Trabalho e tecnologia;S240016;Tatiane Esteves Pinto;S;80;120;160;120;160;640
+05/03/2024;Trabalho e tecnologia;S240017;Nicolas Lopes Vieira;S;80;40;80;40;120;360
+05/03/2024;Trabalho e tecnologia;S240018;Paulo Ribeiro Nogueira;S;200;200;160;120;160;840
+05/03/2024;Trabalho e tecnologia;S240019;Fernanda Andrade Garcia;N;;;;;;
+05/03/2024;Trabalho e tecnologia;S240020;João Santos Barbosa;S;80;120;40;80;120;440
+12/03/2024;O papel da ciência na sociedade;S240001;Isabela Oliveira Ribeiro;N;;;;;;
+12/03/2024;O papel da ciência na sociedade;S240002;Lucas Campos Lima;S;120;120;80;40;40;400
+12/03/2024;O papel da ciência na sociedade;S240003;Otávio Teixeira Ferreira;S;160;80;160;120;160;680
+12/03/2024;O papel da ciência na sociedade;S240004;Débora Lopes Teixeira;S;80;80;120;160;80;520
+12/03/2024;O papel da ciência na sociedade;S240006;Olívia Andrade Ramos;S;120;120;160;160;200;760
+12/03/2024;O papel da ciência na sociedade;S240007;Olívia Garcia Ferreira;S;80;160;120;80;80;520
+12/03/2024;O papel da ciência na sociedade;S240008;Manuela Ferreira Pinto;S;120;200;200;120;120;760
+12/03/2024;O papel da ciência na sociedade;S240009;Arthur Garcia Ferreira;S;200;200;160;120;160;840
+12/03/2024;O papel da ciência na sociedade;S240010;Júlia Lima Batista;S;40;40;40;80;40;240
+12/03/2024;O papel da ciência na sociedade;S240011;Samuel Cardoso Dias;S;80;120;160;160;120;640
+12/03/2024;O papel da ciência na sociedade;S240012;Henrique Duarte Henriques;N;;;;;;
+12/03/2024;O papel da ciência na sociedade;S240014;Renan Campos Cardoso;S;200;200;160;120;160;840
+12/03/2024;O papel da ciência na sociedade;S240015;Carla Lopes Almeida;S;120;80;160;120;80;560
+12/03/2024;O papel da ciência na sociedade;S240016;Tatiane Esteves Pinto;S;80;160;120;120;80;560
+12/03/2024;O papel da ciência na sociedade;S240017;Nicolas Lopes Vieira;S;40;80;120;80;80;400
+12/03/2024;O papel da ciência na sociedade;S240018;Paulo Ribeiro Nogueira;S;160;160;120;200;120;760
+12/03/2024;O papel da ciência na sociedade;S240019;Fernanda Andrade Garcia;N;;;;;;
+12/03/2024;O papel da ciência na sociedade;S240020;João Santos Barbosa;N;;;;;;
+19/03/2024;Desperdício de alimentos;S240001;Isabela Oliveira Ribeiro;S;80;80;120;80;80;440
+19/03/2024;Desperdício de alimentos;S240002;Lucas Campos Lima;S;120;80;40;120;80;440
+19/03/2024;Desperdício de alimentos;S240003;Otávio Teixeira Ferreira;S;160;80;120;80;80;520
+19/03/2024;Desperdício de alimentos;S240004;Débora Lopes Teixeira;S;120;160;120;120;160;680
+19/03/2024;Desperdício de alimentos;S240006;Olívia Andrade Ramos;S;160;120;160;120;160;720
+19/03/2024;Desperdício de alimentos;S240007;Olívia Garcia Ferreira;S;160;120;80;160;120;640
+19/03/2024;Desperdício de alimentos;S240008;Manuela Ferreira Pinto;S;120;200;120;200;120;760
+19/03/2024;Desperdício de alimentos;S240009;Arthur Garcia Ferreira;N;;;;;;
+19/03/2024;Desperdício de alimentos;S240010;Júlia Lima Batista;N;;;;;;
+19/03/2024;Desperdício de alimentos;S240011;Samuel Cardoso Dias;S;160;120;160;120;80;640
+19/03/2024;Desperdício de alimentos;S240012;Henrique Duarte Henriques;N;;;;;;
+19/03/2024;Desperdício de alimentos;S240014;Renan Campos Cardoso;S;160;200;200;200;200;960
+19/03/2024;Desperdício de alimentos;S240015;Carla Lopes Almeida;S;80;80;160;80;120;520
+19/03/2024;Desperdício de alimentos;S240016;Tatiane Esteves Pinto;N;;;;;;
+19/03/2024;Desperdício de alimentos;S240017;Nicolas Lopes Vieira;S;80;120;40;120;120;480
+19/03/2024;Desperdício de alimentos;S240018;Paulo Ribeiro Nogueira;S;200;160;200;120;160;840
+19/03/2024;Desperdício de alimentos;S240019;Fernanda Andrade Garcia;N;;;;;;
+19/03/2024;Desperdício de alimentos;S240020;João Santos Barbosa;S;40;120;120;80;80;440
+26/03/2024;Inclusão digital de idosos;S240001;Isabela Oliveira Ribeiro;N;;;;;;
+26/03/2024;Inclusão digital de idosos;S240002;Lucas Campos Lima;S;80;40;120;80;120;440
+26/03/2024;Inclusão digital de idosos;S240003;Otávio Teixeira Ferreira;S;120;80;120;160;120;600
+26/03/2024;Inclusão digital de idosos;S240004;Débora Lopes Teixeira;N;;;;;;
+26/03/2024;Inclusão digital de idosos;S240006;Olívia Andrade Ramos;S;160;160;120;160;120;720
+26/03/2024;Inclusão digital de idosos;S240007;Olívia Garcia Ferreira;S;80;120;160;80;80;520
+26/03/2024;Inclusão digital de idosos;S240008;Manuela Ferreira Pinto;S;120;120;120;200;120;680
+26/03/2024;Inclusão digital de idosos;S240009;Arthur Garcia Ferreira;S;160;160;200;120;120;760
+26/03/2024;Inclusão digital de idosos;S240010;Júlia Lima Batista;S;120;120;120;40;120;520
+26/03/2024;Inclusão digital de idosos;S240011;Samuel Cardoso Dias;S;120;120;80;160;120;600
+26/03/2024;Inclusão digital de idosos;S240012;Henrique Duarte Henriques;S;160;120;120;80;160;640
+26/03/2024;Inclusão digital de idosos;S240014;Renan Campos Cardoso;S;120;120;200;160;160;760
+26/03/2024;Inclusão digital de idosos;S240015;Carla Lopes Almeida;S;80;160;80;80;160;560
+26/03/2024;Inclusão digital de idosos;S240016;Tatiane Esteves Pinto;S;120;120;120;80;80;520
+26/03/2024;Inclusão digital de idosos;S240017;Nicolas Lopes Vieira;N;;;;;;
+26/03/2024;Inclusão digital de idosos;S240018;Paulo Ribeiro Nogueira;N;;;;;;
+26/03/2024;Inclusão digital de idosos;S240019;Fernanda Andrade Garcia;N;;;;;;
+26/03/2024;Inclusão digital de idosos;S240020;João Santos Barbosa;S;80;80;80;40;40;320
+02/04/2024;Preservação dos recursos hídricos;S240001;Isabela Oliveira Ribeiro;N;;;;;;
+02/04/2024;Preservação dos recursos hídricos;S240002;Lucas Campos Lima;S;120;120;120;80;120;560
+02/04/2024;Preservação dos recursos hídricos;S240003;Otávio Teixeira Ferreira;S;80;160;120;160;160;680
+02/04/2024;Preservação dos recursos hídricos;S240004;Débora Lopes Teixeira;S;160;120;160;160;160;760
+02/04/2024;Preservação dos recursos hídricos;S240006;Olívia Andrade Ramos;S;160;200;160;120;200;840
+02/04/2024;Preservação dos recursos hídricos;S240007;Olívia Garcia Ferreira;S;160;80;120;80;80;520
+02/04/2024;Preservação dos recursos hídricos;S240008;Manuela Ferreira Pinto;S;120;160;120;160;200;760
+02/04/2024;Preservação dos recursos hídricos;S240009;Arthur Garcia Ferreira;S;160;160;200;160;160;840
+02/04/2024;Preservação dos recursos hídricos;S240010;Júlia Lima Batista;S;120;120;80;120;120;560
+02/04/2024;Preservação dos recursos hídricos;S240011;Samuel Cardoso Dias;S;120;160;80;160;160;680
+02/04/2024;Preservação dos recursos hídricos;S240012;Henrique Duarte Henriques;S;120;80;80;80;120;480
+02/04/2024;Preservação dos recursos hídricos;S240014;Renan Campos Cardoso;S;200;120;200;200;200;920
+02/04/2024;Preservação dos recursos hídricos;S240015;Carla Lopes Almeida;S;160;160;120;120;80;640
+02/04/2024;Preservação dos recursos hídricos;S240016;Tatiane Esteves Pinto;S;80;80;160;120;160;600
+02/04/2024;Preservação dos recursos hídricos;S240017;Nicolas Lopes Vieira;N;;;;;;
+02/04/2024;Preservação dos recursos hídricos;S240018;Paulo Ribeiro Nogueira;S;200;160;200;160;200;920
+02/04/2024;Preservação dos recursos hídricos;S240019;Fernanda Andrade Garcia;S;120;120;80;120;120;560
+02/04/2024;Preservação dos recursos hídricos;S240020;João Santos Barbosa;N;;;;;;
+09/04/2024;Educação financeira nas escolas;S240001;Isabela Oliveira Ribeiro;S;120;40;120;120;80;480
+09/04/2024;Educação financeira nas escolas;S240002;Lucas Campos Lima;S;80;40;120;80;80;400
+09/04/2024;Educação financeira nas escolas;S240003;Otávio Teixeira Ferreira;N;;;;;;
+09/04/2024;Educação financeira nas escolas;S240004;Débora Lopes Teixeira;S;120;120;80;160;160;640
+09/04/2024;Educação financeira nas escolas;S240006;Olívia Andrade Ramos;S;160;160;160;120;120;720
+09/04/2024;Educação financeira nas escolas;S240007;Olívia Garcia Ferreira;S;120;160;120;120;120;640
+09/04/2024;Educação financeira nas escolas;S240008;Manuela Ferreira Pinto;N;;;;;;
+09/04/2024;Educação financeira nas escolas;S240009;Arthur Garcia Ferreira;S;120;160;160;200;120;760
+09/04/2024;Educação financeira nas escolas;S240010;Júlia Lima Batista;N;;;;;;
+09/04/2024;Educação financeira nas escolas;S240011;Samuel Cardoso Dias;S;80;160;120;160;80;600
+09/04/2024;Educação financeira nas escolas;S240012;Henrique Duarte Henriques;S;120;80;160;80;160;600
+09/04/2024;Educação financeira nas escolas;S240014;Renan Campos Cardoso;N;;;;;;
+09/04/2024;Educação financeira nas escolas;S240015;Carla Lopes Almeida;S;80;120;120;160;120;600
+09/04/2024;Educação financeira nas escolas;S240016;Tatiane Esteves Pinto;S;120;120;120;120;120;600
+09/04/2024;Educação financeira nas escolas;S240017;Nicolas Lopes Vieira;S;40;40;40;120;120;360
+09/04/2024;Educação financeira nas escolas;S240018;Paulo Ribeiro Nogueira;S;200;160;160;200;160;880
+09/04/2024;Educação financeira nas escolas;S240019;Fernanda Andrade Garcia;N;;;;;;
+09/04/2024;Educação financeira nas escolas;S240020;João Santos Barbosa;S;80;80;40;120;80;400
+16/04/2024;Desafios da mobilidade urbana;S240001;Isabela Oliveira Ribeiro;S;80;120;40;120;40;400
+16/04/2024;Desafios da mobilidade urbana;S240002;Lucas Campos Lima;S;80;120;80;120;80;480
+16/04/2024;Desafios da mobilidade urbana;S240003;Otávio Teixeira Ferreira;N;;;;;;
+16/04/2024;Desafios da mobilidade urbana;S240004;Débora Lopes Teixeira;S;160;160;120;80;160;680
+16/04/2024;Desafios da mobilidade urbana;S240005;Enzo Campos Freitas;S;120;40;120;40;80;400
+16/04/2024;Desafios da mobilidade urbana;S240006;Olívia Andrade Ramos;N;;;;;;
+16/04/2024;Desafios da mobilidade urbana;S240007;Olívia Garcia Ferreira;N;;;;;;
+16/04/2024;Desafios da mobilidade urbana;S240008;Manuela Ferreira Pinto;S;120;200;160;200;120;800
+16/04/2024;Desafios da mobilidade urbana;S240009;Arthur Garcia Ferreira;S;160;200;120;160;160;800
+16/04/2024;Desafios da mobilidade urbana;S240010;Júlia Lima Batista;N;;;;;;
+16/04/2024;Desafios da mobilidade urbana;S240011;Samuel Cardoso Dias;S;160;80;160;160;80;640
+16/04/2024;Desafios da mobilidade urbana;S240012;Henrique Duarte Henriques;N;;;;;;
+16/04/2024;Desafios da mobilidade urbana;S240013;Thiago Freitas Lopes;S;120;120;160;160;160;720
+16/04/2024;Desafios da mobilidade urbana;S240014;Renan Campos Cardoso;N;;;;;;
+16/04/2024;Desafios da mobilidade urbana;S240015;Carla Lopes Almeida;S;120;80;80;160;80;520
+16/04/2024;Desafios da mobilidade urbana;S240016;Tatiane Esteves Pinto;S;80;160;80;80;160;560
+16/04/2024;Desafios da mobilidade urbana;S240017;Nicolas Lopes Vieira;S;40;120;40;80;120;400
+16/04/2024;Desafios da mobilidade urbana;S240018;Paulo Ribeiro Nogueira;N;;;;;;
+16/04/2024;Desafios da mobilidade urbana;S240019;Fernanda Andrade Garcia;N;;;;;;
+16/04/2024;Desafios da mobilidade urbana;S240020;João Santos Barbosa;S;120;80;120;80;80;480
+23/04/2024;O acesso à cultura nas periferias;S240001;Isabela Oliveira Ribeiro;S;80;80;40;80;120;400
+23/04/2024;O acesso à cultura nas periferias;S240002;Lucas Campos Lima;S;80;80;120;80;40;400
+23/04/2024;O acesso à cultura nas periferias;S240003;Otávio Teixeira Ferreira;N;;;;;;
+23/04/2024;O acesso à cultura nas periferias;S240004;Débora Lopes Teixeira;S;160;120;160;120;80;640
+23/04/2024;O acesso à cultura nas periferias;S240005;Enzo Campos Freitas;S;120;120;80;80;80;480
+23/04/2024;O acesso à cultura nas periferias;S240006;Olívia Andrade Ramos;S;160;200;160;120;120;760
+23/04/2024;O acesso à cultura nas periferias;S240007;Olívia Garcia Ferreira;S;80;160;80;120;80;520
+23/04/2024;O acesso à cultura nas periferias;S240008;Manuela Ferreira Pinto;N;;;;;;
+23/04/2024;O acesso à cultura nas periferias;S240009;Arthur Garcia Ferreira;S;120;120;120;120;200;680
+23/04/2024;O acesso à cultura nas periferias;S240010;Júlia Lima Batista;N;;;;;;
+23/04/2024;O acesso à cultura nas periferias;S240011;Samuel Cardoso Dias;S;160;80;120;120;120;600
+23/04/2024;O acesso à cultura nas periferias;S240012;Henrique Duarte Henriques;S;80;120;120;120;120;560
+23/04/2024;O acesso à cultura nas periferias;S240013;Thiago Freitas Lopes;N;;;;;;
+23/04/2024;O acesso à cultura nas periferias;S240014;Renan Campos Cardoso;S;120;120;120;160;120;640
+23/04/2024;O acesso à cultura nas periferias;S240015;Carla Lopes Almeida;S;120;80;160;80;120;560
+23/04/2024;O acesso à cultura nas periferias;S240016;Tatiane Esteves Pinto;N;;;;;;
+23/04/2024;O acesso à cultura nas periferias;S240017;Nicolas Lopes Vieira;N;;;;;;
+23/04/2024;O acesso à cultura nas periferias;S240018;Paulo Ribeiro Nogueira;S;160;120;200;200;200;880
+23/04/2024;O acesso à cultura nas periferias;S240019;Fernanda Andrade Garcia;N;;;;;;
+23/04/2024;O acesso à cultura nas periferias;S240020;João Santos Barbosa;N;;;;;;
+30/04/2024;Saúde mental na juventude;S240001;Isabela Oliveira Ribeiro;S;120;120;120;80;80;520
+30/04/2024;Saúde mental na juventude;S240002;Lucas Campos Lima;N;;;;;;
+30/04/2024;Saúde mental na juventude;S240003;Otávio Teixeira Ferreira;N;;;;;;
+30/04/2024;Saúde mental na juventude;S240004;Débora Lopes Teixeira;S;80;120;120;160;120;600
+30/04/2024;Saúde mental na juventude;S240005;Enzo Campos Freitas;S;40;120;80;80;40;360
+30/04/2024;Saúde mental na juventude;S240006;Olívia Andrade Ramos;S;120;200;160;120;120;720
+30/04/2024;Saúde mental na juventude;S240007;Olívia Garcia Ferreira;S;80;120;120;80;80;480
+30/04/2024;Saúde mental na juventude;S240008;Manuela Ferreira Pinto;S;120;120;120;160;160;680
+30/04/2024;Saúde mental na juventude;S240009;Arthur Garcia Ferreira;S;200;160;120;120;200;800
+30/04/2024;Saúde mental na juventude;S240010;Júlia Lima Batista;N;;;;;;
+30/04/2024;Saúde mental na juventude;S240011;Samuel Cardoso Dias;S;160;160;80;80;160;640
+30/04/2024;Saúde mental na juventude;S240012;Henrique Duarte Henriques;S;80;80;120;160;160;600
+30/04/2024;Saúde mental na juventude;S240013;Thiago Freitas Lopes;S;200;120;120;120;120;680
+30/04/2024;Saúde mental na juventude;S240014;Renan Campos Cardoso;N;;;;;;
+30/04/2024;Saúde mental na juventude;S240015;Carla Lopes Almeida;S;80;160;120;80;160;600
+30/04/2024;Saúde mental na juventude;S240016;Tatiane Esteves Pinto;S;80;80;160;80;160;560
+30/04/2024;Saúde mental na juventude;S240017;Nicolas Lopes Vieira;S;40;40;120;40;120;360
+30/04/2024;Saúde mental na juventude;S240018;Paulo Ribeiro Nogueira;S;160;200;120;160;160;800
+30/04/2024;Saúde mental na juventude;S240019;Fernanda Andrade Garcia;N;;;;;;
+30/04/2024;Saúde mental na juventude;S240020;João Santos Barbosa;N;;;;;;
+07/05/2024;A desinformação nas redes sociais;S240001;Isabela Oliveira Ribeiro;S;40;40;80;80;120;360
+07/05/2024;A desinformação nas redes sociais;S240002;Lucas Campos Lima;S;120;120;120;80;80;520
+07/05/2024;A desinformação nas redes sociais;S240003;Otávio Teixeira Ferreira;N;;;;;;
+07/05/2024;A desinformação nas redes sociais;S240004;Débora Lopes Teixeira;S;120;120;160;80;120;600
+07/05/2024;A desinformação nas redes sociais;S240005;Enzo Campos Freitas;S;120;80;40;120;120;480
+07/05/2024;A desinformação nas redes sociais;S240006;Olívia Andrade Ramos;S;200;120;160;120;160;760
+07/05/2024;A desinformação nas redes sociais;S240007;Olívia Garcia Ferreira;S;120;160;160;160;160;760
+07/05/2024;A desinformação nas redes sociais;S240008;Manuela Ferreira Pinto;S;200;160;200;120;120;800
+07/05/2024;A desinformação nas redes sociais;S240009;Arthur Garcia Ferreira;S;200;160;120;120;160;760
+07/05/2024;A desinformação nas redes sociais;S240010;Júlia Lima Batista;S;80;120;120;80;40;440
+07/05/2024;A desinformação nas redes sociais;S240011;Samuel Cardoso Dias;S;80;80;80;80;120;440
+07/05/2024;A desinformação nas redes sociais;S240012;Henrique Duarte Henriques;N;;;;;;
+07/05/2024;A desinformação nas redes sociais;S240013;Thiago Freitas Lopes;S;160;200;120;120;120;720
+07/05/2024;A desinformação nas redes sociais;S240014;Renan Campos Cardoso;N;;;;;;
+07/05/2024;A desinformação nas redes sociais;S240015;Carla Lopes Almeida;S;80;80;80;120;120;480
+07/05/2024;A desinformação nas redes sociais;S240016;Tatiane Esteves Pinto;N;;;;;;
+07/05/2024;A desinformação nas redes sociais;S240017;Nicolas Lopes Vieira;S;120;120;80;40;120;480
+07/05/2024;A desinformação nas redes sociais;S240018;Paulo Ribeiro Nogueira;S;120;120;200;200;120;760
+07/05/2024;A desinformação nas redes sociais;S240019;Fernanda Andrade Garcia;S;120;40;40;120;120;440
+07/05/2024;A desinformação nas redes sociais;S240020;João Santos Barbosa;N;;;;;;
+14/05/2024;Trabalho e tecnologia;S240001;Isabela Oliveira Ribeiro;S;80;40;40;80;120;360
+14/05/2024;Trabalho e tecnologia;S240002;Lucas Campos Lima;S;80;80;120;40;120;440
+14/05/2024;Trabalho e tecnologia;S240003;Otávio Teixeira Ferreira;S;80;80;160;80;160;560
+14/05/2024;Trabalho e tecnologia;S240004;Débora Lopes Teixeira;S;160;160;80;80;160;640
+14/05/2024;Trabalho e tecnologia;S240005;Enzo Campos Freitas;N;;;;;;
+14/05/2024;Trabalho e tecnologia;S240006;Olívia Andrade Ramos;S;120;120;120;160;160;680
+14/05/2024;Trabalho e tecnologia;S240007;Olívia Garcia Ferreira;N;;;;;;
+14/05/2024;Trabalho e tecnologia;S240008;Manuela Ferreira Pinto;S;160;200;200;200;200;960
+14/05/2024;Trabalho e tecnologia;S240009;Arthur Garcia Ferreira;S;120;160;160;200;160;800
+14/05/2024;Trabalho e tecnologia;S240010;Júlia Lima Batista;S;40;80;40;80;120;360
+14/05/2024;Trabalho e tecnologia;S240011;Samuel Cardoso Dias;S;120;80;120;80;80;480
+14/05/2024;Trabalho e tecnologia;S240012;Henrique Duarte Henriques;S;80;160;160;80;120;600
+14/05/2024;Trabalho e tecnologia;S240013;Thiago Freitas Lopes;S;160;160;160;200;120;800
+14/05/2024;Trabalho e tecnologia;S240014;Renan Campos Cardoso;S;120;120;200;120;120;680
+14/05/2024;Trabalho e tecnologia;S240015;Carla Lopes Almeida;S;160;80;160;80;80;560
+14/05/2024;Trabalho e tecnologia;S240016;Tatiane Esteves Pinto;N;;;;;;
+14/05/2024;Trabalho e tecnologia;S240017;Nicolas Lopes Vieira;S;40;120;40;80;120;400
+14/05/2024;Trabalho e tecnologia;S240018;Paulo Ribeiro Nogueira;S;160;120;120;200;200;800
+14/05/2024;Trabalho e tecnologia;S240019;Fernanda Andrade Garcia;S;80;40;80;40;40;280
+14/05/2024;Trabalho e tecnologia;S240020;João Santos Barbosa;S;40;80;40;80;40;280
+21/05/2024;O papel da ciência na sociedade;S240001;Isabela Oliveira Ribeiro;N;;;;;;
+21/05/2024;O papel da ciência na sociedade;S240002;Lucas Campos Lima;S;40;120;80;80;120;440
+21/05/2024;O papel da ciência na sociedade;S240003;Otávio Teixeira Ferreira;S;80;80;120;160;160;600
+21/05/2024;O papel da ciência na sociedade;S240004;Débora Lopes Teixeira;S;120;160;80;120;120;600
+21/05/2024;O papel da ciência na sociedade;S240005;Enzo Campos Freitas;N;;;;;;
+21/05/2024;O papel da ciência na sociedade;S240006;Olívia Andrade Ramos;S;120;120;120;160;120;640
+21/05/2024;O papel da ciência na sociedade;S240007;Olívia Garcia Ferreira;N;;;;;;
+21/05/2024;O papel da ciência na sociedade;S240008;Manuela Ferreira Pinto;N;;;;;;
+21/05/2024;O papel da ciência na sociedade;S240009;Arthur Garcia Ferreira;N;;;;;;
+21/05/2024;O papel da ciência na sociedade;S240010;Júlia Lima Batista;N;;;;;;
+21/05/2024;O papel da ciência na sociedade;S240011;Samuel Cardoso Dias;S;120;80;120;160;120;600
+21/05/2024;O papel da ciência na sociedade;S240012;Henrique Duarte Henriques;S;160;80;160;160;160;720
+21/05/2024;O papel da ciência na sociedade;S240013;Thiago Freitas Lopes;N;;;;;;
+21/05/2024;O papel da ciência na sociedade;S240014;Renan Campos Cardoso;S;160;200;160;120;120;760
+21/05/2024;O papel da ciência na sociedade;S240015;Carla Lopes Almeida;S;160;80;80;160;160;640
+21/05/2024;O papel da ciência na sociedade;S240016;Tatiane Esteves Pinto;S;120;160;120;120;80;600
+21/05/2024;O papel da ciência na sociedade;S240017;Nicolas Lopes Vieira;S;80;80;80;80;120;440
+21/05/2024;O papel da ciência na sociedade;S240018;Paulo Ribeiro Nogueira;S;200;120;120;160;160;760
+21/05/2024;O papel da ciência na sociedade;S240019;Fernanda Andrade Garcia;N;;;;;;
+21/05/2024;O papel da ciência na sociedade;S240020;João Santos Barbosa;S;120;80;40;120;80;440
+28/05/2024;Desperdício de alimentos;S240001;Isabela Oliveira Ribeiro;S;80;120;120;40;40;400
+28/05/2024;Desperdício de alimentos;S240002;Lucas Campos Lima;S;120;120;80;40;40;400
+28/05/2024;Desperdício de alimentos;S240003;Otávio Teixeira Ferreira;N;;;;;;
+28/05/2024;Desperdício de alimentos;S240004;Débora Lopes Teixeira;N;;;;;;
+28/05/2024;Desperdício de alimentos;S240005;Enzo Campos Freitas;S;120;40;120;40;120;440
+28/05/2024;Desperdício de alimentos;S240006;Olívia Andrade Ramos;N;;;;;;
+28/05/2024;Desperdício de alimentos;S240007;Olívia Garcia Ferreira;S;160;120;120;80;160;640
+28/05/2024;Desperdício de alimentos;S240008;Manuela Ferreira Pinto;S;120;160;200;120;160;760
+28/05/2024;Desperdício de alimentos;S240009;Arthur Garcia Ferreira;S;200;160;160;120;160;800
+28/05/2024;Desperdício de alimentos;S240010;Júlia Lima Batista;S;120;80;80;80;40;400
+28/05/2024;Desperdício de alimentos;S240011;Samuel Cardoso Dias;S;160;80;120;160;160;680
+28/05/2024;Desperdício de alimentos;S240012;Henrique Duarte Henriques;N;;;;;;
+28/05/2024;Desperdício de alimentos;S240013;Thiago Freitas Lopes;S;120;120;200;200;200;840
+28/05/2024;Desperdício de alimentos;S240014;Renan Campos Cardoso;N;;;;;;
+28/05/2024;Desperdício de alimentos;S240015;Carla Lopes Almeida;S;80;120;160;120;160;640
+28/05/2024;Desperdício de alimentos;S240016;Tatiane Esteves Pinto;N;;;;;;
+28/05/2024;Desperdício de alimentos;S240017;Nicolas Lopes Vieira;N;;;;;;
+28/05/2024;Desperdício de alimentos;S240018;Paulo Ribeiro Nogueira;S;200;120;120;160;160;760
+28/05/2024;Desperdício de alimentos;S240019;Fernanda Andrade Garcia;N;;;;;;
+28/05/2024;Desperdício de alimentos;S240020;João Santos Barbosa;S;40;40;40;80;40;240
+04/06/2024;Inclusão digital de idosos;S240001;Isabela Oliveira Ribeiro;N;;;;;;
+04/06/2024;Inclusão digital de idosos;S240002;Lucas Campos Lima;S;120;40;40;120;120;440
+04/06/2024;Inclusão digital de idosos;S240003;Otávio Teixeira Ferreira;N;;;;;;
+04/06/2024;Inclusão digital de idosos;S240004;Débora Lopes Teixeira;S;80;80;80;80;80;400
+04/06/2024;Inclusão digital de idosos;S240005;Enzo Campos Freitas;S;40;40;120;40;120;360
+04/06/2024;Inclusão digital de idosos;S240006;Olívia Andrade Ramos;S;200;160;160;120;160;800
+04/06/2024;Inclusão digital de idosos;S240007;Olívia Garcia Ferreira;N;;;;;;
+04/06/2024;Inclusão digital de idosos;S240008;Manuela Ferreira Pinto;S;120;200;200;200;160;880
+04/06/2024;Inclusão digital de idosos;S240009;Arthur Garcia Ferreira;S;160;120;200;160;160;800
+04/06/2024;Inclusão digital de idosos;S240010;Júlia Lima Batista;S;120;80;40;120;80;440
+04/06/2024;Inclusão digital de idosos;S240011;Samuel Cardoso Dias;S;160;80;120;160;160;680
+04/06/2024;Inclusão digital de idosos;S240012;Henrique Duarte Henriques;S;160;160;80;120;120;640
+04/06/2024;Inclusão digital de idosos;S240013;Thiago Freitas Lopes;S;160;120;160;120;160;720
+04/06/2024;Inclusão digital de idosos;S240014;Renan Campos Cardoso;S;160;160;120;200;160;800
+04/06/2024;Inclusão digital de idosos;S240015;Carla Lopes Almeida;N;;;;;;
+04/06/2024;Inclusão digital de idosos;S240016;Tatiane Esteves Pinto;N;;;;;;
+04/06/2024;Inclusão digital de idosos;S240017;Nicolas Lopes Vieira;S;40;120;120;40;80;400
+04/06/2024;Inclusão digital de idosos;S240018;Paulo Ribeiro Nogueira;S;120;160;120;200;120;720
+04/06/2024;Inclusão digital de idosos;S240019;Fernanda Andrade Garcia;S;40;120;40;40;120;360
+04/06/2024;Inclusão digital de idosos;S240020;João Santos Barbosa;S;120;40;120;120;80;480
+11/06/2024;Preservação dos recursos hídricos;S240001;Isabela Oliveira Ribeiro;N;;;;;;
+11/06/2024;Preservação dos recursos hídricos;S240002;Lucas Campos Lima;S;40;40;120;80;120;400
+11/06/2024;Preservação dos recursos hídricos;S240003;Otávio Teixeira Ferreira;N;;;;;;
+11/06/2024;Preservação dos recursos hídricos;S240004;Débora Lopes Teixeira;S;120;160;120;120;160;680
+11/06/2024;Preservação dos recursos hídricos;S240005;Enzo Campos Freitas;S;80;40;80;80;80;360
+11/06/2024;Preservação dos recursos hídricos;S240006;Olívia Andrade Ramos;S;160;160;120;200;120;760
+11/06/2024;Preservação dos recursos hídricos;S240007;Olívia Garcia Ferreira;N;;;;;;
+11/06/2024;Preservação dos recursos hídricos;S240008;Manuela Ferreira Pinto;N;;;;;;
+11/06/2024;Preservação dos recursos hídricos;S240009;Arthur Garcia Ferreira;S;160;120;200;200;160;840
+11/06/2024;Preservação dos recursos hídricos;S240010;Júlia Lima Batista;N;;;;;;
+11/06/2024;Preservação dos recursos hídricos;S240011;Samuel Cardoso Dias;S;120;80;160;120;160;640
+11/06/2024;Preservação dos recursos hídricos;S240012;Henrique Duarte Henriques;S;160;120;120;120;120;640
+11/06/2024;Preservação dos recursos hídricos;S240013;Thiago Freitas Lopes;S;160;120;200;160;200;840
+11/06/2024;Preservação dos recursos hídricos;S240014;Renan Campos Cardoso;N;;;;;;
+11/06/2024;Preservação dos recursos hídricos;S240015;Carla Lopes Almeida;S;80;80;80;120;160;520
+11/06/2024;Preservação dos recursos hídricos;S240016;Tatiane Esteves Pinto;S;160;120;120;80;120;600
+11/06/2024;Preservação dos recursos hídricos;S240017;Nicolas Lopes Vieira;N;;;;;;
+11/06/2024;Preservação dos recursos hídricos;S240018;Paulo Ribeiro Nogueira;S;200;120;160;120;160;760
+11/06/2024;Preservação dos recursos hídricos;S240019;Fernanda Andrade Garcia;N;;;;;;
+11/06/2024;Preservação dos recursos hídricos;S240020;João Santos Barbosa;N;;;;;;
+18/06/2024;Educação financeira nas escolas;S240001;Isabela Oliveira Ribeiro;S;40;80;80;120;40;360
+18/06/2024;Educação financeira nas escolas;S240002;Lucas Campos Lima;S;40;80;120;40;120;400
+18/06/2024;Educação financeira nas escolas;S240003;Otávio Teixeira Ferreira;S;80;120;160;160;160;680
+18/06/2024;Educação financeira nas escolas;S240004;Débora Lopes Teixeira;S;120;160;160;160;160;760
+18/06/2024;Educação financeira nas escolas;S240005;Enzo Campos Freitas;S;40;80;120;40;80;360
+18/06/2024;Educação financeira nas escolas;S240006;Olívia Andrade Ramos;S;160;160;160;120;160;760
+18/06/2024;Educação financeira nas escolas;S240007;Olívia Garcia Ferreira;S;160;160;80;80;160;640
+18/06/2024;Educação financeira nas escolas;S240008;Manuela Ferreira Pinto;S;160;160;200;120;200;840
+18/06/2024;Educação financeira nas escolas;S240009;Arthur Garcia Ferreira;N;;;;;;
+18/06/2024;Educação financeira nas escolas;S240010;Júlia Lima Batista;N;;;;;;
+18/06/2024;Educação financeira nas escolas;S240011;Samuel Cardoso Dias;S;120;80;120;80;120;520
+18/06/2024;Educação financeira nas escolas;S240012;Henrique Duarte Henriques;S;80;160;120;80;160;600
+18/06/2024;Educação financeira nas escolas;S240013;Thiago Freitas Lopes;S;160;200;200;160;200;920
+18/06/2024;Educação financeira nas escolas;S240014;Renan Campos Cardoso;S;120;120;200;120;120;680
+18/06/2024;Educação financeira nas escolas;S240015;Carla Lopes Almeida;S;120;80;120;160;80;560
+18/06/2024;Educação financeira nas escolas;S240016;Tatiane Esteves Pinto;S;80;160;80;80;80;480
+18/06/2024;Educação financeira nas escolas;S240017;Nicolas Lopes Vieira;S;120;40;120;120;80;480
+18/06/2024;Educação financeira nas escolas;S240018;Paulo Ribeiro Nogueira;S;120;200;160;160;160;800
+18/06/2024;Educação financeira nas escolas;S240019;Fernanda Andrade Garcia;S;80;80;120;120;40;440
+18/06/2024;Educação financeira nas escolas;S240020;João Santos Barbosa;N;;;;;;
+25/06/2024;Desafios da mobilidade urbana;S240001;Isabela Oliveira Ribeiro;S;80;120;80;40;40;360
+25/06/2024;Desafios da mobilidade urbana;S240002;Lucas Campos Lima;S;40;40;120;40;120;360
+25/06/2024;Desafios da mobilidade urbana;S240003;Otávio Teixeira Ferreira;S;120;160;160;120;120;680
+25/06/2024;Desafios da mobilidade urbana;S240004;Débora Lopes Teixeira;S;80;120;120;80;160;560
+25/06/2024;Desafios da mobilidade urbana;S240005;Enzo Campos Freitas;S;80;40;40;40;80;280
+25/06/2024;Desafios da mobilidade urbana;S240006;Olívia Andrade Ramos;S;160;200;160;160;200;880
+25/06/2024;Desafios da mobilidade urbana;S240007;Olívia Garcia Ferreira;N;;;;;;
+25/06/2024;Desafios da mobilidade urbana;S240008;Manuela Ferreira Pinto;S;120;160;160;120;120;680
+25/06/2024;Desafios da mobilidade urbana;S240009;Arthur Garcia Ferreira;S;160;160;200;200;120;840
+25/06/2024;Desafios da mobilidade urbana;S240010;Júlia Lima Batista;N;;;;;;
+25/06/2024;Desafios da mobilidade urbana;S240011;Samuel Cardoso Dias;S;160;120;80;120;120;600
+25/06/2024;Desafios da mobilidade urbana;S240012;Henrique Duarte Henriques;S;120;80;160;160;120;640
+25/06/2024;Desafios da mobilidade urbana;S240013;Thiago Freitas Lopes;S;120;200;200;160;120;800
+25/06/2024;Desafios da mobilidade urbana;S240014;Renan Campos Cardoso;S;120;200;200;200;120;840
+25/06/2024;Desafios da mobilidade urbana;S240015;Carla Lopes Almeida;S;120;120;80;120;120;560
+25/06/2024;Desafios da mobilidade urbana;S240016;Tatiane Esteves Pinto;N;;;;;;
+25/06/2024;Desafios da mobilidade urbana;S240017;Nicolas Lopes Vieira;S;120;80;80;40;120;440
+25/06/2024;Desafios da mobilidade urbana;S240018;Paulo Ribeiro Nogueira;N;;;;;;
+25/06/2024;Desafios da mobilidade urbana;S240019;Fernanda Andrade Garcia;S;120;80;80;80;40;400
+25/06/2024;Desafios da mobilidade urbana;S240020;João Santos Barbosa;S;80;80;40;120;120;440
+16/07/2024;O acesso à cultura nas periferias;S240001;Isabela Oliveira Ribeiro;S;40;80;40;40;80;280
+16/07/2024;O acesso à cultura nas periferias;S240002;Lucas Campos Lima;S;120;40;40;80;80;360
+16/07/2024;O acesso à cultura nas periferias;S240003;Otávio Teixeira Ferreira;N;;;;;;
+16/07/2024;O acesso à cultura nas periferias;S240004;Débora Lopes Teixeira;N;;;;;;
+16/07/2024;O acesso à cultura nas periferias;S240005;Enzo Campos Freitas;S;120;40;80;80;120;440
+16/07/2024;O acesso à cultura nas periferias;S240006;Olívia Andrade Ramos;S;160;120;160;200;200;840
+16/07/2024;O acesso à cultura nas periferias;S240007;Olívia Garcia Ferreira;N;;;;;;
+16/07/2024;O acesso à cultura nas periferias;S240008;Manuela Ferreira Pinto;S;120;120;200;200;200;840
+16/07/2024;O acesso à cultura nas periferias;S240009;Arthur Garcia Ferreira;S;120;120;120;160;120;640
+16/07/2024;O acesso à cultura nas periferias;S240010;Júlia Lima Batista;S;40;80;40;120;80;360
+16/07/2024;O acesso à cultura nas periferias;S240011;Samuel Cardoso Dias;S;160;80;120;80;160;600
+16/07/2024;O acesso à cultura nas periferias;S240012;Henrique Duarte Henriques;N;;;;;;
+16/07/2024;O acesso à cultura nas periferias;S240013;Thiago Freitas Lopes;S;200;120;200;120;160;800
+16/07/2024;O acesso à cultura nas periferias;S240014;Renan Campos Cardoso;N;;;;;;
+16/07/2024;O acesso à cultura nas periferias;S240015;Carla Lopes Almeida;N;;;;;;
+16/07/2024;O acesso à cultura nas periferias;S240016;Tatiane Esteves Pinto;S;80;80;160;80;80;480
+16/07/2024;O acesso à cultura nas periferias;S240017;Nicolas Lopes Vieira;S;40;80;40;80;120;360
+16/07/2024;O acesso à cultura nas periferias;S240018;Paulo Ribeiro Nogueira;S;160;200;120;120;160;760
+16/07/2024;O acesso à cultura nas periferias;S240019;Fernanda Andrade Garcia;S;40;120;120;120;80;480
+16/07/2024;O acesso à cultura nas periferias;S240020;João Santos Barbosa;N;;;;;;
+23/07/2024;Saúde mental na juventude;S240001;Isabela Oliveira Ribeiro;S;40;120;120;80;80;440
+23/07/2024;Saúde mental na juventude;S240002;Lucas Campos Lima;S;120;40;40;120;40;360
+23/07/2024;Saúde mental na juventude;S240003;Otávio Teixeira Ferreira;S;120;80;80;80;120;480
+23/07/2024;Saúde mental na juventude;S240004;Débora Lopes Teixeira;S;80;80;120;120;120;520
+23/07/2024;Saúde mental na juventude;S240005;Enzo Campos Freitas;S;40;120;120;80;80;440
+23/07/2024;Saúde mental na juventude;S240006;Olívia Andrade Ramos;S;160;160;160;160;200;840
+23/07/2024;Saúde mental na juventude;S240007;Olívia Garcia Ferreira;S;160;120;120;120;120;640
+23/07/2024;Saúde mental na juventude;S240008;Manuela Ferreira Pinto;N;;;;;;
+23/07/2024;Saúde mental na juventude;S240009;Arthur Garcia Ferreira;S;200;160;160;160;120;800
+23/07/2024;Saúde mental na juventude;S240010;Júlia Lima Batista;N;;;;;;
+23/07/2024;Saúde mental na juventude;S240011;Samuel Cardoso Dias;S;120;80;120;80;120;520
+23/07/2024;Saúde mental na juventude;S240012;Henrique Duarte Henriques;S;120;120;80;160;80;560
+23/07/2024;Saúde mental na juventude;S240013;Thiago Freitas Lopes;S;200;120;120;120;200;760
+23/07/2024;Saúde mental na juventude;S240014;Renan Campos Cardoso;S;120;200;200;160;160;840
+23/07/2024;Saúde mental na juventude;S240015;Carla Lopes Almeida;S;80;80;120;120;80;480
+23/07/2024;Saúde mental na juventude;S240016;Tatiane Esteves Pinto;N;;;;;;
+23/07/2024;Saúde mental na juventude;S240017;Nicolas Lopes Vieira;S;80;80;80;80;80;400
+23/07/2024;Saúde mental na juventude;S240018;Paulo Ribeiro Nogueira;S;160;120;120;120;200;720
+23/07/2024;Saúde mental na juventude;S240019;Fernanda Andrade Garcia;N;;;;;;
+23/07/2024;Saúde mental na juventude;S240020;João Santos Barbosa;N;;;;;;
+30/07/2024;A desinformação nas redes sociais;S240001;Isabela Oliveira Ribeiro;S;40;120;40;40;120;360
+30/07/2024;A desinformação nas redes sociais;S240002;Lucas Campos Lima;S;80;40;40;40;40;240
+30/07/2024;A desinformação nas redes sociais;S240003;Otávio Teixeira Ferreira;N;;;;;;
+30/07/2024;A desinformação nas redes sociais;S240004;Débora Lopes Teixeira;S;120;120;160;120;160;680
+30/07/2024;A desinformação nas redes sociais;S240005;Enzo Campos Freitas;S;80;120;40;120;80;440
+30/07/2024;A desinformação nas redes sociais;S240006;Olívia Andrade Ramos;S;200;200;200;200;160;960
+30/07/2024;A desinformação nas redes sociais;S240007;Olívia Garcia Ferreira;S;160;160;160;160;80;720
+30/07/2024;A desinformação nas redes sociais;S240008;Manuela Ferreira Pinto;S;200;120;160;200;200;880
+30/07/2024;A desinformação nas redes sociais;S240009;Arthur Garcia Ferreira;S;120;160;200;120;120;720
+30/07/2024;A desinformação nas redes sociais;S240010;Júlia Lima Batista;S;120;40;80;40;40;320
+30/07/2024;A desinformação nas redes sociais;S240011;Samuel Cardoso Dias;S;80;80;80;160;160;560
+30/07/2024;A desinformação nas redes sociais;S240012;Henrique Duarte Henriques;S;80;120;80;120;80;480
+30/07/2024;A desinformação nas redes sociais;S240013;Thiago Freitas Lopes;S;200;200;200;200;200;1000
+30/07/2024;A desinformação nas redes sociais;S240014;Renan Campos Cardoso;S;200;120;160;200;160;840
+30/07/2024;A desinformação nas redes sociais;S240015;Carla Lopes Almeida;S;120;120;80;120;80;520
+30/07/2024;A desinformação nas redes sociais;S240016;Tatiane Esteves Pinto;N;;;;;;
+30/07/2024;A desinformação nas redes sociais;S240017;Nicolas Lopes Vieira;S;40;120;40;80;120;400
+30/07/2024;A desinformação nas redes sociais;S240018;Paulo Ribeiro Nogueira;S;160;160;200;200;200;920
+30/07/2024;A desinformação nas redes sociais;S240019;Fernanda Andrade Garcia;N;;;;;;
+30/07/2024;A desinformação nas redes sociais;S240020;João Santos Barbosa;N;;;;;;
+06/08/2024;Trabalho e tecnologia;S240001;Isabela Oliveira Ribeiro;S;40;120;40;40;120;360
+06/08/2024;Trabalho e tecnologia;S240002;Lucas Campos Lima;N;;;;;;
+06/08/2024;Trabalho e tecnologia;S240003;Otávio Teixeira Ferreira;N;;;;;;
+06/08/2024;Trabalho e tecnologia;S240004;Débora Lopes Teixeira;N;;;;;;
+06/08/2024;Trabalho e tecnologia;S240005;Enzo Campos Freitas;S;120;40;40;80;120;400
+06/08/2024;Trabalho e tecnologia;S240006;Olívia Andrade Ramos;N;;;;;;
+06/08/2024;Trabalho e tecnologia;S240007;Olívia Garcia Ferreira;S;80;160;80;120;120;560
+06/08/2024;Trabalho e tecnologia;S240008;Manuela Ferreira Pinto;S;200;160;120;200;160;840
+06/08/2024;Trabalho e tecnologia;S240009;Arthur Garcia Ferreira;N;;;;;;
+06/08/2024;Trabalho e tecnologia;S240010;Júlia Lima Batista;N;;;;;;
+06/08/2024;Trabalho e tecnologia;S240011;Samuel Cardoso Dias;S;80;160;160;160;80;640
+06/08/2024;Trabalho e tecnologia;S240012;Henrique Duarte Henriques;N;;;;;;
+06/08/2024;Trabalho e tecnologia;S240013;Thiago Freitas Lopes;N;;;;;;
+06/08/2024;Trabalho e tecnologia;S240014;Renan Campos Cardoso;S;160;120;200;160;160;800
+06/08/2024;Trabalho e tecnologia;S240015;Carla Lopes Almeida;S;120;80;80;80;120;480
+06/08/2024;Trabalho e tecnologia;S240016;Tatiane Esteves Pinto;S;160;120;80;120;80;560
+06/08/2024;Trabalho e tecnologia;S240017;Nicolas Lopes Vieira;S;40;80;120;80;80;400
+06/08/2024;Trabalho e tecnologia;S240018;Paulo Ribeiro Nogueira;N;;;;;;
+06/08/2024;Trabalho e tecnologia;S240019;Fernanda Andrade Garcia;N;;;;;;
+06/08/2024;Trabalho e tecnologia;S240020;João Santos Barbosa;S;40;40;40;40;40;200
+13/08/2024;O papel da ciência na sociedade;S240001;Isabela Oliveira Ribeiro;N;;;;;;
+13/08/2024;O papel da ciência na sociedade;S240002;Lucas Campos Lima;N;;;;;;
+13/08/2024;O papel da ciência na sociedade;S240003;Otávio Teixeira Ferreira;N;;;;;;
+13/08/2024;O papel da ciência na sociedade;S240004;Débora Lopes Teixeira;S;80;80;120;120;160;560
+13/08/2024;O papel da ciência na sociedade;S240005;Enzo Campos Freitas;S;80;80;80;80;80;400
+13/08/2024;O papel da ciência na sociedade;S240006;Olívia Andrade Ramos;S;200;200;200;200;200;1000
+13/08/2024;O papel da ciência na sociedade;S240007;Olívia Garcia Ferreira;S;80;160;120;80;120;560
+13/08/2024;O papel da ciência na sociedade;S240008;Manuela Ferreira Pinto;S;120;160;200;200;200;880
+13/08/2024;O papel da ciência na sociedade;S240009;Arthur Garcia Ferreira;S;200;160;200;120;200;880
+13/08/2024;O papel da ciência na sociedade;S240010;Júlia Lima Batista;N;;;;;;
+13/08/2024;O papel da ciência na sociedade;S240011;Samuel Cardoso Dias;S;160;120;80;160;160;680
+13/08/2024;O papel da ciência na sociedade;S240012;Henrique Duarte Henriques;N;;;;;;
+13/08/2024;O papel da ciência na sociedade;S240013;Thiago Freitas Lopes;N;;;;;;
+13/08/2024;O papel da ciência na sociedade;S240014;Renan Campos Cardoso;S;160;160;200;160;120;800
+13/08/2024;O papel da ciência na sociedade;S240015;Carla Lopes Almeida;S;80;80;120;120;120;520
+13/08/2024;O papel da ciência na sociedade;S240016;Tatiane Esteves Pinto;N;;;;;;
+13/08/2024;O papel da ciência na sociedade;S240017;Nicolas Lopes Vieira;S;40;120;80;80;120;440
+13/08/2024;O papel da ciência na sociedade;S240018;Paulo Ribeiro Nogueira;S;200;160;120;160;200;840
+13/08/2024;O papel da ciência na sociedade;S240019;Fernanda Andrade Garcia;N;;;;;;
+13/08/2024;O papel da ciência na sociedade;S240020;João Santos Barbosa;S;40;80;80;120;80;400
+20/08/2024;Desperdício de alimentos;S240001;Isabela Oliveira Ribeiro;N;;;;;;
+20/08/2024;Desperdício de alimentos;S240002;Lucas Campos Lima;S;80;120;40;80;40;360
+20/08/2024;Desperdício de alimentos;S240003;Otávio Teixeira Ferreira;N;;;;;;
+20/08/2024;Desperdício de alimentos;S240004;Débora Lopes Teixeira;S;120;80;80;160;160;600
+20/08/2024;Desperdício de alimentos;S240005;Enzo Campos Freitas;N;;;;;;
+20/08/2024;Desperdício de alimentos;S240006;Olívia Andrade Ramos;S;120;200;160;200;160;840
+20/08/2024;Desperdício de alimentos;S240007;Olívia Garcia Ferreira;S;120;80;160;160;80;600
+20/08/2024;Desperdício de alimentos;S240008;Manuela Ferreira Pinto;S;120;160;200;120;120;720
+20/08/2024;Desperdício de alimentos;S240009;Arthur Garcia Ferreira;S;200;160;120;200;120;800
+20/08/2024;Desperdício de alimentos;S240010;Júlia Lima Batista;N;;;;;;
+20/08/2024;Desperdício de alimentos;S240011;Samuel Cardoso Dias;S;80;160;80;120;120;560
+20/08/2024;Desperdício de alimentos;S240012;Henrique Duarte Henriques;S;80;160;80;120;120;560
+20/08/2024;Desperdício de alimentos;S240013;Thiago Freitas Lopes;N;;;;;;
+20/08/2024;Desperdício de alimentos;S240014;Renan Campos Cardoso;N;;;;;;
+20/08/2024;Desperdício de alimentos;S240015;Carla Lopes Almeida;S;160;80;160;160;80;640
+20/08/2024;Desperdício de alimentos;S240016;Tatiane Esteves Pinto;S;80;120;160;120;120;600
+20/08/2024;Desperdício de alimentos;S240017;Nicolas Lopes Vieira;N;;;;;;
+20/08/2024;Desperdício de alimentos;S240018;Paulo Ribeiro Nogueira;S;160;200;120;160;160;800
+20/08/2024;Desperdício de alimentos;S240019;Fernanda Andrade Garcia;N;;;;;;
+20/08/2024;Desperdício de alimentos;S240020;João Santos Barbosa;N;;;;;;
+27/08/2024;Inclusão digital de idosos;S240001;Isabela Oliveira Ribeiro;N;;;;;;
+27/08/2024;Inclusão digital de idosos;S240002;Lucas Campos Lima;S;120;80;80;80;80;440
+27/08/2024;Inclusão digital de idosos;S240003;Otávio Teixeira Ferreira;S;80;120;120;80;80;480
+27/08/2024;Inclusão digital de idosos;S240004;Débora Lopes Teixeira;S;120;120;120;160;120;640
+27/08/2024;Inclusão digital de idosos;S240005;Enzo Campos Freitas;N;;;;;;
+27/08/2024;Inclusão digital de idosos;S240006;Olívia Andrade Ramos;S;120;200;120;200;160;800
+27/08/2024;Inclusão digital de idosos;S240007;Olívia Garcia Ferreira;S;160;120;80;120;120;600
+27/08/2024;Inclusão digital de idosos;S240008;Manuela Ferreira Pinto;S;120;160;200;120;200;800
+27/08/2024;Inclusão digital de idosos;S240009;Arthur Garcia Ferreira;S;200;120;200;120;120;760
+27/08/2024;Inclusão digital de idosos;S240010;Júlia Lima Batista;N;;;;;;
+27/08/2024;Inclusão digital de idosos;S240011;Samuel Cardoso Dias;S;80;120;160;80;80;520
+27/08/2024;Inclusão digital de idosos;S240012;Henrique Duarte Henriques;S;160;120;80;120;120;600
+27/08/2024;Inclusão digital de idosos;S240013;Thiago Freitas Lopes;S;200;120;160;200;120;800
+27/08/2024;Inclusão digital de idosos;S240014;Renan Campos Cardoso;N;;;;;;
+27/08/2024;Inclusão digital de idosos;S240015;Carla Lopes Almeida;N;;;;;;
+27/08/2024;Inclusão digital de idosos;S240016;Tatiane Esteves Pinto;N;;;;;;
+27/08/2024;Inclusão digital de idosos;S240017;Nicolas Lopes Vieira;S;120;120;40;40;40;360
+27/08/2024;Inclusão digital de idosos;S240018;Paulo Ribeiro Nogueira;N;;;;;;
+27/08/2024;Inclusão digital de idosos;S240019;Fernanda Andrade Garcia;N;;;;;;
+27/08/2024;Inclusão digital de idosos;S240020;João Santos Barbosa;S;80;80;120;40;120;440
+03/09/2024;Preservação dos recursos hídricos;S240001;Isabela Oliveira Ribeiro;S;80;80;120;120;40;440
+03/09/2024;Preservação dos recursos hídricos;S240002;Lucas Campos Lima;S;120;80;120;40;120;480
+03/09/2024;Preservação dos recursos hídricos;S240003;Otávio Teixeira Ferreira;S;80;80;120;80;120;480
+03/09/2024;Preservação dos recursos hídricos;S240004;Débora Lopes Teixeira;S;80;80;160;120;160;600
+03/09/2024;Preservação dos recursos hídricos;S240005;Enzo Campos Freitas;S;120;80;80;40;120;440
+03/09/2024;Preservação dos recursos hídricos;S240006;Olívia Andrade Ramos;S;120;160;160;120;200;760
+03/09/2024;Preservação dos recursos hídricos;S240007;Olívia Garcia Ferreira;S;160;160;160;160;80;720
+03/09/2024;Preservação dos recursos hídricos;S240008;Manuela Ferreira Pinto;S;160;200;200;120;120;800
+03/09/2024;Preservação dos recursos hídricos;S240009;Arthur Garcia Ferreira;N;;;;;;
+03/09/2024;Preservação dos recursos hídricos;S240010;Júlia Lima Batista;S;120;80;120;40;80;440
+03/09/2024;Preservação dos recursos hídricos;S240011;Samuel Cardoso Dias;S;120;160;160;80;120;640
+03/09/2024;Preservação dos recursos hídricos;S240012;Henrique Duarte Henriques;N;;;;;;
+03/09/2024;Preservação dos recursos hídricos;S240013;Thiago Freitas Lopes;N;;;;;;
+03/09/2024;Preservação dos recursos hídricos;S240014;Renan Campos Cardoso;S;200;200;160;160;160;880
+03/09/2024;Preservação dos recursos hídricos;S240015;Carla Lopes Almeida;S;120;160;120;120;120;640
+03/09/2024;Preservação dos recursos hídricos;S240016;Tatiane Esteves Pinto;S;80;120;80;80;160;520
+03/09/2024;Preservação dos recursos hídricos;S240017;Nicolas Lopes Vieira;S;40;40;40;40;120;280
+03/09/2024;Preservação dos recursos hídricos;S240018;Paulo Ribeiro Nogueira;S;200;160;120;120;160;760
+03/09/2024;Preservação dos recursos hídricos;S240019;Fernanda Andrade Garcia;N;;;;;;
+03/09/2024;Preservação dos recursos hídricos;S240020;João Santos Barbosa;S;120;80;120;80;40;440
+10/09/2024;Educação financeira nas escolas;S240001;Isabela Oliveira Ribeiro;S;120;40;120;120;80;480
+10/09/2024;Educação financeira nas escolas;S240002;Lucas Campos Lima;S;120;80;40;80;40;360
+10/09/2024;Educação financeira nas escolas;S240003;Otávio Teixeira Ferreira;S;120;80;160;80;160;600
+10/09/2024;Educação financeira nas escolas;S240004;Débora Lopes Teixeira;S;120;120;160;80;160;640
+10/09/2024;Educação financeira nas escolas;S240005;Enzo Campos Freitas;N;;;;;;
+10/09/2024;Educação financeira nas escolas;S240006;Olívia Andrade Ramos;S;160;160;200;160;160;840
+10/09/2024;Educação financeira nas escolas;S240007;Olívia Garcia Ferreira;S;120;80;160;160;80;600
+10/09/2024;Educação financeira nas escolas;S240008;Manuela Ferreira Pinto;S;120;120;200;120;200;760
+10/09/2024;Educação financeira nas escolas;S240009;Arthur Garcia Ferreira;S;200;200;120;160;120;800
+10/09/2024;Educação financeira nas escolas;S240010;Júlia Lima Batista;N;;;;;;
+10/09/2024;Educação financeira nas escolas;S240011;Samuel Cardoso Dias;S;80;120;80;160;120;560
+10/09/2024;Educação financeira nas escolas;S240012;Henrique Duarte Henriques;S;160;80;160;160;120;680
+10/09/2024;Educação financeira nas escolas;S240013;Thiago Freitas Lopes;N;;;;;;
+10/09/2024;Educação financeira nas escolas;S240014;Renan Campos Cardoso;S;160;160;120;120;120;680
+10/09/2024;Educação financeira nas escolas;S240015;Carla Lopes Almeida;S;80;120;80;120;160;560
+10/09/2024;Educação financeira nas escolas;S240016;Tatiane Esteves Pinto;N;;;;;;
+10/09/2024;Educação financeira nas escolas;S240017;Nicolas Lopes Vieira;S;40;80;120;120;80;440
+10/09/2024;Educação financeira nas escolas;S240018;Paulo Ribeiro Nogueira;S;200;160;160;160;160;840
+10/09/2024;Educação financeira nas escolas;S240019;Fernanda Andrade Garcia;N;;;;;;
+10/09/2024;Educação financeira nas escolas;S240020;João Santos Barbosa;N;;;;;;
+17/09/2024;Desafios da mobilidade urbana;S240001;Isabela Oliveira Ribeiro;S;120;80;40;80;80;400
+17/09/2024;Desafios da mobilidade urbana;S240002;Lucas Campos Lima;S;120;120;80;120;120;560
+17/09/2024;Desafios da mobilidade urbana;S240003;Otávio Teixeira Ferreira;N;;;;;;
+17/09/2024;Desafios da mobilidade urbana;S240004;Débora Lopes Teixeira;N;;;;;;
+17/09/2024;Desafios da mobilidade urbana;S240005;Enzo Campos Freitas;S;80;80;80;40;80;360
+17/09/2024;Desafios da mobilidade urbana;S240006;Olívia Andrade Ramos;S;160;120;160;160;160;760
+17/09/2024;Desafios da mobilidade urbana;S240007;Olívia Garcia Ferreira;N;;;;;;
+17/09/2024;Desafios da mobilidade urbana;S240008;Manuela Ferreira Pinto;S;200;200;160;160;160;880
+17/09/2024;Desafios da mobilidade urbana;S240009;Arthur Garcia Ferreira;S;120;160;160;120;120;680
+17/09/2024;Desafios da mobilidade urbana;S240010;Júlia Lima Batista;N;;;;;;
+17/09/2024;Desafios da mobilidade urbana;S240011;Samuel Cardoso Dias;S;80;160;160;80;80;560
+17/09/2024;Desafios da mobilidade urbana;S240012;Henrique Duarte Henriques;S;160;160;160;120;160;760
+17/09/2024;Desafios da mobilidade urbana;S240013;Thiago Freitas Lopes;S;120;200;200;120;160;800
+17/09/2024;Desafios da mobilidade urbana;S240014;Renan Campos Cardoso;S;160;200;120;160;200;840
+17/09/2024;Desafios da mobilidade urbana;S240015;Carla Lopes Almeida;N;;;;;;
+17/09/2024;Desafios da mobilidade urbana;S240016;Tatiane Esteves Pinto;N;;;;;;
+17/09/2024;Desafios da mobilidade urbana;S240017;Nicolas Lopes Vieira;S;40;80;80;40;40;280
+17/09/2024;Desafios da mobilidade urbana;S240018;Paulo Ribeiro Nogueira;N;;;;;;
+17/09/2024;Desafios da mobilidade urbana;S240019;Fernanda Andrade Garcia;N;;;;;;
+17/09/2024;Desafios da mobilidade urbana;S240020;João Santos Barbosa;S;80;40;120;80;80;400
+24/09/2024;O acesso à cultura nas periferias;S240001;Isabela Oliveira Ribeiro;S;120;80;80;40;120;440
+24/09/2024;O acesso à cultura nas periferias;S240002;Lucas Campos Lima;S;80;120;80;40;40;360
+24/09/2024;O acesso à cultura nas periferias;S240003;Otávio Teixeira Ferreira;S;120;120;160;160;120;680
+24/09/2024;O acesso à cultura nas periferias;S240004;Débora Lopes Teixeira;S;120;160;120;120;120;640
+24/09/2024;O acesso à cultura nas periferias;S240005;Enzo Campos Freitas;N;;;;;;
+24/09/2024;O acesso à cultura nas periferias;S240006;Olívia Andrade Ramos;S;120;120;200;120;200;760
+24/09/2024;O acesso à cultura nas periferias;S240007;Olívia Garcia Ferreira;N;;;;;;
+24/09/2024;O acesso à cultura nas periferias;S240008;Manuela Ferreira Pinto;S;200;160;120;160;160;800
+24/09/2024;O acesso à cultura nas periferias;S240009;Arthur Garcia Ferreira;S;160;120;120;200;120;720
+24/09/2024;O acesso à cultura nas periferias;S240010;Júlia Lima Batista;N;;;;;;
+24/09/2024;O acesso à cultura nas periferias;S240011;Samuel Cardoso Dias;N;;;;;;
+24/09/2024;O acesso à cultura nas periferias;S240012;Henrique Duarte Henriques;S;80;80;120;80;160;520
+24/09/2024;O acesso à cultura nas periferias;S240013;Thiago Freitas Lopes;N;;;;;;
+24/09/2024;O acesso à cultura nas periferias;S240014;Renan Campos Cardoso;N;;;;;;
+24/09/2024;O acesso à cultura nas periferias;S240015;Carla Lopes Almeida;S;160;80;120;120;160;640
+24/09/2024;O acesso à cultura nas periferias;S240016;Tatiane Esteves Pinto;S;160;120;80;80;120;560
+24/09/2024;O acesso à cultura nas periferias;S240017;Nicolas Lopes Vieira;S;80;120;120;120;120;560
+24/09/2024;O acesso à cultura nas periferias;S240018;Paulo Ribeiro Nogueira;S;160;160;160;120;120;720
+24/09/2024;O acesso à cultura nas periferias;S240019;Fernanda Andrade Garcia;N;;;;;;
+24/09/2024;O acesso à cultura nas periferias;S240020;João Santos Barbosa;N;;;;;;
+01/10/2024;Saúde mental na juventude;S240001;Isabela Oliveira Ribeiro;S;40;120;120;80;80;440
+01/10/2024;Saúde mental na juventude;S240002;Lucas Campos Lima;N;;;;;;
+01/10/2024;Saúde mental na juventude;S240003;Otávio Teixeira Ferreira;S;160;160;120;80;160;680
+01/10/2024;Saúde mental na juventude;S240004;Débora Lopes Teixeira;S;160;80;160;120;80;600
+01/10/2024;Saúde mental na juventude;S240005;Enzo Campos Freitas;S;40;40;40;80;40;240
+01/10/2024;Saúde mental na juventude;S240006;Olívia Andrade Ramos;N;;;;;;
+01/10/2024;Saúde mental na juventude;S240007;Olívia Garcia Ferreira;S;80;120;120;80;80;480
+01/10/2024;Saúde mental na juventude;S240008;Manuela Ferreira Pinto;N;;;;;;
+01/10/2024;Saúde mental na juventude;S240009;Arthur Garcia Ferreira;S;200;160;160;200;120;840
+01/10/2024;Saúde mental na juventude;S240010;Júlia Lima Batista;S;80;120;40;80;80;400
+01/10/2024;Saúde mental na juventude;S240011;Samuel Cardoso Dias;S;160;120;120;80;80;560
+01/10/2024;Saúde mental na juventude;S240012;Henrique Duarte Henriques;S;160;80;160;120;160;680
+01/10/2024;Saúde mental na juventude;S240013;Thiago Freitas Lopes;N;;;;;;
+01/10/2024;Saúde mental na juventude;S240014;Renan Campos Cardoso;S;120;200;160;160;120;760
+01/10/2024;Saúde mental na juventude;S240015;Carla Lopes Almeida;S;160;80;120;120;80;560
+01/10/2024;Saúde mental na juventude;S240016;Tatiane Esteves Pinto;N;;;;;;
+01/10/2024;Saúde mental na juventude;S240017;Nicolas Lopes Vieira;S;40;120;80;80;40;360
+01/10/2024;Saúde mental na juventude;S240018;Paulo Ribeiro Nogueira;S;200;200;160;120;120;800
+01/10/2024;Saúde mental na juventude;S240019;Fernanda Andrade Garcia;N;;;;;;
+01/10/2024;Saúde mental na juventude;S240020;João Santos Barbosa;S;40;80;120;80;40;360
+08/10/2024;A desinformação nas redes sociais;S240001;Isabela Oliveira Ribeiro;N;;;;;;
+08/10/2024;A desinformação nas redes sociais;S240002;Lucas Campos Lima;S;120;40;80;40;40;320
+08/10/2024;A desinformação nas redes sociais;S240003;Otávio Teixeira Ferreira;S;120;160;160;120;160;720
+08/10/2024;A desinformação nas redes sociais;S240004;Débora Lopes Teixeira;S;80;160;160;160;120;680
+08/10/2024;A desinformação nas redes sociais;S240005;Enzo Campos Freitas;S;120;40;40;120;120;440
+08/10/2024;A desinformação nas redes sociais;S240006;Olívia Andrade Ramos;N;;;;;;
+08/10/2024;A desinformação nas redes sociais;S240007;Olívia Garcia Ferreira;S;120;80;160;160;120;640
+08/10/2024;A desinformação nas redes sociais;S240008;Manuela Ferreira Pinto;S;120;200;120;160;120;720
+08/10/2024;A desinformação nas redes sociais;S240009;Arthur Garcia Ferreira;S;120;160;120;200;200;800
+08/10/2024;A desinformação nas redes sociais;S240010;Júlia Lima Batista;N;;;;;;
+08/10/2024;A desinformação nas redes sociais;S240011;Samuel Cardoso Dias;S;120;120;120;120;160;640
+08/10/2024;A desinformação nas redes sociais;S240012;Henrique Duarte Henriques;S;120;80;160;160;80;600
+08/10/2024;A desinformação nas redes sociais;S240013;Thiago Freitas Lopes;N;;;;;;
+08/10/2024;A desinformação nas redes sociais;S240014;Renan Campos Cardoso;S;200;200;160;200;120;880
+08/10/2024;A desinformação nas redes sociais;S240015;Carla Lopes Almeida;N;;;;;;
+08/10/2024;A desinformação nas redes sociais;S240016;Tatiane Esteves Pinto;N;;;;;;
+08/10/2024;A desinformação nas redes sociais;S240017;Nicolas Lopes Vieira;S;120;40;120;120;40;440
+08/10/2024;A desinformação nas redes sociais;S240018;Paulo Ribeiro Nogueira;S;200;160;200;160;120;840
+08/10/2024;A desinformação nas redes sociais;S240019;Fernanda Andrade Garcia;S;120;120;40;80;80;440
+08/10/2024;A desinformação nas redes sociais;S240020;João Santos Barbosa;S;40;80;80;120;40;360
+15/10/2024;Trabalho e tecnologia;S240001;Isabela Oliveira Ribeiro;S;80;40;40;120;80;360
+15/10/2024;Trabalho e tecnologia;S240002;Lucas Campos Lima;S;120;120;80;40;120;480
+15/10/2024;Trabalho e tecnologia;S240003;Otávio Teixeira Ferreira;S;120;120;160;80;120;600
+15/10/2024;Trabalho e tecnologia;S240004;Débora Lopes Teixeira;S;80;80;160;120;120;560
+15/10/2024;Trabalho e tecnologia;S240005;Enzo Campos Freitas;S;40;80;40;120;120;400
+15/10/2024;Trabalho e tecnologia;S240006;Olívia Andrade Ramos;S;200;200;120;200;200;920
+15/10/2024;Trabalho e tecnologia;S240007;Olívia Garcia Ferreira;S;120;80;120;160;120;600
+15/10/2024;Trabalho e tecnologia;S240008;Manuela Ferreira Pinto;S;120;160;160;120;160;720
+15/10/2024;Trabalho e tecnologia;S240009;Arthur Garcia Ferreira;S;120;200;160;160;200;840
+15/10/2024;Trabalho e tecnologia;S240010;Júlia Lima Batista;N;;;;;;
+15/10/2024;Trabalho e tecnologia;S240011;Samuel Cardoso Dias;S;160;80;80;160;160;640
+15/10/2024;Trabalho e tecnologia;S240012;Henrique Duarte Henriques;S;80;80;160;160;80;560
+15/10/2024;Trabalho e tecnologia;S240013;Thiago Freitas Lopes;N;;;;;;
+15/10/2024;Trabalho e tecnologia;S240014;Renan Campos Cardoso;S;160;160;160;200;160;840
+15/10/2024;Trabalho e tecnologia;S240015;Carla Lopes Almeida;N;;;;;;
+15/10/2024;Trabalho e tecnologia;S240016;Tatiane Esteves Pinto;S;160;160;80;80;120;600
+15/10/2024;Trabalho e tecnologia;S240017;Nicolas Lopes Vieira;S;40;40;80;120;120;400
+15/10/2024;Trabalho e tecnologia;S240018;Paulo Ribeiro Nogueira;S;160;120;160;160;160;760
+15/10/2024;Trabalho e tecnologia;S240019;Fernanda Andrade Garcia;S;80;40;40;80;120;360
+15/10/2024;Trabalho e tecnologia;S240020;João Santos Barbosa;N;;;;;;
+22/10/2024;O papel da ciência na sociedade;S240001;Isabela Oliveira Ribeiro;S;80;120;80;120;120;520
+22/10/2024;O papel da ciência na sociedade;S240002;Lucas Campos Lima;S;80;40;80;120;120;440
+22/10/2024;O papel da ciência na sociedade;S240003;Otávio Teixeira Ferreira;N;;;;;;
+22/10/2024;O papel da ciência na sociedade;S240004;Débora Lopes Teixeira;N;;;;;;
+22/10/2024;O papel da ciência na sociedade;S240005;Enzo Campos Freitas;S;40;80;80;120;120;440
+22/10/2024;O papel da ciência na sociedade;S240006;Olívia Andrade Ramos;S;160;160;120;160;160;760
+22/10/2024;O papel da ciência na sociedade;S240007;Olívia Garcia Ferreira;S;80;160;80;160;120;600
+22/10/2024;O papel da ciência na sociedade;S240008;Manuela Ferreira Pinto;N;;;;;;
+22/10/2024;O papel da ciência na sociedade;S240009;Arthur Garcia Ferreira;S;200;120;160;200;120;800
+22/10/2024;O papel da ciência na sociedade;S240010;Júlia Lima Batista;S;80;40;120;80;80;400
+22/10/2024;O papel da ciência na sociedade;S240011;Samuel Cardoso Dias;S;80;120;160;80;160;600
+22/10/2024;O papel da ciência na sociedade;S240012;Henrique Duarte Henriques;N;;;;;;
+22/10/2024;O papel da ciência na sociedade;S240013;Thiago Freitas Lopes;S;200;160;120;160;200;840
+22/10/2024;O papel da ciência na sociedade;S240014;Renan Campos Cardoso;N;;;;;;
+22/10/2024;O papel da ciência na sociedade;S240015;Carla Lopes Almeida;S;120;80;80;160;80;520
+22/10/2024;O papel da ciência na sociedade;S240016;Tatiane Esteves Pinto;N;;;;;;
+22/10/2024;O papel da ciência na sociedade;S240017;Nicolas Lopes Vieira;N;;;;;;
+22/10/2024;O papel da ciência na sociedade;S240018;Paulo Ribeiro Nogueira;N;;;;;;
+22/10/2024;O papel da ciência na sociedade;S240019;Fernanda Andrade Garcia;N;;;;;;
+22/10/2024;O papel da ciência na sociedade;S240020;João Santos Barbosa;N;;;;;;
+29/10/2024;Desperdício de alimentos;S240001;Isabela Oliveira Ribeiro;N;;;;;;
+29/10/2024;Desperdício de alimentos;S240002;Lucas Campos Lima;S;80;80;40;80;40;320
+29/10/2024;Desperdício de alimentos;S240003;Otávio Teixeira Ferreira;N;;;;;;
+29/10/2024;Desperdício de alimentos;S240004;Débora Lopes Teixeira;S;80;160;160;120;120;640
+29/10/2024;Desperdício de alimentos;S240005;Enzo Campos Freitas;S;120;120;120;40;120;520
+29/10/2024;Desperdício de alimentos;S240006;Olívia Andrade Ramos;S;200;200;200;160;120;880
+29/10/2024;Desperdício de alimentos;S240007;Olívia Garcia Ferreira;S;160;80;120;160;120;640
+29/10/2024;Desperdício de alimentos;S240008;Manuela Ferreira Pinto;S;200;160;160;160;200;880
+29/10/2024;Desperdício de alimentos;S240009;Arthur Garcia Ferreira;S;120;160;160;120;160;720
+29/10/2024;Desperdício de alimentos;S240010;Júlia Lima Batista;S;80;120;120;80;40;440
+29/10/2024;Desperdício de alimentos;S240011;Samuel Cardoso Dias;N;;;;;;
+29/10/2024;Desperdício de alimentos;S240012;Henrique Duarte Henriques;S;160;160;160;160;160;800
+29/10/2024;Desperdício de alimentos;S240013;Thiago Freitas Lopes;S;160;120;160;120;200;760
+29/10/2024;Desperdício de alimentos;S240014;Renan Campos Cardoso;S;160;200;120;120;160;760
+29/10/2024;Desperdício de alimentos;S240015;Carla Lopes Almeida;S;160;120;160;160;160;760
+29/10/2024;Desperdício de alimentos;S240016;Tatiane Esteves Pinto;S;120;80;120;80;160;560
+29/10/2024;Desperdício de alimentos;S240017;Nicolas Lopes Vieira;N;;;;;;
+29/10/2024;Desperdício de alimentos;S240018;Paulo Ribeiro Nogueira;N;;;;;;
+29/10/2024;Desperdício de alimentos;S240019;Fernanda Andrade Garcia;S;80;40;80;40;80;320
+29/10/2024;Desperdício de alimentos;S240020;João Santos Barbosa;N;;;;;;
+05/11/2024;Inclusão digital de idosos;S240001;Isabela Oliveira Ribeiro;N;;;;;;
+05/11/2024;Inclusão digital de idosos;S240002;Lucas Campos Lima;S;40;80;80;120;120;440
+05/11/2024;Inclusão digital de idosos;S240003;Otávio Teixeira Ferreira;N;;;;;;
+05/11/2024;Inclusão digital de idosos;S240004;Débora Lopes Teixeira;S;80;80;120;120;80;480
+05/11/2024;Inclusão digital de idosos;S240005;Enzo Campos Freitas;S;40;80;80;120;120;440
+05/11/2024;Inclusão digital de idosos;S240006;Olívia Andrade Ramos;S;120;120;160;120;200;720
+05/11/2024;Inclusão digital de idosos;S240007;Olívia Garcia Ferreira;S;160;160;120;120;160;720
+05/11/2024;Inclusão digital de idosos;S240008;Manuela Ferreira Pinto;S;160;120;120;160;120;680
+05/11/2024;Inclusão digital de idosos;S240009;Arthur Garcia Ferreira;S;200;160;160;200;200;920
+05/11/2024;Inclusão digital de idosos;S240010;Júlia Lima Batista;S;40;120;80;40;120;400
+05/11/2024;Inclusão digital de idosos;S240011;Samuel Cardoso Dias;S;120;120;80;120;120;560
+05/11/2024;Inclusão digital de idosos;S240012;Henrique Duarte Henriques;S;160;80;160;120;120;640
+05/11/2024;Inclusão digital de idosos;S240013;Thiago Freitas Lopes;N;;;;;;
+05/11/2024;Inclusão digital de idosos;S240014;Renan Campos Cardoso;S;120;200;200;120;200;840
+05/11/2024;Inclusão digital de idosos;S240015;Carla Lopes Almeida;S;160;160;160;160;80;720
+05/11/2024;Inclusão digital de idosos;S240016;Tatiane Esteves Pinto;N;;;;;;
+05/11/2024;Inclusão digital de idosos;S240017;Nicolas Lopes Vieira;S;80;120;40;40;120;400
+05/11/2024;Inclusão digital de idosos;S240018;Paulo Ribeiro Nogueira;S;120;120;200;160;160;760
+05/11/2024;Inclusão digital de idosos;S240019;Fernanda Andrade Garcia;N;;;;;;
+05/11/2024;Inclusão digital de idosos;S240020;João Santos Barbosa;S;40;40;80;40;80;280
+12/11/2024;Preservação dos recursos hídricos;S240001;Isabela Oliveira Ribeiro;S;40;80;120;80;40;360
+12/11/2024;Preservação dos recursos hídricos;S240002;Lucas Campos Lima;S;80;80;40;120;40;360
+12/11/2024;Preservação dos recursos hídricos;S240003;Otávio Teixeira Ferreira;N;;;;;;
+12/11/2024;Preservação dos recursos hídricos;S240004;Débora Lopes Teixeira;S;160;160;120;120;120;680
+12/11/2024;Preservação dos recursos hídricos;S240005;Enzo Campos Freitas;N;;;;;;
+12/11/2024;Preservação dos recursos hídricos;S240006;Olívia Andrade Ramos;S;160;120;200;160;200;840
+12/11/2024;Preservação dos recursos hídricos;S240007;Olívia Garcia Ferreira;S;160;160;80;160;80;640
+12/11/2024;Preservação dos recursos hídricos;S240008;Manuela Ferreira Pinto;S;200;200;200;160;120;880
+12/11/2024;Preservação dos recursos hídricos;S240009;Arthur Garcia Ferreira;S;160;160;200;200;120;840
+12/11/2024;Preservação dos recursos hídricos;S240010;Júlia Lima Batista;N;;;;;;
+12/11/2024;Preservação dos recursos hídricos;S240011;Samuel Cardoso Dias;S;160;160;120;120;160;720
+12/11/2024;Preservação dos recursos hídricos;S240012;Henrique Duarte Henriques;N;;;;;;
+12/11/2024;Preservação dos recursos hídricos;S240013;Thiago Freitas Lopes;N;;;;;;
+12/11/2024;Preservação dos recursos hídricos;S240014;Renan Campos Cardoso;N;;;;;;
+12/11/2024;Preservação dos recursos hídricos;S240015;Carla Lopes Almeida;S;80;160;160;160;120;680
+12/11/2024;Preservação dos recursos hídricos;S240016;Tatiane Esteves Pinto;N;;;;;;
+12/11/2024;Preservação dos recursos hídricos;S240017;Nicolas Lopes Vieira;N;;;;;;
+12/11/2024;Preservação dos recursos hídricos;S240018;Paulo Ribeiro Nogueira;N;;;;;;
+12/11/2024;Preservação dos recursos hídricos;S240019;Fernanda Andrade Garcia;N;;;;;;
+12/11/2024;Preservação dos recursos hídricos;S240020;João Santos Barbosa;S;120;80;80;120;40;440
+19/11/2024;Educação financeira nas escolas;S240001;Isabela Oliveira Ribeiro;N;;;;;;
+19/11/2024;Educação financeira nas escolas;S240002;Lucas Campos Lima;N;;;;;;
+19/11/2024;Educação financeira nas escolas;S240003;Otávio Teixeira Ferreira;N;;;;;;
+19/11/2024;Educação financeira nas escolas;S240004;Débora Lopes Teixeira;S;80;120;80;160;120;560
+19/11/2024;Educação financeira nas escolas;S240005;Enzo Campos Freitas;S;40;120;40;80;40;320
+19/11/2024;Educação financeira nas escolas;S240006;Olívia Andrade Ramos;S;200;160;160;120;160;800
+19/11/2024;Educação financeira nas escolas;S240007;Olívia Garcia Ferreira;S;80;120;80;120;120;520
+19/11/2024;Educação financeira nas escolas;S240008;Manuela Ferreira Pinto;S;160;160;120;160;120;720
+19/11/2024;Educação financeira nas escolas;S240009;Arthur Garcia Ferreira;S;160;200;200;120;200;880
+19/11/2024;Educação financeira nas escolas;S240010;Júlia Lima Batista;N;;;;;;
+19/11/2024;Educação financeira nas escolas;S240011;Samuel Cardoso Dias;S;120;120;160;80;80;560
+19/11/2024;Educação financeira nas escolas;S240012;Henrique Duarte Henriques;S;120;160;120;120;80;600
+19/11/2024;Educação financeira nas escolas;S240013;Thiago Freitas Lopes;S;120;120;120;120;160;640
+19/11/2024;Educação financeira nas escolas;S240014;Renan Campos Cardoso;S;120;200;200;200;120;840
+19/11/2024;Educação financeira nas escolas;S240015;Carla Lopes Almeida;S;80;80;80;80;120;440
+19/11/2024;Educação financeira nas escolas;S240016;Tatiane Esteves Pinto;N;;;;;;
+19/11/2024;Educação financeira nas escolas;S240017;Nicolas Lopes Vieira;N;;;;;;
+19/11/2024;Educação financeira nas escolas;S240018;Paulo Ribeiro Nogueira;S;120;160;160;200;120;760
+19/11/2024;Educação financeira nas escolas;S240019;Fernanda Andrade Garcia;N;;;;;;
+19/11/2024;Educação financeira nas escolas;S240020;João Santos Barbosa;S;80;80;120;40;120;440

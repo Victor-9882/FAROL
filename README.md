@@ -25,11 +25,37 @@ Cada app Django corresponde a uma camada da arquitetura (Relatório Descritivo, 
 
 As migrações ficam em `<app>/migrations/`, como é o padrão do Django, e não num `db/migrations/` central, como previa o GConfig.
 
-## Rodar localmente
+## Rodar com Docker Compose (recomendado)
+
+Sobe o mesmo ambiente em qualquer máquina: aplicação, PostgreSQL 16 e [Mailpit](https://mailpit.axllent.org/), um servidor de e-mail de teste que captura as mensagens sem entregá-las.
+
+```bash
+cp .env.example .env              # ajuste DJANGO_SECRET_KEY; o .env nunca é versionado
+docker compose up --build         # aplica as migrações e sobe o servidor
+```
+
+| Serviço | Endereço |
+|---|---|
+| Aplicação | <http://localhost:8000/saude/> e <http://localhost:8000/admin/> |
+| Mailpit (caixa de entrada de teste) | <http://localhost:8025> |
+| PostgreSQL | `localhost:5432`, usuário, senha e banco conforme o `.env` |
+
+Comandos úteis, com o ambiente no ar:
+
+```bash
+docker compose exec app python manage.py createsuperuser
+docker compose exec app python manage.py sendtestemail voce@exemplo.org   # aparece no Mailpit
+docker compose exec app pytest
+docker compose down               # para tudo; acrescente --volumes para apagar o banco
+```
+
+O código é montado como volume, então alterações aparecem sem reconstruir a imagem. Só rode `--build` de novo quando mudar `pyproject.toml` ou `uv.lock`. No Linux, arquivos criados dentro do contêiner (por exemplo, por `makemigrations`) ficam com dono `root`. Prefira gerar migrações com o uv na própria máquina.
+
+## Rodar sem Docker
 
 1. Instale o uv: `curl -LsSf https://astral.sh/uv/install.sh | sh`
 2. Instale as dependências: `uv sync`
-3. Defina as variáveis de ambiente, num arquivo `.env` na raiz (nunca versionado) ou no shell:
+3. Defina as variáveis de ambiente, copiando o `.env.example` para `.env` (nunca versionado) ou no shell:
 
    | Variável | Obrigatória | Exemplo |
    |---|---|---|
@@ -58,6 +84,8 @@ uv run pytest --cov             # suíte completa; falha abaixo da meta de cober
 uv run pytest -m regras         # só as regras de negócio dos alertas
 uv run ruff check . && uv run ruff format --check .
 ```
+
+Os testes usam a base sintética em `tests/dados_sinteticos/pequena/`, gerada por `uv run python scripts/gerar_base_sintetica.py`. O formato dos arquivos e os perfis com resultado conhecido estão em [tests/dados_sinteticos/README.md](tests/dados_sinteticos/README.md).
 
 Marque com `@pytest.mark.regras` os testes das regras RN001, RN002, RN005, RN008 e RN009, que a CI roda primeiro.
 
