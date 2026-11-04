@@ -22,7 +22,7 @@ Passo a passo para colocar no ar o repositório descrito no Plano de Controle de
 git init -b main
 git add .
 git commit -m "chore: estrutura inicial do repositório"
-git remote add origin https://github.com/Victor-9882/FAROL.git
+git remote add origin https://github.com/Victor-9882/FAROL
 git push -u origin main
 ```
 
