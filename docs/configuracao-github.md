@@ -167,7 +167,8 @@ gh release create v0.2.0 --generate-notes --title "v0.2.0 — Ingestão"
 
 ## Pendências quando o código começar
 
-- Criar `pyproject.toml` e `uv.lock` (`uv init`, `uv add django ...`) e o projeto Django (`manage.py` na raiz). A CI passa a rodar migrações e testes automaticamente.
-- Registrar o marker `regras` no `pyproject.toml`, `[tool.pytest.ini_options] markers = ["regras: regras de negócio dos alertas"]`, e marcar os testes das RN001, RN002, RN005, RN008 e RN009.
-- Definir `fail_under` em `[tool.coverage.report]`.
-- Criar `.env.example`, `Dockerfile` e `docker-compose.yml`, e `config/regras_padrao.yaml` quando os limiares forem definidos com o cliente.
+- [x] `pyproject.toml`, `uv.lock` e projeto Django (`manage.py` na raiz). A CI roda migrações e testes.
+- [x] Marker `regras` registrado no `pyproject.toml`. Falta marcar os testes das RN001, RN002, RN005, RN008 e RN009 quando forem escritos.
+- [x] `fail_under` definido em `[tool.coverage.report]`.
+- [ ] `.env.example`, `Dockerfile` e `docker-compose.yml`.
+- [ ] `config/regras_padrao.yaml`, quando os limiares forem definidos com o cliente.
