@@ -1,0 +1,37 @@
+{% extends "web/base.html" %}
+{% block titulo %}Calendário · FAROL{% endblock %}
+{% block conteudo %}
+  <h1>Calendário letivo{% if ano %} de {{ ano }}{% endif %}</h1>
+  {% if user.is_diretor %}<p><a href="{% url 'web:calendario_importar' %}">Importar planilha</a></p>{% endif %}
+  <form method="get">
+    <label>Ano <input type="number" name="ano" value="{{ ano|default_if_none:'' }}"></label>
+    <button type="submit">Ver</button>
+  </form>
+  {% if not ano %}
+    <p>Nenhum calendário cadastrado.</p>
+  {% else %}
+    <h2>Ciclos e temas de redação</h2>
+    <table>
+      <thead><tr><th>Ciclo</th><th>Início</th><th>Fim</th><th>Simulado</th><th>Temas (terças)</th></tr></thead>
+      <tbody>
+      {% for c in ciclos %}
+        <tr>
+          <td>{{ c.numero }}</td>
+          <td>{{ c.data_inicio|date:"d/m/Y" }}</td>
+          <td>{{ c.data_fim|date:"d/m/Y" }}</td>
+          <td>{{ c.data_simulado|date:"d/m/Y"|default:"—" }}</td>
+          <td>{% for t in c.temas %}{{ t.data|date:"d/m" }}: {{ t.tema }}{% if not forloop.last %}; {% endif %}{% endfor %}</td>
+        </tr>
+      {% empty %}
+        <tr><td colspan="5">Nenhum ciclo cadastrado.</td></tr>
+      {% endfor %}
+      </tbody>
+    </table>
+    <h2>Dias não letivos</h2>
+    <p>{{ total_letivos }} dias letivos no ano. Fins de semana sem registro não são letivos.</p>
+    <ul>
+      {% for d in nao_letivos %}<li>{{ d.data|date:"d/m/Y" }}{% if d.descricao %} · {{ d.descricao }}{% endif %}</li>
+      {% empty %}<li>Nenhum dia não letivo cadastrado.</li>{% endfor %}
+    </ul>
+  {% endif %}
+{% endblock %}

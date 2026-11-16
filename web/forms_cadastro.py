@@ -165,6 +165,15 @@ class TurmaForm(forms.ModelForm):
         return turma
 
 
+def validar_arquivo(arquivo):
+    """Extensão e tamanho do upload; o conteúdo é validado por `ler_tabela`."""
+    if not arquivo.name.lower().endswith(leitura.EXTENSOES):
+        raise forms.ValidationError("Envie um arquivo .csv ou .xlsx.")
+    if arquivo.size > leitura.TAMANHO_MAXIMO:
+        raise forms.ValidationError("O arquivo excede o tamanho máximo permitido.")
+    return arquivo
+
+
 class ImportacaoCadastroForm(forms.Form):
     arquivo = forms.FileField(label="Planilha (.csv ou .xlsx)")
     ano = forms.IntegerField(label="Ano letivo", min_value=2000, max_value=2100)
@@ -180,9 +189,4 @@ class ImportacaoCadastroForm(forms.Form):
         self.fields["data_mudanca"].initial = hoje
 
     def clean_arquivo(self):
-        arquivo = self.cleaned_data["arquivo"]
-        if not arquivo.name.lower().endswith(leitura.EXTENSOES):
-            raise forms.ValidationError("Envie um arquivo .csv ou .xlsx.")
-        if arquivo.size > leitura.TAMANHO_MAXIMO:
-            raise forms.ValidationError("O arquivo excede o tamanho máximo permitido.")
-        return arquivo
+        return validar_arquivo(self.cleaned_data["arquivo"])
