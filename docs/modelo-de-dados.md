@@ -52,4 +52,4 @@ Precisam de uma Solicitação de Mudança para atualizar o DER e o Relatório De
 ## Suposições a confirmar
 
 - **Áreas do simulado:** as quatro áreas do ENEM (Linguagens, Humanas, Natureza, Matemática). Confirmar com a DES como o P+ separa as áreas, sobretudo nos simulados de FUVEST.
-- **Formato da matrícula:** texto de até 20 caracteres, para preservar zeros à esquerda.
+- **Formato da matrícula:** confirmado em 16/11/2026. É sempre de 7 dígitos: `AA` (ano letivo) + `30` (extensivo) ou `31` (semiextensivo) + 3 dígitos, e o aluno recebe uma matrícula nova a cada ano. Detalhes em [dominio-casd.md](dominio-casd.md), seção 2. O campo continua como texto de até 20 caracteres, o que também comporta o formato da base sintética.
