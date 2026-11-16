@@ -59,23 +59,33 @@ def _linhas_xlsx(conteudo: bytes) -> list[list]:
         livro.close()
 
 
-def _achar_cabecalho(bruto: list[list], colunas) -> int:
+def _achar_cabecalho(bruto: list[list], colunas, opcionais=frozenset()) -> int:
     """Índice do cabeçalho: a 1ª linha (entre as 10 primeiras) com todas as colunas exigidas."""
     if colunas:
         for indice, linha in enumerate(bruto[:LINHAS_PARA_CABECALHO]):
             nomes = {normalizar_cabecalho(c) for c in linha}
-            if all(c in nomes or any(s in nomes for s in sin) for c, sin in colunas.items()):
+            if all(
+                c in nomes or any(s in nomes for s in sin)
+                for c, sin in colunas.items()
+                if c not in opcionais
+            ):
                 return indice
     return 0
 
 
-def ler_tabela(arquivo, nome_arquivo: str, *, colunas: dict[str, tuple[str, ...]] | None = None):
+def ler_tabela(
+    arquivo,
+    nome_arquivo: str,
+    *,
+    colunas: dict[str, tuple[str, ...]] | None = None,
+    opcionais=frozenset(),
+):
     """Lê a primeira aba (XLSX) ou o CSV e devolve uma lista de dicionários.
 
     `colunas` mapeia o nome canônico de cada coluna obrigatória aos sinônimos aceitos (já
     normalizados). Cada linha traz `_linha`, o número da linha no arquivo.
     O cabeçalho é a linha 1 ou, se `colunas` for dado, a primeira das 10 linhas iniciais que
-    traga todas as colunas.
+    traga todas as colunas. As colunas em `opcionais` podem faltar no arquivo.
     Linhas totalmente vazias são puladas. Datas do XLSX viram `date`; matrícula numérica
     vira texto inteiro.
     """
@@ -91,12 +101,14 @@ def ler_tabela(arquivo, nome_arquivo: str, *, colunas: dict[str, tuple[str, ...]
     if len(bruto) > LIMITE_LINHAS + 1:
         raise ArquivoInvalidoError(f"O arquivo excede o limite de {LIMITE_LINHAS} linhas.")
 
-    inicio = _achar_cabecalho(bruto, colunas)
+    inicio = _achar_cabecalho(bruto, colunas, opcionais)
     cabecalho = [normalizar_cabecalho(c) for c in bruto[inicio]]
     if colunas:
         renomear = {}
         for canonico, sinonimos in colunas.items():
             achado = next((c for c in cabecalho if c == canonico or c in sinonimos), None)
+            if achado is None and canonico in opcionais:
+                continue
             if achado is None:
                 raise ArquivoInvalidoError(f"Coluna obrigatória ausente: {canonico}.")
             renomear[achado] = canonico

@@ -7,8 +7,8 @@ from pathlib import Path
 import pytest
 
 from core.models import Aluno, HistoricoTurma, RegistroAlteracao, Turma
-from ingestao.cadastro import COLUNAS, importar_cadastro
-from ingestao.leitura import ler_tabela
+from ingestao.cadastro import COLUNAS, OPCIONAIS, importar_cadastro
+from ingestao.leitura import ArquivoInvalidoError, ler_tabela
 
 pytestmark = pytest.mark.django_db
 
@@ -120,7 +120,7 @@ def test_mudanca_na_data_de_inicio_e_inconsistente_e_no_dia_seguinte_passa(diret
     assert r.mudancas_turma == 1
 
 
-@pytest.mark.parametrize("ingresso", ["31/02/2026", "", "ontem"])
+@pytest.mark.parametrize("ingresso", ["31/02/2026", "ontem"])
 def test_data_invalida(diretor, ingresso):
     r = _importar([_linha(ingresso=ingresso)], diretor)
     assert len(r.inconsistentes) == 1 and not Aluno.objects.exists()
@@ -160,3 +160,39 @@ def test_importacao_nao_altera_situacao(diretor, turma_a):
 def test_rm_e_aceito_como_matricula():
     arq = io.BytesIO(b"RM;Nome Completo;Turma;Ingresso\nS1;Ana;T1;02/02/2026\n")
     assert ler_tabela(arq, "a.csv", colunas=COLUNAS)[0]["matricula"] == "S1"
+
+
+def _lido(texto):
+    return ler_tabela(io.BytesIO(texto.encode()), "a.csv", colunas=COLUNAS, opcionais=OPCIONAIS)
+
+
+def test_arquivo_sem_coluna_de_ingresso_usa_1o_de_janeiro(diretor):
+    r = _importar(_lido("matricula;nome;turma\nS1;Ana;T1\n"), diretor)
+    assert r.criados == 1 and not r.inconsistentes
+    assert Aluno.objects.get(pk="S1").data_ingresso == date(2026, 1, 1)
+
+
+def test_celula_de_ingresso_vazia_usa_1o_de_janeiro(diretor):
+    r = _importar(_lido("matricula;nome;turma;data_ingresso\nS1;Ana;T1;\n"), diretor)
+    assert r.criados == 1 and not r.inconsistentes
+    assert Aluno.objects.get(pk="S1").data_ingresso == date(2026, 1, 1)
+
+
+def test_reimportar_sem_coluna_nao_diverge_nem_altera(diretor):
+    _importar([_linha(ingresso="09/02/2026")], diretor)
+    r = _importar(_lido("matricula;nome;turma\nS1;Ana Sintética;Turma A\n"), diretor)
+    assert not r.divergencias and not r.inconsistentes and r.sem_alteracao == 1
+    assert Aluno.objects.get(pk="S1").data_ingresso == date(2026, 2, 9)
+
+
+@pytest.mark.parametrize("faltando", ["matricula", "nome", "turma"])
+def test_coluna_obrigatoria_ausente_continua_erro(faltando):
+    cols = [c for c in ("matricula", "nome", "turma") if c != faltando]
+    with pytest.raises(ArquivoInvalidoError):
+        _lido(";".join(cols) + "\n" + ";".join("x" for _ in cols) + "\n")
+
+
+def test_formato_exemplo_corrijame_reproduzido_a_mao(diretor):
+    linhas = _lido("NOME COMPLETO;RM;TURMA\nAluno Fictício;S77;Turma Z\n")
+    r = _importar(linhas, diretor)
+    assert r.criados == 1 and not r.inconsistentes

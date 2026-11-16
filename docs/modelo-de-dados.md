@@ -39,7 +39,7 @@ Precisam de uma Solicitação de Mudança para atualizar o DER e o Relatório De
 
 ## Cadastro (RF006)
 
-- **Colunas aceitas** (CSV `;` ou `,`, ou XLSX, primeira aba; cabeçalho sem distinção de caixa, acento ou espaço): `matricula`, `nome` (ou `nome_completo`, `aluno`), `turma`, `data_ingresso` (ou `ingresso`, `data_de_ingresso`). Datas em `dd/mm/aaaa` ou `aaaa-mm-dd`. Limites: 5 MB e 5.000 linhas.
+- **Colunas aceitas** (CSV `;` ou `,`, ou XLSX, primeira aba; cabeçalho sem distinção de caixa, acento ou espaço): `matricula`, `nome` (ou `nome_completo`, `aluno`), `turma` e, **opcional**, `data_ingresso` (ou `ingresso`, `data_de_ingresso`): se a coluna faltar ou a célula vier vazia, o aluno novo ingressa em 1º de janeiro do ano letivo informado e, em aluno existente, o ingresso não é conferido (preenchida e diferente, vira divergência). Datas em `dd/mm/aaaa` ou `aaaa-mm-dd`. Limites: 5 MB e 5.000 linhas.
 - **Divergências**: a importação nunca sobrescreve nome nem data de ingresso de aluno existente (RN003); a diferença é listada e o Diretor corrige na edição manual. Nome só difere em caixa, acento ou espaço: não é divergência. Turma diferente da atual muda a turma na data informada no formulário, preservando o histórico (RN011) e auditando (NF009). Reimportar não duplica (NF008). Aluno ausente do arquivo não é alterado (NF007).
 - **Matrícula**: única por ano, sem vínculo entre anos, imutável (chave). Digitada errada: o Diretor cria o aluno com a matrícula correta e marca o lançamento errado como `INVALIDO`; ele é preservado, mas escondido das listas por padrão e fora dos indicadores.
 - **`Aluno.corrigir_ingresso(data)`**: atualiza `data_ingresso` e o início do primeiro período de turma; recusa data igual ou posterior ao fim desse período.

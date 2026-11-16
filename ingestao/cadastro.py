@@ -26,6 +26,9 @@ COLUNAS = {
     "data_ingresso": ("ingresso", "data_de_ingresso"),
 }
 
+# Pode faltar no arquivo ou vir vazia: vale o 1º de janeiro do ano letivo.
+OPCIONAIS = frozenset({"data_ingresso"})
+
 EXEMPLOS = [
     {"matricula": "S900001", "nome": "Aluno Exemplo Um", "turma": "Turma A",
      "data_ingresso": "02/02/2026"},
@@ -70,7 +73,7 @@ def _data(valor) -> date | None:
     return None
 
 
-def _validar(linha) -> tuple[dict | None, str]:
+def _validar(linha, ano) -> tuple[dict | None, str]:
     matricula = str(linha.get("matricula") or "").strip()
     if not matricula:
         return None, "matrícula em branco"
@@ -86,10 +89,18 @@ def _validar(linha) -> tuple[dict | None, str]:
         return None, "turma em branco"
     if len(turma) > _MAX_TURMA:
         return None, f"turma com mais de {_MAX_TURMA} caracteres"
-    ingresso = _data(linha.get("data_ingresso"))
-    if ingresso is None:
+    bruta = linha.get("data_ingresso")
+    informada = not (bruta is None or str(bruta).strip() == "")
+    ingresso = _data(bruta) if informada else None
+    if informada and ingresso is None:
         return None, "data de ingresso inválida (use dd/mm/aaaa ou aaaa-mm-dd)"
-    return {"matricula": matricula, "nome": nome, "turma": turma, "ingresso": ingresso}, ""
+    return {
+        "matricula": matricula,
+        "nome": nome,
+        "turma": turma,
+        "ingresso": ingresso,
+        "ingresso_padrao": date(ano, 1, 1),
+    }, ""
 
 
 def importar_cadastro(linhas, *, ano: int, autor, data_mudanca: date, gravar: bool):
@@ -101,7 +112,7 @@ def importar_cadastro(linhas, *, ano: int, autor, data_mudanca: date, gravar: bo
         vistas = set()
         for linha in linhas:
             numero = linha["_linha"]
-            dados, motivo = _validar(linha)
+            dados, motivo = _validar(linha, ano)
             if dados is None:
                 resumo.inconsistentes.append(
                     (numero, str(linha.get("matricula") or "").strip()[:30], motivo)
@@ -130,7 +141,7 @@ def importar_cadastro(linhas, *, ano: int, autor, data_mudanca: date, gravar: bo
                 Aluno(
                     matricula=d["matricula"],
                     nome=d["nome"],
-                    data_ingresso=d["ingresso"],
+                    data_ingresso=d["ingresso"] or d["ingresso_padrao"],
                     turma=turma_de(d["turma"]),
                 ).save()
                 resumo.criados += 1
@@ -138,7 +149,7 @@ def importar_cadastro(linhas, *, ano: int, autor, data_mudanca: date, gravar: bo
             if _chave_nome(aluno.nome) != _chave_nome(d["nome"]):
                 resumo.divergencias.append((numero, aluno.matricula, "nome diferente do cadastro"))
                 continue
-            if aluno.data_ingresso != d["ingresso"]:
+            if d["ingresso"] is not None and aluno.data_ingresso != d["ingresso"]:
                 resumo.divergencias.append(
                     (numero, aluno.matricula, "data de ingresso diferente do cadastro")
                 )

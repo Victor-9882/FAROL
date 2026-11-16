@@ -3,7 +3,9 @@
 {% block conteudo %}
   <h1>Importar cadastro de alunos</h1>
   <p><a href="{% url 'web:alunos' %}">Voltar à lista</a></p>
-  <p>Colunas: matrícula, nome, turma, data de ingresso. Nome e data de ingresso de alunos já
+  <p>Colunas: matrícula, nome, turma e, opcionalmente, data de ingresso (se faltar ou vier vazia, vale
+    o 1º de janeiro do ano letivo informado; em alunos já cadastrados ela só é conferida se
+    preenchida). Nome e data de ingresso de alunos já
     cadastrados nunca são sobrescritos: diferenças aparecem como divergências, para correção manual.
     Use "Conferir" para simular sem gravar.</p>
   <p><a href="{% url 'web:cadastro_modelo_xlsx' %}">Baixar modelo (.xlsx)</a> ·

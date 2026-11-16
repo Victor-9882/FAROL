@@ -16,7 +16,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 
 from core.auditoria import historico_de
 from core.models import Aluno, RegistroImportacao, Turma
-from ingestao.cadastro import COLUNAS, EXEMPLOS, importar_cadastro
+from ingestao.cadastro import COLUNAS, EXEMPLOS, OPCIONAIS, importar_cadastro
 from ingestao.leitura import ArquivoInvalidoError, ler_tabela
 from ingestao.modelos import gerar_modelo
 
@@ -144,7 +144,7 @@ def cadastro_importar(request):
         gravado = request.POST.get("acao") == "importar"
         arquivo = form.cleaned_data["arquivo"]
         try:
-            linhas = ler_tabela(arquivo, arquivo.name, colunas=COLUNAS)
+            linhas = ler_tabela(arquivo, arquivo.name, colunas=COLUNAS, opcionais=OPCIONAIS)
         except ArquivoInvalidoError as erro:
             form.add_error("arquivo", str(erro))
         else:
