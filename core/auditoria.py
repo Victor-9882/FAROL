@@ -5,6 +5,8 @@ Reutilizada por qualquer tela que altere dado sensível (usuários, alunos, inte
 
 from .models import RegistroAlteracao
 
+CAMPOS_AUDITADOS_USUARIO = ("perfil", "is_active", "email", "first_name", "last_name")
+
 
 def _texto(valor) -> str:
     return "" if valor is None else str(valor)
