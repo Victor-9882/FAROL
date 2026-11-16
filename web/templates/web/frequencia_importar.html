@@ -1,0 +1,24 @@
+{% extends "web/base.html" %}
+{% block titulo %}Importar frequência · FAROL{% endblock %}
+{% block conteudo %}
+  <h1>Importar frequência da catraca</h1>
+  <p>Envie a exportação da catraca (uma linha por passagem: data, matrícula e, se houver, nome) e
+    informe o período. Para cada aluno e cada dia letivo do período, o FAROL registra presença se
+    houve passagem e falta se não houve, sem tolerância de atraso (RN001). Feriados, emendas e
+    férias não contam (RN005), e o aluno só conta a partir do ingresso (RN004).</p>
+  <p>Passagens com matrícula em branco, fora do padrão ou sem aluno no cadastro ficam em
+    <a href="{% url 'web:pendencias' %}">Pendências</a> para associação manual (RN003).
+    Reimportar um período já importado substitui a presença, sem mexer nas ausências justificadas,
+    e o resumo avisa antes de confirmar.</p>
+  <p><a href="{% url 'web:frequencia_modelo' 'xlsx' %}">Baixar modelo (.xlsx)</a> ·
+    <a href="{% url 'web:frequencia_modelo' 'csv' %}">Baixar modelo (.csv)</a></p>
+  <form method="post" enctype="multipart/form-data" id="importacao-form">
+    {% csrf_token %}
+    {% for campo in form %}
+      <p>{{ campo.label_tag }} {{ campo }}{% if campo.help_text %} <small>{{ campo.help_text }}</small>{% endif %}</p>
+    {% endfor %}
+    <button type="submit" name="acao" value="conferir">Conferir</button>
+  </form>
+  {% include "web/_importacao_resumo.html" with detalhe="web/_importacao_detalhe_frequencia.html" %}
+  {% include "web/_importacao_script.html" %}
+{% endblock %}

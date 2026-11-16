@@ -1,0 +1,7 @@
+<ul>
+  <li>Dias letivos no período: {{ resumo.dias_letivos }}</li>
+  <li>Calendário definido até: {% if resumo.calendario_ate %}{{ resumo.calendario_ate|date:"d/m/Y" }}{% else %}nenhum período letivo cadastrado{% endif %}</li>
+  <li>Alunos considerados: {{ resumo.alunos }}</li>
+  <li>Presenças: {{ resumo.presencas }} · Faltas: {{ resumo.faltas }}</li>
+  <li>Registros de frequência criados: {{ resumo.criados }} · alterados: {{ resumo.atualizados }} · sem alteração: {{ resumo.sem_alteracao }}</li>
+</ul>

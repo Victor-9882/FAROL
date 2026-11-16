@@ -113,3 +113,5 @@ DEFAULT_FROM_EMAIL = env("DEFAULT_FROM_EMAIL", default="FAROL <farol@localhost>"
 
 # Importações (NF025): máximo de linhas de dados por arquivo. Ajustável por ambiente.
 IMPORTACAO_LIMITE_LINHAS = env.int("IMPORTACAO_LIMITE_LINHAS", default=5000)
+# A catraca exporta uma linha por passagem: cerca de 20 mil por mês para 900 alunos (RF003).
+IMPORTACAO_LIMITE_LINHAS_CATRACA = env.int("IMPORTACAO_LIMITE_LINHAS_CATRACA", default=50000)

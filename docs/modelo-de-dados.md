@@ -88,6 +88,16 @@ Sem migração: é código compartilhado por todas as importações.
 - **Tela:** `pendencias/`, só do Diretor (RN013), com filtro por origem, situação e ano. O nome do cadastro aparece só na própria página, quando a associação pede confirmação.
 - **Trilha:** `RegistroImportacao.pendencias` conta as linhas que viraram pendência; os tipos `FREQUENCIA`, `SIMULADOS` e `REDACOES` ficam prontos para RF003 a RF005. `web.importacao.registrar_trilha` grava a trilha a partir do resumo.
 
+## Frequência da catraca (RF003, #14)
+
+- **Arquivo:** uma linha por **passagem**: `data` (aceita `dd/mm/aaaa hh:mm`, a hora é ignorada), `matricula` e, opcional, `nome`. O Diretor informa o ano letivo e o período (`inicio` e `fim`, dentro do ano). Limite próprio de linhas: `IMPORTACAO_LIMITE_LINHAS_CATRACA` (padrão 50.000, cerca de dois meses de 900 alunos). Modelo para download em `frequencia/importar/modelo/<csv|xlsx>/`, com o ano atual.
+- **Apuração (RN001):** para cada aluno do ano (turma do ano letivo, sem `INVALIDO`, entre o ingresso e a saída, RN004) e cada dia de `dias_letivos(inicio, fim)` (RN005), um `RegistroFrequencia`: `presente` se houve ao menos uma passagem, ausente se não houve. Não há tolerância de atraso: o arquivo não é lido por hora.
+- **Avisos:** passagem em dia não letivo não vira registro, mas gera aviso por dia ("dia não letivo com N passagens; o calendário está atualizado?"); também passagem antes do ingresso ou depois da saída, nenhum período letivo cadastrado e "calendário definido até dd/mm" quando o último período termina antes do fim informado.
+- **Linhas:** data em branco, inválida ou fora do período é inconsistente; várias passagens do mesmo aluno no dia contam uma presença (as demais são ignoradas). Matrícula sem aluno vira pendência (`FREQUENCIA`, referência = dia); a mesma pessoa passando várias vezes no dia gera uma pendência só.
+- **Reimportação (NF008):** substitui `presente` dos registros existentes do período, com `RegistroAlteracao` por registro alterado (NF009), e nunca altera `justificada` (RN002). O resumo lista a sobreposição ("N registros já existem…"); confirmar a conferência é confirmar a substituição. Pendência já associada conta como passagem do aluno; já resolvida é ignorada.
+- **Associação de pendência:** marca o aluno presente naquele dia (cria ou altera o registro, com auditoria). Recusa dia não letivo ou fora da janela do aluno.
+- **Gravação em lote:** `bulk_create` e `bulk_update` em lotes de 2.000 (NF011).
+
 ## Suposições a confirmar
 
 - **Áreas do simulado:** as quatro áreas do ENEM (Linguagens, Humanas, Natureza, Matemática). Confirmar com a DES como o P+ separa as áreas, sobretudo nos simulados de FUVEST.
