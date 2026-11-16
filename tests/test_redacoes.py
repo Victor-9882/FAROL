@@ -1,11 +1,13 @@
-"""Importação das redações do Corrija-me (RF005, RN003, RN004, RN007, NF006, NF008, NF009).
+"""Importação da exportação do Corrija-me (RF005, RN003, RN004, RN007, NF006, NF008, NF009).
 
-Só dados sintéticos (NF017): a base `pequena/2026` e linhas inventadas.
+Só dados sintéticos (NF017): as réplicas `pequena/2026/planilhas/corrija_me_*.xlsx` e
+exportações montadas no mesmo layout por `ingestao.planilhas_casd`.
 """
 
 import io
 import json
-from datetime import date
+from datetime import date, datetime, timedelta
+from decimal import Decimal
 from pathlib import Path
 
 import pytest
@@ -21,48 +23,56 @@ from core.models import (
     TemaRedacao,
     Turma,
 )
-from ingestao import pendencias
+from ingestao import pendencias, planilhas_casd
 from ingestao.cadastro import COLUNAS as COLUNAS_CADASTRO
 from ingestao.cadastro import importar_cadastro
-from ingestao.leitura import ler_data, ler_tabela
+from ingestao.leitura import ler_tabela
 from ingestao.redacoes import COLUNAS, OPCIONAIS, aplicar_pendencia, importar_redacoes
 from tests.conftest import importar_em_dois_passos
 
 pytestmark = pytest.mark.django_db
 
 PASTA = Path(__file__).parent / "dados_sinteticos" / "pequena"
+PLANILHAS = PASTA / "2026" / "planilhas"
 CONHECIDOS = json.loads((PASTA / "perfis_conhecidos.json").read_text())
-CABECALHO = "data_tema;tema;matricula;nome;entregue;c1;c2;c3;c4;c5;total\n"
 TERCA = date(2026, 3, 3)
-NOTAS = "160;160;160;160;160;800"
-VAZIO = ";;;;;"
+ENVIO = datetime(2026, 3, 5, 18, 0)
 
 
-def _ler(nome, colunas, opcionais=frozenset()):
+def _ler_csv(nome, colunas, opcionais=frozenset()):
     with (PASTA / "2026" / nome).open("rb") as f:
         return ler_tabela(f, nome, colunas=colunas, opcionais=opcionais)
 
 
-def _csv(corpo):
-    texto = CABECALHO + corpo
-    return ler_tabela(io.BytesIO(texto.encode()), "r.csv", colunas=COLUNAS, opcionais=OPCIONAIS)
+def _redacao(rm="S260001", notas=(160, 160, 160, 160, 160), final=800, banca="ENEM", **extra):
+    return {
+        "id": extra.get("id", 1),
+        "atividade": extra.get("atividade", 7001),
+        "envio": extra.get("envio", ENVIO),
+        "correcao": ENVIO + timedelta(days=2),
+        "nome": extra.get("nome", "Aluno Sintético Um"),
+        "rm": rm,
+        "banca": banca,
+        "tema": extra.get("tema", "Tema A"),
+        "notas": list(notas),
+        "final": final,
+        "turma": "CASDvest 2026 - Turma 1",
+    }
 
 
-def _linha(
-    matricula="S260001",
-    entregue="S",
-    notas=NOTAS,
-    data="03/03/2026",
-    tema="Tema A",
-    nome="Aluno Sintético Um",
-):
-    return f"{data};{tema};{matricula};{nome};{entregue};{notas}\n"
+def _exportacao(*redacoes):
+    conteudo = planilhas_casd.exportacao_corrija_me(list(redacoes))
+    return ler_tabela(io.BytesIO(conteudo), "corrija.xlsx", colunas=COLUNAS, opcionais=OPCIONAIS)
+
+
+def _importar(linhas, autor, terca=TERCA, gravar=True):
+    return importar_redacoes(linhas, ano=2026, terca=terca, autor=autor, gravar=gravar)
 
 
 @pytest.fixture
 def ano_2026(diretor):
     importar_cadastro(
-        _ler("cadastro_alunos.csv", COLUNAS_CADASTRO, frozenset({"data_ingresso"})),
+        _ler_csv("cadastro_alunos.csv", COLUNAS_CADASTRO, frozenset({"data_ingresso"})),
         ano=2026,
         autor=diretor,
         data_mudanca=date(2026, 6, 25),
@@ -72,174 +82,240 @@ def ano_2026(diretor):
 
 @pytest.fixture
 def aluno(db):
-    turma = Turma.objects.create(nome="Turma A", ano=2026)
+    turma = Turma.objects.create(nome="Turma 1", ano=2026)
     return Aluno.objects.create(
         matricula="S260001", nome="Aluno Sintético Um", data_ingresso=date(2026, 2, 2), turma=turma
     )
 
 
-def _importar(corpo, autor, gravar=True):
-    return importar_redacoes(_csv(corpo), ano=2026, autor=autor, gravar=gravar)
+# --- Réplica da exportação -----------------------------------------------------------
 
 
-# --- Base sintética do ano todo ------------------------------------------------------
-
-
-def test_ano_sintetico(diretor, ano_2026):
-    linhas = _ler("corrija_me_redacoes.csv", COLUNAS, OPCIONAIS)
-    resumo = importar_redacoes(linhas, ano=2026, autor=diretor, gravar=True)
-    assert resumo.total_linhas == len(linhas) and not resumo.inconsistentes
-    # RN007: os temas vêm do arquivo, um por terça
-    temas = _ler("temas_redacao.csv", {"data": (), "tema": ()})
-    assert resumo.temas_criados == len(temas) == TemaRedacao.objects.count()
-    assert TemaRedacao.objects.get(data=TERCA).tema == next(
-        t["tema"] for t in temas if ler_data(t["data"]) == TERCA
-    )
-    # não entregue fica registrada, sem nota
-    assert resumo.nao_entregues == 191
-    nao = ResultadoRedacao.objects.filter(entregue=False)
-    assert nao.count() == 191 and not nao.exclude(nota_c1__isnull=True).exists()
-    # RN003: a redação sem matrícula do export vira pendência
+def test_replica_com_matricula_em_branco(diretor, ano_2026):
     em_branco = next(i for i in CONHECIDOS["inconsistencias"] if i["tipo"] == "matricula_em_branco")
+    terca = date(2026, 2, 24)
+    caminho = PLANILHAS / "corrija_me_2026-02-24.xlsx"
+    linhas = ler_tabela(caminho.open("rb"), caminho.name, colunas=COLUNAS, opcionais=OPCIONAIS)
+    resumo = _importar(linhas, diretor, terca)
+    assert resumo.total_linhas == len(linhas) and not resumo.inconsistentes
+    # RN007: o tema da terça é criado com o título do arquivo
+    assert (
+        resumo.temas_criados == 1 and TemaRedacao.objects.get(data=terca).tema == linhas[0]["tema"]
+    )
+    # RN003: a redação sem RM vira pendência; o nome é só verificação
     pendencia = PendenciaImportacao.objects.get()
     assert pendencia.motivo == "EM_BRANCO" and pendencia.nome_informado == em_branco["nome"]
-    assert pendencia.data == date(2026, 2, 24)
-    assert len(resumo.pendencias) == 1
-    assert ResultadoRedacao.objects.count() == len(linhas) - 1
+    # quem não aparece no arquivo (só entregas) fica como não entregue
+    entregues = ResultadoRedacao.objects.filter(tema_semana=terca, entregue=True).count()
+    assert entregues == len(linhas) - 1 == resumo.criados
+    no_curso = Aluno.objects.filter(data_ingresso__lte=terca + timedelta(days=6)).count()
+    assert no_curso < 20  # RN004: quem ingressa nas chamadas seguintes não conta
+    assert resumo.nao_entregues == no_curso - entregues
+    nao = ResultadoRedacao.objects.filter(tema_semana=terca, entregue=False)
+    assert nao.count() == resumo.nao_entregues and not nao.exclude(nota_c1__isnull=True).exists()
+    # na base sintética, a dona do nome só ingressa depois deste tema: associar é recusado (RN004)
+    orfa = Aluno.objects.get(nome=em_branco["nome"])
+    assert orfa.data_ingresso > terca + timedelta(days=6)
+    associadas, recusas = pendencias.associar([pendencia], orfa, autor=diretor)
+    assert associadas == 0 and "antes do ingresso" in recusas[0][1]
+    # associar a um aluno que estava no curso corrige o "não entregue" dele
+    outro = nao.first().aluno
+    assert pendencias.associar([pendencia], outro, autor=diretor, confirmar_nome=True) == (1, [])
+    redacao = ResultadoRedacao.objects.get(aluno=outro, tema_semana=terca)
+    assert redacao.entregue and redacao.nota_total == 600
+    assert RegistroAlteracao.objects.filter(objeto_id=str(redacao.pk), campo="entregue").exists()
 
 
-def test_reimportar_nao_duplica(diretor, ano_2026):
-    linhas = _ler("corrija_me_redacoes.csv", COLUNAS, OPCIONAIS)
-    importar_redacoes(linhas, ano=2026, autor=diretor, gravar=True)
-    segunda = importar_redacoes(linhas, ano=2026, autor=diretor, gravar=True)
-    assert segunda.importados == 0 and segunda.temas_criados == 0
-    assert segunda.sem_alteracao == len(linhas) - 1 and len(segunda.pendencias) == 1
-    assert ResultadoRedacao.objects.count() == len(linhas) - 1
-    assert PendenciaImportacao.objects.count() == 1
-    assert segunda.sobreposicoes
+def test_reimportar_a_replica_nao_duplica(diretor, ano_2026):
+    caminho = PLANILHAS / "corrija_me_2026-02-03.xlsx"
+    linhas = ler_tabela(caminho.open("rb"), caminho.name, colunas=COLUNAS, opcionais=OPCIONAIS)
+    primeira = _importar(linhas, diretor, date(2026, 2, 3))
+    segunda = _importar(linhas, diretor, date(2026, 2, 3))
+    assert segunda.importados == 0 and segunda.nao_entregues == 0 and segunda.temas_criados == 0
+    assert segunda.sem_alteracao == primeira.criados and segunda.sobreposicoes
+    no_curso = Aluno.objects.filter(data_ingresso__lte=date(2026, 2, 9)).count()
+    assert ResultadoRedacao.objects.count() == no_curso
 
 
-# --- Regras e valores-limite (RN007) -------------------------------------------------
+# --- Bancas e valores-limite ---------------------------------------------------------
 
 
-def test_entregue_e_nao_entregue(diretor, aluno):
-    Aluno.objects.create(
-        matricula="S260002", nome="Dois", data_ingresso=date(2026, 2, 2), turma=aluno.turma
+def test_enem_valores_limite(diretor, aluno):
+    resumo = _importar(_exportacao(_redacao(notas=(0, 200, 0, 200, 0), final=400)), diretor)
+    assert resumo.criados == 1
+    redacao = ResultadoRedacao.objects.get()
+    assert redacao.entregue and redacao.banca == "ENEM" and redacao.nota_total == 400
+    assert redacao.tema == "Tema A" and redacao.tema_semana == TERCA
+
+
+def test_vunesp_aceita_decimais_e_quatro_criterios(diretor, aluno):
+    linhas = _exportacao(
+        _redacao(notas=(21.4, 21.4, 21.4, 14.3, None), final=78.58, banca="VUNESP - CONCURSOS")
     )
-    resumo = _importar(_linha() + _linha("S260002", "N", VAZIO), diretor)
-    assert (resumo.criados, resumo.entregues, resumo.nao_entregues) == (2, 1, 1)
-    um = ResultadoRedacao.objects.get(aluno=aluno)
-    assert um.entregue and um.nota_total == 800 and um.tema == "Tema A" and um.tema_semana == TERCA
-    dois = ResultadoRedacao.objects.get(aluno_id="S260002")
-    assert not dois.entregue and dois.nota_total is None
+    assert _importar(linhas, diretor).criados == 1
+    redacao = ResultadoRedacao.objects.get()
+    assert redacao.nota_c1 == Decimal("21.4") and redacao.nota_c5 is None
+    assert redacao.nota_final == Decimal("78.58") and redacao.nota_total == Decimal("78.58")
 
 
 @pytest.mark.parametrize(
-    "entregue,notas,data,motivo",
+    "notas,final,banca,motivo",
     [
-        ("N", NOTAS, "03/03/2026", "redação não entregue com nota"),
-        ("S", ";160;160;160;160;", "03/03/2026", "competência 1 em branco em redação entregue"),
-        ("S", "201;160;160;160;160;", "03/03/2026", "competência 1 fora de 0 a 200"),
-        ("S", "160;-1;160;160;160;", "03/03/2026", "competência 2 fora de 0 a 200"),
-        ("S", "160;160;160;160;160;801", "03/03/2026", "total diferente da soma das competências"),
-        ("X", VAZIO, "03/03/2026", "entrega inválida (use S ou N)"),
-        ("S", NOTAS, "04/03/2026", "a data do tema precisa ser uma terça-feira (RN007)"),
-        ("S", NOTAS, "03/03/2025", "data do tema fora do ano letivo informado"),
-        ("S", NOTAS, "", "data do tema em branco"),
-        ("S", NOTAS, "xx", "data do tema inválida (use dd/mm/aaaa ou aaaa-mm-dd)"),
+        ((160, 160, 160, 160, None), 640, "ENEM", "competência 5 em branco"),
+        ((201, 160, 160, 160, 160), 841, "ENEM", "competência 1 fora de 0 a 200"),
+        ((160, -1, 160, 160, 160), 639, "ENEM", "competência 2 fora de 0 a 200"),
+        ((160, 160, 160, 160, 160), 801, "ENEM", "nota final diferente da soma das competências"),
+        ((21.4, 21.4, None, 14.3, None), 50, "VUNESP", "competência 3 em branco"),
+        ((21.4, 21.4, 21.4, 14.3, None), 1000.5, "VUNESP", "nota final fora de 0 a 1000"),
     ],
 )
-def test_linhas_invalidas(diretor, aluno, entregue, notas, data, motivo):
-    resumo = _importar(_linha(entregue=entregue, notas=notas, data=data), diretor)
+def test_linhas_invalidas(diretor, aluno, notas, final, banca, motivo):
+    resumo = _importar(_exportacao(_redacao(notas=notas, final=final, banca=banca)), diretor)
     assert [m for _, _, m in resumo.inconsistentes] == [motivo]
-    assert not ResultadoRedacao.objects.exists()
+    assert not ResultadoRedacao.objects.filter(entregue=True).exists()
 
 
-def test_valores_limite_e_total_opcional(diretor, aluno):
-    resumo = _importar(_linha(notas="0;200;0;200;0;"), diretor)
-    assert resumo.criados == 1 and ResultadoRedacao.objects.get().nota_total == 400
-    resumo = _importar(_linha("S260001", "N", ";;;;;0", data="10/03/2026"), diretor)
-    assert resumo.criados == 1  # não entregue com total 0 é aceito
+def test_banca_em_branco_e_enem_e_nota_final_opcional(diretor, aluno):
+    assert _importar(_exportacao(_redacao(final=None, banca="")), diretor).criados == 1
+    assert ResultadoRedacao.objects.get().nota_total == 800
+
+
+# --- Tema, atividade, reenvio e janela do aluno --------------------------------------
 
 
 def test_tema_cadastrado_e_mantido_e_avisa(diretor, aluno):
     TemaRedacao.objects.create(data=TERCA, tema="Tema cadastrado")
-    resumo = _importar(
-        _linha(tema="Outro título") + _linha("S269999", tema="Outro título"), diretor
-    )
+    resumo = _importar(_exportacao(_redacao(tema="OUTRO TÍTULO")), diretor)
     assert resumo.temas_criados == 0
     assert [m for _, m in resumo.avisos] == [
         "03/03/2026: o tema do arquivo difere do cadastrado; mantido o cadastrado"
     ]
     assert ResultadoRedacao.objects.get().tema == "Tema cadastrado"
-    # mesmo título, só com caixa e acento diferentes: sem aviso
-    resumo = _importar(_linha(tema="TEMA CADASTRADO"), diretor)
-    assert not resumo.avisos
+    assert not _importar(_exportacao(_redacao(tema="tema cadastrádo")), diretor).avisos
 
 
-def test_tema_em_branco_sem_cadastro_e_inconsistente(diretor, aluno):
-    resumo = _importar(_linha(tema=""), diretor)
-    assert resumo.inconsistentes[0][2] == "tema em branco e não cadastrado para esta terça"
-    TemaRedacao.objects.create(data=TERCA, tema="Tema cadastrado")
-    assert _importar(_linha(tema=""), diretor).criados == 1
+def test_sem_tema_cadastrado_nem_titulo_tudo_e_inconsistente(diretor, aluno):
+    resumo = _importar(_exportacao(_redacao(tema="")), diretor)
+    assert resumo.inconsistentes[0][2] == "tema não cadastrado nesta terça e sem título no arquivo"
+    assert not ResultadoRedacao.objects.exists() and not TemaRedacao.objects.exists()
 
 
-def test_repetido_e_fora_do_aluno(diretor, aluno):
-    aluno.corrigir_ingresso(date(2026, 3, 10))
-    corpo = _linha() + _linha(data="10/03/2026") + _linha(data="10/03/2026")
-    resumo = _importar(corpo, diretor)
-    assert [m for _, _, m in resumo.inconsistentes] == [
+def test_reenvio_vale_o_mais_recente(diretor, aluno):
+    antiga = _redacao(id=1, notas=(120,) * 5, final=600, envio=ENVIO)
+    nova = _redacao(id=2, notas=(160,) * 5, final=800, envio=ENVIO + timedelta(hours=3))
+    resumo = _importar(_exportacao(antiga, nova), diretor)
+    assert resumo.criados == 1 and resumo.reenvios == 1 and resumo.total_linhas == 2
+    assert ResultadoRedacao.objects.get().nota_total == 800
+
+
+def test_outra_atividade_e_fora_do_aluno(diretor, aluno):
+    Aluno.objects.create(
+        matricula="S260002", nome="Dois", data_ingresso=date(2026, 3, 10), turma=aluno.turma
+    )
+    resumo = _importar(
+        _exportacao(
+            _redacao(id=1),
+            _redacao(id=2, rm="S260002"),
+            _redacao(id=3, rm="S260003"),
+            _redacao(id=4, rm="S260001", atividade=9999, envio=ENVIO + timedelta(days=1)),
+        ),
+        diretor,
+    )
+    motivos = sorted(m for _, _, m in resumo.inconsistentes)
+    assert motivos == [
+        "redação de outra atividade do Corrija-me (ID DA ATIVIDADE)",
         "tema de antes do ingresso ou depois da saída do aluno (RN004)",
-        "aluno repetido no mesmo tema",
     ]
-    assert resumo.criados == 1
+    assert resumo.criados == 1 and len(resumo.pendencias) == 1  # S260003 não existe
 
 
 def test_ingresso_no_meio_da_semana_do_tema_conta(diretor, aluno):
-    aluno.corrigir_ingresso(date(2026, 3, 9))  # segunda da semana do tema de 03/03
-    assert _importar(_linha(), diretor).criados == 1
+    aluno.corrigir_ingresso(date(2026, 3, 9))  # a segunda que fecha a semana do tema
+    assert _importar(_exportacao(_redacao()), diretor).criados == 1
+
+
+# --- Não entregue --------------------------------------------------------------------
+
+
+def test_nao_entregue_respeita_janela_e_registro_existente(diretor, aluno):
+    turma = aluno.turma
+    Aluno.objects.create(
+        matricula="S260002", nome="Dois", data_ingresso=date(2026, 2, 2), turma=turma
+    )
+    Aluno.objects.create(
+        matricula="S260003", nome="Três", data_ingresso=date(2026, 4, 1), turma=turma
+    )
+    Aluno.objects.create(
+        matricula="S260004",
+        nome="Quatro",
+        data_ingresso=date(2026, 2, 2),
+        turma=turma,
+        situacao=Aluno.Situacao.INVALIDO,
+    )
+    TemaRedacao.objects.create(data=TERCA, tema="Tema A")
+    ResultadoRedacao.objects.create(
+        aluno_id="S260001", tema_semana=TERCA, tema="Tema A", entregue=True, nota_final=800
+    )
+    resumo = _importar(_exportacao(_redacao(rm="S269999")), diretor)
+    assert resumo.nao_entregues == 1  # só S260002: S260003 ainda não ingressou; S260004 é inválido
+    assert ResultadoRedacao.objects.get(aluno_id="S260002").entregue is False
+    assert ResultadoRedacao.objects.get(aluno_id="S260001").entregue is True  # não é tocado
 
 
 # --- Reimportação com auditoria (NF008, NF009) ---------------------------------------
 
 
 def test_reimportar_atualiza_com_auditoria(diretor, aluno):
-    _importar(_linha(), diretor)
-    conferencia = _importar(_linha(notas="200;160;160;160;160;840"), diretor, gravar=False)
+    _importar(_exportacao(_redacao()), diretor)
+    novo = _exportacao(_redacao(notas=(200, 160, 160, 160, 160), final=840))
+    conferencia = _importar(novo, diretor, gravar=False)
     assert conferencia.atualizados == 1 and conferencia.sobreposicoes
     assert ResultadoRedacao.objects.get().nota_c1 == 160
-    _importar(_linha(notas="200;160;160;160;160;840"), diretor)
+    _importar(novo, diretor)
     redacao = ResultadoRedacao.objects.get()
     assert redacao.nota_c1 == 200
-    registros = RegistroAlteracao.objects.filter(
-        modelo="core.resultadoredacao", objeto_id=str(redacao.pk)
+    campos = set(
+        RegistroAlteracao.objects.filter(
+            modelo="core.resultadoredacao", objeto_id=str(redacao.pk)
+        ).values_list("campo", flat=True)
     )
-    assert list(registros.values_list("campo", flat=True)) == ["nota_c1"]
+    assert campos == {"nota_c1", "nota_final"}
 
 
 # --- Pendências (RN003) --------------------------------------------------------------
 
 
-def test_pendencia_e_associacao(diretor, aluno):
-    resumo = _importar(_linha(matricula="", nome="Aluno Sintético Um"), diretor)
-    assert resumo.pendencias == [(2, "Matrícula em branco")] and resumo.temas_criados == 1
+def test_pendencia_associada_vale_na_reimportacao(diretor, aluno):
+    assert _importar(_exportacao(_redacao(rm="")), diretor).pendencias == [
+        (2, "Matrícula em branco")
+    ]
     pendencia = PendenciaImportacao.objects.get()
-    assert pendencia.origem == "REDACAO" and pendencia.data == TERCA
     assert pendencias.associar([pendencia], aluno, autor=diretor) == (1, [])
-    redacao = ResultadoRedacao.objects.get(aluno=aluno)
-    assert redacao.nota_total == 800 and redacao.tema == "Tema A"
-    resumo = _importar(_linha(matricula="", nome="Aluno Sintético Um"), diretor)
+    resumo = _importar(
+        _exportacao(_redacao(rm="", notas=(200, 160, 160, 160, 160), final=840)), diretor
+    )
+    assert resumo.pendencias == [] and resumo.atualizados == 1
+    assert ResultadoRedacao.objects.get().nota_total == 840
+    assert (
+        aplicar_pendencia(pendencia, aluno, diretor) == "o aluno já tem redação entregue neste tema"
+    )
+
+
+def test_pendencia_descartada_e_ignorada(diretor, aluno):
+    _importar(_exportacao(_redacao(rm="", nome="Desconhecido")), diretor)
+    pendencias.descartar(list(PendenciaImportacao.objects.all()), autor=diretor)
+    resumo = _importar(_exportacao(_redacao(rm="", nome="Desconhecido")), diretor)
     assert resumo.pendencias == [] and resumo.sem_alteracao == 1
-    assert aplicar_pendencia(pendencia, aluno, diretor) == "o aluno já tem redação neste tema"
 
 
 def test_aplicador_recusa_tema_ausente_e_fora_do_aluno(diretor, aluno):
-    dados = {"tema_semana": "2026-03-10", "entregue": False, "notas": [None] * 5}
-    assert aplicar_pendencia(PendenciaImportacao(dados=dados), aluno, diretor) == (
-        "o tema da redação não está cadastrado"
+    dados = {"tema_semana": "2026-03-10", "valores": {}}
+    assert (
+        aplicar_pendencia(PendenciaImportacao(dados=dados), aluno, diretor)
+        == "o tema da redação não está cadastrado"
     )
     TemaRedacao.objects.create(data=date(2026, 1, 6), tema="Tema antigo")
-    antes = {**dados, "tema_semana": "2026-01-06"}
+    antes = {"tema_semana": "2026-01-06", "valores": {}}
     assert "antes do ingresso" in aplicar_pendencia(
         PendenciaImportacao(dados=antes), aluno, diretor
     )
@@ -250,21 +326,24 @@ def test_aplicador_recusa_tema_ausente_e_fora_do_aluno(diretor, aluno):
 URL = reverse("web:redacoes_importar")
 
 
-def _montar(corpo):
+def _montar(conteudo, terca="2026-03-03", ano=2026):
     def montar(acao):
-        arquivo = SimpleUploadedFile("corrija.csv", (CABECALHO + corpo).encode())
-        return {"arquivo": arquivo, "ano": 2026, "acao": acao}
+        arquivo = SimpleUploadedFile("Exemplo_Planilha_Corrijame.xlsx", conteudo)
+        return {"arquivo": arquivo, "ano": ano, "terca": terca, "acao": acao}
 
     return montar
 
 
 def test_tela_confere_e_confirma(cliente_diretor, diretor, aluno):
-    montar = _montar(_linha() + _linha(matricula="", nome="Sem Matrícula"))
+    conteudo = planilhas_casd.exportacao_corrija_me(
+        [_redacao(), _redacao(id=2, rm="", nome="Sem RM")]
+    )
+    montar = _montar(conteudo)
     conferencia = cliente_diretor.post(URL, montar("conferir"))
     html = conferencia.content.decode()
     assert (
         "Pendências para associação manual: 1" in html
-        and "Temas criados a partir do arquivo: 1" in html
+        and "Tema criado a partir do arquivo: sim" in html
     )
     assert not ResultadoRedacao.objects.exists() and not TemaRedacao.objects.exists()
     resp = importar_em_dois_passos(cliente_diretor, URL, montar)
@@ -273,22 +352,31 @@ def test_tela_confere_e_confirma(cliente_diretor, diretor, aluno):
     assert trilha.tipo == RegistroImportacao.Tipo.REDACOES and trilha.pendencias == 1
 
 
+def test_tela_valida_a_terca(cliente_diretor, aluno):
+    conteudo = planilhas_casd.exportacao_corrija_me([_redacao()])
+    resp = cliente_diretor.post(URL, _montar(conteudo, terca="2026-03-04")("conferir"))
+    assert "terça-feira" in resp.content.decode()
+    resp = cliente_diretor.post(URL, _montar(conteudo, terca="2027-03-02", ano=2026)("conferir"))
+    assert "precisa ser do ano letivo" in resp.content.decode()
+
+
 def test_tela_so_do_diretor(client, membro, aluno):
-    montar = _montar(_linha())
+    montar = _montar(planilhas_casd.exportacao_corrija_me([_redacao()]))
     assert client.post(URL, montar("conferir")).status_code == 302
     client.force_login(membro)
     assert client.post(URL, montar("conferir")).status_code == 403
 
 
-def test_modelo_para_download_importa(cliente_diretor, diretor):
+def test_modelo_para_download_e_importavel(cliente_diretor, diretor):
     ano = date.today().year
-    resp = cliente_diretor.get(reverse("web:redacoes_modelo", args=["csv"]))
-    linhas = ler_tabela(io.BytesIO(resp.content), "m.csv", colunas=COLUNAS, opcionais=OPCIONAIS)
-    turma = Turma.objects.create(nome="Turma A", ano=ano)
+    resp = cliente_diretor.get(reverse("web:redacoes_modelo", args=["xlsx"]))
+    linhas = ler_tabela(io.BytesIO(resp.content), "m.xlsx", colunas=COLUNAS, opcionais=OPCIONAIS)
+    turma = Turma.objects.create(nome="Turma 1", ano=ano)
     for n in (1, 2):
         Aluno.objects.create(
             matricula=f"S{ano % 100}000{n}", nome="X", data_ingresso=date(ano, 1, 1), turma=turma
         )
-    resumo = importar_redacoes(linhas, ano=ano, autor=diretor, gravar=True)
+    terca = date(ano, 3, 3) + timedelta(days=(1 - date(ano, 3, 3).weekday()) % 7)
+    resumo = importar_redacoes(linhas, ano=ano, terca=terca, autor=diretor, gravar=True)
     assert resumo.criados == 2 and not resumo.inconsistentes
-    assert cliente_diretor.get(reverse("web:redacoes_modelo", args=["pdf"])).status_code == 404
+    assert cliente_diretor.get(reverse("web:redacoes_modelo", args=["csv"])).status_code == 404

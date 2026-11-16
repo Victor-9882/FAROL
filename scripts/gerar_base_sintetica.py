@@ -21,11 +21,17 @@ import argparse
 import csv
 import json
 import random
+import sys
 from dataclasses import dataclass, field
-from datetime import date, timedelta
+from datetime import date, datetime, timedelta
 from pathlib import Path
 
 RAIZ = Path(__file__).resolve().parent.parent
+if str(RAIZ) not in sys.path:
+    sys.path.insert(0, str(RAIZ))  # para usar os layouts de ingestao.planilhas_casd
+
+from ingestao import planilhas_casd  # noqa: E402  (só openpyxl e biblioteca padrão)
+
 DESTINO_PADRAO = RAIZ / "tests" / "dados_sinteticos"
 SEMENTE_PADRAO = 28
 
@@ -514,6 +520,7 @@ def gerar(destino: Path, tamanho: Tamanho, semente: int = SEMENTE_PADRAO) -> dic
         pasta, catraca, justificativas, simulados, redacoes = gerar_ano(destino, cal, alunos, rng)
 
         if ultimo_ano:
+            pasta_ultimo_ano = pasta
             resumo["perfis"] = descrever_perfis(cal, alunos)
             # Inconsistências conhecidas, para os testes de importação tolerante (NF006).
             dia = fmt(cal.dias_letivos[10])
@@ -554,9 +561,133 @@ def gerar(destino: Path, tamanho: Tamanho, semente: int = SEMENTE_PADRAO) -> dic
             "temas_redacao": len(cal.temas),
         }
 
+    gerar_planilhas_reais(pasta_ultimo_ano, tamanho.anos[-1])
     caminho = destino / "perfis_conhecidos.json"
     caminho.write_text(json.dumps(resumo, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     return resumo
+
+
+# --- Réplicas no layout das planilhas reais do CASD (#74) ------------------------------------
+
+SIMULADOS_REAIS = (6, 7, 8)  # ausente no ciclo 6; queda de desempenho entre os ciclos 7 e 8
+TEMAS_REAIS = 2  # os dois primeiros temas, mais o 4º, que tem a redação sem matrícula
+SIGLA_AREA = {"LC": "LINGUAGENS", "CH": "HUMANAS", "CN": "NATUREZA", "MT": "MATEMATICA"}
+
+
+def _ler_csv(caminho: Path) -> list[dict]:
+    with caminho.open(encoding="utf-8", newline="") as arquivo:
+        return list(csv.DictReader(arquivo, delimiter=";"))
+
+
+def _data(texto: str) -> date:
+    dia, mes, ano = map(int, texto.split("/"))
+    return date(ano, mes, dia)
+
+
+def gerar_planilhas_reais(pasta: Path, ano: int) -> None:
+    """Escreve em `pasta/planilhas/` réplicas sintéticas dos layouts reais (grade de
+    presença, relatório do P+ e exportação do Corrija-me), com a coluna Matrícula acrescentada
+    pela equipe. Usa só os CSVs sintéticos já gerados; os originais reais ficam no Drive."""
+    saida = pasta / "planilhas"
+    saida.mkdir(parents=True, exist_ok=True)
+    cadastro = _ler_csv(pasta / "cadastro_alunos.csv")
+    ingresso = {a["matricula"]: _data(a["data_ingresso"]) for a in cadastro}
+
+    # Grade "Presença Anual": P com passagem na catraca, J com justificativa aprovada, F sem
+    # passagem, S em feriado ou recesso; em branco antes do ingresso.
+    nao_letivos = {
+        _data(d["data"])
+        for d in _ler_csv(pasta / "calendario_letivo.csv")
+        if d["dia_letivo"] == "N"
+    }
+    letivos = {_data(d["data"]) for d in _ler_csv(pasta / "calendario_letivo.csv")} - nao_letivos
+    passagens = {
+        (p["matricula"], _data(p["data"])) for p in _ler_csv(pasta / "catraca_presencas.csv")
+    }
+    justificadas = {
+        (j["matricula"], _data(j["data"]))
+        for j in _ler_csv(pasta / "justificativas.csv")
+        if j["aprovada"] == "S"
+    }
+    codigos = {}
+    for aluno in cadastro:
+        matricula = aluno["matricula"]
+        for dia in sorted(letivos | nao_letivos):
+            if dia < ingresso[matricula]:
+                continue
+            if dia in nao_letivos:
+                codigos[(matricula, dia)] = "S"
+            elif (matricula, dia) in passagens:
+                codigos[(matricula, dia)] = "P"
+            else:
+                codigos[(matricula, dia)] = "J" if (matricula, dia) in justificadas else "F"
+    sem_cadastro = [(m, d) for m, d in passagens if m not in ingresso]
+    alunos = [
+        {"nome": a["nome"], "matricula": a["matricula"], "turma": a["turma"]} for a in cadastro
+    ]
+    for matricula, dia in sem_cadastro:
+        alunos.append({"nome": "Passagem Sem Cadastro", "matricula": matricula, "turma": ""})
+        codigos[(matricula, dia)] = "P"
+    (saida / "presenca_anual.xlsx").write_bytes(planilhas_casd.grade_presenca(ano, alunos, codigos))
+
+    # Relatórios do P+: um arquivo por simulado, como o P+ exporta.
+    turma = {a["matricula"]: a["turma"] for a in cadastro}
+    simulados = _ler_csv(pasta / "p_mais_simulados.csv")
+    for numero in SIMULADOS_REAIS:
+        nome = f"Simulado {numero} - {ano}"
+        linhas = []
+        for posicao, s in enumerate(r for r in simulados if r["simulado"] == nome):
+            presente = s["presenca"] == "Presente"
+            notas = {
+                SIGLA_AREA[sigla]: float(s[f"{sigla}_tri"].replace(",", ".")) if presente else None
+                for sigla in SIGLA_AREA
+            }
+            acertos = {
+                SIGLA_AREA[sigla]: int(s[f"{sigla}_acertos"]) if presente else None
+                for sigla in SIGLA_AREA
+            }
+            linhas.append(
+                {
+                    "matricula": s["matricula"],
+                    "nome": s["nome"],
+                    "id_aluno": 5000 + posicao,
+                    "inscricao": f"{9000000 + posicao:07d}",
+                    "turma": turma.get(s["matricula"], ""),
+                    "notas": notas,
+                    "acertos": acertos,
+                }
+            )
+        relatorio = planilhas_casd.relatorio_pmais(f"{numero}º Simulado Enem", ano, linhas)
+        (saida / f"p_mais_simulado_{numero:02d}.xlsx").write_bytes(relatorio)
+
+    # Exportações do Corrija-me: uma por tema, só com as redações entregues (banca ENEM).
+    redacoes = _ler_csv(pasta / "corrija_me_redacoes.csv")
+    temas = sorted({_data(r["data_tema"]) for r in redacoes})
+    for atividade, terca in enumerate(temas[:TEMAS_REAIS] + [temas[3]], start=1):
+        entregues = []
+        for indice, r in enumerate(
+            r for r in redacoes if _data(r["data_tema"]) == terca and r["entregue"] == "S"
+        ):
+            envio = datetime(terca.year, terca.month, terca.day, 19, 0) + timedelta(
+                days=2, minutes=indice
+            )
+            entregues.append(
+                {
+                    "id": atividade * 1000 + indice,
+                    "atividade": 7000 + atividade,
+                    "envio": envio,
+                    "correcao": envio + timedelta(days=3),
+                    "nome": r["nome"],
+                    "rm": r["matricula"],
+                    "banca": "ENEM",
+                    "tema": r["tema"],
+                    "notas": [int(r[f"c{n}"]) for n in range(1, 6)],
+                    "final": int(r["total"]),
+                    "turma": f"CASDvest {ano} - {turma.get(r['matricula'], '')}",
+                }
+            )
+        conteudo = planilhas_casd.exportacao_corrija_me(entregues)
+        (saida / f"corrija_me_{terca.isoformat()}.xlsx").write_bytes(conteudo)
 
 
 def main(argv: list[str] | None = None) -> None:

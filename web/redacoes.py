@@ -8,7 +8,7 @@ from django.shortcuts import render
 
 from core.models import RegistroImportacao
 from ingestao import redacoes
-from ingestao.modelos import gerar_modelo
+from ingestao.modelos import TIPO_XLSX
 
 from .acesso import diretor_required
 from .forms_importacao import ImportacaoRedacoesForm
@@ -25,9 +25,9 @@ def redacoes_importar(request):
         form,
         colunas=redacoes.COLUNAS,
         opcionais=redacoes.OPCIONAIS,
-        parametros={"ano": dados["ano"]} if dados else {},
+        parametros={"ano": dados["ano"], "terca": dados["terca"].isoformat()} if dados else {},
         importar=lambda linhas, gravar: redacoes.importar_redacoes(
-            linhas, ano=dados["ano"], autor=request.user, gravar=gravar
+            linhas, ano=dados["ano"], terca=dados["terca"], autor=request.user, gravar=gravar
         ),
         registrar=lambda nome, tamanho, resumo: registrar_trilha(
             autor=request.user,
@@ -44,13 +44,9 @@ def redacoes_importar(request):
 
 @login_required
 def redacoes_modelo(request, formato):
-    ano = date.today().year
-    try:
-        conteudo, mime, nome = gerar_modelo(
-            "modelo_redacoes", list(redacoes.COLUNAS), redacoes.exemplos(ano), formato
-        )
-    except ValueError:
-        raise Http404 from None
-    resposta = HttpResponse(conteudo, content_type=mime)
-    resposta["Content-Disposition"] = f'attachment; filename="{nome}"'
+    """Exportação do Corrija-me no layout real, com redações sintéticas. Só .xlsx."""
+    if formato != "xlsx":
+        raise Http404
+    resposta = HttpResponse(redacoes.exemplo(date.today().year), content_type=TIPO_XLSX)
+    resposta["Content-Disposition"] = 'attachment; filename="modelo_corrija_me.xlsx"'
     return resposta

@@ -172,3 +172,32 @@ def test_limite_linhas_por_parametro():
 def test_limite_linhas_zero_nao_vira_o_padrao():
     with pytest.raises(ArquivoInvalidoError, match="limite de 0"):
         ler_tabela(_csv("m;n\n1;a\n"), "a.csv", limite_linhas=0)
+
+
+def _livro_com_abas():
+    livro = Workbook()
+    livro.active.title = "Primeira"
+    livro.active.append(["m", "n"])
+    livro.active.append(["1", "a"])
+    outra = livro.create_sheet("Presença Anual")
+    outra.append(["m", "n"])
+    outra.append(["2", "b"])
+    saida = io.BytesIO()
+    livro.save(saida)
+    return saida.getvalue()
+
+
+def test_xlsm_e_escolha_de_aba():
+    conteudo = _livro_com_abas()
+    assert ler_tabela(io.BytesIO(conteudo), "relatorio.xlsm")[0]["m"] == "1"
+    linhas = ler_tabela(io.BytesIO(conteudo), "a.xlsx", aba="presenca anual")
+    assert linhas[0]["m"] == "2"
+    with pytest.raises(ArquivoInvalidoError, match="não existe no arquivo"):
+        ler_tabela(io.BytesIO(conteudo), "a.xlsx", aba="Outra")
+
+
+def test_ler_bruto_csv_e_extensao():
+    bruto = leitura.ler_bruto(_csv("m;n\n1;a\n"), "a.csv", aba="ignorada")
+    assert bruto == [["m", "n"], ["1", "a"]]
+    with pytest.raises(ArquivoInvalidoError, match=".xlsm"):
+        leitura.ler_bruto(_csv("m\n1\n"), "a.txt")

@@ -32,7 +32,7 @@ Essas são **suposições** para a base sintética. Confirmar com a Direção os
 
 Uma pasta por ano letivo (`pequena/2026/`...). Todos os arquivos são CSV em UTF-8, com separador `;`, datas `dd/mm/aaaa` e decimal com vírgula, como nas planilhas em português.
 
-> Os formatos reais das exportações da catraca, do P+ e do Corrija-me ainda não foram vistos. Estes são **plausíveis**, baseados na ata da 1ª reunião, e devem ser ajustados quando as amostras chegarem à pasta restrita do Drive.
+> Os CSVs abaixo são a base de referência, num formato simplificado (uma tabela por fonte). Os layouts reais da catraca/grade de presença, do P+ e do Corrija-me, vistos em 16/11/2026, estão nas réplicas da seção seguinte, que é o que as importações leem.
 
 | Arquivo | Origem simulada | Colunas | Uma linha por |
 |---|---|---|---|
@@ -45,6 +45,18 @@ Uma pasta por ano letivo (`pequena/2026/`...). Todos os arquivos são CSV em UTF
 | `justificativas.csv` | RH | `data`, `matricula`, `aprovada` | ausência justificada (RN002) |
 | `p_mais_simulados.csv` | P+ | `simulado`, `data`, `matricula`, `nome`, `presenca` (`Presente`/`Ausente`) e, por área (`LC`, `CH`, `CN`, `MT`), `<area>_acertos` (0–45) e `<area>_tri` | aluno e simulado; ausente tem as notas vazias |
 | `corrija_me_redacoes.csv` | Corrija-me | `data_tema`, `tema`, `matricula`, `nome`, `entregue` (`S`/`N`), `c1`–`c5` (0–200), `total` | aluno e tema; não entregue tem as notas vazias |
+
+## Réplicas das planilhas reais (`pequena/2026/planilhas/`)
+
+As importações de frequência, simulados e redação leem os layouts das planilhas que o CASD usa (`docs/dominio-casd.md`, seção 6). O gerador monta, a partir dos CSVs de 2026, réplicas nesses layouts, com a coluna `Matrícula` que a equipe acrescentou, e-mails `@exemplo.org` e nomes sintéticos:
+
+| Arquivo | Layout real | Conteúdo |
+|---|---|---|
+| `presenca_anual.xlsx` | Grade "Presença Anual" (`Controle de Presença AAAA.xlsx`) | Os 20 alunos, P/F/J/S por dia; mais a linha da passagem sem cadastro (`S999999`) |
+| `p_mais_simulado_06.xlsx` a `_08.xlsx` | Relatório do P+ (abas de notas TRI e de acertos) | Simulados dos ciclos 6 (aluno ausente) a 8 (queda de desempenho) |
+| `corrija_me_AAAA-MM-DD.xlsx` | Exportação do Corrija-me (`Worksheet`) | Só as entregas de três temas, banca ENEM; o de 24/02 tem a redação sem RM |
+
+Os CSVs continuam sendo a base de referência. As réplicas são reprodutíveis: o mesmo gerador produz os mesmos bytes.
 
 ## Perfis com resultado conhecido
 

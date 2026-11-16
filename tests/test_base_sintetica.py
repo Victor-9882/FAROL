@@ -65,8 +65,30 @@ def test_semente_diferente_gera_outra_base(tmp_path):
 def test_base_versionada_corresponde_ao_gerador(tmp_path):
     """Quem muda o gerador precisa regerar e versionar a base pequena."""
     gerador.main(["--destino", str(tmp_path)])
-    versionada = {k: v for k, v in conteudo(BASE_PEQUENA).items() if k.endswith((".csv", ".json"))}
+    extensoes = (".csv", ".json", ".xlsx")
+    versionada = {k: v for k, v in conteudo(BASE_PEQUENA).items() if k.endswith(extensoes)}
     assert conteudo(tmp_path) == versionada
+
+
+def test_replicas_das_planilhas_reais_sao_versionadas():
+    """As réplicas sintéticas dos layouts reais (#74) existem e não trazem e-mail real."""
+    pasta = BASE_PEQUENA / "2026" / "planilhas"
+    nomes = sorted(p.name for p in pasta.glob("*.xlsx"))
+    assert "presenca_anual.xlsx" in nomes
+    assert [n for n in nomes if n.startswith("p_mais")] == [
+        "p_mais_simulado_06.xlsx",
+        "p_mais_simulado_07.xlsx",
+        "p_mais_simulado_08.xlsx",
+    ]
+    assert len([n for n in nomes if n.startswith("corrija_me")]) == 3
+    from openpyxl import load_workbook
+
+    for arquivo in pasta.glob("*.xlsx"):
+        for aba in load_workbook(arquivo, read_only=True).worksheets:
+            for linha in aba.iter_rows(values_only=True):
+                for valor in linha:
+                    if isinstance(valor, str) and "@" in valor:
+                        assert valor.endswith("@exemplo.org")
 
 
 # --- Tamanho (NF012) ----------------------------------------------------------------

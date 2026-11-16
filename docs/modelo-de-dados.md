@@ -37,7 +37,7 @@ Registradas na SM #41, para atualizar o DER, o Diagrama de Classes e o Relatóri
 1. **Tabela `HistoricoTurma`** (aluno, turma, início, fim). O DER guarda só a turma atual, o que não atende à RN011. Esse problema foi apontado pela revisão estática do Plano de Testes.
 2. **`Intervencao.aluno`**. No DER, a intervenção se liga só ao alerta, mas o RF019 admite intervenção sem alerta.
 3. **`ResultadoSimulado.presente`**. Registra a ausência no simulado, que não é avaliada em desempenho (RN009). Um ausente não tem nota (restrição no banco).
-4. **`ResultadoRedacao`**: `nota_competencias` virou cinco colunas (`nota_c1` a `nota_c5`). Também foram acrescentados `entregue` (já presente no Diagrama de Classes) e `tema`. O tema é identificado pela terça-feira em que foi lançado (RN007).
+4. **`ResultadoRedacao`**: `nota_competencias` virou cinco colunas (`nota_c1` a `nota_c5`), decimais com uma casa (a banca VUNESP do Corrija-me dá notas como 21,4). Também foram acrescentados `entregue` (já presente no Diagrama de Classes), `tema`, `banca` e `nota_final`. O tema é identificado pela terça-feira em que foi lançado (RN007).
 5. **`Alerta.regra`, `Alerta.ciclo` e `Alerta.area`**. Registram qual regra e qual limiar geraram o alerta e a área do alerta de desempenho (RF015).
 6. **`CicloCalendario` sem `temaRedacaoSemana`**, com `data_simulado`. Cada ciclo tem duas semanas e, portanto, dois temas (RN007); os temas ficam na tabela `TemaRedacao`, e o ciclo registra a data do simulado (RN006).
 7. **Tabela `RegistroAlteracao`** (autor, modelo, objeto, campo, valor anterior e novo). O DER não tem trilha de auditoria, exigida pela NF009.
@@ -88,32 +88,36 @@ Sem migração: é código compartilhado por todas as importações.
 - **Tela:** `pendencias/`, só do Diretor (RN013), com filtro por origem, situação e ano. O nome do cadastro aparece só na própria página, quando a associação pede confirmação.
 - **Trilha:** `RegistroImportacao.pendencias` conta as linhas que viraram pendência; os tipos `FREQUENCIA`, `SIMULADOS` e `REDACOES` ficam prontos para RF003 a RF005. `web.importacao.registrar_trilha` grava a trilha a partir do resumo.
 
-## Frequência da catraca (RF003, #14)
+## Planilhas reais (#74)
 
-- **Arquivo:** uma linha por **passagem**: `data` (aceita `dd/mm/aaaa hh:mm`, a hora é ignorada), `matricula` e, opcional, `nome`. O Diretor informa o ano letivo e o período (`inicio` e `fim`, dentro do ano). Limite próprio de linhas: `IMPORTACAO_LIMITE_LINHAS_CATRACA` (padrão 50.000, cerca de dois meses de 900 alunos). Modelo para download em `frequencia/importar/modelo/<csv|xlsx>/`, com o ano atual.
-- **Apuração (RN001):** para cada aluno do ano (turma do ano letivo, sem `INVALIDO`, entre o ingresso e a saída, RN004) e cada dia de `dias_letivos(inicio, fim)` (RN005), um `RegistroFrequencia`: `presente` se houve ao menos uma passagem, ausente se não houve. Não há tolerância de atraso: o arquivo não é lido por hora.
-- **Avisos:** passagem em dia não letivo não vira registro, mas gera aviso por dia ("dia não letivo com N passagens; o calendário está atualizado?"); também passagem antes do ingresso ou depois da saída, nenhum período letivo cadastrado e "calendário definido até dd/mm" quando o último período termina antes do fim informado.
-- **Linhas:** data em branco, inválida ou fora do período é inconsistente; várias passagens do mesmo aluno no dia contam uma presença (as demais são ignoradas). Matrícula sem aluno vira pendência (`FREQUENCIA`, referência = dia); a mesma pessoa passando várias vezes no dia gera uma pendência só.
-- **Reimportação (NF008):** substitui `presente` dos registros existentes do período, com `RegistroAlteracao` por registro alterado (NF009), e nunca altera `justificada` (RN002). O resumo lista a sobreposição ("N registros já existem…"); confirmar a conferência é confirmar a substituição. Pendência já associada conta como passagem do aluno; já resolvida é ignorada.
-- **Associação de pendência:** marca o aluno presente naquele dia (cria ou altera o registro, com auditoria). Recusa dia não letivo ou fora da janela do aluno.
-- **Gravação em lote:** `bulk_create` e `bulk_update` em lotes de 2.000 (NF011).
+As três importações leem os layouts das planilhas que o CASD usa no dia a dia, descritos em `docs/dominio-casd.md` (seção 6). Cabeçalhos e geradores ficam em `ingestao/planilhas_casd.py`; as réplicas sintéticas, em `tests/dados_sinteticos/pequena/2026/planilhas/`. A associação continua pela matrícula (RN003): a equipe acrescentou a coluna `Matrícula` à grade e ao relatório do P+, e no Corrija-me usa a coluna `RM`. Os modelos para download são `.xlsx` no layout real, com linhas sintéticas do ano atual. A leitura aceita `.xlsm` (as macros nunca rodam) e escolhe a aba pelo nome (`ler_tabela(aba=...)`, `ler_bruto`). `executar_importacao(ler=...)` recebe o leitor das planilhas que não são uma tabela simples.
 
-## Simulados do P+ (RF004, #15)
+Em todas as três, uma pendência já associada vale para o aluno escolhido nas reimportações seguintes (`pendencias.aluno_da_linha`); já descartada, a linha é ignorada.
 
-- **Arquivo:** uma linha por aluno e simulado: `data`, `matricula`, `nome` (opcional), `presenca` (`Presente`/`Ausente`, também S/N), `simulado` (opcional, não é guardado) e, por área (`lc`, `ch`, `cn`, `mt`), `<area>_acertos` e `<area>_tri` (RN010). Modelo para download em `simulados/importar/modelo/<csv|xlsx>/`, com o ano atual.
-- **Ciclo (RN006):** o ciclo do ano cuja `data_simulado` é a data da linha ou, se nenhum, o que contém a data. Sem ciclo, a linha é inconsistente: os ciclos precisam ser cadastrados antes.
-- **Valores:** acertos de 0 a 45 por área; TRI de 0 a 1000 com uma casa decimal (vírgula ou ponto). Presente exige as oito notas; ausente (RN009) não pode ter nota e grava as quatro áreas com `presente=False` e sem nota. Simulado antes do ingresso (RN004) ou depois da saída do aluno é inconsistente; aluno repetido no mesmo simulado também.
-- **Reimportação:** atualiza o que mudou, com `RegistroAlteracao` por campo (NF009); o resumo avisa quantos alunos já tinham resultado (NF008). Conta linhas: criada, atualizada ou sem alteração.
-- **Pendências (RN003):** referência = ciclo; `dados` guarda presença e notas. Associar grava as quatro áreas para o aluno e recusa se ele já tem resultado no simulado ou se o simulado é de fora da janela dele.
-- **Datas do ciclo fixas:** `CicloCalendario.clean()` recusa mudar `data_inicio`, `data_fim` ou `data_simulado` de ciclo que já tem resultado de simulado. Vale para a tela e para a importação do calendário (`docs/dominio-casd.md`, seção 4).
+## Frequência: grade "Presença Anual" (RF003, #14)
 
-## Redações do Corrija-me (RF005, #16)
+- **Arquivo:** a planilha `Controle de Presença AAAA.xlsx`, aba "Presença Anual" (o formulário aceita outro nome, como "Nivelamento"). O cabeçalho é a primeira das dez linhas iniciais com `Nome` e `Matrícula`; cada coluna cujo cabeçalho é uma data (ou `dd/mm`, completada com o ano letivo) é um dia. As outras colunas (`Turma`, `% Presença`, `Faltas`) são ignoradas, assim como linhas sem matrícula e sem nome com P, F ou J (título, totais, médias). Até 500 colunas.
+- **Códigos (RN001, RN002):** `P` grava presente; `F` grava falta sem justificativa; `J` grava falta justificada; `S` (sem aula) não grava. A grade manda: reimportar troca F por J ou P conforme a planilha, com `RegistroAlteracao` por campo (NF009).
+- **Calendário (RN005) e janela do aluno (RN004):** só entram dias letivos de `dias_letivos` e entre o ingresso e a saída. Avisos por dia: P, F ou J em dia não letivo ("o calendário está atualizado?") e S em dia letivo. Avisos gerais: registros fora da janela do aluno, dias letivos sem coluna na grade, códigos desconhecidos, colunas de outro ano, nenhum período letivo e "calendário definido até dd/mm".
+- **Resumo:** conta linhas de aluno (novo, com alteração, sem alteração, pendência, inconsistente: aluno repetido) e, à parte, registros criados, alterados e iguais, presenças, faltas e justificadas. A sobreposição lista os registros já existentes no período da grade; confirmar a conferência é confirmar a substituição (NF008). Aluno ausente da grade não é tocado (NF007).
+- **Pendência:** uma por linha (`referencia = "grade"`), com os códigos da linha em `dados`; associar grava os P, F e J aplicáveis para o aluno.
 
-- **Arquivo:** uma linha por aluno e tema: `data_tema` (terça-feira, RN007), `tema` (título, opcional se o tema já está cadastrado), `matricula`, `nome` (opcional), `entregue` (S/N), `c1` a `c5` (0 a 200) e `total` (opcional). Modelo para download em `redacoes/importar/modelo/<csv|xlsx>/`, com o ano atual.
-- **Tema:** a importação cria o `TemaRedacao` da terça que ainda não existe, com o título do arquivo (os temas são publicados no Corrija-me, `docs/dominio-casd.md`, seção 5). Se ele já existe com outro título (caixa e acento à parte), mantém o cadastrado e avisa uma vez por terça. Sem título e sem cadastro, a linha é inconsistente. `ResultadoRedacao.tema` recebe o título cadastrado.
-- **Valores:** entregue exige as cinco competências, de 0 a 200; `total`, se vier, precisa ser a soma. Não entregue fica registrada com `entregue=False` e sem notas (`total` vazio ou 0); com nota, é inconsistente. Data que não é terça, de outro ano, aluno repetido no tema e tema de antes do ingresso (considerando a semana toda, terça a segunda) ou depois da saída também são inconsistentes (RN004).
-- **Reimportação:** atualiza o que mudou, com `RegistroAlteracao` por campo (NF009); o resumo avisa quantas redações já existiam (NF008).
-- **Pendências (RN003):** inclusive a matrícula em branco, vista no export real. Referência = terça do tema; `dados` guarda entrega e notas. Associar grava a redação para o aluno e recusa se ele já tem redação no tema, se o tema não está cadastrado ou se é de fora da janela dele.
+## Simulados: relatório do P+ (RF004, #15)
+
+- **Arquivo:** o relatório de **uma** avaliação (`.xlsm` ou `.xlsx`). Abas `Resultados e Classificações TRI` (com `Matrícula`, `ID Aluno`, `Nome Avaliação`, `Nome Aluno` e `<Área> - Etapa N - Nota`) e `Acertos e Porcentagens TRI` (`ID Aluno` e `<Área> - Acertos`), unidas pelo `ID Aluno`. CSV não serve: são duas abas.
+- **Ciclo (RN006):** o P+ não traz data; o Diretor escolhe o ciclo no formulário (do ano letivo informado). A janela do aluno (RN004) usa a data do simulado do ciclo (ou o fim do ciclo).
+- **Etapas e ausência (RN009, RN010):** área com nota e acertos em branco é falta naquela etapa (Etapa 1: LC e CH; Etapa 2: CN e MT): grava `presente=False`, sem nota, só nas áreas da etapa. Faltou às duas: ausente. Só um dos dois em branco é inconsistente. Acertos de 0 a 45; TRI de 0 a 1000, uma casa decimal.
+- **Linhas inconsistentes:** outra avaliação (o `Nome Avaliação` difere do mais frequente), aluno sem linha na aba de acertos, aluno repetido, simulado fora da janela.
+- **Reimportação e pendência:** como antes (auditoria por campo; referência = ciclo; associar grava as quatro áreas e recusa se o aluno já tem resultado no ciclo). As datas de ciclo com resultados são fixas (`CicloCalendario.clean()`).
+
+## Redações: exportação do Corrija-me (RF005, #16)
+
+- **Arquivo:** a aba `Worksheet` exportada, de **um** tema, com `RM` (matrícula), `NOME COMPLETO`, `BANCA`, `TEMA`, `C1`–`C5`, `NOTAL FINAL` (sic), `ID DA ATIVIDADE` e `DATA ENVIO`; as demais colunas são ignoradas. O Diretor escolhe a terça do tema (RN007), porque o arquivo não traz a data do tema.
+- **Tema:** se não há `TemaRedacao` na terça, ele é criado com o título mais frequente do arquivo; se há, o cadastrado é mantido, com aviso quando o título difere. Sem tema e sem título, todas as linhas são inconsistentes.
+- **Banca:** ENEM (ou banca em branco) exige C1 a C5, de 0 a 200, e a nota final, se vier, tem de ser a soma (tolerância de 0,5). Outras bancas (VUNESP, usada no CASDinho) exigem C1 a C4, aceitam decimais e guardam a nota final da banca. `ResultadoRedacao` ganhou `banca` e `nota_final`, e as competências viraram decimais com uma casa (migração 0009); `nota_total` é a nota final ou, sem ela, a soma das cinco.
+- **Não entregue:** o Corrija-me só exporta entregas. Aluno do ano (não `INVALIDO`), no curso na semana do tema (RN004) e sem linha no arquivo ganha `entregue=False`, sem nota; registro já existente não é tocado. Associar uma pendência a ele troca o não entregue pela redação, com auditoria.
+- **Linhas:** reenvio do mesmo aluno vale o mais recente (`DATA ENVIO`) e os demais contam como ignorados; outra atividade (`ID DA ATIVIDADE` diferente do mais frequente) e tema fora da janela do aluno são inconsistentes.
+- **Reimportação e pendência:** auditoria por campo; referência = terça do tema.
 
 ## Suposições a confirmar
 

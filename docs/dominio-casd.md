@@ -76,13 +76,28 @@ Quando um fato daqui mudar um requisito, ele precisa de uma Solicitação de Mud
 - **Temas (RN007):** um tema novo toda terça-feira, publicado manualmente no **Corrija-me** pelo membro de redações, junto com os professores de redação. Os temas não estão na planilha do calendário.
 - A importação do RF005 (#16) cria o `TemaRedacao` da terça a partir da exportação do Corrija-me, quando ainda não existe; se já existe, mantém o cadastrado e avisa se o título difere. O cadastro manual serve para corrigir ou antecipar.
 
-## 6. Dados reais
+## 6. Planilhas do dia a dia
+
+*Amostras entregues pela equipe em 16/11/2026 (#74). Os arquivos têm nomes e e-mails de alunos e ficam só na pasta restrita do Drive; aqui vai só o layout. Réplicas sintéticas: `tests/dados_sinteticos/pequena/2026/planilhas/`.*
+
+- **Matrícula (RN003 mantida):** nenhuma das planilhas trazia a matrícula. A equipe decidiu manter a associação pela matrícula e acrescentar a coluna `Matrícula` à grade de presença e ao relatório do P+; no Corrija-me, a matrícula vai na coluna `RM`, que já existe e vinha vazia.
+- **Catraca e grade de presença** (`Controle de Presença AAAA.xlsx`):
+  - a catraca gera uma aba por dia com `NOME` e a hora de chegada (vazio = não passou); a equipe monta com `PROCV` pelo nome a grade "Presença Anual" (e "Nivelamento", no início do ano);
+  - a grade tem uma linha de título, uma de "Semana N" e o cabeçalho `Nome`, `Turma`, `% Presença`, `Faltas totais` e uma coluna por dia útil, agrupadas por semana com uma coluna `Faltas`;
+  - códigos: `P` presente, `F` falta (sem passagem), `J` falta justificada, `S` sem aula (feriado, recesso ou antes do início do semiextensivo); a `Turma` vira "Desligado" quando o aluno sai;
+  - as abas "Chegada" pontuam o horário (de 5, até 18h15, a 1, até 21h50); a pontualidade não é requisito do FAROL hoje (RN001 não tem tolerância de atraso);
+  - o FAROL importa a grade (decisão da equipe em 16/11/2026), não as abas diárias.
+- **Relatório do P+** (`.xlsm`, uma avaliação por arquivo): abas "Resultados e Classificações TRI" (nota TRI e posições por área e etapa) e "Acertos e Porcentagens TRI" (questões, acertos e porcentagem por área), com `ID Aluno`, `Inscrição`, `E-mail p4ed`, `Nome Aluno` e `Turma` ("CASDvest AAAA - Turma N"). Sem data: o nome da avaliação é do tipo "4º Simulado Enem". Etapa 1 = Linguagens e Humanas; Etapa 2 = Natureza e Matemática; área em branco = falta naquela etapa.
+- **Exportação do Corrija-me** (aba `Worksheet`): uma linha por redação **entregue**, com `ID DA REDACAO`, `ID DA ATIVIDADE`, `DATA ENVIO`, `DATA CORREÇÃO`, `NOME COMPLETO`, `EMAIL`, `RM`, `BANCA`, `TEMA`, `C1`–`C5`, `NOTAL FINAL` (sic) e dados de turma. Não traz a data de lançamento do tema. Na amostra (CASDinho), a banca é VUNESP: quatro critérios, notas decimais e nota final de 0 a 100; no CASDvest, espera-se a banca ENEM (cinco competências de 0 a 200).
+- **Outras planilhas da amostra** (controle de presença de redação, dashboard de redação, protótipo antigo) são derivadas ou de acompanhamento e não são fontes de importação. A aba de contato com alunos inativos traz apelidos da gestão e resumos de conversa: nunca copiar.
+
+## 7. Dados reais
 
 - Planilhas e exportações reais (catraca, P+, Corrija-me, cadastro, calendário) ficam só na **pasta restrita do Drive**. Nunca no Git, em issues, PRs ou comentários.
 - Desenvolvimento e testes usam só a base sintética em `tests/dados_sinteticos/` (NF017).
 - Para descrever o layout de uma planilha real numa issue ou PR, use só o cabeçalho e linhas inventadas.
 
-## 7. Onde cada decisão está registrada
+## 8. Onde cada decisão está registrada
 
 | Assunto | Registro |
 |---|---|
@@ -93,3 +108,4 @@ Quando um fato daqui mudar um requisito, ele precisa de uma Solicitação de Mud
 | Semanas do ITA | #64 |
 | Fonte dos temas de redação | Comentário na #16 |
 | Aviso de passagens em dia não letivo no RF003 | Comentário na #14 |
+| Layouts das planilhas reais; matrícula acrescentada; fonte da frequência; tema escolhido pelo Diretor | #74 |
