@@ -45,8 +45,9 @@ Precisam de uma Solicitação de Mudança para atualizar o DER e o Relatório De
 - **`Aluno.corrigir_ingresso(data)`**: atualiza `data_ingresso` e o início do primeiro período de turma; recusa data igual ou posterior ao fim desse período.
 - **`Aluno.objects.ingressados_ate(data)`**: alunos com `data_ingresso <= data` (RN004). **`ativos()`**: `situacao = ATIVO`.
 - **Situação do aluno** (Solicitação de Mudança do DER): `situacao` (`ATIVO`, `DESLIGADO`, `EVADIDO`, `INVALIDO`) e `data_saida`. `DESLIGADO` e `EVADIDO` exigem `data_saida >= data_ingresso`; `ATIVO` exige `data_saida` vazia; `INVALIDO` não exige data. A importação não altera a situação; a situação não altera o `HistoricoTurma`.
-- **Modelos para download** (só Diretor): `alunos/importar/modelo.xlsx` e `.csv`, gerados em memória por `ingestao/modelos.py` (`gerar_modelo(nome, colunas, exemplos, formato)`, reutilizável por RF003 a RF005) com o cabeçalho canônico de `COLUNAS` e duas linhas sintéticas (matrícula `S9000xx`). O modelo baixado importa sem divergência.
-- **LGPD**: por decisão do usuário, o Membro vê as listas de alunos e turmas, com nomes. Escrita (novo, editar, importar) é só do Diretor. Arquivos importados não são guardados.
+- **Modelos para download** (qualquer usuário autenticado): `alunos/importar/modelo.xlsx` e `.csv`, gerados em memória por `ingestao/modelos.py` (`gerar_modelo(nome, colunas, exemplos, formato)`, reutilizável por RF003 a RF005) com o cabeçalho canônico de `COLUNAS` e duas linhas sintéticas (matrícula `S9000xx`). O modelo baixado importa sem divergência.
+- **LGPD**: por decisão do usuário, o Membro vê as listas de alunos e turmas, com nomes. Importar cadastro e baixar os modelos é permitido ao Membro; criar e editar aluno ou turma é só do Diretor. Arquivos importados não são guardados.
+- **Trilha de uploads** (`core.RegistroImportacao`, NF007): ao importar (não ao conferir) grava-se autor, data e hora, tipo, nome do arquivo (sanitizado, máx. 255), tamanho, ano letivo, data de mudança e as contagens do resumo. Nunca o conteúdo, nomes ou matrículas de alunos. Sem exclusão nem edição. Só o Diretor vê, em `importacoes/` (filtro `?usuario=`).
 
 ## Suposições a confirmar
 

@@ -18,6 +18,7 @@ urlpatterns = [
     path("alunos/importar/modelo.xlsx", cadastro.cadastro_modelo_xlsx, name="cadastro_modelo_xlsx"),
     path("alunos/importar/modelo.csv", cadastro.cadastro_modelo_csv, name="cadastro_modelo_csv"),
     path("alunos/<str:matricula>/editar/", cadastro.aluno_editar, name="aluno_editar"),
+    path("importacoes/", cadastro.importacoes, name="importacoes"),
     path("turmas/", cadastro.turmas, name="turmas"),
     path("turmas/nova/", cadastro.turma_nova, name="turma_nova"),
     path("turmas/<int:pk>/", cadastro.turma_detalhe, name="turma_detalhe"),

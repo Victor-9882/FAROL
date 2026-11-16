@@ -39,12 +39,12 @@ def test_modelo_baixado_importa_sem_divergencia(cliente_diretor, diretor, format
 
 
 @pytest.mark.parametrize("formato", FORMATOS)
-def test_membro_recebe_403_e_anonimo_vai_para_login(client, membro, formato):
+def test_membro_baixa_e_anonimo_vai_para_login(client, membro, formato):
     url = reverse(f"web:cadastro_modelo_{formato}")
     resp = client.get(url)
     assert resp.status_code == 302 and reverse("web:login") in resp["Location"]
     client.force_login(membro)
-    assert client.get(url).status_code == 403
+    assert client.get(url).status_code == 200
 
 
 def test_geradores_reutilizaveis_aceitam_colunas_quaisquer():

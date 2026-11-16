@@ -7,7 +7,7 @@ import pytest
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.urls import reverse
 
-from core.models import Aluno, HistoricoTurma, RegistroAlteracao, Turma
+from core.models import Aluno, HistoricoTurma, RegistroAlteracao, RegistroImportacao, Turma
 from ingestao import leitura
 
 pytestmark = pytest.mark.django_db
@@ -34,7 +34,6 @@ def _rotas_escrita(aluno, turma_a):
         reverse("web:aluno_editar", args=[aluno.matricula]),
         reverse("web:turma_nova"),
         reverse("web:turma_editar", args=[turma_a.pk]),
-        reverse("web:cadastro_importar"),
     ]
 
 
@@ -271,3 +270,66 @@ def test_nao_existe_rota_de_exclusao():
 
     nomes = [str(p.pattern) + (p.name or "") for p in urlpatterns]
     assert not [n for n in nomes if any(x in n for x in ("exclu", "delet", "apag", "remov"))]
+
+
+def test_membro_acessa_importacao_e_modelos(client, membro):
+    client.force_login(membro)
+    for nome in ("cadastro_importar", "cadastro_modelo_xlsx", "cadastro_modelo_csv"):
+        assert client.get(reverse(f"web:{nome}")).status_code == 200, nome
+
+
+def test_membro_importa_e_registro_leva_o_autor(client, membro):
+    client.force_login(membro)
+    url = reverse("web:cadastro_importar")
+    client.post(url, _form(_upload(PEQUENA.read_bytes()), "conferir"))
+    assert not RegistroImportacao.objects.exists()
+    client.post(url, _form(_upload(PEQUENA.read_bytes(), "../x/cad.csv"), "importar"))
+    reg = RegistroImportacao.objects.get()
+    assert reg.autor == membro and reg.tipo == "CADASTRO" and reg.ano == 2026
+    assert reg.nome_arquivo == "cad.csv" and reg.tamanho_bytes == len(PEQUENA.read_bytes())
+    assert reg.criados == 20 and reg.turmas_criadas == 5
+    assert reg.data_mudanca == date(2026, 3, 2)
+
+
+def test_registro_nao_contem_nome_de_aluno(cliente_diretor):
+    cliente_diretor.post(
+        reverse("web:cadastro_importar"), _form(_upload(PEQUENA.read_bytes()), "importar")
+    )
+    nomes = list(Aluno.objects.values_list("nome", flat=True))
+    reg = RegistroImportacao.objects.get()
+    texto = " ".join(str(v) for v in vars(reg).values())
+    assert not any(n in texto for n in nomes)
+
+
+def test_importacoes_so_diretor(client, membro):
+    client.force_login(membro)
+    assert client.get(reverse("web:importacoes")).status_code == 403
+    assert "Importações" not in client.get(reverse("web:alunos")).content.decode()
+
+
+def test_importacoes_lista_ordenada_com_autor_e_filtro(cliente_diretor, diretor, membro):
+    for autor, nome in ((diretor, "a.csv"), (membro, "b.csv"), (diretor, "c.csv")):
+        RegistroImportacao.objects.create(
+            autor=autor, tipo="CADASTRO", nome_arquivo=nome, tamanho_bytes=1, ano=2026
+        )
+    resp = cliente_diretor.get(reverse("web:importacoes"))
+    html = resp.content.decode()
+    assert html.index("c.csv") < html.index("b.csv") < html.index("a.csv")
+    assert "membro" in html and "Importações" in html
+    filtrada = cliente_diretor.get(reverse("web:importacoes") + "?usuario=membro").content.decode()
+    assert "b.csv" in filtrada and "a.csv" not in filtrada
+
+
+def test_registro_importacao_sem_exclusao_nem_edicao(diretor):
+    from core.historico import ExclusaoProibidaError
+    from web.urls import urlpatterns
+
+    reg = RegistroImportacao.objects.create(
+        autor=diretor, tipo="CADASTRO", nome_arquivo="a.csv", tamanho_bytes=1, ano=2026
+    )
+    with pytest.raises(ExclusaoProibidaError):
+        reg.delete()
+    nomes = [
+        str(p.pattern) + (p.name or "") for p in urlpatterns if "importacoes" in str(p.pattern)
+    ]
+    assert nomes == ["importacoes/importacoes"]

@@ -483,3 +483,37 @@ class RegistroAlteracao(HistoricoPreservado):
 
     def __str__(self):
         return f"{self.modelo}#{self.objeto_id}.{self.campo} por {self.autor_id}"
+
+
+class RegistroImportacao(HistoricoPreservado):
+    """Trilha de uploads: quem importou qual arquivo e quando (RF006, NF007, NF009).
+
+    Guarda só o nome do arquivo, o tamanho e as contagens do resumo. Nunca guarda o
+    conteúdo do arquivo, nomes ou matrículas de alunos.
+    """
+
+    class Tipo(models.TextChoices):
+        CADASTRO = "CADASTRO", "Cadastro de alunos e turmas"
+
+    autor = models.ForeignKey(
+        Usuario, on_delete=models.PROTECT, related_name="importacoes_registradas"
+    )
+    tipo = models.CharField(max_length=20, choices=Tipo.choices, default=Tipo.CADASTRO)
+    nome_arquivo = models.CharField("arquivo", max_length=255)
+    tamanho_bytes = models.PositiveBigIntegerField("tamanho (bytes)")
+    ano = models.PositiveSmallIntegerField("ano letivo")
+    data_mudanca = models.DateField("data de mudança de turma", null=True, blank=True)
+    criados = models.PositiveIntegerField(default=0)
+    mudancas_turma = models.PositiveIntegerField(default=0)
+    sem_alteracao = models.PositiveIntegerField(default=0)
+    turmas_criadas = models.PositiveIntegerField(default=0)
+    divergencias = models.PositiveIntegerField(default=0)
+    inconsistentes = models.PositiveIntegerField(default=0)
+
+    class Meta:
+        verbose_name = "registro de importação"
+        verbose_name_plural = "registros de importação"
+        ordering = ["-criado_em", "-id"]
+
+    def __str__(self):
+        return f"{self.tipo} {self.nome_arquivo} por {self.autor_id}"

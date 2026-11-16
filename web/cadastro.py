@@ -1,8 +1,12 @@
 """Views de cadastro de alunos e turmas (RF006).
 
 Leitura (listas e detalhe da turma): Diretor e Membro, por decisão do usuário (nomes
-visíveis ao Membro). Escrita (novo, editar, importar): só o Diretor. Não há exclusão (NF007).
+visíveis ao Membro). Importar e baixar modelos: qualquer autenticado (o Diretor
+audita em `importacoes/`).
+Demais escritas (novo, editar): só o Diretor. Não há exclusão (NF007).
 """
+
+import os
 
 from django.contrib.auth.decorators import login_required
 from django.db import transaction
@@ -11,7 +15,7 @@ from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 
 from core.auditoria import historico_de
-from core.models import Aluno, Turma
+from core.models import Aluno, RegistroImportacao, Turma
 from ingestao.cadastro import COLUNAS, EXEMPLOS, importar_cadastro
 from ingestao.leitura import ArquivoInvalidoError, ler_tabela
 from ingestao.modelos import gerar_modelo
@@ -102,7 +106,35 @@ def turma_editar(request, pk):
     return render(request, "web/turma_form.html", contexto)
 
 
+def _registrar(autor, arquivo, dados, resumo):
+    """Trilha do upload: só nome (sanitizado), tamanho e contagens."""
+    nome = os.path.basename(arquivo.name.replace("\\", "/"))
+    nome = "".join(c for c in nome if c.isprintable())[:255] or "arquivo"
+    RegistroImportacao.objects.create(
+        autor=autor,
+        nome_arquivo=nome,
+        tamanho_bytes=arquivo.size,
+        ano=dados["ano"],
+        data_mudanca=dados["data_mudanca"],
+        criados=resumo.criados,
+        mudancas_turma=resumo.mudancas_turma,
+        sem_alteracao=resumo.sem_alteracao,
+        turmas_criadas=resumo.turmas_criadas,
+        divergencias=len(resumo.divergencias),
+        inconsistentes=len(resumo.inconsistentes),
+    )
+
+
 @diretor_required
+def importacoes(request):
+    usuario = request.GET.get("usuario", "").strip()
+    qs = RegistroImportacao.objects.select_related("autor")
+    if usuario:
+        qs = qs.filter(autor__username=usuario)
+    return render(request, "web/importacoes.html", {"registros": qs, "usuario": usuario})
+
+
+@login_required
 def cadastro_importar(request):
     """Um formulário, dois botões: `conferir` (simula) e `importar` (grava). O arquivo é
     reenviado no segundo clique; nada fica em sessão nem em disco."""
@@ -124,6 +156,8 @@ def cadastro_importar(request):
                     data_mudanca=form.cleaned_data["data_mudanca"],
                     gravar=gravado,
                 )
+                if gravado:
+                    _registrar(request.user, arquivo, form.cleaned_data, resumo)
     return render(
         request,
         "web/cadastro_importar.html",
@@ -138,11 +172,11 @@ def _modelo(formato):
     return resposta
 
 
-@diretor_required
+@login_required
 def cadastro_modelo_xlsx(request):
     return _modelo("xlsx")
 
 
-@diretor_required
+@login_required
 def cadastro_modelo_csv(request):
     return _modelo("csv")
