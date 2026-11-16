@@ -38,14 +38,13 @@ Registradas na SM #41, para atualizar o DER, o Diagrama de Classes e o Relatóri
 3. **`ResultadoSimulado.presente`**. Registra a ausência no simulado, que não é avaliada em desempenho (RN009). Um ausente não tem nota (restrição no banco).
 4. **`ResultadoRedacao`**: `nota_competencias` virou cinco colunas (`nota_c1` a `nota_c5`). Também foram acrescentados `entregue` (já presente no Diagrama de Classes) e `tema`. O tema é identificado pela terça-feira em que foi lançado (RN007).
 5. **`Alerta.regra`, `Alerta.ciclo` e `Alerta.area`**. Registram qual regra e qual limiar geraram o alerta e a área do alerta de desempenho (RF015).
-6. **`CicloCalendario` sem `temaRedacaoSemana`**, com `data_simulado`. Cada ciclo tem duas semanas e, portanto, dois temas (RN007); os temas ficam na tabela `TemaRedacao`, e o ciclo registra a data do simulado.
+6. **`CicloCalendario` sem `temaRedacaoSemana`**, com `data_simulado`. Cada ciclo tem duas semanas e, portanto, dois temas (RN007); os temas ficam na tabela `TemaRedacao`, e o ciclo registra a data do simulado (RN006).
 7. **Tabela `RegistroAlteracao`** (autor, modelo, objeto, campo, valor anterior e novo). O DER não tem trilha de auditoria, exigida pela NF009.
 8. **Tabelas `DiaCalendario` e `TemaRedacao`**. O DER não tem onde guardar feriados, recessos (RN005) nem os temas semanais (RN007).
 9. **Tabela `PeriodoLetivo`** (RN005). Define os períodos de aula; as férias ficam entre dois períodos.
 10. **`Aluno.situacao` e `Aluno.data_saida`** (RF006). Registram desligamento, evasão e lançamento inválido; o DER não tem situação do aluno.
 11. **Tabela `RegistroImportacao`** (NF007, NF009). Trilha dos uploads de importação, sem conteúdo de arquivo.
-12. **`CicloCalendario.data_simulado`** (RN006). Data do simulado dentro do ciclo.
-13. **`inteligencia.RegraAlerta`**. Existe só no Diagrama de Classes, não no DER; guarda os limiares no banco (RF018).
+12. **`inteligencia.RegraAlerta`**. Existe só no Diagrama de Classes, não no DER; guarda os limiares no banco (RF018).
 
 ## Cadastro (RF006)
 
