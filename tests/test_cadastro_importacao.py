@@ -1,5 +1,6 @@
 """Importação do cadastro de alunos e turmas (RF006, RN003, RN004, RN011, NF008)."""
 
+import io
 from datetime import date
 from pathlib import Path
 
@@ -154,3 +155,8 @@ def test_importacao_nao_altera_situacao(diretor, turma_a):
     )
     _importar([_linha()], diretor)
     assert Aluno.objects.get(pk="S1").situacao == "EVADIDO"
+
+
+def test_rm_e_aceito_como_matricula():
+    arq = io.BytesIO(b"RM;Nome Completo;Turma;Ingresso\nS1;Ana;T1;02/02/2026\n")
+    assert ler_tabela(arq, "a.csv", colunas=COLUNAS)[0]["matricula"] == "S1"

@@ -97,3 +97,21 @@ def test_limite_de_linhas(monkeypatch):
     assert len(ler_tabela(_csv("m;n\n1;a\n2;b\n"), "a.csv")) == 2
     with pytest.raises(ArquivoInvalidoError):
         ler_tabela(_csv("m;n\n1;a\n2;b\n3;c\n"), "a.csv")
+
+
+def test_cabecalho_fora_da_primeira_linha_e_linha_real_do_arquivo():
+    arq = _xlsx([
+        ["Controle de presença", None, None],
+        [None, None, None],
+        ["RM", "Nome Completo", "Turma"],
+        [260001, "Ana", "T1"],
+    ])  # fmt: skip
+    colunas = {"matricula": ("rm",), "nome": ("nome_completo",), "turma": ()}
+    linhas = ler_tabela(arq, "a.xlsx", colunas=colunas)
+    assert linhas == [{"matricula": "260001", "nome": "Ana", "turma": "T1", "_linha": 4}]
+
+
+def test_cabecalho_ausente_nas_primeiras_linhas_continua_erro():
+    arq = _xlsx([["titulo", None], ["x", "y"], ["a", "b"]])
+    with pytest.raises(ArquivoInvalidoError, match="matricula"):
+        ler_tabela(arq, "a.xlsx", colunas=COLUNAS)

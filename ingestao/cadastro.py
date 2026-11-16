@@ -20,7 +20,7 @@ from core.auditoria import registrar_alteracoes
 from core.models import Aluno, Turma
 
 COLUNAS = {
-    "matricula": (),
+    "matricula": ("rm",),
     "nome": ("nome_completo", "aluno"),
     "turma": (),
     "data_ingresso": ("ingresso", "data_de_ingresso"),

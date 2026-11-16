@@ -15,6 +15,7 @@ from datetime import datetime
 TAMANHO_MAXIMO = 5 * 1024 * 1024  # bytes
 LIMITE_LINHAS = 5000
 EXTENSOES = (".csv", ".xlsx")
+LINHAS_PARA_CABECALHO = 10
 
 
 class ArquivoInvalidoError(Exception):
@@ -58,11 +59,23 @@ def _linhas_xlsx(conteudo: bytes) -> list[list]:
         livro.close()
 
 
+def _achar_cabecalho(bruto: list[list], colunas) -> int:
+    """Índice do cabeçalho: a 1ª linha (entre as 10 primeiras) com todas as colunas exigidas."""
+    if colunas:
+        for indice, linha in enumerate(bruto[:LINHAS_PARA_CABECALHO]):
+            nomes = {normalizar_cabecalho(c) for c in linha}
+            if all(c in nomes or any(s in nomes for s in sin) for c, sin in colunas.items()):
+                return indice
+    return 0
+
+
 def ler_tabela(arquivo, nome_arquivo: str, *, colunas: dict[str, tuple[str, ...]] | None = None):
     """Lê a primeira aba (XLSX) ou o CSV e devolve uma lista de dicionários.
 
     `colunas` mapeia o nome canônico de cada coluna obrigatória aos sinônimos aceitos (já
-    normalizados). Cada linha traz `_linha`, o número da linha no arquivo (cabeçalho é 1).
+    normalizados). Cada linha traz `_linha`, o número da linha no arquivo.
+    O cabeçalho é a linha 1 ou, se `colunas` for dado, a primeira das 10 linhas iniciais que
+    traga todas as colunas.
     Linhas totalmente vazias são puladas. Datas do XLSX viram `date`; matrícula numérica
     vira texto inteiro.
     """
@@ -75,10 +88,11 @@ def ler_tabela(arquivo, nome_arquivo: str, *, colunas: dict[str, tuple[str, ...]
     bruto = _linhas_xlsx(conteudo) if nome.endswith(".xlsx") else _linhas_csv(conteudo)
     if len(bruto) < 2:
         raise ArquivoInvalidoError("O arquivo não tem linhas de dados.")
-    if len(bruto) - 1 > LIMITE_LINHAS:
+    if len(bruto) > LIMITE_LINHAS + 1:
         raise ArquivoInvalidoError(f"O arquivo excede o limite de {LIMITE_LINHAS} linhas.")
 
-    cabecalho = [normalizar_cabecalho(c) for c in bruto[0]]
+    inicio = _achar_cabecalho(bruto, colunas)
+    cabecalho = [normalizar_cabecalho(c) for c in bruto[inicio]]
     if colunas:
         renomear = {}
         for canonico, sinonimos in colunas.items():
@@ -89,7 +103,7 @@ def ler_tabela(arquivo, nome_arquivo: str, *, colunas: dict[str, tuple[str, ...]
         cabecalho = [renomear.get(c, c) for c in cabecalho]
 
     linhas = []
-    for numero, valores in enumerate(bruto[1:], start=2):
+    for numero, valores in enumerate(bruto[inicio + 1 :], start=inicio + 2):
         celulas = [_celula(v) for v in valores]
         if all(v is None or v == "" for v in celulas):
             continue
