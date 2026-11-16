@@ -163,6 +163,12 @@ Em todas as três, uma pendência já associada vale para o aluno escolhido nas 
 - **Pré-visualização obrigatória:** a tela mostra quantos alunos seriam sinalizados com o limiar atual e com o novo. Na frequência, conta as semanas do ciclo de referência; no desempenho, o ciclo de referência (`alertas.simular_*`, sem gravar). "Salvar" só vale para o mesmo valor pré-visualizado.
 - **Troca (`regras.alterar_limiar`):** desativa a regra vigente e cria outra, com a descrição gerada a partir de `config/regras_padrao.yaml`. Os alertas antigos continuam apontando para o limiar que os gerou. Audita com `RegistroAlteracao`: `ativa` da regra antiga e `limiar` anterior e novo da nova, com autor e data (NF009). Em seguida, os alertas do ano são regerados (`alertas.gerar_ano`).
 
+## Histórico de intervenções (RF020, #31)
+
+- **Tela `intervencoes/`:** só do Diretor (RN013, NF013); o Membro recebe 403. Somente leitura: sem editar nem excluir (NF007). Não há migração.
+- **Escopo:** todas as intervenções, de todos os anos e gestões, inclusive de alunos não ativos e de usuários revogados. Ordem `-data, -id`, 50 por página; os links de página preservam os filtros.
+- **Filtros (GET):** `aluno` (matrícula exata ou parte do nome; é busca de consulta, não associação, RN003), `tipo`, `desfecho` (inclui `PENDENTE`, o desfecho ainda em branco) e período `de`/`ate` sobre `Intervencao.data`, inclusivo nas duas pontas. `de` posterior a `ate` é erro de formulário e a lista fica vazia.
+
 ## Suposições a confirmar
 
 - **Limiares dos alertas:** provisórios até a definição com a Direção (FAROL_Contexto, "Questões em aberto", itens 2 e 3). Frequência: 3 faltas não justificadas na semana; desempenho: queda de 30 pontos TRI. Evolução no RF015 usa o mesmo limiar para cima. O Diretor muda os limiares no sistema (RF018).
