@@ -8,10 +8,11 @@ Mensagens de erro nunca incluem conteúdo de células (LGPD).
 import csv
 import io
 import itertools
+import os
 import re
 import unicodedata
 import zipfile
-from datetime import datetime
+from datetime import date, datetime
 
 TAMANHO_MAXIMO = 5 * 1024 * 1024  # bytes
 LIMITE_LINHAS = 5000
@@ -28,6 +29,26 @@ def normalizar_cabecalho(texto) -> str:
     """Minúsculas, sem acento; espaços e traços viram `_`."""
     sem_acento = unicodedata.normalize("NFKD", str(texto or "")).encode("ascii", "ignore").decode()
     return re.sub(r"[\s\-]+", "_", sem_acento.strip().lower())
+
+
+def ler_data(valor) -> date | None:
+    """Data de uma célula: `date`/`datetime` do XLSX ou texto `dd/mm/aaaa` ou `aaaa-mm-dd`."""
+    if isinstance(valor, datetime):
+        return valor.date()
+    if isinstance(valor, date):
+        return valor
+    for formato in ("%d/%m/%Y", "%Y-%m-%d"):
+        try:
+            return datetime.strptime(str(valor or "").strip(), formato).date()
+        except ValueError:
+            continue
+    return None
+
+
+def nome_arquivo_seguro(arquivo) -> str:
+    """Nome do upload sem diretórios nem caracteres de controle, para a trilha."""
+    nome = os.path.basename(arquivo.name.replace("\\", "/"))
+    return "".join(c for c in nome if c.isprintable())[:255] or "arquivo"
 
 
 def _celula(valor):

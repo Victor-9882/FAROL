@@ -1,6 +1,6 @@
 from django.urls import path
 
-from . import cadastro, views
+from . import cadastro, calendario, views
 
 app_name = "web"
 
@@ -23,6 +23,15 @@ urlpatterns = [
     path("turmas/nova/", cadastro.turma_nova, name="turma_nova"),
     path("turmas/<int:pk>/", cadastro.turma_detalhe, name="turma_detalhe"),
     path("turmas/<int:pk>/editar/", cadastro.turma_editar, name="turma_editar"),
+    path("calendario/", calendario.calendario, name="calendario"),
+    path("calendario/importar/", calendario.calendario_importar, name="calendario_importar"),
+    path(
+        "calendario/importar/modelo/<slug:tipo>/<slug:formato>/",
+        calendario.calendario_modelo,
+        name="calendario_modelo",
+    ),
+    path("calendario/<slug:tipo>/novo/", calendario.calendario_item, name="calendario_item_novo"),
+    path("calendario/<slug:tipo>/<int:pk>/", calendario.calendario_item, name="calendario_item"),
     path("definir-senha/<uidb64>/<token>/", views.DefinirSenha.as_view(), name="definir_senha"),
     path("saude/", views.saude, name="saude"),
 ]

@@ -8,7 +8,10 @@ Implementação física do Diagrama de Classes e do DER do Relatório Descritivo
 | `core.Turma` | Turma | Única por nome e ano letivo |
 | `core.Aluno` | Aluno | Matrícula é a chave primária (RN003); `turma` é a turma atual |
 | `core.HistoricoTurma` | **nova** | Períodos do aluno em cada turma (RN011) |
-| `core.CicloCalendario` | Ciclo | Duas semanas entre simulados (RN006) |
+| `core.PeriodoLetivo` | **nova** | Período de aulas (`inicio`, `fim`, `descricao`); as férias ficam entre dois períodos (RN005) |
+| `core.DiaCalendario` | **nova** | Só exceções ao período: feriado ou emenda (não letivo) e sábado com aula (letivo), com descrição (RN005) |
+| `core.CicloCalendario` | Ciclo | Duas semanas entre simulados (RN006); `data_simulado` dentro do ciclo |
+| `core.TemaRedacao` | **nova** | Tema semanal, chave na terça-feira (RN007) |
 | `core.RegistroFrequencia` | Frequência | Único por aluno e dia (NF008) |
 | `core.ResultadoSimulado` | Simulado | Único por aluno, ciclo e área; campo `presente` (RN009) |
 | `core.ResultadoRedacao` | Redação | Único por aluno e tema; competências c1 a c5 (0 a 200) |
@@ -34,8 +37,9 @@ Precisam de uma Solicitação de Mudança para atualizar o DER e o Relatório De
 3. **`ResultadoSimulado.presente`**. Registra a ausência no simulado, que não é avaliada em desempenho (RN009). Um ausente não tem nota (restrição no banco).
 4. **`ResultadoRedacao`**: `nota_competencias` virou cinco colunas (`nota_c1` a `nota_c5`). Também foram acrescentados `entregue` (já presente no Diagrama de Classes) e `tema`. O tema é identificado pela terça-feira em que foi lançado (RN007).
 5. **`Alerta.regra`, `Alerta.ciclo` e `Alerta.area`**. Registram qual regra e qual limiar geraram o alerta e a área do alerta de desempenho (RF015).
-6. **`CicloCalendario` sem `temaRedacaoSemana`**. Cada ciclo tem duas semanas e, portanto, dois temas (RN007). O tema fica na redação.
+6. **`CicloCalendario` sem `temaRedacaoSemana`**, com `data_simulado`. Cada ciclo tem duas semanas e, portanto, dois temas (RN007); os temas ficam na tabela `TemaRedacao`, e o ciclo registra a data do simulado.
 7. **Tabela `RegistroAlteracao`** (autor, modelo, objeto, campo, valor anterior e novo). O DER não tem trilha de auditoria, exigida pela NF009.
+8. **Tabelas `DiaCalendario` e `TemaRedacao`**. O DER não tem onde guardar feriados, recessos (RN005) nem os temas semanais (RN007).
 
 ## Cadastro (RF006)
 
@@ -48,6 +52,14 @@ Precisam de uma Solicitação de Mudança para atualizar o DER e o Relatório De
 - **Modelos para download** (qualquer usuário autenticado): `alunos/importar/modelo.xlsx` e `.csv`, gerados em memória por `ingestao/modelos.py` (`gerar_modelo(nome, colunas, exemplos, formato)`, reutilizável por RF003 a RF005) com o cabeçalho canônico de `COLUNAS` e duas linhas sintéticas (matrícula `S9000xx`). O modelo baixado importa sem divergência.
 - **LGPD**: conforme a SM #58, o Membro vê as listas de alunos e turmas, com nomes. Baixar os modelos de planilha é permitido ao Membro; importar cadastro e criar ou editar aluno ou turma é só do Diretor. Arquivos importados não são guardados.
 - **Trilha de uploads** (`core.RegistroImportacao`, NF007): ao importar (não ao conferir) grava-se autor, data e hora, tipo, nome do arquivo (sanitizado, máx. 255), tamanho, ano letivo, data de mudança e as contagens do resumo. Nunca o conteúdo, nomes ou matrículas de alunos. Sem exclusão nem edição. Só o Diretor vê, em `importacoes/` (filtro `?usuario=`).
+
+## Calendário (RF007)
+
+- **Dia letivo (RN005)**: segunda a sexta dentro de um `PeriodoLetivo`, desde que não exista `DiaCalendario(letivo=False)` na data. `DiaCalendario(letivo=True)` é a exceção contrária (sábado com aula) e conta por si. O calendário do CASD tem aula de segunda a sexta e é preenchido aos poucos; por isso o Diretor cadastra períodos (vários por ano, sem sobreposição, sem modalidade: o início do semiextensivo já é coberto pela data de ingresso, RN004) e só as exceções (15 a 20 por ano). Use `core.calendario`: `eh_dia_letivo(data)`, `dias_letivos(inicio, fim)` (extremos inclusos, mesma regra). A regra é aplicada na hora do cálculo (RF003, RF010), nunca só na importação, porque um dia pode virar não letivo depois.
+- **Ciclo (RN006)**: o que o calendário disser; sem restrição de 14 dias no banco (duração diferente gera aviso na importação e na edição). Pode haver lacunas (recesso de julho). Sobreposição é erro (`clean()`). `ciclo_em(data)` devolve o ciclo ou `None`. O número do ciclo não é armazenado: a tela numera pela ordem no ano. `data_simulado` é opcional e fica dentro do ciclo (restrição no banco).
+- **Tema (RN007)**: chave na terça-feira (restrição no banco), vale de terça a segunda; terça de feriado continua tendo tema. `tema_em(data)` devolve o tema da terça anterior (janela de 7 dias) ou `None` na semana sem tema; `temas_do_ciclo(ciclo)`. `ResultadoRedacao` continua ligado por `tema_semana == TemaRedacao.data`; uma FK fica para o RF005.
+- **Importação** (Diretor, `calendario/importar/`): tipos `periodos` (`inicio`, `fim`, `descricao` opcional; chave `inicio`, sobreposição recusada), `dias` (exceções; `data`, `dia_letivo` com S/N, sim/não, 1/0; `descricao` opcional), `ciclos` (`data_inicio`, `data_fim`, `data_simulado` opcional) e `temas` (`data`, `tema`). O ano letivo é informado e linha de outro ano é inconsistente. Diferente do cadastro, reimportar **atualiza** o que mudou e audita cada campo (NF009); o que não mudou conta como sem alteração (NF008); ausente do arquivo não é tocado (NF007). Modelos para download por tipo e formato em `calendario/importar/modelo/<tipo>/<csv|xlsx>/`. A trilha (`RegistroImportacao`) ganha os tipos `PERIODOS`, `CALENDARIO`, `CICLOS`, `TEMAS` e o campo `atualizados`.
+- **Acesso**: qualquer autenticado lê o calendário e baixa os modelos; importar e editar é só do Diretor. Sem rota de exclusão (NF007). Não há dado pessoal.
 
 ## Suposições a confirmar
 

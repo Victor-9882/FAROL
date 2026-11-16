@@ -11,6 +11,7 @@
     {% if user.is_authenticated %}
       <a href="{% url 'web:alunos' %}">Alunos</a>
       <a href="{% url 'web:turmas' %}">Turmas</a>
+      <a href="{% url 'web:calendario' %}">Calendário</a>
       {% if user.is_diretor %}<a href="{% url 'web:importacoes' %}">Importações</a>
       <a href="{% url 'web:usuarios' %}">Usuários</a>{% endif %}
       <form method="post" action="{% url 'web:logout' %}" style="display:inline">
@@ -20,6 +21,7 @@
       </form>
     {% endif %}
   </header>
+  {% if messages %}<ul>{% for m in messages %}<li>{{ m }}</li>{% endfor %}</ul>{% endif %}
   <main>{% block conteudo %}{% endblock %}</main>
 </body>
 </html>

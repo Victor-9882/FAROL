@@ -7,7 +7,7 @@
     <button type="submit">Filtrar</button>
   </form>
   <table>
-    <thead><tr><th>Data e hora</th><th>Usuário</th><th>Arquivo</th><th>Ano</th><th>Criados</th><th>Mudanças de turma</th><th>Sem alteração</th><th>Turmas criadas</th><th>Divergências</th><th>Inconsistentes</th></tr></thead>
+    <thead><tr><th>Data e hora</th><th>Usuário</th><th>Arquivo</th><th>Ano</th><th>Tipo</th><th>Criados</th><th>Atualizados</th><th>Mudanças de turma</th><th>Sem alteração</th><th>Turmas criadas</th><th>Divergências</th><th>Inconsistentes</th></tr></thead>
     <tbody>
     {% for r in registros %}
       <tr>
@@ -15,7 +15,9 @@
         <td>{{ r.autor.username }}</td>
         <td>{{ r.nome_arquivo }}</td>
         <td>{{ r.ano }}</td>
+        <td>{{ r.get_tipo_display }}</td>
         <td>{{ r.criados }}</td>
+        <td>{{ r.atualizados }}</td>
         <td>{{ r.mudancas_turma }}</td>
         <td>{{ r.sem_alteracao }}</td>
         <td>{{ r.turmas_criadas }}</td>
@@ -23,7 +25,7 @@
         <td>{{ r.inconsistentes }}</td>
       </tr>
     {% empty %}
-      <tr><td colspan="10">Nenhuma importação registrada.</td></tr>
+      <tr><td colspan="12">Nenhuma importação registrada.</td></tr>
     {% endfor %}
     </tbody>
   </table>
