@@ -1,0 +1,15 @@
+{% extends "web/base.html" %}
+{% block titulo %}Definir senha · FAROL{% endblock %}
+{% block conteudo %}
+  {% if validlink %}
+    <h1>Definir senha</h1>
+    <form method="post">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit">Salvar senha</button>
+    </form>
+  {% else %}
+    <h1>Link inválido</h1>
+    <p>Este link já foi usado ou expirou. Peça um novo link à Direção.</p>
+  {% endif %}
+{% endblock %}

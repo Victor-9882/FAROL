@@ -399,3 +399,33 @@ class Intervencao(HistoricoPreservado):
         if self.alerta_id and self.alerta.aluno_id != self.aluno_id:
             raise ValueError("A intervenção e o alerta precisam ser do mesmo aluno.")
         super().save(*args, **kwargs)
+
+
+# --- Auditoria (NF009) ---------------------------------------------------------------
+
+
+class RegistroAlteracao(HistoricoPreservado):
+    """Uma alteração de um campo: quem, quando, valor anterior e novo (NF009).
+
+    Genérico e sem `GenericForeignKey`: a chave de `Aluno` é texto, então o objeto é
+    identificado por `modelo` (`_meta.label_lower`) e `objeto_id` (texto). Nunca guarda
+    senha, hash ou token.
+    """
+
+    autor = models.ForeignKey(
+        Usuario, on_delete=models.PROTECT, related_name="alteracoes_registradas"
+    )
+    modelo = models.CharField(max_length=100)
+    objeto_id = models.CharField(max_length=64)
+    campo = models.CharField(max_length=64)
+    valor_anterior = models.TextField("valor anterior", blank=True)
+    valor_novo = models.TextField("valor novo", blank=True)
+
+    class Meta:
+        verbose_name = "registro de alteração"
+        verbose_name_plural = "registros de alteração"
+        ordering = ["-criado_em", "-id"]
+        indexes = [models.Index(fields=["modelo", "objeto_id"])]
+
+    def __str__(self):
+        return f"{self.modelo}#{self.objeto_id}.{self.campo} por {self.autor_id}"
