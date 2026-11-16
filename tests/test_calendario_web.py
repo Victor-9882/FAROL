@@ -16,7 +16,7 @@ from core.models import (
 )
 from ingestao.calendario import TIPOS
 from ingestao.leitura import ler_tabela
-from tests.conftest import SENHA
+from tests.conftest import SENHA, importar_em_dois_passos
 
 pytestmark = pytest.mark.django_db
 
@@ -74,6 +74,14 @@ def _enviar(cliente, tipo, arquivo, acao, ano=2026):
     )
 
 
+def _importar(cliente, tipo, conteudo, ano=2026):
+    return importar_em_dois_passos(
+        cliente,
+        reverse("web:calendario_importar"),
+        lambda acao: {"tipo": tipo, "arquivo": _csv(conteudo), "ano": ano, "acao": acao},
+    )
+
+
 def test_importar_conferir_nao_grava(cliente_diretor):
     r = _enviar(cliente_diretor, "dias", _csv("data;dia_letivo\n16/02/2026;N\n"), "conferir")
     assert r.status_code == 200 and r.context["resumo"].criados == 1
@@ -81,8 +89,8 @@ def test_importar_conferir_nao_grava(cliente_diretor):
 
 
 def test_importar_grava_e_registra_trilha(cliente_diretor, diretor):
-    _enviar(cliente_diretor, "dias", _csv("data;dia_letivo\n16/02/2026;S\n"), "importar")
-    _enviar(cliente_diretor, "dias", _csv("data;dia_letivo\n16/02/2026;N\n"), "importar")
+    _importar(cliente_diretor, "dias", "data;dia_letivo\n16/02/2026;S\n")
+    _importar(cliente_diretor, "dias", "data;dia_letivo\n16/02/2026;N\n")
     primeiro, segundo = RegistroImportacao.objects.order_by("id")
     assert primeiro.tipo == "CALENDARIO" and primeiro.criados == 1
     assert (segundo.atualizados, segundo.criados, segundo.autor) == (1, 0, diretor)
@@ -212,11 +220,8 @@ def test_tela_mostra_periodos_e_texto_da_regra(client, membro):
 
 
 def test_importar_periodos_e_trilha(cliente_diretor):
-    r = _enviar(
-        cliente_diretor,
-        "periodos",
-        _csv("inicio;fim;descricao\n02/02/2026;03/07/2026;Primeiro\n"),
-        "importar",
+    r = _importar(
+        cliente_diretor, "periodos", "inicio;fim;descricao\n02/02/2026;03/07/2026;Primeiro\n"
     )
     assert r.context["resumo"].criados == 1 and PeriodoLetivo.objects.count() == 1
     assert RegistroImportacao.objects.get().tipo == "PERIODOS"

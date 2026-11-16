@@ -9,6 +9,7 @@ from django.urls import reverse
 
 from core.models import Aluno, HistoricoTurma, RegistroAlteracao, RegistroImportacao, Turma
 from ingestao import leitura
+from tests.conftest import importar_em_dois_passos
 
 pytestmark = pytest.mark.django_db
 
@@ -236,6 +237,14 @@ def _form(arquivo, acao):
     return {"arquivo": arquivo, "ano": 2026, "data_mudanca": "2026-03-02", "acao": acao}
 
 
+def _importar(cliente, nome="cad.csv"):
+    return importar_em_dois_passos(
+        cliente,
+        reverse("web:cadastro_importar"),
+        lambda acao: _form(_upload(PEQUENA.read_bytes(), nome), acao),
+    )
+
+
 def test_importar_conferir_nao_grava(cliente_diretor):
     resp = cliente_diretor.post(
         reverse("web:cadastro_importar"), _form(_upload(PEQUENA.read_bytes()), "conferir")
@@ -245,9 +254,7 @@ def test_importar_conferir_nao_grava(cliente_diretor):
 
 
 def test_importar_gravar(cliente_diretor):
-    resp = cliente_diretor.post(
-        reverse("web:cadastro_importar"), _form(_upload(PEQUENA.read_bytes()), "importar")
-    )
+    resp = _importar(cliente_diretor)
     assert resp.status_code == 200 and "Importação concluída" in resp.content.decode()
     assert Aluno.objects.count() == 20 and Turma.objects.count() == 5
 
@@ -300,7 +307,7 @@ def test_diretor_importa_e_registro_leva_o_autor(cliente_diretor, diretor):
     url = reverse("web:cadastro_importar")
     cliente_diretor.post(url, _form(_upload(PEQUENA.read_bytes()), "conferir"))
     assert not RegistroImportacao.objects.exists()
-    cliente_diretor.post(url, _form(_upload(PEQUENA.read_bytes(), "../x/cad.csv"), "importar"))
+    _importar(cliente_diretor, "../x/cad.csv")
     reg = RegistroImportacao.objects.get()
     assert reg.autor == diretor and reg.tipo == "CADASTRO" and reg.ano == 2026
     assert reg.nome_arquivo == "cad.csv" and reg.tamanho_bytes == len(PEQUENA.read_bytes())
@@ -326,9 +333,7 @@ def test_edicao_so_aceita_turma_do_mesmo_ano(cliente_diretor, aluno):
 
 
 def test_registro_nao_contem_nome_de_aluno(cliente_diretor):
-    cliente_diretor.post(
-        reverse("web:cadastro_importar"), _form(_upload(PEQUENA.read_bytes()), "importar")
-    )
+    _importar(cliente_diretor)
     nomes = list(Aluno.objects.values_list("nome", flat=True))
     reg = RegistroImportacao.objects.get()
     texto = " ".join(str(v) for v in vars(reg).values())

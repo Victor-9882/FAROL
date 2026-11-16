@@ -160,3 +160,10 @@ def test_csv_acima_do_limite_e_recusado(monkeypatch):
     monkeypatch.setattr(leitura, "LIMITE_LINHAS", 2)
     with pytest.raises(ArquivoInvalidoError, match="limite"):
         ler_tabela(_csv("m;n\n" + "1;a\n" * 50), "a.csv")
+
+
+def test_limite_linhas_por_parametro():
+    texto = "m;n\n1;a\n2;b\n3;c\n"
+    assert len(ler_tabela(_csv(texto), "a.csv", limite_linhas=3)) == 3
+    with pytest.raises(ArquivoInvalidoError):
+        ler_tabela(_csv(texto + "4;d\n"), "a.csv", limite_linhas=3)

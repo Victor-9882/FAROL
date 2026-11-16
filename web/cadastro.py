@@ -6,7 +6,6 @@ Importar, novo e editar: só o Diretor, que audita em `importacoes/`. Não há e
 """
 
 from django.contrib.auth.decorators import login_required
-from django.db import transaction
 from django.db.models import Count, Max
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
@@ -14,11 +13,11 @@ from django.shortcuts import get_object_or_404, redirect, render
 from core.auditoria import historico_de
 from core.models import Aluno, RegistroImportacao, Turma
 from ingestao.cadastro import COLUNAS, EXEMPLOS, OPCIONAIS, importar_cadastro
-from ingestao.leitura import ArquivoInvalidoError, ler_tabela, nome_arquivo_seguro
 from ingestao.modelos import gerar_modelo
 
 from .acesso import diretor_required
 from .forms_cadastro import AlunoEdicaoForm, AlunoNovoForm, ImportacaoCadastroForm, TurmaForm
+from .importacao import executar_importacao
 
 
 def _inteiro(valor):
@@ -103,13 +102,12 @@ def turma_editar(request, pk):
     return render(request, "web/turma_form.html", contexto)
 
 
-def _registrar(autor, arquivo, dados, resumo):
+def _registrar(autor, nome, tamanho, dados, resumo):
     """Trilha do upload: só nome (sanitizado), tamanho e contagens."""
-    nome = nome_arquivo_seguro(arquivo)
     RegistroImportacao.objects.create(
         autor=autor,
         nome_arquivo=nome,
-        tamanho_bytes=arquivo.size,
+        tamanho_bytes=tamanho,
         ano=dados["ano"],
         data_mudanca=dados["data_mudanca"],
         criados=resumo.criados,
@@ -132,33 +130,37 @@ def importacoes(request):
 
 @diretor_required
 def cadastro_importar(request):
-    """Um formulário, dois botões: `conferir` (simula) e `importar` (grava). O arquivo é
-    reenviado no segundo clique; nada fica em sessão nem em disco."""
+    """Conferir sempre antes de gravar: a confirmação exige o token da conferência e nada
+    fica em sessão nem em disco (ver `web.importacao`)."""
     form = ImportacaoCadastroForm(request.POST or None, request.FILES or None)
-    resumo, gravado = None, False
-    if request.method == "POST" and form.is_valid():
-        gravado = request.POST.get("acao") == "importar"
-        arquivo = form.cleaned_data["arquivo"]
-        try:
-            linhas = ler_tabela(arquivo, arquivo.name, colunas=COLUNAS, opcionais=OPCIONAIS)
-        except ArquivoInvalidoError as erro:
-            form.add_error("arquivo", str(erro))
-        else:
-            with transaction.atomic():
-                resumo = importar_cadastro(
-                    linhas,
-                    ano=form.cleaned_data["ano"],
-                    autor=request.user,
-                    data_mudanca=form.cleaned_data["data_mudanca"],
-                    gravar=gravado,
-                )
-                if gravado:
-                    _registrar(request.user, arquivo, form.cleaned_data, resumo)
-    return render(
-        request,
-        "web/cadastro_importar.html",
-        {"form": form, "resumo": resumo, "gravado": gravado},
+    dados = form.is_valid() and form.cleaned_data
+    parametros = (
+        {"ano": dados["ano"], "data_mudanca": dados["data_mudanca"].isoformat()} if dados else {}
     )
+    resultado = executar_importacao(
+        request,
+        form,
+        colunas=COLUNAS,
+        opcionais=OPCIONAIS,
+        parametros=parametros,
+        importar=lambda linhas, gravar: importar_cadastro(
+            linhas,
+            ano=dados["ano"],
+            autor=request.user,
+            data_mudanca=dados["data_mudanca"],
+            gravar=gravar,
+        ),
+        registrar=lambda nome, tamanho, resumo: _registrar(
+            request.user, nome, tamanho, dados, resumo
+        ),
+    )
+    contexto = {
+        "form": form,
+        "resultado": resultado,
+        "resumo": resultado.resumo,
+        "gravado": resultado.gravado,
+    }
+    return render(request, "web/cadastro_importar.html", contexto)
 
 
 def _modelo(formato):

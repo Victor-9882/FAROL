@@ -8,7 +8,6 @@ from datetime import date
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.db import transaction
 from django.db.models import Max
 from django.http import Http404, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
@@ -23,11 +22,11 @@ from core.models import (
     TemaRedacao,
 )
 from ingestao.calendario import TIPOS
-from ingestao.leitura import ArquivoInvalidoError, ler_tabela, nome_arquivo_seguro
 from ingestao.modelos import gerar_modelo
 
 from .acesso import diretor_required
 from .forms_calendario import FORMULARIOS, ImportacaoCalendarioForm
+from .importacao import executar_importacao
 
 
 def _tipo(slug):
@@ -67,41 +66,43 @@ def calendario(request):
 
 @diretor_required
 def calendario_importar(request):
-    """`conferir` simula e desfaz; `importar` grava. O arquivo nunca é persistido."""
+    """Conferir sempre antes de gravar (ver `web.importacao`). O arquivo nunca é persistido."""
     form = ImportacaoCalendarioForm(request.POST or None, request.FILES or None)
-    resumo, gravado = None, False
-    if request.method == "POST" and form.is_valid():
-        gravado = request.POST.get("acao") == "importar"
-        tipo = TIPOS[form.cleaned_data["tipo"]]
-        arquivo = form.cleaned_data["arquivo"]
-        try:
-            linhas = ler_tabela(
-                arquivo, arquivo.name, colunas=tipo.colunas, opcionais=tipo.opcionais
-            )
-        except ArquivoInvalidoError as erro:
-            form.add_error("arquivo", str(erro))
-        else:
-            with transaction.atomic():
-                resumo = tipo.importar(
-                    linhas, ano=form.cleaned_data["ano"], autor=request.user, gravar=gravado
-                )
-                if gravado:
-                    RegistroImportacao.objects.create(
-                        autor=request.user,
-                        tipo=tipo.registro,
-                        nome_arquivo=nome_arquivo_seguro(arquivo),
-                        tamanho_bytes=arquivo.size,
-                        ano=form.cleaned_data["ano"],
-                        criados=resumo.criados,
-                        atualizados=resumo.atualizados,
-                        sem_alteracao=resumo.sem_alteracao,
-                        inconsistentes=len(resumo.inconsistentes),
-                    )
-    return render(
+    dados = form.is_valid() and form.cleaned_data
+    tipo = TIPOS[dados["tipo"]] if dados else None
+
+    def registrar(nome, tamanho, resumo):
+        RegistroImportacao.objects.create(
+            autor=request.user,
+            tipo=tipo.registro,
+            nome_arquivo=nome,
+            tamanho_bytes=tamanho,
+            ano=dados["ano"],
+            criados=resumo.criados,
+            atualizados=resumo.atualizados,
+            sem_alteracao=resumo.sem_alteracao,
+            inconsistentes=len(resumo.inconsistentes),
+        )
+
+    resultado = executar_importacao(
         request,
-        "web/calendario_importar.html",
-        {"form": form, "resumo": resumo, "gravado": gravado, "tipos": TIPOS},
+        form,
+        colunas=tipo.colunas if tipo else None,
+        opcionais=tipo.opcionais if tipo else frozenset(),
+        parametros={"tipo": dados["tipo"], "ano": dados["ano"]} if dados else {},
+        importar=lambda linhas, gravar: tipo.importar(
+            linhas, ano=dados["ano"], autor=request.user, gravar=gravar
+        ),
+        registrar=registrar,
     )
+    contexto = {
+        "form": form,
+        "resultado": resultado,
+        "resumo": resultado.resumo,
+        "gravado": resultado.gravado,
+        "tipos": TIPOS,
+    }
+    return render(request, "web/calendario_importar.html", contexto)
 
 
 @login_required

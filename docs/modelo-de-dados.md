@@ -61,6 +61,16 @@ Precisam de uma Solicitação de Mudança para atualizar o DER e o Relatório De
 - **Importação** (Diretor, `calendario/importar/`): tipos `periodos` (`inicio`, `fim`, `descricao` opcional; chave `inicio`, sobreposição recusada), `dias` (exceções; `data`, `dia_letivo` com S/N, sim/não, 1/0; `descricao` opcional), `ciclos` (`data_inicio`, `data_fim`, `data_simulado` opcional) e `temas` (`data`, `tema`). O ano letivo é informado e linha de outro ano é inconsistente. Diferente do cadastro, reimportar **atualiza** o que mudou e audita cada campo (NF009); o que não mudou conta como sem alteração (NF008); ausente do arquivo não é tocado (NF007). Modelos para download por tipo e formato em `calendario/importar/modelo/<tipo>/<csv|xlsx>/`. A trilha (`RegistroImportacao`) ganha os tipos `PERIODOS`, `CALENDARIO`, `CICLOS`, `TEMAS` e o campo `atualizados`.
 - **Acesso**: qualquer autenticado lê o calendário e baixa os modelos; importar e editar é só do Diretor. Sem rota de exclusão (NF007). Não há dado pessoal.
 
+## Base de importação (NF006, NF008, NF011, NF025)
+
+Sem migração: é código compartilhado por todas as importações.
+
+- **`ingestao/base.py`:** `ResumoImportacao` (criados, atualizados, sem alteração, inconsistentes, avisos, sobreposições) com os totais `importados`, `ignorados`, `divergentes` e `total_linhas`, que sempre fecha com as linhas do arquivo. "Ignorado" é só a linha válida que não mudou nada; a que difere do banco (divergência do cadastro) conta à parte. `triar` valida e separa linha inválida ou repetida sem interromper; `transacao_de_importacao(gravar)` desfaz tudo ao só conferir; `linha_isolada` usa um savepoint por linha, e a recusa por restrição do banco ou validação do modelo nunca traz o valor da célula.
+- **`ingestao/confirmacao.py` e `web/importacao.py`:** a tela sempre confere primeiro e só grava com o token da conferência, assinado (`django.core.signing`, validade de 30 minutos) e preso ao usuário, ao hash do arquivo, aos parâmetros do formulário e aos números do resumo. Nada fica no servidor (nem arquivo, nem sessão). Se algo mudou, a gravação é desfeita e a tela volta a ser conferência, com aviso e token novo. A confirmação do resumo é a confirmação das sobreposições de dados já existentes (NF008).
+- **Limite de linhas (NF025):** `settings.IMPORTACAO_LIMITE_LINHAS` (variável de ambiente de mesmo nome, padrão 5000); `ler_tabela(limite_linhas=...)` troca o valor por chamada.
+- **Importação nova:** escreva `_validar(linha)` e a aplicação por linha; use `triar` e `transacao_de_importacao`, devolva um `ResumoImportacao` e chame `executar_importacao` na view (`importar(linhas, gravar)` e `registrar(nome, tamanho, resumo)`), com `diretor_required`. Reaproveite os parciais `web/_importacao_resumo.html` e `web/_importacao_script.html`.
+- **NF011:** `tests/test_importacao_web.py` mede conferir e confirmar 500 alunos em menos de 2 minutos.
+
 ## Suposições a confirmar
 
 - **Áreas do simulado:** as quatro áreas do ENEM (Linguagens, Humanas, Natureza, Matemática). Confirmar com a DES como o P+ separa as áreas, sobretudo nos simulados de FUVEST.

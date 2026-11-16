@@ -29,3 +29,12 @@ def cliente_diretor(client, diretor):
 @pytest.fixture
 def turma_a(db):
     return Turma.objects.create(nome="Turma A", ano=2026)
+
+
+def importar_em_dois_passos(cliente, url, montar):
+    """Conferir e confirmar, como a tela exige. `montar(acao)` devolve o POST completo, com
+    um arquivo novo a cada chamada. Devolve a resposta da confirmação."""
+    conferencia = cliente.post(url, montar("conferir"))
+    token = conferencia.context["resultado"].token
+    assert token, "a conferência não emitiu token"
+    return cliente.post(url, {**montar("importar"), "token": token})

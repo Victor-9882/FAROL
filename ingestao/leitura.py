@@ -14,8 +14,11 @@ import unicodedata
 import zipfile
 from datetime import date, datetime
 
+from django.conf import settings
+
 TAMANHO_MAXIMO = 5 * 1024 * 1024  # bytes
-LIMITE_LINHAS = 5000
+# Alterável por `IMPORTACAO_LIMITE_LINHAS` (ambiente) ou por `ler_tabela(limite_linhas=...)`.
+LIMITE_LINHAS = settings.IMPORTACAO_LIMITE_LINHAS
 EXTENSOES = (".csv", ".xlsx")
 LINHAS_PARA_CABECALHO = 10
 MAX_COLUNAS = 50  # o XLSX em modo somente leitura preenche até a dimensão declarada da aba
@@ -59,7 +62,7 @@ def _celula(valor):
     return valor
 
 
-def _linhas_csv(conteudo: bytes) -> list[list]:
+def _linhas_csv(conteudo: bytes, limite: int) -> list[list]:
     try:
         texto = conteudo.decode("utf-8-sig")
     except UnicodeDecodeError:
@@ -67,10 +70,10 @@ def _linhas_csv(conteudo: bytes) -> list[list]:
     primeira = texto.split("\n", 1)[0]
     separador = ";" if primeira.count(";") >= primeira.count(",") else ","
     leitor = csv.reader(io.StringIO(texto, newline=""), delimiter=separador)
-    return [linha[:MAX_COLUNAS] for linha in itertools.islice(leitor, LIMITE_LINHAS + 2)]
+    return [linha[:MAX_COLUNAS] for linha in itertools.islice(leitor, limite + 2)]
 
 
-def _linhas_xlsx(conteudo: bytes) -> list[list]:
+def _linhas_xlsx(conteudo: bytes, limite: int) -> list[list]:
     from openpyxl import load_workbook
 
     try:
@@ -79,7 +82,7 @@ def _linhas_xlsx(conteudo: bytes) -> list[list]:
         raise ArquivoInvalidoError("O arquivo XLSX não pôde ser lido.") from erro
     try:
         linhas = livro.worksheets[0].iter_rows(values_only=True, max_col=MAX_COLUNAS)
-        return [list(linha) for linha in itertools.islice(linhas, LIMITE_LINHAS + 2)]
+        return [list(linha) for linha in itertools.islice(linhas, limite + 2)]
     finally:
         livro.close()
 
@@ -104,6 +107,7 @@ def ler_tabela(
     *,
     colunas: dict[str, tuple[str, ...]] | None = None,
     opcionais=frozenset(),
+    limite_linhas: int | None = None,
 ):
     """Lê a primeira aba (XLSX) ou o CSV e devolve uma lista de dicionários.
 
@@ -112,19 +116,22 @@ def ler_tabela(
     O cabeçalho é a linha 1 ou, se `colunas` for dado, a primeira das 10 linhas iniciais que
     traga todas as colunas. As colunas em `opcionais` podem faltar no arquivo.
     Linhas totalmente vazias são puladas. Datas do XLSX viram `date`; matrícula numérica
-    vira texto inteiro.
+    vira texto inteiro. `limite_linhas` troca o limite padrão de linhas de dados.
     """
+    limite = limite_linhas or LIMITE_LINHAS
     nome = (nome_arquivo or "").lower()
     if not nome.endswith(EXTENSOES):
         raise ArquivoInvalidoError("Só são aceitos arquivos .csv e .xlsx.")
     conteudo = arquivo.read()
     if len(conteudo) > TAMANHO_MAXIMO:
         raise ArquivoInvalidoError("O arquivo excede o tamanho máximo permitido.")
-    bruto = _linhas_xlsx(conteudo) if nome.endswith(".xlsx") else _linhas_csv(conteudo)
+    bruto = (
+        _linhas_xlsx(conteudo, limite) if nome.endswith(".xlsx") else _linhas_csv(conteudo, limite)
+    )
     if len(bruto) < 2:
         raise ArquivoInvalidoError("O arquivo não tem linhas de dados.")
-    if len(bruto) > LIMITE_LINHAS + 1:
-        raise ArquivoInvalidoError(f"O arquivo excede o limite de {LIMITE_LINHAS} linhas.")
+    if len(bruto) > limite + 1:
+        raise ArquivoInvalidoError(f"O arquivo excede o limite de {limite} linhas.")
 
     inicio = _achar_cabecalho(bruto, colunas, opcionais)
     cabecalho = [normalizar_cabecalho(c) for c in bruto[inicio]]

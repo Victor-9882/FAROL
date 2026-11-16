@@ -14,10 +14,9 @@ import unicodedata
 from dataclasses import dataclass, field
 from datetime import date
 
-from django.db import transaction
-
 from core.auditoria import registrar_alteracoes
 from core.models import Aluno, Turma
+from ingestao.base import ResumoImportacao, transacao_de_importacao, triar
 from ingestao.leitura import ler_data
 
 COLUNAS = {
@@ -42,13 +41,18 @@ _MAX_TURMA = Turma._meta.get_field("nome").max_length
 
 
 @dataclass
-class ResumoCadastro:
-    criados: int = 0
+class ResumoCadastro(ResumoImportacao):
     mudancas_turma: int = 0
-    sem_alteracao: int = 0
     turmas_criadas: int = 0
     divergencias: list[tuple[int, str, str]] = field(default_factory=list)
-    inconsistentes: list[tuple[int, str, str]] = field(default_factory=list)
+
+    @property
+    def importados(self) -> int:
+        return self.criados + self.mudancas_turma
+
+    @property
+    def divergentes(self) -> int:
+        return len(self.divergencias)
 
 
 def _espacos(texto) -> str:
@@ -110,24 +114,17 @@ def importar_cadastro(linhas, *, ano: int, autor, data_mudanca: date, gravar: bo
     """Aplica `linhas` (de `ler_tabela`) ao cadastro. Com `gravar=False` só confere:
     devolve o mesmo resumo e desfaz tudo."""
     resumo = ResumoCadastro()
-    with transaction.atomic():
-        validas = []
-        vistas = set()
-        for linha in linhas:
-            numero = linha["_linha"]
-            dados, motivo = _validar(linha, ano)
-            if dados is None:
-                resumo.inconsistentes.append(
-                    (numero, str(linha.get("matricula") or "").strip()[:30], motivo)
-                )
-            elif dados["matricula"] in vistas:
-                resumo.inconsistentes.append(
-                    (numero, dados["matricula"], "matrícula repetida no arquivo")
-                )
-            else:
-                vistas.add(dados["matricula"])
-                validas.append((numero, dados))
-
+    with transacao_de_importacao(gravar):
+        validas = triar(
+            linhas,
+            lambda linha: _validar(linha, ano),
+            chave=lambda d: d["matricula"],
+            recusar=lambda linha, motivo: resumo.inconsistentes.append(
+                (linha["_linha"], str(linha.get("matricula") or "").strip()[:30], motivo)
+            ),
+            repetida="matrícula repetida no arquivo",
+        )
+        vistas = {d["matricula"] for _, d in validas}
         existentes = Aluno.objects.in_bulk(list(vistas))
         turmas = {t.nome.casefold(): t for t in Turma.objects.filter(ano=ano)}
 
@@ -171,7 +168,4 @@ def importar_cadastro(linhas, *, ano: int, autor, data_mudanca: date, gravar: bo
             aluno.mudar_turma(turma_de(d["turma"]), data_mudanca)
             registrar_alteracoes(autor=autor, objeto=aluno, anteriores={"turma": anterior})
             resumo.mudancas_turma += 1
-
-        if not gravar:
-            transaction.set_rollback(True)
     return resumo

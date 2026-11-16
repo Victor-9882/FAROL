@@ -11,11 +11,9 @@ Sem dado pessoal; as mensagens citam só a linha e o motivo.
 """
 
 import unicodedata
-from dataclasses import dataclass, field
 from types import SimpleNamespace
 
 from django.core.exceptions import ValidationError
-from django.db import transaction
 
 from core.auditoria import registrar_alteracoes
 from core.calendario import aviso_duracao
@@ -26,19 +24,14 @@ from core.models import (
     RegistroImportacao,
     TemaRedacao,
 )
+from ingestao.base import ResumoImportacao, transacao_de_importacao, triar
 from ingestao.leitura import ler_data
 
 _SIM = {"s", "sim", "1", "true", "verdadeiro", "v"}
 _NAO = {"n", "nao", "0", "false", "falso", "f"}
 
 
-@dataclass
-class ResumoCalendario:
-    criados: int = 0
-    atualizados: int = 0
-    sem_alteracao: int = 0
-    inconsistentes: list[tuple[int, str]] = field(default_factory=list)
-    avisos: list[tuple[int, str]] = field(default_factory=list)
+ResumoCalendario = ResumoImportacao
 
 
 def _vazio(valor) -> bool:
@@ -132,18 +125,15 @@ def _validar_tema(linha, ano):
 
 def _importar(modelo, chave, validar, linhas, *, ano, autor, gravar, avisar=None):
     resumo = ResumoCalendario()
-    with transaction.atomic():
-        validas, vistas = [], set()
-        for linha in linhas:
-            numero = linha["_linha"]
-            dados, motivo = validar(linha, ano)
-            if dados is None:
-                resumo.inconsistentes.append((numero, motivo))
-            elif dados[chave] in vistas:
-                resumo.inconsistentes.append((numero, "data repetida no arquivo"))
-            else:
-                vistas.add(dados[chave])
-                validas.append((numero, dados))
+    with transacao_de_importacao(gravar):
+        validas = triar(
+            linhas,
+            lambda linha: validar(linha, ano),
+            chave=lambda d: d[chave],
+            recusar=lambda linha, motivo: resumo.inconsistentes.append((linha["_linha"], motivo)),
+            repetida="data repetida no arquivo",
+        )
+        vistas = {d[chave] for _, d in validas}
         existentes = modelo.objects.in_bulk(list(vistas), field_name=chave)
         for numero, dados in validas:
             objeto = existentes.get(dados[chave])
@@ -170,8 +160,6 @@ def _importar(modelo, chave, validar, linhas, *, ano, autor, gravar, avisar=None
                 resumo.atualizados += 1
             if avisar and (aviso := avisar(objeto)):
                 resumo.avisos.append((numero, aviso))
-        if not gravar:
-            transaction.set_rollback(True)
     return resumo
 
 
