@@ -14,6 +14,7 @@ from django.core.exceptions import ValidationError
 from django.db import IntegrityError, transaction
 
 MOTIVO_RESTRICAO = "registro recusado por uma restrição do banco"
+MOTIVO_VALIDACAO = "registro recusado pela validação do modelo"
 
 
 @dataclass
@@ -49,8 +50,18 @@ class ResumoImportacao:
         return self.importados + self.ignorados + self.divergentes + len(self.inconsistentes)
 
     def assinatura(self) -> list[int]:
-        """Números que a conferência mostrou; o token de confirmação os carrega."""
-        return [self.importados, self.ignorados, len(self.inconsistentes), len(self.sobreposicoes)]
+        """Números que a conferência mostrou; o token de confirmação os carrega.
+
+        Cada contador vai separado: se um registro "a criar" passou a existir entre a conferência
+        e a confirmação (e seria sobrescrito), a assinatura muda e a confirmação é recusada."""
+        return [
+            self.criados,
+            self.atualizados,
+            self.sem_alteracao,
+            self.divergentes,
+            len(self.inconsistentes),
+            len(self.sobreposicoes),
+        ]
 
 
 def triar(
@@ -102,8 +113,12 @@ def linha_isolada(recusar: Callable[[str], None]):
             campos = [c for c in erro.error_dict if c != "__all__"]
             if campos:
                 partes.append("campos inválidos: " + ", ".join(campos))
-            geral = erro.error_dict.get("__all__", [])
-            partes += [m for e in geral for m in e.messages]
+            partes += _mensagens(erro.error_dict.get("__all__", []))
         else:
-            partes = erro.messages
+            partes = _mensagens(erro.error_list)
         recusar("; ".join(partes))
+
+
+def _mensagens(erros) -> list[str]:
+    """Mensagem com `params` pode interpolar o valor da célula: vira o motivo genérico."""
+    return [MOTIVO_VALIDACAO if e.params else str(e.message) for e in erros]

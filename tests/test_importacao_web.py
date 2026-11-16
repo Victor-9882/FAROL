@@ -3,6 +3,7 @@ NF011). Cobre o cadastro e o calendário."""
 
 import io
 import time
+from datetime import date
 from pathlib import Path
 
 import pytest
@@ -106,6 +107,22 @@ def test_confirmar_apos_mudanca_no_banco_vira_conferencia(cliente_diretor):
     resp = cliente_diretor.post(url, {**_cad()("importar"), "token": token})
     assert not resp.context["resultado"].gravado and resp.context["resultado"].aviso
     assert Aluno.objects.count() == antes and not RegistroImportacao.objects.exists()
+
+
+def test_confirmar_quando_registro_a_criar_passou_a_existir_vira_conferencia(cliente_diretor):
+    """NF008: a conferência mostrou "1 criado"; se o registro passou a existir, a confirmação
+    não pode sobrescrevê-lo sem que o resumo mostre a alteração."""
+    url = reverse(URL_CAL)
+    conteudo = "data;dia_letivo\n16/02/2026;N\n"
+    conferencia = cliente_diretor.post(url, _cal(conteudo)("conferir")).context["resultado"]
+    assert conferencia.resumo.criados == 1 and conferencia.resumo.atualizados == 0
+    DiaCalendario.objects.create(data=date(2026, 2, 16), letivo=True, descricao="Aula extra")
+    resp = cliente_diretor.post(url, {**_cal(conteudo)("importar"), "token": conferencia.token})
+    resultado = resp.context["resultado"]
+    assert not resultado.gravado and resultado.aviso
+    assert resultado.resumo.atualizados == 1  # a nova conferência mostra a alteração
+    assert DiaCalendario.objects.get(data=date(2026, 2, 16)).letivo is True
+    assert not RegistroImportacao.objects.exists()
 
 
 def test_reconfirmar_mesmo_token_nao_duplica(cliente_diretor, caso):

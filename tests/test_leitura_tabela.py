@@ -92,8 +92,8 @@ def test_limite_de_tamanho(monkeypatch):
         ler_tabela(_csv(conteudo + "x"), "a.csv")
 
 
-def test_limite_de_linhas(monkeypatch):
-    monkeypatch.setattr(leitura, "LIMITE_LINHAS", 2)
+def test_limite_de_linhas(settings):
+    settings.IMPORTACAO_LIMITE_LINHAS = 2
     assert len(ler_tabela(_csv("m;n\n1;a\n2;b\n"), "a.csv")) == 2
     with pytest.raises(ArquivoInvalidoError):
         ler_tabela(_csv("m;n\n1;a\n2;b\n3;c\n"), "a.csv")
@@ -156,8 +156,8 @@ def test_xlsx_inflado_em_colunas_nao_consome_memoria():
     assert pico < 30 * 1024 * 1024
 
 
-def test_csv_acima_do_limite_e_recusado(monkeypatch):
-    monkeypatch.setattr(leitura, "LIMITE_LINHAS", 2)
+def test_csv_acima_do_limite_e_recusado(settings):
+    settings.IMPORTACAO_LIMITE_LINHAS = 2
     with pytest.raises(ArquivoInvalidoError, match="limite"):
         ler_tabela(_csv("m;n\n" + "1;a\n" * 50), "a.csv")
 
@@ -167,3 +167,8 @@ def test_limite_linhas_por_parametro():
     assert len(ler_tabela(_csv(texto), "a.csv", limite_linhas=3)) == 3
     with pytest.raises(ArquivoInvalidoError):
         ler_tabela(_csv(texto + "4;d\n"), "a.csv", limite_linhas=3)
+
+
+def test_limite_linhas_zero_nao_vira_o_padrao():
+    with pytest.raises(ArquivoInvalidoError, match="limite de 0"):
+        ler_tabela(_csv("m;n\n1;a\n"), "a.csv", limite_linhas=0)

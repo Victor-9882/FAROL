@@ -17,8 +17,6 @@ from datetime import date, datetime
 from django.conf import settings
 
 TAMANHO_MAXIMO = 5 * 1024 * 1024  # bytes
-# Alterável por `IMPORTACAO_LIMITE_LINHAS` (ambiente) ou por `ler_tabela(limite_linhas=...)`.
-LIMITE_LINHAS = settings.IMPORTACAO_LIMITE_LINHAS
 EXTENSOES = (".csv", ".xlsx")
 LINHAS_PARA_CABECALHO = 10
 MAX_COLUNAS = 50  # o XLSX em modo somente leitura preenche até a dimensão declarada da aba
@@ -116,9 +114,11 @@ def ler_tabela(
     O cabeçalho é a linha 1 ou, se `colunas` for dado, a primeira das 10 linhas iniciais que
     traga todas as colunas. As colunas em `opcionais` podem faltar no arquivo.
     Linhas totalmente vazias são puladas. Datas do XLSX viram `date`; matrícula numérica
-    vira texto inteiro. `limite_linhas` troca o limite padrão de linhas de dados.
+    vira texto inteiro. `limite_linhas` troca o limite de linhas de dados, que por padrão é
+    `settings.IMPORTACAO_LIMITE_LINHAS`.
     """
-    limite = limite_linhas or LIMITE_LINHAS
+    # Lido na chamada (e não na importação do módulo): `settings` e o ambiente valem sempre.
+    limite = limite_linhas if limite_linhas is not None else settings.IMPORTACAO_LIMITE_LINHAS
     nome = (nome_arquivo or "").lower()
     if not nome.endswith(EXTENSOES):
         raise ArquivoInvalidoError("Só são aceitos arquivos .csv e .xlsx.")

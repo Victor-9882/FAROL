@@ -16,7 +16,7 @@ from datetime import date
 
 from core.auditoria import registrar_alteracoes
 from core.models import Aluno, Turma
-from ingestao.base import ResumoImportacao, transacao_de_importacao, triar
+from ingestao.base import ResumoImportacao, linha_isolada, transacao_de_importacao, triar
 from ingestao.leitura import ler_data
 
 COLUNAS = {
@@ -53,6 +53,9 @@ class ResumoCadastro(ResumoImportacao):
     @property
     def divergentes(self) -> int:
         return len(self.divergencias)
+
+    def assinatura(self) -> list[int]:
+        return super().assinatura() + [self.mudancas_turma, self.turmas_criadas]
 
 
 def _espacos(texto) -> str:
@@ -135,7 +138,7 @@ def importar_cadastro(linhas, *, ano: int, autor, data_mudanca: date, gravar: bo
                 resumo.turmas_criadas += 1
             return turma
 
-        for numero, d in validas:
+        def aplicar(numero, d):
             aluno = existentes.get(d["matricula"])
             if aluno is None:
                 Aluno(
@@ -145,27 +148,43 @@ def importar_cadastro(linhas, *, ano: int, autor, data_mudanca: date, gravar: bo
                     turma=turma_de(d["turma"]),
                 ).save()
                 resumo.criados += 1
-                continue
+                return
             if _chave_nome(aluno.nome) != _chave_nome(d["nome"]):
                 resumo.divergencias.append((numero, aluno.matricula, "nome diferente do cadastro"))
-                continue
+                return
             if d["ingresso"] is not None and aluno.data_ingresso != d["ingresso"]:
                 resumo.divergencias.append(
                     (numero, aluno.matricula, "data de ingresso diferente do cadastro")
                 )
-                continue
+                return
             atual = turmas.get(d["turma"].casefold())
             if atual is not None and atual.pk == aluno.turma_id:
                 resumo.sem_alteracao += 1
-                continue
+                return
             periodo = aluno.historico_turmas.get(data_fim__isnull=True)
             if data_mudanca <= periodo.data_inicio:
                 resumo.inconsistentes.append(
                     (numero, aluno.matricula, "data da mudança não é posterior ao início da turma")
                 )
-                continue
+                return
             anterior = aluno.turma
             aluno.mudar_turma(turma_de(d["turma"]), data_mudanca)
             registrar_alteracoes(autor=autor, objeto=aluno, anteriores={"turma": anterior})
             resumo.mudancas_turma += 1
+
+        def recusador(numero, matricula):
+            # NF006: se a linha for desfeita (savepoint), a turma que ela criou também some.
+            turmas_antes, criadas_antes = dict(turmas), resumo.turmas_criadas
+
+            def recusar(motivo):
+                turmas.clear()
+                turmas.update(turmas_antes)
+                resumo.turmas_criadas = criadas_antes
+                resumo.inconsistentes.append((numero, matricula, motivo))
+
+            return recusar
+
+        for numero, d in validas:
+            with linha_isolada(recusador(numero, d["matricula"])):
+                aplicar(numero, d)
     return resumo

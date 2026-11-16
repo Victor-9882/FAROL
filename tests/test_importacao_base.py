@@ -4,10 +4,12 @@ from datetime import date
 from pathlib import Path
 
 import pytest
-from django.db import transaction
+from django.db import IntegrityError, transaction
 
-from core.models import Turma
+from core.models import Aluno, DiaCalendario, Turma
 from ingestao.base import (
+    MOTIVO_RESTRICAO,
+    MOTIVO_VALIDACAO,
     ResumoImportacao,
     linha_isolada,
     transacao_de_importacao,
@@ -90,7 +92,9 @@ def test_importados_e_divergentes_do_cadastro(diretor):
     assert resumo.ignorados == 0  # divergência não é ignorado
     assert resumo.divergentes == 1
     assert resumo.total_linhas == 3
-    assert resumo.assinatura() == [2, 0, 0, 0]
+    # criados, atualizados, sem alteração, divergentes, inconsistentes, sobreposições,
+    # mudanças de turma, turmas criadas: cada um separado no token
+    assert resumo.assinatura() == [1, 0, 0, 1, 0, 0, 1, 1]
 
 
 def test_transacao_sem_gravar_desfaz():
@@ -128,3 +132,71 @@ def test_linha_isolada_validacao_nao_vaza_valor():
         raise ValidationError("mensagem do modelo")
     assert motivos == ["campos inválidos: nome, ano; texto do clean", "mensagem do modelo"]
     assert "valor-secreto" not in " ".join(motivos)
+
+
+def test_linha_isolada_mensagem_com_params_nao_interpola_valor():
+    from django.core.exceptions import ValidationError
+
+    motivos = []
+    with linha_isolada(motivos.append):
+        raise ValidationError("valor %(valor)s inválido", params={"valor": "valor-secreto"})
+    with linha_isolada(motivos.append):
+        raise ValidationError({"__all__": [ValidationError("x %(v)s", params={"v": "segredo"})]})
+    assert motivos == [MOTIVO_VALIDACAO, MOTIVO_VALIDACAO]
+
+
+def test_cadastro_restricao_do_banco_isola_a_linha_e_a_turma_criada(diretor, monkeypatch):
+    """NF006: a linha recusada pelo banco não interrompe a carga nem deixa turma fantasma."""
+    original = Aluno.save
+
+    def save(self, *args, **kwargs):
+        if self.matricula == "S260002":
+            raise IntegrityError("simulada")
+        return original(self, *args, **kwargs)
+
+    monkeypatch.setattr(Aluno, "save", save)
+
+    def linha(matricula, turma, n):
+        return {
+            "matricula": matricula,
+            "nome": f"Aluno {n}",
+            "turma": turma,
+            "data_ingresso": "02/02/2026",
+            "_linha": n,
+        }
+
+    resumo = importar_cadastro(
+        [
+            linha("S260001", "Turma A", 2),
+            linha("S260002", "Turma Z", 3),
+            linha("S260003", "Turma Z", 4),
+        ],
+        ano=2026,
+        autor=diretor,
+        data_mudanca=date(2026, 3, 2),
+        gravar=True,
+    )
+    assert resumo.inconsistentes == [(3, "S260002", MOTIVO_RESTRICAO)]
+    assert resumo.criados == 2 and resumo.turmas_criadas == 2 and resumo.total_linhas == 3
+    assert set(Aluno.objects.values_list("matricula", flat=True)) == {"S260001", "S260003"}
+    assert Aluno.objects.get(matricula="S260003").turma.nome == "Turma Z"
+
+
+def test_calendario_restricao_do_banco_isola_a_linha(diretor, monkeypatch):
+    original = DiaCalendario.save
+
+    def save(self, *args, **kwargs):
+        if self.data == date(2026, 2, 17):
+            raise IntegrityError("simulada")
+        return original(self, *args, **kwargs)
+
+    monkeypatch.setattr(DiaCalendario, "save", save)
+    linhas = [
+        {"data": "16/02/2026", "dia_letivo": "N", "_linha": 2},
+        {"data": "17/02/2026", "dia_letivo": "N", "_linha": 3},
+        {"data": "18/02/2026", "dia_letivo": "N", "_linha": 4},
+    ]
+    resumo = TIPOS["dias"].importar(linhas, ano=2026, autor=diretor, gravar=True)
+    assert resumo.inconsistentes == [(3, MOTIVO_RESTRICAO)]
+    assert resumo.criados == 2 and resumo.total_linhas == 3
+    assert DiaCalendario.objects.count() == 2

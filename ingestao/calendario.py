@@ -24,7 +24,7 @@ from core.models import (
     RegistroImportacao,
     TemaRedacao,
 )
-from ingestao.base import ResumoImportacao, transacao_de_importacao, triar
+from ingestao.base import ResumoImportacao, linha_isolada, transacao_de_importacao, triar
 from ingestao.leitura import ler_data
 
 _SIM = {"s", "sim", "1", "true", "verdadeiro", "v"}
@@ -152,14 +152,16 @@ def _importar(modelo, chave, validar, linhas, *, ano, autor, gravar, avisar=None
             except ValidationError as erro:
                 resumo.inconsistentes.append((numero, "; ".join(erro.messages)))
                 continue
-            objeto.save()
-            if novo:
-                resumo.criados += 1
-            else:
-                registrar_alteracoes(autor=autor, objeto=objeto, anteriores=anteriores)
-                resumo.atualizados += 1
-            if avisar and (aviso := avisar(objeto)):
-                resumo.avisos.append((numero, aviso))
+            # NF006: uma restrição do banco recusa só esta linha.
+            with linha_isolada(lambda motivo, n=numero: resumo.inconsistentes.append((n, motivo))):
+                objeto.save()
+                if novo:
+                    resumo.criados += 1
+                else:
+                    registrar_alteracoes(autor=autor, objeto=objeto, anteriores=anteriores)
+                    resumo.atualizados += 1
+                if avisar and (aviso := avisar(objeto)):
+                    resumo.avisos.append((numero, aviso))
     return resumo
 
 
