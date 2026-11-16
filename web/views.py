@@ -3,7 +3,7 @@
 from django.contrib.auth.decorators import login_not_required
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.auth.views import LoginView, LogoutView, PasswordResetConfirmView
-from django.db import connection, transaction
+from django.db import connection
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse, reverse_lazy
@@ -91,6 +91,12 @@ def usuario_editar(request, pk):
 def usuario_link_senha(request, pk):
     """Gera link de uso único para o usuário definir a senha; o Diretor o repassa por fora."""
     alvo = get_object_or_404(_gerenciaveis(), pk=pk)
+    # Quem gera o link não pode usá-lo para entrar como o alvo sem que ele perceba:
+    # a senha anterior deixa de valer (NF009).
+    invalidou = alvo.has_usable_password()
+    if invalidou:
+        alvo.set_unusable_password()
+        alvo.save(update_fields=["password"])
     caminho = reverse(
         "web:definir_senha",
         kwargs={
@@ -98,15 +104,15 @@ def usuario_link_senha(request, pk):
             "token": default_token_generator.make_token(alvo),
         },
     )
-    with transaction.atomic():
-        RegistroAlteracao.objects.create(
-            autor=request.user,
-            modelo=alvo._meta.label_lower,
-            objeto_id=str(alvo.pk),
-            campo="senha",
-            valor_anterior="",
-            valor_novo="link de definição gerado",
-        )
+    RegistroAlteracao.objects.create(
+        autor=request.user,
+        modelo=alvo._meta.label_lower,
+        objeto_id=str(alvo.pk),
+        campo="senha",
+        valor_anterior="",
+        valor_novo="link de definição gerado"
+        + ("; senha anterior invalidada" if invalidou else ""),
+    )
     contexto = {"alvo": alvo, "link": request.build_absolute_uri(caminho)}
     return render(request, "web/usuario_link.html", contexto)
 

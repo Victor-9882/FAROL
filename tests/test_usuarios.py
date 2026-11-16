@@ -219,9 +219,11 @@ def test_link_de_senha_so_por_post(cliente_diretor, membro):
     )
 
 
-def test_gerar_link_nao_invalida_a_senha_atual(client, cliente_diretor, membro):
+def test_gerar_link_invalida_a_senha_atual(client, cliente_diretor, membro):
     cliente_diretor.post(reverse("web:usuario_link_senha", args=[membro.pk]))
-    assert client.login(username="membro", password=SENHA)
+    assert not client.login(username="membro", password=SENHA)
+    reg = RegistroAlteracao.objects.get()
+    assert reg.valor_novo == "link de definição gerado; senha anterior invalidada"
 
 
 def test_registro_do_link_nao_guarda_senha_nem_token(cliente_diretor, membro):
@@ -231,7 +233,7 @@ def test_registro_do_link_nao_guarda_senha_nem_token(cliente_diretor, membro):
     assert (reg.campo, reg.valor_anterior, reg.valor_novo) == (
         "senha",
         "",
-        "link de definição gerado",
+        "link de definição gerado; senha anterior invalidada",
     )
     assert token not in reg.valor_novo and membro.password not in reg.valor_novo
 
