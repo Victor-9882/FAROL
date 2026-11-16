@@ -13,6 +13,7 @@
       <li>Ignorados (sem alteração): {{ resumo.ignorados }}</li>
       {% if resumo.divergentes %}<li>Divergentes (conferir e corrigir à mão): {{ resumo.divergentes }}</li>{% endif %}
       <li>Inconsistentes (linhas recusadas): {{ resumo.inconsistentes|length }}</li>
+      {% if resumo.pendencias %}<li>Pendências para associação manual: {{ resumo.pendencias|length }}</li>{% endif %}
       <li>Total de linhas do arquivo: {{ resumo.total_linhas }}</li>
     </ul>
     {% if resumo.atualizados %}
@@ -27,6 +28,11 @@
     {% if resumo.avisos %}
       <h3>Avisos (linha importada)</h3>
       <ul>{% for linha, motivo in resumo.avisos %}<li>Linha {{ linha }} · {{ motivo }}</li>{% endfor %}</ul>
+    {% endif %}
+    {% if resumo.pendencias %}
+      <h3>Pendências (linha sem aluno correspondente)</h3>
+      <p>{% if resultado.gravado %}Guardadas{% else %}Serão guardadas{% endif %} para o Diretor associar a um aluno ou descartar em <a href="{% url 'web:pendencias' %}">Pendências</a>.</p>
+      <ul>{% for linha, motivo in resumo.pendencias %}<li>Linha {{ linha }} · {{ motivo }}</li>{% endfor %}</ul>
     {% endif %}
     {% if resumo.inconsistentes %}
       <h3>Linhas inconsistentes (ignoradas)</h3>
