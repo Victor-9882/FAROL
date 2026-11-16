@@ -1,0 +1,22 @@
+{% extends "web/base.html" %}
+{% block titulo %}{% if alvo %}Editar turma{% else %}Nova turma{% endif %} · FAROL{% endblock %}
+{% block conteudo %}
+  <h1>{% if alvo %}Editar turma{% else %}Nova turma{% endif %}</h1>
+  <p><a href="{% url 'web:turmas' %}">Voltar às turmas</a></p>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Salvar</button>
+  </form>
+  {% if alvo %}
+    <h2>Histórico de alterações</h2>
+    <ul>
+    {% for r in historico %}
+      <li>{{ r.criado_em|date:"d/m/Y H:i" }} · {{ r.autor.username }} · {{ r.campo }}:
+        "{{ r.valor_anterior }}" → "{{ r.valor_novo }}"</li>
+    {% empty %}
+      <li>Sem alterações registradas.</li>
+    {% endfor %}
+    </ul>
+  {% endif %}
+{% endblock %}

@@ -1,0 +1,42 @@
+{% extends "web/base.html" %}
+{% block titulo %}Alunos · FAROL{% endblock %}
+{% block conteudo %}
+  <h1>Alunos</h1>
+  {% if user.is_diretor %}
+    <p><a href="{% url 'web:aluno_novo' %}">Novo aluno</a> · <a href="{% url 'web:cadastro_importar' %}">Importar cadastro</a></p>
+  {% endif %}
+  <form method="get">
+    <label>Ano letivo <input type="number" name="ano" value="{{ ano|default_if_none:'' }}"></label>
+    <label>Turma
+      <select name="turma">
+        <option value="">Todas</option>
+        {% for t in turmas %}<option value="{{ t.pk }}"{% if t.pk == turma_filtro %} selected{% endif %}>{{ t.nome }}</option>{% endfor %}
+      </select>
+    </label>
+    <label>Situação
+      <select name="situacao">
+        <option value="">Todas, exceto inválidos</option>
+        {% for valor, rotulo in situacoes %}<option value="{{ valor }}"{% if valor == situacao %} selected{% endif %}>{{ rotulo }}</option>{% endfor %}
+        <option value="TODAS"{% if situacao == "TODAS" %} selected{% endif %}>Todas, inclusive inválidos</option>
+      </select>
+    </label>
+    <button type="submit">Filtrar</button>
+  </form>
+  <table>
+    <thead><tr><th>Matrícula</th><th>Nome</th><th>Turma</th><th>Ingresso</th><th>Situação</th><th></th></tr></thead>
+    <tbody>
+    {% for a in alunos %}
+      <tr>
+        <td>{{ a.matricula }}</td>
+        <td>{{ a.nome }}</td>
+        <td>{{ a.turma.nome }}</td>
+        <td>{{ a.data_ingresso|date:"d/m/Y" }}</td>
+        <td>{{ a.get_situacao_display }}{% if a.data_saida %} ({{ a.data_saida|date:"d/m/Y" }}){% endif %}</td>
+        <td>{% if user.is_diretor %}<a href="{% url 'web:aluno_editar' a.matricula %}">Editar</a>{% endif %}</td>
+      </tr>
+    {% empty %}
+      <tr><td colspan="6">Nenhum aluno encontrado.</td></tr>
+    {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

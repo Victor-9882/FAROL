@@ -13,10 +13,11 @@ com estas mudanças, a registrar numa Solicitação de Mudança do DER:
 """
 
 from django.contrib.auth.models import AbstractUser
+from django.core.exceptions import ValidationError
 from django.db import models, transaction
 from django.db.models import Q
 
-from .historico import HistoricoPreservado
+from .historico import HistoricoPreservado, HistoricoQuerySet
 
 
 class Usuario(AbstractUser):
@@ -63,12 +64,28 @@ class Turma(HistoricoPreservado):
         return f"{self.nome} ({self.ano})"
 
 
+class AlunoQuerySet(HistoricoQuerySet):
+    def ingressados_ate(self, data):
+        """Alunos que já ingressaram em `data` (inclusive); base dos indicadores (RN004)."""
+        return self.filter(data_ingresso__lte=data)
+
+    def ativos(self):
+        return self.filter(situacao=Aluno.Situacao.ATIVO)
+
+
 class Aluno(HistoricoPreservado):
     """Aluno do CASDvest, identificado unicamente pela matrícula (RN003).
 
     `turma` é a turma atual. Para trocar de turma use `mudar_turma()`, que
-    preserva o histórico (RN011).
+    preserva o histórico (RN011). `situacao` e `data_saida` registram desligamento,
+    evasão ou matrícula lançada por engano (`INVALIDO`, preservada por causa da NF007).
     """
+
+    class Situacao(models.TextChoices):
+        ATIVO = "ATIVO", "Ativo"
+        DESLIGADO = "DESLIGADO", "Desligado"
+        EVADIDO = "EVADIDO", "Evadido"
+        INVALIDO = "INVALIDO", "Inválido (lançado por engano)"
 
     matricula = models.CharField("matrícula", max_length=20, primary_key=True)
     nome = models.CharField(max_length=150)
@@ -80,6 +97,12 @@ class Aluno(HistoricoPreservado):
     turma = models.ForeignKey(
         Turma, on_delete=models.PROTECT, related_name="alunos", verbose_name="turma atual"
     )
+    situacao = models.CharField(
+        "situação", max_length=10, choices=Situacao.choices, default=Situacao.ATIVO
+    )
+    data_saida = models.DateField("data de saída", null=True, blank=True)
+
+    objects = AlunoQuerySet.as_manager()
 
     class Meta:
         verbose_name = "aluno"
@@ -87,10 +110,29 @@ class Aluno(HistoricoPreservado):
         ordering = ["nome"]
         constraints = [
             models.CheckConstraint(condition=~Q(matricula=""), name="aluno_matricula_preenchida"),
+            models.CheckConstraint(
+                condition=~Q(situacao="ATIVO") | Q(data_saida__isnull=True),
+                name="aluno_ativo_sem_data_saida",
+            ),
+            models.CheckConstraint(
+                condition=~Q(situacao__in=["DESLIGADO", "EVADIDO"])
+                | Q(data_saida__gte=models.F("data_ingresso")),
+                name="aluno_saida_apos_ingresso",
+            ),
         ]
 
     def __str__(self):
         return f"{self.nome} ({self.matricula})"
+
+    def clean(self):
+        super().clean()
+        if self.situacao == self.Situacao.ATIVO and self.data_saida:
+            raise ValidationError({"data_saida": "Aluno ativo não tem data de saída."})
+        if self.situacao in (self.Situacao.DESLIGADO, self.Situacao.EVADIDO):
+            if not self.data_saida:
+                raise ValidationError({"data_saida": "Informe a data de saída."})
+            if self.data_ingresso and self.data_saida < self.data_ingresso:
+                raise ValidationError({"data_saida": "A saída não pode ser anterior ao ingresso."})
 
     def save(self, *args, **kwargs):
         novo = self._state.adding
@@ -114,6 +156,18 @@ class Aluno(HistoricoPreservado):
         HistoricoTurma.objects.create(aluno=self, turma=nova_turma, data_inicio=data)
         self.turma = nova_turma
         self.save(update_fields=["turma"])
+
+    @transaction.atomic
+    def corrigir_ingresso(self, data):
+        """Corrige a data de ingresso e o início do primeiro período de turma (RN004, RN011)."""
+        primeiro = self.historico_turmas.order_by("data_inicio").first()
+        if primeiro and primeiro.data_fim and data >= primeiro.data_fim:
+            raise ValueError("O ingresso deve ser anterior ao fim do primeiro período de turma.")
+        self.data_ingresso = data
+        self.save(update_fields=["data_ingresso"])
+        if primeiro:
+            primeiro.data_inicio = data
+            primeiro.save(update_fields=["data_inicio"])
 
     def turma_em(self, data) -> Turma | None:
         """Turma em que o aluno estava na `data`, ou None se ainda não tinha ingressado."""

@@ -1,0 +1,21 @@
+{% extends "web/base.html" %}
+{% block titulo %}Turmas · FAROL{% endblock %}
+{% block conteudo %}
+  <h1>Turmas</h1>
+  {% if user.is_diretor %}<p><a href="{% url 'web:turma_nova' %}">Nova turma</a></p>{% endif %}
+  <table>
+    <thead><tr><th>Ano</th><th>Turma</th><th>Alunos</th><th></th></tr></thead>
+    <tbody>
+    {% for t in turmas %}
+      <tr>
+        <td>{{ t.ano }}</td>
+        <td><a href="{% url 'web:turma_detalhe' t.pk %}">{{ t.nome }}</a></td>
+        <td>{{ t.total }}</td>
+        <td>{% if user.is_diretor %}<a href="{% url 'web:turma_editar' t.pk %}">Editar</a>{% endif %}</td>
+      </tr>
+    {% empty %}
+      <tr><td colspan="4">Nenhuma turma cadastrada.</td></tr>
+    {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}
