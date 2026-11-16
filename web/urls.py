@@ -1,11 +1,23 @@
 from django.urls import path
 
-from . import cadastro, calendario, frequencia, pendencias, redacoes, simulados, views
+from . import (
+    cadastro,
+    calendario,
+    ficha,
+    frequencia,
+    painel,
+    pendencias,
+    redacoes,
+    simulados,
+    views,
+)
 
 app_name = "web"
 
 urlpatterns = [
-    path("", views.inicio, name="inicio"),
+    path("", painel.inicio, name="inicio"),
+    path("painel/<slug:categoria>/", painel.painel_lista, name="painel_lista"),
+    path("indicadores/", painel.indicadores, name="indicadores"),
     path("entrar/", views.Login.as_view(), name="login"),
     path("sair/", views.Logout.as_view(), name="logout"),
     path("usuarios/", views.usuarios, name="usuarios"),
@@ -18,6 +30,7 @@ urlpatterns = [
     path("alunos/importar/modelo.xlsx", cadastro.cadastro_modelo_xlsx, name="cadastro_modelo_xlsx"),
     path("alunos/importar/modelo.csv", cadastro.cadastro_modelo_csv, name="cadastro_modelo_csv"),
     path("alunos/<str:matricula>/editar/", cadastro.aluno_editar, name="aluno_editar"),
+    path("alunos/<str:matricula>/ficha/", ficha.ficha, name="ficha"),
     path("importacoes/", cadastro.importacoes, name="importacoes"),
     path("pendencias/", pendencias.pendencias, name="pendencias"),
     path("frequencia/importar/", frequencia.frequencia_importar, name="frequencia_importar"),

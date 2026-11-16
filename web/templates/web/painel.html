@@ -1,0 +1,68 @@
+{% extends "web/base.html" %}
+{% load farol %}
+{% block titulo %}Painel · FAROL{% endblock %}
+{% block conteudo %}
+  <h1>Painel {{ ref.ano }}</h1>
+  <p class="suave">
+    {% if user.is_diretor %}Você vê os dados nominais dos alunos: clique numa contagem para abrir a lista.
+    {% else %}Perfil Membro de diretoria: você vê só contagens e indicadores agregados (RN013).{% endif %}
+  </p>
+  <p class="indicativo">Os alertas são <strong>indicativos</strong>: apontam quem a Direção pode procurar
+    para conversar. Não punem, não classificam publicamente e não mudam nada no aluno (RN012).</p>
+
+  {% if not ref.semana and not ref.ciclo %}
+    <h2>Sem dados no período</h2>
+    <p>Ainda não há frequência nem resultados de simulado importados para {{ ref.ano }}.</p>
+    {% if ultimas %}
+      <p>Últimas importações:</p>
+      <ul>{% for tipo, quando in ultimas %}<li>{{ tipo }}: {{ quando|date:"d/m/Y H:i" }}</li>{% endfor %}</ul>
+    {% else %}
+      <p>Nenhuma importação registrada.</p>
+    {% endif %}
+  {% else %}
+    <h2>Alertas ativos</h2>
+    <div class="cartoes">
+      <div class="cartao">
+        {% if user.is_diretor %}<a href="{% url 'web:painel_lista' 'FREQUENCIA' %}?ano={{ ref.ano }}">{% endif %}
+          <div class="valor aviso">{{ alertas_frequencia|length }}</div>
+          <div class="rotulo">Frequência{% if ref.semanas_alerta %} · semanas de {{ ref.semanas_alerta.0|date:"d/m" }} a {{ ref.semanas_alerta.1|date:"d/m/Y" }}{% endif %}</div>
+        {% if user.is_diretor %}</a>{% endif %}
+      </div>
+      <div class="cartao">
+        {% if user.is_diretor %}<a href="{% url 'web:painel_lista' 'DESEMPENHO' %}?ano={{ ref.ano }}">{% endif %}
+          <div class="valor queda">{{ alertas_desempenho|length }}</div>
+          <div class="rotulo">Queda de desempenho{% if ref.ciclo %} · ciclo {{ ref.numero_ciclo }}{% endif %}</div>
+        {% if user.is_diretor %}</a>{% endif %}
+      </div>
+      <div class="cartao">
+        <div class="valor">{{ total.frequencia.percentual|default_if_none:"—" }}{% if total.frequencia.percentual is not None %}%{% endif %}</div>
+        <div class="rotulo">Presença no período (justificadas contam, RN002)</div>
+      </div>
+      <div class="cartao">
+        <div class="valor">{{ total.participacao.percentual|default_if_none:"—" }}{% if total.participacao.percentual is not None %}%{% endif %}</div>
+        <div class="rotulo">Redações entregues no período</div>
+      </div>
+    </div>
+
+    <h2>Situação das turmas{% if ref.ciclo %} no ciclo {{ ref.numero_ciclo }}{% endif %}</h2>
+    <p class="suave">Período: {{ ref.inicio|date:"d/m/Y" }} a {{ ref.fim|date:"d/m/Y" }}.
+      {% if ref.ciclo %}Desempenho pelo delta da nota TRI média contra o último simulado do próprio aluno (RN008){% if limiar %}, limiar de {{ limiar|floatformat:"0" }} pontos{% endif %}; quem faltou ao simulado ou fez o primeiro não é avaliado (RN009).{% else %}Ainda não há resultado de simulado neste ano.{% endif %}</p>
+    <div class="rolagem">
+      <table>
+        <thead>
+          <tr>
+            <th>Turma</th><th class="num">Alunos</th><th class="num">Presença</th>
+            {% for chave, rotulo in categorias.items %}<th class="num">{{ rotulo }}</th>{% endfor %}
+          </tr>
+        </thead>
+        <tbody>
+          {% for linha in turmas %}
+            {% include "web/_painel_linha.html" %}
+          {% endfor %}
+          {% with linha=total %}{% include "web/_painel_linha.html" with negrito=True %}{% endwith %}
+        </tbody>
+      </table>
+    </div>
+    <p><a href="{% url 'web:indicadores' %}?ano={{ ref.ano }}">Ver a evolução por ciclo e por área</a></p>
+  {% endif %}
+{% endblock %}

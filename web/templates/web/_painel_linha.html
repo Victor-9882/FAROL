@@ -1,0 +1,13 @@
+{% load farol %}
+<tr{% if negrito %} style="font-weight:600"{% endif %}>
+  <td>{{ linha.turma }}</td>
+  <td class="num">{{ linha.total_alunos }}</td>
+  <td class="num">{{ linha.frequencia.percentual|default_if_none:"—" }}{% if linha.frequencia.percentual is not None %}%{% endif %}</td>
+  {% for chave, rotulo in categorias.items %}
+    {% with n=linha.alunos|dictkey:chave %}
+      <td class="num{% if chave == 'queda' and n %} queda{% elif chave == 'evolucao' and n %} evolucao{% endif %}">
+        {% if user.is_diretor and n %}<a href="{% url 'web:painel_lista' chave %}?ano={{ ref.ano }}{% if not negrito %}&amp;turma={{ linha.turma|urlencode }}{% endif %}">{{ n|length }}</a>{% else %}{{ n|length }}{% endif %}
+      </td>
+    {% endwith %}
+  {% endfor %}
+</tr>

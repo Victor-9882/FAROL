@@ -30,7 +30,7 @@
         <td>{{ a.turma.nome }}</td>
         <td>{{ a.data_ingresso|date:"d/m/Y" }}</td>
         <td>{{ a.get_situacao_display }}{% if a.data_saida %} ({{ a.data_saida|date:"d/m/Y" }}){% endif %}</td>
-        <td>{% if user.is_diretor %}<a href="{% url 'web:aluno_editar' a.matricula %}">Editar</a>{% endif %}</td>
+        <td>{% if user.is_diretor %}<a href="{% url 'web:ficha' a.matricula %}">Ficha</a> · <a href="{% url 'web:aluno_editar' a.matricula %}">Editar</a>{% endif %}</td>
       </tr>
     {% empty %}
       <tr><td colspan="6">Nenhum aluno encontrado.</td></tr>
