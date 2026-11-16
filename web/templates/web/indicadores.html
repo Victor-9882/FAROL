@@ -1,0 +1,75 @@
+{% extends "web/base.html" %}
+{% block titulo %}Indicadores · FAROL{% endblock %}
+{% block conteudo %}
+  <h1>Indicadores {{ ref.ano }}</h1>
+  <p class="suave">Visão agregada por turma, sem dados nominais. Nota TRI média dos alunos avaliados
+    em cada ciclo (quem faltou não entra, RN009); presença com as faltas justificadas contando como
+    presença (RN002). A turma de cada aluno é a da data do ciclo (RN011).</p>
+  <form method="get" class="filtros">
+    <input type="hidden" name="ano" value="{{ ref.ano }}">
+    <label>Turma
+      <select name="turma">
+        <option value="">Todas</option>
+        {% for t in turmas %}<option value="{{ t.pk }}"{% if filtros.turma == t.pk %} selected{% endif %}>{{ t.nome }}</option>{% endfor %}
+      </select>
+    </label>
+    <label>Área
+      <select name="area">
+        <option value="">Média das quatro áreas</option>
+        {% for valor, rotulo in areas.items %}<option value="{{ valor }}"{% if filtros.area == valor %} selected{% endif %}>{{ rotulo }}</option>{% endfor %}
+      </select>
+    </label>
+    <label>Ciclo (detalhe)
+      <select name="ciclo">
+        <option value="">Nenhum</option>
+        {% for c in ciclos %}<option value="{{ c.pk }}"{% if filtros.ciclo == c.pk %} selected{% endif %}>Ciclo {{ forloop.counter }} ({{ c.data_inicio|date:"d/m" }} a {{ c.data_fim|date:"d/m" }})</option>{% endfor %}
+      </select>
+    </label>
+    <button type="submit">Filtrar</button>
+  </form>
+
+  {% if not ciclos %}
+    <p class="vazio">Ainda não há resultados de simulado em {{ ref.ano }}.</p>
+  {% else %}
+    <h2>Nota TRI média por ciclo · {{ nome_area }}</h2>
+    {{ grafico_nota }}
+    <h2>Presença por ciclo</h2>
+    {{ grafico_presenca }}
+
+    {% if detalhe %}
+      <h2>Ciclo {{ indice|add:1 }}: {{ ciclo.data_inicio|date:"d/m/Y" }} a {{ ciclo.data_fim|date:"d/m/Y" }}</h2>
+      <div class="rolagem"><table>
+        <thead><tr><th>Turma</th><th class="num">Nota média</th><th class="num">Avaliados</th><th class="num">Presença</th><th class="num">Redações entregues</th><th class="num">Queda</th><th class="num">Evolução</th></tr></thead>
+        <tbody>
+        {% for nome, p in detalhe %}
+          <tr{% if nome == "Total" %} style="font-weight:600"{% endif %}>
+            <td>{{ nome }}</td>
+            <td class="num">{{ p.nota|default_if_none:"—" }}</td>
+            <td class="num">{{ p.avaliados }}</td>
+            <td class="num">{{ p.presenca|default_if_none:"—" }}{% if p.presenca is not None %}%{% endif %}</td>
+            <td class="num">{{ p.participacao|default_if_none:"—" }}{% if p.participacao is not None %}%{% endif %}</td>
+            <td class="num queda">{{ p.queda }}</td>
+            <td class="num evolucao">{{ p.evolucao }}</td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table></div>
+    {% endif %}
+
+    <h2>Evolução no tempo</h2>
+    <div class="rolagem"><table>
+      <thead>
+        <tr><th>Turma</th>{% for c in ciclos %}<th class="num" title="{{ c.data_inicio|date:'d/m' }} a {{ c.data_fim|date:'d/m' }}">C{{ forloop.counter }}</th>{% endfor %}</tr>
+      </thead>
+      <tbody>
+      {% for nome, pontos in series.items %}
+        <tr{% if nome == "Total" %} style="font-weight:600"{% endif %}>
+          <td>{{ nome }}</td>
+          {% for p in pontos %}<td class="num" title="presença {{ p.presenca|default_if_none:'—' }}% · queda {{ p.queda }} · evolução {{ p.evolucao }}">{{ p.nota|default_if_none:"—" }}</td>{% endfor %}
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table></div>
+    <p class="suave">Cada célula é a nota TRI média ({{ nome_area }}); passe o dedo ou o mouse para ver presença, quedas e evoluções.</p>
+  {% endif %}
+{% endblock %}

@@ -137,10 +137,30 @@ Em todas as três, uma pendência já associada vale para o aluno escolhido nas 
 - **Quando são gerados:** ao confirmar a importação da grade de presença (as semanas da grade) e do P+ (todos os ciclos do ano, porque um ciclo novo muda o delta do seguinte); ao associar pendências; na carga da base sintética; e por `manage.py gerar_alertas --ano AAAA`, que é idempotente e pode rodar por agendador.
 - **Indicativos (RN012, NF022):** nenhum alerta muda nada no aluno; servem para a Direção olhar.
 
+## Painel, indicadores e ficha (#20 a #23)
+
+- **Referência (`inteligencia.painel.referencia`):** o ano com dados mais recente, a última semana com frequência e o último ciclo com resultado de simulado. É o "ciclo corrente" para os dados já importados.
+- **Painel inicial (RF010, `/`):**
+  - alertas ativos de frequência (semanas do ciclo de referência até a última semana com dados) e de desempenho (do ciclo de referência);
+  - presença e redações entregues no período;
+  - situação de cada turma, pela turma da data (RN011): alunos, presença, queda, estagnados, em evolução (classificação do RF015 pelo limiar vigente), sem avaliação no ciclo (faltou ou primeiro simulado, RN009) e sem presença no ciclo (só faltas não justificadas nos dias letivos).
+  - Sem dados no ano, mostra a data da última importação de cada tipo.
+  - O Diretor clica numa contagem e abre a lista (`painel/<categoria>/`, nominal, só Diretor); o Membro vê só os números (RN013). Alertas a um clique e a ficha a dois (NF002). O texto do painel lembra que os alertas são indicativos (RN012, NF022).
+- **Indicadores agregados (RF012, `indicadores/`):** Diretor e Membro, sem nome. Filtros por turma, área e ciclo. Mostra:
+  - gráficos por ciclo da nota TRI média dos avaliados (total ou da área) e da presença;
+  - detalhe do ciclo por turma (nota, avaliados, presença, redações, quedas e evoluções);
+  - tabela da evolução no tempo.
+- **Ficha do aluno (RF011, RF013, `alunos/<matrícula>/ficha/`):** só o Diretor. Traz:
+  - notas por ciclo e por área, com o delta contra o próprio histórico e a classificação (RN008);
+  - a média da turma no ciclo só como referência, nunca para classificar;
+  - frequência por ciclo, alertas (inclusive os desativados), intervenções, redações e histórico de turmas.
+- **Gráficos:** SVG gerado no servidor (`web/graficos.py`), sem JavaScript nem CDN; escala com a tela (NF001) e escapa todo texto.
+
 ## Suposições a confirmar
 
 - **Limiares dos alertas:** provisórios até a definição com a Direção (FAROL_Contexto, "Questões em aberto", itens 2 e 3). Frequência: 3 faltas não justificadas na semana; desempenho: queda de 30 pontos TRI. Evolução no RF015 usa o mesmo limiar para cima. O Diretor muda os limiares no sistema (RF018).
 - **Evolução consistente (RF016, #27):** critério ainda não definido com a Direção; não implementado.
+- **"Sem presença no ciclo" no painel:** aluno com dias letivos no ciclo e nenhuma presença (nem justificada). É a leitura provisória de "alunos inativos" do RF010; confirmar com a Direção.
 
 - **Áreas do simulado:** as quatro áreas do ENEM (Linguagens, Humanas, Natureza, Matemática). Confirmar com a DES como o P+ separa as áreas, sobretudo nos simulados de FUVEST.
 - **Formato da matrícula:** confirmado em 16/11/2026. É sempre de 7 dígitos: `AA` (ano letivo) + `30` (extensivo) ou `31` (semiextensivo) + 3 dígitos, e o aluno recebe uma matrícula nova a cada ano. Detalhes em [dominio-casd.md](dominio-casd.md), seção 2. O campo continua como texto de até 20 caracteres, o que também comporta o formato da base sintética.

@@ -1,0 +1,91 @@
+{% extends "web/base.html" %}
+{% load farol %}
+{% block titulo %}Ficha · FAROL{% endblock %}
+{% block conteudo %}
+  <p><a href="{% url 'web:inicio' %}">← Painel</a> · <a href="{% url 'web:aluno_editar' aluno.matricula %}">Editar cadastro</a></p>
+  <h1>{{ aluno.nome }}</h1>
+  <p class="suave">Matrícula {{ aluno.matricula }} · {{ aluno.turma.nome }} ({{ aluno.turma.ano }}) ·
+    ingresso em {{ aluno.data_ingresso|date:"d/m/Y" }} · {{ aluno.get_situacao_display }}{% if aluno.data_saida %} em {{ aluno.data_saida|date:"d/m/Y" }}{% endif %}</p>
+  <p class="indicativo">Dados nominais: só a Direção vê (RN013). As classificações e os alertas são indicativos (RN012).</p>
+
+  <div class="cartoes">
+    <div class="cartao"><div class="valor">{{ frequencia_ano.percentual|default_if_none:"—" }}{% if frequencia_ano.percentual is not None %}%{% endif %}</div><div class="rotulo">Presença no ano ({{ frequencia_ano.faltas }} falta(s), {{ frequencia_ano.justificadas }} justificada(s))</div></div>
+    <div class="cartao"><div class="valor">{{ participacao.percentual|default_if_none:"—" }}{% if participacao.percentual is not None %}%{% endif %}</div><div class="rotulo">Redações entregues ({{ participacao.entregues }} de {{ participacao.registradas }})</div></div>
+    <div class="cartao"><div class="valor">{{ avaliadas|length }}</div><div class="rotulo">Simulados avaliados</div></div>
+    <div class="cartao"><div class="valor queda">{{ alertas|length }}</div><div class="rotulo">Alertas registrados</div></div>
+  </div>
+
+  <h2>Evolução das notas</h2>
+  <p class="suave">A classificação compara o aluno com o próprio histórico: a nota do ciclo menos a do último simulado em que ele foi avaliado (RN008){% if limiar %}, limiar de {{ limiar|floatformat:"0" }} pontos{% endif %}. A média da turma aparece só como referência. Quem faltou não é avaliado no ciclo (RN009).</p>
+  {{ grafico_notas }}
+  {{ grafico_areas }}
+  <div class="rolagem"><table>
+    <thead><tr><th>Ciclo</th>{% for valor, nome in areas %}<th class="num">{{ nome }}</th>{% endfor %}<th class="num">Média</th><th class="num">Δ</th><th>Situação</th><th class="num">Turma</th></tr></thead>
+    <tbody>
+    {% for linha in avaliadas %}
+      <tr>
+        <td>C{{ linha.numero }} <span class="suave">{{ linha.ciclo.data_fim|date:"d/m" }}</span></td>
+        {% for valor, nome in areas %}
+          {% with nota=linha.notas|dictkey:valor d=linha.deltas|dictkey:valor %}
+            <td class="num">{% if nota is None or nota == "" %}<span class="suave">faltou</span>{% else %}{{ nota }}{% if d %}<br><span class="suave">{{ d.valor|floatformat:1 }}</span>{% endif %}{% endif %}</td>
+          {% endwith %}
+        {% endfor %}
+        <td class="num">{{ linha.total|default_if_none:"—" }}</td>
+        <td class="num">{% if linha.delta_total %}{{ linha.delta_total.valor|floatformat:1 }}{% else %}—{% endif %}</td>
+        <td>{% if linha.classificacao == "QUEDA" %}<span class="queda">Queda</span>{% elif linha.classificacao == "EVOLUCAO" %}<span class="evolucao">Evolução</span>{% elif linha.classificacao == "ESTAGNADO" %}Estagnado{% else %}<span class="suave">sem avaliação</span>{% endif %}</td>
+        <td class="num">{{ linha.media_turma|default_if_none:"—" }}</td>
+      </tr>
+    {% empty %}
+      <tr><td colspan="9" class="vazio">Nenhum resultado de simulado.</td></tr>
+    {% endfor %}
+    </tbody>
+  </table></div>
+
+  <h2>Frequência por ciclo</h2>
+  {{ grafico_presenca }}
+  <div class="rolagem"><table>
+    <thead><tr><th>Ciclo</th><th class="num">Dias letivos</th><th class="num">Presenças</th><th class="num">Justificadas</th><th class="num">Faltas</th><th class="num">Presença</th></tr></thead>
+    <tbody>
+    {% for linha in linhas %}{% if linha.frequencia.dias %}
+      <tr><td>C{{ linha.numero }} <span class="suave">{{ linha.ciclo.data_inicio|date:"d/m" }} a {{ linha.ciclo.data_fim|date:"d/m" }}</span></td>
+        <td class="num">{{ linha.frequencia.dias }}</td><td class="num">{{ linha.frequencia.presencas }}</td>
+        <td class="num">{{ linha.frequencia.justificadas }}</td><td class="num{% if linha.frequencia.faltas %} queda{% endif %}">{{ linha.frequencia.faltas }}</td>
+        <td class="num">{{ linha.frequencia.percentual }}%</td></tr>
+    {% endif %}{% endfor %}
+    </tbody>
+  </table></div>
+
+  <h2>Alertas</h2>
+  <ul>
+  {% for a in alertas %}
+    <li><strong>{{ a.get_tipo_display }}</strong>{% if a.area %} · {{ a.get_area_display }}{% endif %}
+      · {{ a.data_geracao|date:"d/m/Y" }}{% if not a.ativo %} <span class="suave">(não vale mais: dado corrigido)</span>{% endif %}<br>{{ a.motivo }}</li>
+  {% empty %}
+    <li class="vazio">Nenhum alerta.</li>
+  {% endfor %}
+  </ul>
+
+  <h2>Intervenções</h2>
+  <ul>
+  {% for i in intervencoes %}
+    <li>{{ i.data|date:"d/m/Y" }} · {{ i.get_tipo_display }} · {{ i.responsavel }}{% if i.desfecho %} · {{ i.get_desfecho_display }}{% endif %}<br>{{ i.descricao }}</li>
+  {% empty %}
+    <li class="vazio">Nenhuma intervenção registrada (RF019, em breve).</li>
+  {% endfor %}
+  </ul>
+
+  <h2>Redações</h2>
+  <div class="rolagem"><table>
+    <thead><tr><th>Tema</th><th>Semana</th><th>Entregue</th><th class="num">Nota</th></tr></thead>
+    <tbody>
+    {% for r in redacoes %}
+      <tr><td>{{ r.tema }}</td><td>{{ r.tema_semana|date:"d/m/Y" }}</td><td>{% if r.entregue %}Sim{% else %}<span class="queda">Não</span>{% endif %}</td><td class="num">{{ r.nota_total|default_if_none:"—" }}</td></tr>
+    {% empty %}
+      <tr><td colspan="4" class="vazio">Nenhuma redação registrada.</td></tr>
+    {% endfor %}
+    </tbody>
+  </table></div>
+
+  <h2>Turmas</h2>
+  <ul>{% for h in historico_turmas %}<li>{{ h.turma.nome }}: {{ h.data_inicio|date:"d/m/Y" }}{% if h.data_fim %} a {{ h.data_fim|date:"d/m/Y" }}{% else %} (atual){% endif %}</li>{% endfor %}</ul>
+{% endblock %}

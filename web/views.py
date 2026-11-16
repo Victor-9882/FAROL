@@ -47,11 +47,6 @@ class Logout(LogoutView):
     """
 
 
-def inicio(request):
-    """Página inicial. O painel (RF010) vem em issue própria; aqui só confirma o perfil."""
-    return render(request, "web/inicio.html")
-
-
 # --- Gestão de usuários (RF002, NF009) -----------------------------------------------
 
 

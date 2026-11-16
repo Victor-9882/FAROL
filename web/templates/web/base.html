@@ -4,25 +4,71 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{% block titulo %}FAROL{% endblock %}</title>
+  <style>
+    /* Responsivo, sem dependências externas (NF001). */
+    :root { --fundo: #f6f7f9; --cartao: #fff; --texto: #1f2933; --suave: #52606d; --borda: #d9dee4;
+            --primaria: #1b6ca8; --queda: #b3261e; --evolucao: #1e7a4c; --aviso: #8a5a00; }
+    * { box-sizing: border-box; }
+    body { margin: 0; font: 16px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+           background: var(--fundo); color: var(--texto); }
+    header { background: var(--primaria); color: #fff; padding: .6rem 1rem; display: flex;
+             flex-wrap: wrap; gap: .4rem 1rem; align-items: center; }
+    header a, header button { color: #fff; }
+    header nav { display: flex; flex-wrap: wrap; gap: .3rem 1rem; }
+    header form { margin-left: auto; display: flex; gap: .5rem; align-items: center; font-size: .9rem; }
+    main { max-width: 1100px; margin: 0 auto; padding: 1rem; }
+    h1 { font-size: 1.5rem; margin: .5rem 0 1rem; }
+    h2 { font-size: 1.2rem; margin: 1.5rem 0 .5rem; }
+    a { color: var(--primaria); }
+    table { border-collapse: collapse; width: 100%; background: var(--cartao); }
+    th, td { border-bottom: 1px solid var(--borda); padding: .45rem .5rem; text-align: left; vertical-align: top; }
+    th { background: #eef1f4; font-weight: 600; }
+    td.num, th.num { text-align: right; white-space: nowrap; }
+    .rolagem { overflow-x: auto; }
+    .cartoes { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: .75rem; }
+    .cartao { background: var(--cartao); border: 1px solid var(--borda); border-radius: 8px; padding: .75rem 1rem; }
+    .cartao .valor { font-size: 1.9rem; font-weight: 700; line-height: 1.1; }
+    .cartao .rotulo { color: var(--suave); font-size: .9rem; }
+    .cartao a { text-decoration: none; color: inherit; display: block; }
+    .queda { color: var(--queda); } .evolucao { color: var(--evolucao); } .aviso { color: var(--aviso); }
+    .indicativo { background: #fff8e1; border-left: 4px solid #e9a03b; padding: .5rem .75rem; margin: 1rem 0; }
+    .suave { color: var(--suave); font-size: .9rem; }
+    .vazio { color: var(--suave); font-style: italic; }
+    .grafico { width: 100%; height: auto; background: var(--cartao); border: 1px solid var(--borda); border-radius: 8px; }
+    .grafico .grade { stroke: #e4e7eb; } .grafico .eixo { font-size: 11px; fill: var(--suave); }
+    .legenda { list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: .25rem 1rem; font-size: .9rem; }
+    .legenda .cor { display: inline-block; width: .8rem; height: .8rem; border-radius: 2px; margin-right: .3rem; vertical-align: -1px; }
+    form.filtros { display: flex; flex-wrap: wrap; gap: .5rem 1rem; align-items: end; margin-bottom: 1rem; }
+    form.filtros label { display: flex; flex-direction: column; font-size: .9rem; }
+    select, input, button { font: inherit; padding: .3rem .4rem; }
+    .mensagens { list-style: none; padding: 0; }
+    @media (max-width: 600px) { th, td { padding: .35rem .3rem; font-size: .92rem; } .cartao .valor { font-size: 1.5rem; } }
+  </style>
 </head>
 <body>
   <header>
     <strong>FAROL</strong>
     {% if user.is_authenticated %}
-      <a href="{% url 'web:alunos' %}">Alunos</a>
-      <a href="{% url 'web:turmas' %}">Turmas</a>
-      <a href="{% url 'web:calendario' %}">Calendário</a>
-      {% if user.is_diretor %}<a href="{% url 'web:importacoes' %}">Importações</a>
-      <a href="{% url 'web:pendencias' %}">Pendências</a>
-      <a href="{% url 'web:usuarios' %}">Usuários</a>{% endif %}
-      <form method="post" action="{% url 'web:logout' %}" style="display:inline">
+      <nav>
+        <a href="{% url 'web:inicio' %}">Painel</a>
+        <a href="{% url 'web:indicadores' %}">Indicadores</a>
+        <a href="{% url 'web:alunos' %}">Alunos</a>
+        <a href="{% url 'web:turmas' %}">Turmas</a>
+        <a href="{% url 'web:calendario' %}">Calendário</a>
+        {% if user.is_diretor %}<a href="{% url 'web:importacoes' %}">Importações</a>
+        <a href="{% url 'web:pendencias' %}">Pendências</a>
+        <a href="{% url 'web:usuarios' %}">Usuários</a>{% endif %}
+      </nav>
+      <form method="post" action="{% url 'web:logout' %}">
         {% csrf_token %}
         <span>{{ user.get_full_name|default:user.username }} · {{ user.get_perfil_display }}</span>
         <button type="submit">Sair</button>
       </form>
     {% endif %}
   </header>
-  {% if messages %}<ul>{% for m in messages %}<li>{{ m }}</li>{% endfor %}</ul>{% endif %}
-  <main>{% block conteudo %}{% endblock %}</main>
+  <main>
+    {% if messages %}<ul class="mensagens">{% for m in messages %}<li>{{ m }}</li>{% endfor %}</ul>{% endif %}
+    {% block conteudo %}{% endblock %}
+  </main>
 </body>
 </html>

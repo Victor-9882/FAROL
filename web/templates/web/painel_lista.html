@@ -1,0 +1,35 @@
+{% extends "web/base.html" %}
+{% block titulo %}{{ titulo }} · FAROL{% endblock %}
+{% block conteudo %}
+  <p><a href="{% url 'web:inicio' %}?ano={{ ref.ano }}">← Painel</a></p>
+  <h1>{{ titulo }}{% if turma %} · {{ turma }}{% endif %}</h1>
+  <p class="indicativo">Lista indicativa, para a Direção acompanhar (RN012). Não compartilhe fora da Direção (RN013).</p>
+  {% if alertas is not None %}
+    <div class="rolagem"><table>
+      <thead><tr><th>Aluno</th><th>Turma</th><th>Motivo</th>{% if alertas.0.area or alertas.0.ciclo %}<th>Área</th>{% endif %}</tr></thead>
+      <tbody>
+      {% for a in alertas %}
+        <tr>
+          <td><a href="{% url 'web:ficha' a.aluno.matricula %}">{{ a.aluno.nome }}</a><br><span class="suave">{{ a.aluno.matricula }}</span></td>
+          <td>{{ a.aluno.turma.nome }}</td>
+          <td>{{ a.motivo }}</td>
+          {% if alertas.0.area or alertas.0.ciclo %}<td>{{ a.get_area_display|default:"Média das áreas" }}</td>{% endif %}
+        </tr>
+      {% empty %}
+        <tr><td colspan="4" class="vazio">Nenhum alerta ativo neste período.</td></tr>
+      {% endfor %}
+      </tbody>
+    </table></div>
+  {% else %}
+    <div class="rolagem"><table>
+      <thead><tr><th>Aluno</th><th>Matrícula</th><th>Turma atual</th></tr></thead>
+      <tbody>
+      {% for aluno in alunos %}
+        <tr><td><a href="{% url 'web:ficha' aluno.matricula %}">{{ aluno.nome }}</a></td><td>{{ aluno.matricula }}</td><td>{{ aluno.turma.nome }}</td></tr>
+      {% empty %}
+        <tr><td colspan="3" class="vazio">Nenhum aluno nesta categoria.</td></tr>
+      {% endfor %}
+      </tbody>
+    </table></div>
+  {% endif %}
+{% endblock %}
