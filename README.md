@@ -77,6 +77,12 @@ O código é montado como volume, então alterações aparecem sem reconstruir a
 
 Sem PostgreSQL instalado, dá para usar SQLite só para experimentar: `DATABASE_URL=sqlite:///db.sqlite3`. A CI sempre roda com PostgreSQL.
 
+## Acessos
+
+O primeiro Diretor é criado no terminal: `uv run python manage.py createsuperuser`, depois ajuste o perfil para Diretor no admin.
+Dali em diante, o Diretor gere usuários em `/usuarios/`: cria, altera o perfil, revoga o acesso e gera um link de uso único para a pessoa definir a própria senha (a senha anterior deixa de valer).
+Toda alteração fica registrada (quem, quando, valor anterior). Superusuários são geridos só no admin.
+
 ## Testes e estilo
 
 ```bash

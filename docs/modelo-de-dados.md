@@ -14,13 +14,15 @@ Implementação física do Diagrama de Classes e do DER do Relatório Descritivo
 | `core.ResultadoRedacao` | Redação | Único por aluno e tema; competências c1 a c5 (0 a 200) |
 | `core.Alerta` | Alerta | Motivo obrigatório (NF004); guarda a regra e o ciclo que o geraram |
 | `core.Intervencao` | Intervenção | Ligada ao aluno e, opcionalmente, ao alerta (RF019) |
+| `core.RegistroAlteracao` | **nova** | Auditoria: autor, data, campo, valor anterior e novo (NF009); reutilizada por RF008 e RF018 |
 | `inteligencia.RegraAlerta` | (só no Diagrama de Classes) | Uma regra ativa por tipo; limiares no banco (RF018) |
 
 ## Garantias
 
 - **Sem exclusão física (NF007):** todos os modelos acima, menos `Usuario`, herdam de `core.historico.HistoricoPreservado`. `delete()` gera `ExclusaoProibidaError`, tanto no objeto quanto em querysets. As chaves estrangeiras usam `PROTECT`. Um usuário de gestão anterior é desativado (`is_active = False`), não excluído.
 - **Sem duplicidade (NF008):** restrições `unique` no banco para frequência, simulado, redação e turma. A importação deve usar `update_or_create` sobre essas chaves.
-- **Perfil e contas (RN013, NF013):** só superusuário cria, altera ou exclui `Usuario` no admin, incluindo `perfil`, senha de terceiros, grupos e permissões. Staff sem superusuário tem no máximo leitura. As contas de superusuário são detidas pelos Diretores. A gestão de usuários pelo Diretor fica para o RF002.
+- **Perfil e contas (RN013, NF013):** só superusuário cria, altera ou exclui `Usuario` no admin, incluindo `perfil`, senha de terceiros, grupos e permissões. Staff sem superusuário tem no máximo leitura. As contas de superusuário são detidas pelos Diretores. O Diretor gere usuários nas telas de `Usuários` (RF002): cria, edita perfil e dados, revoga por desativação (`is_active`, sem exclusão) e gera link de uso único para definir a senha (gerar o link invalida a senha anterior, para que ninguém entre como outro usuário sem que ele perceba); nunca vê nem digita a senha de terceiros. Sempre resta um Diretor ativo, e superusuários ficam só no admin.
+- **Auditoria (NF009):** toda alteração de `perfil`, `is_active`, e-mail e nome grava um `RegistroAlteracao` por campo (quem, quando, valor anterior e novo). Nunca guarda senha, hash ou token. O histórico só aparece para o Diretor.
 - **Mudança de turma (RN011):** use `aluno.mudar_turma(nova_turma, data)`. O período anterior é fechado e outro é aberto. `aluno.turma_em(data)` responde em que turma o aluno estava numa data.
 
 ## Diferenças em relação ao DER do Lab 03
@@ -33,6 +35,7 @@ Precisam de uma Solicitação de Mudança para atualizar o DER e o Relatório De
 4. **`ResultadoRedacao`**: `nota_competencias` virou cinco colunas (`nota_c1` a `nota_c5`). Também foram acrescentados `entregue` (já presente no Diagrama de Classes) e `tema`. O tema é identificado pela terça-feira em que foi lançado (RN007).
 5. **`Alerta.regra`, `Alerta.ciclo` e `Alerta.area`**. Registram qual regra e qual limiar geraram o alerta e a área do alerta de desempenho (RF015).
 6. **`CicloCalendario` sem `temaRedacaoSemana`**. Cada ciclo tem duas semanas e, portanto, dois temas (RN007). O tema fica na redação.
+7. **Tabela `RegistroAlteracao`** (autor, modelo, objeto, campo, valor anterior e novo). O DER não tem trilha de auditoria, exigida pela NF009.
 
 ## Suposições a confirmar
 

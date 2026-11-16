@@ -10,7 +10,7 @@ from django.urls.converters import get_converters
 from django.utils.html import escape
 
 SENHA = "senha-sintetica-123"  # nosec: dado de teste, sem relação com contas reais
-ROTAS_PUBLICAS = {"web:saude", "web:login"}
+ROTAS_PUBLICAS = {"web:saude", "web:login", "web:definir_senha"}
 
 
 @pytest.fixture

@@ -1,0 +1,21 @@
+{% extends "web/base.html" %}
+{% block titulo %}Usuários · FAROL{% endblock %}
+{% block conteudo %}
+  <h1>Usuários</h1>
+  <p><a href="{% url 'web:usuario_novo' %}">Novo usuário</a></p>
+  <table>
+    <thead><tr><th>Usuário</th><th>Nome</th><th>E-mail</th><th>Perfil</th><th>Acesso</th><th></th></tr></thead>
+    <tbody>
+    {% for u in usuarios %}
+      <tr>
+        <td>{{ u.username }}</td>
+        <td>{{ u.get_full_name }}</td>
+        <td>{{ u.email }}</td>
+        <td>{{ u.get_perfil_display }}</td>
+        <td>{% if u.is_active %}Ativo{% else %}Revogado{% endif %}</td>
+        <td><a href="{% url 'web:usuario_editar' u.pk %}">Editar</a></td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}
