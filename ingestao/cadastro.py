@@ -30,13 +30,12 @@ COLUNAS = {
 OPCIONAIS = frozenset({"data_ingresso"})
 
 EXEMPLOS = [
-    {"matricula": "S900001", "nome": "Aluno Exemplo Um", "turma": "Turma A",
+    {"matricula": "S260001", "nome": "Aluno Exemplo Um", "turma": "Turma A",
      "data_ingresso": "02/02/2026"},
-    {"matricula": "S900002", "nome": "Aluno Exemplo Dois", "turma": "Turma B",
+    {"matricula": "S260002", "nome": "Aluno Exemplo Dois", "turma": "Turma B",
      "data_ingresso": "02/02/2026"},
 ]  # fmt: skip
 
-_MAX_MATRICULA = Aluno._meta.get_field("matricula").max_length
 _MAX_NOME = Aluno._meta.get_field("nome").max_length
 _MAX_TURMA = Turma._meta.get_field("nome").max_length
 
@@ -73,12 +72,28 @@ def _data(valor) -> date | None:
     return None
 
 
+# `AA` + modalidade (30 extensivo, 31 semiextensivo) + 3 dígitos; `AA` = ano letivo % 100.
+MATRICULA_REAL = re.compile(r"^(\d{2})(30|31)\d{3}$")  # CASDvest
+MATRICULA_SINTETICA = re.compile(r"^S(\d{2})\d{4}$")  # base sintética (NF017)
+
+
+def validar_matricula(matricula: str, ano: int) -> str:
+    """Devolve o motivo da recusa, ou "" se a matrícula é do padrão e do ano letivo."""
+    achado = MATRICULA_REAL.match(matricula) or MATRICULA_SINTETICA.match(matricula)
+    if achado is None:
+        return "matrícula fora do padrão"
+    if int(achado.group(1)) != ano % 100:
+        return "matrícula de outro ano letivo"
+    return ""
+
+
 def _validar(linha, ano) -> tuple[dict | None, str]:
     matricula = str(linha.get("matricula") or "").strip()
     if not matricula:
         return None, "matrícula em branco"
-    if len(matricula) > _MAX_MATRICULA:
-        return None, f"matrícula com mais de {_MAX_MATRICULA} caracteres"
+    motivo = validar_matricula(matricula, ano)
+    if motivo:
+        return None, motivo
     nome = _espacos(linha.get("nome"))
     if not nome:
         return None, "nome em branco"

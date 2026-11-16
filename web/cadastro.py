@@ -1,9 +1,8 @@
 """Views de cadastro de alunos e turmas (RF006).
 
-Leitura (listas e detalhe da turma): Diretor e Membro, por decisão do usuário (nomes
-visíveis ao Membro). Importar e baixar modelos: qualquer autenticado (o Diretor
-audita em `importacoes/`).
-Demais escritas (novo, editar): só o Diretor. Não há exclusão (NF007).
+Leitura (listas e detalhe da turma): Diretor e Membro, conforme a SM #58 (nomes
+visíveis ao Membro). Baixar modelos: qualquer autenticado (sem dado real).
+Importar, novo e editar: só o Diretor, que audita em `importacoes/`. Não há exclusão (NF007).
 """
 
 import os
@@ -134,7 +133,7 @@ def importacoes(request):
     return render(request, "web/importacoes.html", {"registros": qs, "usuario": usuario})
 
 
-@login_required
+@diretor_required
 def cadastro_importar(request):
     """Um formulário, dois botões: `conferir` (simula) e `importar` (grava). O arquivo é
     reenviado no segundo clique; nada fica em sessão nem em disco."""

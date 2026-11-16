@@ -115,3 +115,48 @@ def test_cabecalho_ausente_nas_primeiras_linhas_continua_erro():
     arq = _xlsx([["titulo", None], ["x", "y"], ["a", "b"]])
     with pytest.raises(ArquivoInvalidoError, match="matricula"):
         ler_tabela(arq, "a.xlsx", colunas=COLUNAS)
+
+
+def _xlsx_inflado(linha, coluna):
+    livro = Workbook()
+    livro.active.cell(row=1, column=1, value="matricula")
+    livro.active.cell(row=1, column=2, value="nome")
+    livro.active.cell(row=2, column=1, value="S260001")
+    livro.active.cell(row=2, column=2, value="Ana")
+    livro.active.cell(row=linha, column=coluna, value="x")
+    saida = io.BytesIO()
+    livro.save(saida)
+    saida.seek(0)
+    return saida
+
+
+def test_xlsx_inflado_em_linhas_e_recusado_sem_ler_a_aba_toda():
+    import tracemalloc
+
+    arq = _xlsx_inflado(200_000, 2)
+    tracemalloc.start()
+    with pytest.raises(ArquivoInvalidoError, match="limite"):
+        ler_tabela(arq, "a.xlsx")
+    pico = tracemalloc.get_traced_memory()[1]
+    tracemalloc.stop()
+    assert pico < 30 * 1024 * 1024
+
+
+def test_xlsx_inflado_em_colunas_nao_consome_memoria():
+    import tracemalloc
+
+    arq = _xlsx_inflado(5_000, 16_384)
+    tracemalloc.start()
+    try:
+        ler_tabela(arq, "a.xlsx")
+    except ArquivoInvalidoError:
+        pass
+    pico = tracemalloc.get_traced_memory()[1]
+    tracemalloc.stop()
+    assert pico < 30 * 1024 * 1024
+
+
+def test_csv_acima_do_limite_e_recusado(monkeypatch):
+    monkeypatch.setattr(leitura, "LIMITE_LINHAS", 2)
+    with pytest.raises(ArquivoInvalidoError, match="limite"):
+        ler_tabela(_csv("m;n\n" + "1;a\n" * 50), "a.csv")

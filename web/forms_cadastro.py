@@ -15,6 +15,7 @@ from django.db import transaction
 from core.auditoria import registrar_alteracoes
 from core.models import Aluno, Turma
 from ingestao import leitura
+from ingestao.cadastro import validar_matricula
 
 CAMPOS_AUDITADOS_ALUNO = ("nome", "data_ingresso", "turma", "situacao", "data_saida")
 
@@ -45,6 +46,15 @@ class AlunoNovoForm(forms.ModelForm):
             raise forms.ValidationError("Já existe um aluno com esta matrícula.")
         return matricula
 
+    def clean(self):
+        dados = super().clean()
+        matricula, turma = dados.get("matricula"), dados.get("turma")
+        if matricula and turma:
+            motivo = validar_matricula(matricula, turma.ano)
+            if motivo:
+                self.add_error("matricula", motivo.capitalize() + ".")
+        return dados
+
     def clean_nome(self):
         return _espacos(self.cleaned_data["nome"])
 
@@ -71,6 +81,7 @@ class AlunoEdicaoForm(forms.ModelForm):
         self.autor = autor
         a = self.instance
         self._anteriores = {c: getattr(a, c) for c in CAMPOS_AUDITADOS_ALUNO}
+        self.fields["turma"].queryset = Turma.objects.filter(ano=a.turma.ano)
         self.initial.update(
             data_ingresso=a.data_ingresso, turma=a.turma_id, situacao=a.situacao,
             data_saida=a.data_saida,

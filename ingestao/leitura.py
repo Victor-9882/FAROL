@@ -7,6 +7,7 @@ Mensagens de erro nunca incluem conteúdo de células (LGPD).
 
 import csv
 import io
+import itertools
 import re
 import unicodedata
 import zipfile
@@ -16,6 +17,7 @@ TAMANHO_MAXIMO = 5 * 1024 * 1024  # bytes
 LIMITE_LINHAS = 5000
 EXTENSOES = (".csv", ".xlsx")
 LINHAS_PARA_CABECALHO = 10
+MAX_COLUNAS = 50  # o XLSX em modo somente leitura preenche até a dimensão declarada da aba
 
 
 class ArquivoInvalidoError(Exception):
@@ -43,7 +45,8 @@ def _linhas_csv(conteudo: bytes) -> list[list]:
         texto = conteudo.decode("cp1252", errors="replace")
     primeira = texto.split("\n", 1)[0]
     separador = ";" if primeira.count(";") >= primeira.count(",") else ","
-    return list(csv.reader(io.StringIO(texto, newline=""), delimiter=separador))
+    leitor = csv.reader(io.StringIO(texto, newline=""), delimiter=separador)
+    return [linha[:MAX_COLUNAS] for linha in itertools.islice(leitor, LIMITE_LINHAS + 2)]
 
 
 def _linhas_xlsx(conteudo: bytes) -> list[list]:
@@ -54,7 +57,8 @@ def _linhas_xlsx(conteudo: bytes) -> list[list]:
     except (zipfile.BadZipFile, KeyError, ValueError, OSError) as erro:
         raise ArquivoInvalidoError("O arquivo XLSX não pôde ser lido.") from erro
     try:
-        return [list(linha) for linha in livro.worksheets[0].iter_rows(values_only=True)]
+        linhas = livro.worksheets[0].iter_rows(values_only=True, max_col=MAX_COLUNAS)
+        return [list(linha) for linha in itertools.islice(linhas, LIMITE_LINHAS + 2)]
     finally:
         livro.close()
 

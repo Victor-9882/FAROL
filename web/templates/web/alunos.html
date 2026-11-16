@@ -2,7 +2,7 @@
 {% block titulo %}Alunos · FAROL{% endblock %}
 {% block conteudo %}
   <h1>Alunos</h1>
-  <p>{% if user.is_diretor %}<a href="{% url 'web:aluno_novo' %}">Novo aluno</a> · {% endif %}<a href="{% url 'web:cadastro_importar' %}">Importar cadastro</a></p>
+  {% if user.is_diretor %}<p><a href="{% url 'web:aluno_novo' %}">Novo aluno</a> · <a href="{% url 'web:cadastro_importar' %}">Importar cadastro</a></p>{% endif %}
   <form method="get">
     <label>Ano letivo <input type="number" name="ano" value="{{ ano|default_if_none:'' }}"></label>
     <label>Turma

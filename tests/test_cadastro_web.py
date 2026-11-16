@@ -19,7 +19,7 @@ D = date(2026, 2, 2)
 @pytest.fixture
 def aluno(turma_a):
     return Aluno.objects.create(
-        matricula="S1", nome="Ana Sintética", data_ingresso=D, turma=turma_a
+        matricula="S260001", nome="Ana Sintética", data_ingresso=D, turma=turma_a
     )
 
 
@@ -77,14 +77,14 @@ def test_criar_aluno_abre_historico(cliente_diretor, turma_a):
     resp = cliente_diretor.post(
         reverse("web:aluno_novo"),
         {
-            "matricula": "S9",
+            "matricula": "S260009",
             "nome": "Novo  Aluno",
             "data_ingresso": "2026-02-09",
             "turma": turma_a.pk,
         },
     )
     assert resp.status_code == 302
-    aluno = Aluno.objects.get(pk="S9")
+    aluno = Aluno.objects.get(pk="S260009")
     assert aluno.nome == "Novo Aluno" and aluno.situacao == "ATIVO"
     assert aluno.historico_turmas.get().data_inicio == date(2026, 2, 9)
 
@@ -92,10 +92,15 @@ def test_criar_aluno_abre_historico(cliente_diretor, turma_a):
 def test_matricula_existente_rejeitada(cliente_diretor, aluno, turma_a):
     resp = cliente_diretor.post(
         reverse("web:aluno_novo"),
-        {"matricula": "S1", "nome": "Outro", "data_ingresso": "2026-02-09", "turma": turma_a.pk},
+        {
+            "matricula": "S260001",
+            "nome": "Outro",
+            "data_ingresso": "2026-02-09",
+            "turma": turma_a.pk,
+        },
     )
     assert resp.status_code == 200 and "Já existe" in resp.content.decode()
-    assert Aluno.objects.get(pk="S1").nome == "Ana Sintética"
+    assert Aluno.objects.get(pk="S260001").nome == "Ana Sintética"
 
 
 def _editar(client, aluno, **dados):
@@ -112,15 +117,18 @@ def _editar(client, aluno, **dados):
 
 
 def test_matricula_nao_editavel(cliente_diretor, aluno):
-    resp = _editar(cliente_diretor, aluno, matricula="S2", nome="Ana Nova")
+    resp = _editar(cliente_diretor, aluno, matricula="S260002", nome="Ana Nova")
     assert resp.status_code == 302
-    assert Aluno.objects.filter(pk="S1").exists() and not Aluno.objects.filter(pk="S2").exists()
+    assert (
+        Aluno.objects.filter(pk="S260001").exists()
+        and not Aluno.objects.filter(pk="S260002").exists()
+    )
 
 
 def test_editar_nome_registra_auditoria(cliente_diretor, diretor, aluno):
     _editar(cliente_diretor, aluno, nome="Ana Corrigida")
     reg = RegistroAlteracao.objects.get(campo="nome")
-    assert (reg.autor, reg.objeto_id, reg.valor_anterior) == (diretor, "S1", "Ana Sintética")
+    assert (reg.autor, reg.objeto_id, reg.valor_anterior) == (diretor, "S260001", "Ana Sintética")
     assert reg.valor_novo == "Ana Corrigida"
     assert RegistroAlteracao.objects.count() == 1
 
@@ -176,7 +184,7 @@ def test_editar_situacao_e_data_saida_com_auditoria(cliente_diretor, aluno):
 )
 def test_situacao_invalida_e_rejeitada(cliente_diretor, aluno, dados):
     assert _editar(cliente_diretor, aluno, **dados).status_code == 200
-    assert Aluno.objects.get(pk="S1").situacao == "ATIVO"
+    assert Aluno.objects.get(pk="S260001").situacao == "ATIVO"
 
 
 def test_saida_no_dia_do_ingresso_passa(cliente_diretor, aluno):
@@ -197,16 +205,16 @@ def test_corrigir_ingresso_pela_edicao(cliente_diretor, aluno):
 def test_invalido_some_da_lista_por_padrao(cliente_diretor, aluno):
     _editar(cliente_diretor, aluno, situacao="INVALIDO")
     url = reverse("web:alunos")
-    assert "S1" not in cliente_diretor.get(url).content.decode()
-    assert "S1" in cliente_diretor.get(url, {"situacao": "TODAS"}).content.decode()
-    assert "S1" in cliente_diretor.get(url, {"situacao": "INVALIDO"}).content.decode()
+    assert "S260001" not in cliente_diretor.get(url).content.decode()
+    assert "S260001" in cliente_diretor.get(url, {"situacao": "TODAS"}).content.decode()
+    assert "S260001" in cliente_diretor.get(url, {"situacao": "INVALIDO"}).content.decode()
 
 
 def test_filtros_da_lista(cliente_diretor, aluno, turma_b):
-    Aluno.objects.create(matricula="S2", nome="Beto Sintético", data_ingresso=D, turma=turma_b)
+    Aluno.objects.create(matricula="S260002", nome="Beto Sintético", data_ingresso=D, turma=turma_b)
     url = reverse("web:alunos")
     html = cliente_diretor.get(url, {"turma": turma_b.pk}).content.decode()
-    assert "S2" in html and "S1" not in html
+    assert "S260002" in html and "S260001" not in html
 
 
 def test_turma_criar_editar_com_auditoria(cliente_diretor, turma_a):
@@ -272,23 +280,49 @@ def test_nao_existe_rota_de_exclusao():
     assert not [n for n in nomes if any(x in n for x in ("exclu", "delet", "apag", "remov"))]
 
 
-def test_membro_acessa_importacao_e_modelos(client, membro):
+def test_membro_baixa_modelos_mas_nao_acessa_importacao(client, membro):
     client.force_login(membro)
-    for nome in ("cadastro_importar", "cadastro_modelo_xlsx", "cadastro_modelo_csv"):
+    for nome in ("cadastro_modelo_xlsx", "cadastro_modelo_csv"):
         assert client.get(reverse(f"web:{nome}")).status_code == 200, nome
+    assert client.get(reverse("web:cadastro_importar")).status_code == 403
+    assert "Importar cadastro" not in client.get(reverse("web:alunos")).content.decode()
 
 
-def test_membro_importa_e_registro_leva_o_autor(client, membro):
+def test_membro_nao_importa_nada_e_nada_e_gravado(client, membro):
     client.force_login(membro)
     url = reverse("web:cadastro_importar")
-    client.post(url, _form(_upload(PEQUENA.read_bytes()), "conferir"))
+    for acao in ("conferir", "importar"):
+        assert client.post(url, _form(_upload(PEQUENA.read_bytes()), acao)).status_code == 403
+    assert not RegistroImportacao.objects.exists() and not Aluno.objects.exists()
+
+
+def test_diretor_importa_e_registro_leva_o_autor(cliente_diretor, diretor):
+    url = reverse("web:cadastro_importar")
+    cliente_diretor.post(url, _form(_upload(PEQUENA.read_bytes()), "conferir"))
     assert not RegistroImportacao.objects.exists()
-    client.post(url, _form(_upload(PEQUENA.read_bytes(), "../x/cad.csv"), "importar"))
+    cliente_diretor.post(url, _form(_upload(PEQUENA.read_bytes(), "../x/cad.csv"), "importar"))
     reg = RegistroImportacao.objects.get()
-    assert reg.autor == membro and reg.tipo == "CADASTRO" and reg.ano == 2026
+    assert reg.autor == diretor and reg.tipo == "CADASTRO" and reg.ano == 2026
     assert reg.nome_arquivo == "cad.csv" and reg.tamanho_bytes == len(PEQUENA.read_bytes())
     assert reg.criados == 20 and reg.turmas_criadas == 5
     assert reg.data_mudanca == date(2026, 3, 2)
+
+
+def test_cadastro_manual_exige_matricula_do_ano_da_turma(cliente_diretor, turma_a):
+    base = {"nome": "Novo", "data_ingresso": "2026-02-09", "turma": turma_a.pk}
+    for ruim, msg in (("2632001", "fora do padrão"), ("S250001", "outro ano letivo")):
+        resp = cliente_diretor.post(reverse("web:aluno_novo"), {**base, "matricula": ruim})
+        assert resp.status_code == 200 and msg in resp.content.decode(), ruim
+    ok = cliente_diretor.post(reverse("web:aluno_novo"), {**base, "matricula": "2630042"})
+    assert ok.status_code == 302 and Aluno.objects.filter(pk="2630042").exists()
+
+
+def test_edicao_so_aceita_turma_do_mesmo_ano(cliente_diretor, aluno):
+    outra = Turma.objects.create(nome="Turma 2027", ano=2027)
+    resp = _editar(cliente_diretor, aluno, turma=outra.pk, data_mudanca="2026-03-02")
+    assert resp.status_code == 200
+    aluno.refresh_from_db()
+    assert aluno.turma.ano == 2026 and aluno.historico_turmas.count() == 1
 
 
 def test_registro_nao_contem_nome_de_aluno(cliente_diretor):
