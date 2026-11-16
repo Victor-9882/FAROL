@@ -7,10 +7,10 @@ entram em formulário (escalada de privilégio). Superusuários são geridos só
 from django import forms
 from django.db import transaction
 
-from core.auditoria import registrar_alteracoes
+from core.auditoria import CAMPOS_AUDITADOS_USUARIO, registrar_alteracoes
 from core.models import Usuario
 
-CAMPOS_AUDITADOS = ("perfil", "is_active", "email", "first_name", "last_name")
+CAMPOS_AUDITADOS = CAMPOS_AUDITADOS_USUARIO
 
 
 class _EmailUnico(forms.ModelForm):
