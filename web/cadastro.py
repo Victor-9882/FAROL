@@ -7,12 +7,14 @@ visíveis ao Membro). Escrita (novo, editar, importar): só o Diretor. Não há 
 from django.contrib.auth.decorators import login_required
 from django.db import transaction
 from django.db.models import Count, Max
+from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 
 from core.auditoria import historico_de
 from core.models import Aluno, Turma
-from ingestao.cadastro import COLUNAS, importar_cadastro
+from ingestao.cadastro import COLUNAS, EXEMPLOS, importar_cadastro
 from ingestao.leitura import ArquivoInvalidoError, ler_tabela
+from ingestao.modelos import gerar_modelo
 
 from .acesso import diretor_required
 from .forms_cadastro import AlunoEdicaoForm, AlunoNovoForm, ImportacaoCadastroForm, TurmaForm
@@ -127,3 +129,20 @@ def cadastro_importar(request):
         "web/cadastro_importar.html",
         {"form": form, "resumo": resumo, "gravado": gravado},
     )
+
+
+def _modelo(formato):
+    conteudo, tipo, nome = gerar_modelo("modelo_cadastro_alunos", list(COLUNAS), EXEMPLOS, formato)
+    resposta = HttpResponse(conteudo, content_type=tipo)
+    resposta["Content-Disposition"] = f'attachment; filename="{nome}"'
+    return resposta
+
+
+@diretor_required
+def cadastro_modelo_xlsx(request):
+    return _modelo("xlsx")
+
+
+@diretor_required
+def cadastro_modelo_csv(request):
+    return _modelo("csv")

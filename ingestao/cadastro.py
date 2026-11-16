@@ -26,6 +26,13 @@ COLUNAS = {
     "data_ingresso": ("ingresso", "data_de_ingresso"),
 }
 
+EXEMPLOS = [
+    {"matricula": "S900001", "nome": "Aluno Exemplo Um", "turma": "Turma A",
+     "data_ingresso": "02/02/2026"},
+    {"matricula": "S900002", "nome": "Aluno Exemplo Dois", "turma": "Turma B",
+     "data_ingresso": "02/02/2026"},
+]  # fmt: skip
+
 _MAX_MATRICULA = Aluno._meta.get_field("matricula").max_length
 _MAX_NOME = Aluno._meta.get_field("nome").max_length
 _MAX_TURMA = Turma._meta.get_field("nome").max_length

@@ -45,6 +45,7 @@ Precisam de uma Solicitação de Mudança para atualizar o DER e o Relatório De
 - **`Aluno.corrigir_ingresso(data)`**: atualiza `data_ingresso` e o início do primeiro período de turma; recusa data igual ou posterior ao fim desse período.
 - **`Aluno.objects.ingressados_ate(data)`**: alunos com `data_ingresso <= data` (RN004). **`ativos()`**: `situacao = ATIVO`.
 - **Situação do aluno** (Solicitação de Mudança do DER): `situacao` (`ATIVO`, `DESLIGADO`, `EVADIDO`, `INVALIDO`) e `data_saida`. `DESLIGADO` e `EVADIDO` exigem `data_saida >= data_ingresso`; `ATIVO` exige `data_saida` vazia; `INVALIDO` não exige data. A importação não altera a situação; a situação não altera o `HistoricoTurma`.
+- **Modelos para download** (só Diretor): `alunos/importar/modelo.xlsx` e `.csv`, gerados em memória por `ingestao/modelos.py` (`gerar_modelo(nome, colunas, exemplos, formato)`, reutilizável por RF003 a RF005) com o cabeçalho canônico de `COLUNAS` e duas linhas sintéticas (matrícula `S9000xx`). O modelo baixado importa sem divergência.
 - **LGPD**: por decisão do usuário, o Membro vê as listas de alunos e turmas, com nomes. Escrita (novo, editar, importar) é só do Diretor. Arquivos importados não são guardados.
 
 ## Suposições a confirmar

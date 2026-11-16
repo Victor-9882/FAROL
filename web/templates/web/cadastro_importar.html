@@ -6,6 +6,8 @@
   <p>Colunas: matrícula, nome, turma, data de ingresso. Nome e data de ingresso de alunos já
     cadastrados nunca são sobrescritos: diferenças aparecem como divergências, para correção manual.
     Use "Conferir" para simular sem gravar.</p>
+  <p><a href="{% url 'web:cadastro_modelo_xlsx' %}">Baixar modelo (.xlsx)</a> ·
+    <a href="{% url 'web:cadastro_modelo_csv' %}">Baixar modelo (.csv)</a></p>
   <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
     {{ form.as_p }}
