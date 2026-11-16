@@ -1,15 +1,8 @@
 """Modelos da Aplicação Core.
 
 Seguem o Diagrama de Classes e o DER do Relatório Descritivo (Seções 1.4 e 1.5),
-com estas mudanças, a registrar numa Solicitação de Mudança do DER:
-
-- `HistoricoTurma`: o DER não guarda o histórico de turmas exigido pela RN011
-  (achado da revisão estática do Plano de Testes).
-- `Intervencao.aluno`: o DER liga a intervenção só ao alerta, mas o RF019 admite
-  intervenção sem alerta associado.
-- `ResultadoSimulado.presente`: registra a ausência no simulado (RN009).
-- `ResultadoRedacao`: as notas por competência viram cinco colunas (c1 a c5), e
-  o tema é identificado pela terça-feira em que foi lançado (RN007).
+com as diferenças registradas na SM #41 e listadas em `docs/modelo-de-dados.md`,
+seção "Diferenças em relação ao DER do Lab 03".
 """
 
 from django.contrib.auth.models import AbstractUser
