@@ -1,7 +1,8 @@
 """Importação do calendário letivo, dos ciclos e dos temas de redação (RF007).
 
 Regras:
-- Chaves: `data` (dia, tema) e `data_inicio` (ciclo). Reimportar atualiza o que mudou e
+- Chaves: `data` (dia, tema), `inicio` (período) e `data_inicio` (ciclo). Reimportar atualiza o
+  que mudou e
   audita cada campo (NF009); o que não mudou conta como sem alteração (NF008).
 - Registro ausente do arquivo não é tocado (NF007).
 - Linha com data de outro ano letivo é inconsistente (protege contra arquivo errado).
@@ -18,7 +19,13 @@ from django.db import transaction
 
 from core.auditoria import registrar_alteracoes
 from core.calendario import aviso_duracao
-from core.models import CicloCalendario, DiaCalendario, RegistroImportacao, TemaRedacao
+from core.models import (
+    CicloCalendario,
+    DiaCalendario,
+    PeriodoLetivo,
+    RegistroImportacao,
+    TemaRedacao,
+)
 from ingestao.leitura import ler_data
 
 _SIM = {"s", "sim", "1", "true", "verdadeiro", "v"}
@@ -83,6 +90,19 @@ def _validar_dia(linha, ano):
     if motivo:
         return None, motivo
     return {"data": data, "letivo": letivo, "descricao": descricao}, ""
+
+
+def _validar_periodo(linha, ano):
+    inicio, motivo = _data_obrigatoria(linha, "inicio", ano)
+    if motivo:
+        return None, motivo
+    fim, motivo = _data_obrigatoria(linha, "fim")
+    if motivo:
+        return None, motivo
+    descricao, motivo = _texto(linha, "descricao", 100, False)
+    if motivo:
+        return None, motivo
+    return {"inicio": inicio, "fim": fim, "descricao": descricao}, ""
 
 
 def _validar_ciclo(linha, ano):
@@ -155,6 +175,12 @@ def _importar(modelo, chave, validar, linhas, *, ano, autor, gravar, avisar=None
     return resumo
 
 
+def importar_periodos(linhas, *, ano, autor, gravar):
+    return _importar(
+        PeriodoLetivo, "inicio", _validar_periodo, linhas, ano=ano, autor=autor, gravar=gravar
+    )
+
+
 def importar_dias(linhas, *, ano, autor, gravar):
     return _importar(
         DiaCalendario, "data", _validar_dia, linhas, ano=ano, autor=autor, gravar=gravar
@@ -181,8 +207,20 @@ def importar_temas(linhas, *, ano, autor, gravar):
 
 
 TIPOS = {
+    "periodos": SimpleNamespace(
+        rotulo="Períodos letivos",
+        registro=RegistroImportacao.Tipo.PERIODOS,
+        modelo=PeriodoLetivo,
+        colunas={"inicio": ("data_inicio",), "fim": ("data_fim",), "descricao": ()},
+        opcionais=frozenset({"descricao"}),
+        exemplos=[
+            {"inicio": "02/02/2026", "fim": "03/07/2026", "descricao": "Primeiro período"},
+            {"inicio": "20/07/2026", "fim": "11/12/2026", "descricao": "Segundo período"},
+        ],
+        importar=importar_periodos,
+    ),
     "dias": SimpleNamespace(
-        rotulo="Dias do calendário",
+        rotulo="Dias não letivos e exceções",
         registro=RegistroImportacao.Tipo.CALENDARIO,
         modelo=DiaCalendario,
         colunas={"data": (), "dia_letivo": ("dia", "letivo"), "descricao": ("motivo",)},

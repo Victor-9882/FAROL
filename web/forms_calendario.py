@@ -7,7 +7,7 @@ from django.db import transaction
 
 from core.auditoria import registrar_alteracoes
 from core.calendario import aviso_duracao
-from core.models import CicloCalendario, DiaCalendario, TemaRedacao
+from core.models import CicloCalendario, DiaCalendario, PeriodoLetivo, TemaRedacao
 from ingestao.calendario import TIPOS
 
 from .forms_cadastro import _Data, validar_arquivo
@@ -47,6 +47,15 @@ class _FormCalendario(forms.ModelForm):
         return objeto
 
 
+class PeriodoForm(_FormCalendario):
+    inicio = _Data(label="Início")
+    fim = _Data(label="Fim")
+
+    class Meta:
+        model = PeriodoLetivo
+        fields = ["inicio", "fim", "descricao"]
+
+
 class DiaForm(_FormCalendario):
     data = _Data(label="Data")
 
@@ -77,4 +86,4 @@ class TemaForm(_FormCalendario):
         fields = ["data", "tema"]
 
 
-FORMULARIOS = {"dias": DiaForm, "ciclos": CicloForm, "temas": TemaForm}
+FORMULARIOS = {"periodos": PeriodoForm, "dias": DiaForm, "ciclos": CicloForm, "temas": TemaForm}

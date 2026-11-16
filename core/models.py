@@ -216,8 +216,40 @@ class HistoricoTurma(HistoricoPreservado):
 # --- Calendário ----------------------------------------------------------------------
 
 
+class PeriodoLetivo(HistoricoPreservado):
+    """Período de aulas (início e fim de período; as férias ficam entre dois períodos). RN005."""
+
+    inicio = models.DateField("início", unique=True)
+    fim = models.DateField()
+    descricao = models.CharField("descrição", max_length=100, blank=True)
+
+    class Meta:
+        verbose_name = "período letivo"
+        verbose_name_plural = "períodos letivos"
+        ordering = ["inicio"]
+        constraints = [
+            models.CheckConstraint(
+                condition=Q(fim__gte=models.F("inicio")),
+                name="periodo_fim_nao_antes_do_inicio",
+                violation_error_message="O fim do período não pode ser anterior ao início.",
+            ),
+        ]
+
+    def __str__(self):
+        return f"Período {self.inicio:%d/%m/%Y} a {self.fim:%d/%m/%Y}"
+
+    def clean(self):
+        super().clean()
+        if self.inicio and self.fim:
+            outros = PeriodoLetivo.objects.exclude(pk=self.pk).filter(
+                inicio__lte=self.fim, fim__gte=self.inicio
+            )
+            if outros.exists():
+                raise ValidationError("O período se sobrepõe a outro período letivo (RN005).")
+
+
 class DiaCalendario(HistoricoPreservado):
-    """Um dia do calendário letivo: letivo ou não (feriado, recesso). RN005."""
+    """Exceção ao período: feriado ou emenda (não letivo), sábado com aula (letivo). RN005."""
 
     data = models.DateField(unique=True)
     letivo = models.BooleanField("dia letivo")
@@ -255,6 +287,7 @@ class CicloCalendario(HistoricoPreservado):
                     data_simulado__lte=models.F("data_fim"),
                 ),
                 name="ciclo_simulado_dentro_do_ciclo",
+                violation_error_message="A data do simulado deve estar dentro do ciclo.",
             ),
         ]
 
@@ -282,7 +315,11 @@ class TemaRedacao(HistoricoPreservado):
         verbose_name_plural = "temas de redação"
         ordering = ["data"]
         constraints = [
-            models.CheckConstraint(condition=Q(data__week_day=3), name="tema_lancado_na_terca"),
+            models.CheckConstraint(
+                condition=Q(data__week_day=3),
+                name="tema_lancado_na_terca",
+                violation_error_message="O tema é divulgado às terças-feiras (RN007).",
+            ),
         ]
 
     def __str__(self):
@@ -551,7 +588,8 @@ class RegistroImportacao(HistoricoPreservado):
 
     class Tipo(models.TextChoices):
         CADASTRO = "CADASTRO", "Cadastro de alunos e turmas"
-        CALENDARIO = "CALENDARIO", "Calendário letivo"
+        PERIODOS = "PERIODOS", "Períodos letivos"
+        CALENDARIO = "CALENDARIO", "Dias não letivos e exceções"
         CICLOS = "CICLOS", "Ciclos"
         TEMAS = "TEMAS", "Temas de redação"
 

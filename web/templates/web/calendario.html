@@ -13,6 +13,11 @@
   {% if not ano %}
     <p>Nenhum calendário cadastrado.</p>
   {% else %}
+    <h2>Períodos letivos</h2>
+    <ul>
+      {% for p in periodos %}<li>{{ p.inicio|date:"d/m/Y" }} a {{ p.fim|date:"d/m/Y" }}{% if p.descricao %} · {{ p.descricao }}{% endif %}{% if user.is_diretor %} · <a href="{% url 'web:calendario_item' 'periodos' p.pk %}">Editar</a>{% endif %}</li>
+      {% empty %}<li>Nenhum período letivo cadastrado: sem período, nenhum dia é letivo.</li>{% endfor %}
+    </ul>
     <h2>Ciclos e temas de redação</h2>
     <table>
       <thead><tr><th>Ciclo</th><th>Início</th><th>Fim</th><th>Simulado</th><th>Temas (terças)</th>{% if user.is_diretor %}<th></th>{% endif %}</tr></thead>
@@ -37,10 +42,16 @@
       {% empty %}<li>Nenhum tema cadastrado.</li>{% endfor %}
     </ul>
     <h2>Dias não letivos</h2>
-    <p>{{ total_letivos }} dias letivos no ano. Fins de semana sem registro não são letivos.</p>
+    <p>Dias letivos: segunda a sexta dentro dos períodos, exceto os dias não letivos abaixo ({{ total_letivos }} no ano).</p>
     <ul>
       {% for d in nao_letivos %}<li>{{ d.data|date:"d/m/Y" }}{% if d.descricao %} · {{ d.descricao }}{% endif %}{% if user.is_diretor %} · <a href="{% url 'web:calendario_item' 'dias' d.pk %}">Editar</a>{% endif %}</li>
       {% empty %}<li>Nenhum dia não letivo cadastrado.</li>{% endfor %}
     </ul>
+    {% if excecoes_letivas %}
+    <h2>Dias letivos fora da regra (ex.: sábado com aula)</h2>
+    <ul>
+      {% for d in excecoes_letivas %}<li>{{ d.data|date:"d/m/Y" }}{% if d.descricao %} · {{ d.descricao }}{% endif %}{% if user.is_diretor %} · <a href="{% url 'web:calendario_item' 'dias' d.pk %}">Editar</a>{% endif %}</li>{% endfor %}
+    </ul>
+    {% endif %}
   {% endif %}
 {% endblock %}

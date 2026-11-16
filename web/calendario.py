@@ -4,6 +4,8 @@ Leitura: qualquer usuário autenticado (sem dado pessoal). Importar e editar: s�
 com auditoria (NF009). Não há exclusão (NF007). Baixar modelos: qualquer autenticado.
 """
 
+from datetime import date
+
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db import transaction
@@ -12,7 +14,14 @@ from django.http import Http404, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 
 from core.auditoria import historico_de
-from core.models import CicloCalendario, DiaCalendario, RegistroImportacao, TemaRedacao
+from core.calendario import dias_letivos
+from core.models import (
+    CicloCalendario,
+    DiaCalendario,
+    PeriodoLetivo,
+    RegistroImportacao,
+    TemaRedacao,
+)
 from ingestao.calendario import TIPOS
 from ingestao.leitura import ArquivoInvalidoError, ler_tabela, nome_arquivo_seguro
 from ingestao.modelos import gerar_modelo
@@ -34,24 +43,25 @@ def calendario(request):
     ano = int(ano) if ano.isdigit() else None
     if ano is None:
         datas = [
+            PeriodoLetivo.objects.aggregate(a=Max("inicio"))["a"],
             CicloCalendario.objects.aggregate(a=Max("data_inicio"))["a"],
             DiaCalendario.objects.aggregate(a=Max("data"))["a"],
             TemaRedacao.objects.aggregate(a=Max("data"))["a"],
         ]
         datas = [d for d in datas if d]
         ano = max(datas).year if datas else None
-    contexto = {"ano": ano, "ciclos": [], "nao_letivos": [], "temas": []}
+    contexto = {"ano": ano, "periodos": [], "ciclos": [], "nao_letivos": [], "temas": []}
     if ano:
         temas = list(TemaRedacao.objects.filter(data__year=ano))
         for numero, ciclo in enumerate(CicloCalendario.objects.filter(data_inicio__year=ano), 1):
             ciclo.numero = numero
             ciclo.temas = [t for t in temas if ciclo.data_inicio <= t.data <= ciclo.data_fim]
             contexto["ciclos"].append(ciclo)
+        contexto["periodos"] = PeriodoLetivo.objects.filter(inicio__year=ano)
         contexto["nao_letivos"] = DiaCalendario.objects.filter(data__year=ano, letivo=False)
+        contexto["excecoes_letivas"] = DiaCalendario.objects.filter(data__year=ano, letivo=True)
         contexto["temas"] = temas
-        contexto["total_letivos"] = DiaCalendario.objects.filter(
-            data__year=ano, letivo=True
-        ).count()
+        contexto["total_letivos"] = len(dias_letivos(date(ano, 1, 1), date(ano, 12, 31)))
     return render(request, "web/calendario.html", contexto)
 
 

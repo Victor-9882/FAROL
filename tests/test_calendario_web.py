@@ -9,6 +9,7 @@ from django.urls import reverse
 from core.models import (
     CicloCalendario,
     DiaCalendario,
+    PeriodoLetivo,
     RegistroAlteracao,
     RegistroImportacao,
     TemaRedacao,
@@ -22,6 +23,7 @@ pytestmark = pytest.mark.django_db
 ESCRITA = [
     ("web:calendario_importar", {}),
     ("web:calendario_item_novo", {"tipo": "dias"}),
+    ("web:calendario_item_novo", {"tipo": "periodos"}),
     ("web:calendario_item_novo", {"tipo": "ciclos"}),
     ("web:calendario_item_novo", {"tipo": "temas"}),
     ("web:calendario_item", {"tipo": "dias", "pk": 1}),
@@ -168,6 +170,7 @@ def test_ciclo_simulado_fora_vira_erro_de_formulario(cliente_diretor):
         {"data_inicio": "2026-02-02", "data_fim": "2026-02-15", "data_simulado": "2026-02-16"},
     )
     assert r.status_code == 200 and CicloCalendario.objects.count() == 0
+    assert "A data do simulado deve estar dentro do ciclo." in r.content.decode()
 
 
 def test_ciclo_fora_de_14_dias_salva_com_aviso(cliente_diretor):
@@ -195,3 +198,38 @@ def test_nao_existe_rota_de_exclusao(cliente_diretor):
         reverse("web:calendario_item", args=["dias", dia.pk]), {"_delete": "1"}
     )
     assert DiaCalendario.objects.count() == 1 and r.status_code in (200, 302)
+
+
+def test_tela_mostra_periodos_e_texto_da_regra(client, membro):
+    PeriodoLetivo.objects.create(
+        inicio=date(2026, 2, 2), fim=date(2026, 7, 3), descricao="Primeiro período"
+    )
+    client.force_login(membro)
+    conteudo = client.get(reverse("web:calendario")).content.decode()
+    assert "Primeiro período" in conteudo and "02/02/2026" in conteudo
+    assert "segunda a sexta dentro dos períodos" in conteudo
+    assert "Fins de semana sem registro" not in conteudo
+
+
+def test_importar_periodos_e_trilha(cliente_diretor):
+    r = _enviar(
+        cliente_diretor,
+        "periodos",
+        _csv("inicio;fim;descricao\n02/02/2026;03/07/2026;Primeiro\n"),
+        "importar",
+    )
+    assert r.context["resumo"].criados == 1 and PeriodoLetivo.objects.count() == 1
+    assert RegistroImportacao.objects.get().tipo == "PERIODOS"
+
+
+def test_editar_periodo_audita_e_sobreposicao_vira_erro(cliente_diretor, diretor):
+    a = PeriodoLetivo.objects.create(inicio=date(2026, 2, 2), fim=date(2026, 7, 3))
+    PeriodoLetivo.objects.create(inicio=date(2026, 7, 20), fim=date(2026, 12, 11))
+    url = reverse("web:calendario_item", args=["periodos", a.pk])
+    assert cliente_diretor.get(url).status_code == 200
+    r = cliente_diretor.post(url, {"inicio": "2026-02-02", "fim": "2026-07-25"})
+    assert r.status_code == 200 and "sobrepõe" in r.content.decode()
+    r = cliente_diretor.post(url, {"inicio": "2026-02-02", "fim": "2026-07-10"})
+    assert r.status_code == 302
+    campos = set(RegistroAlteracao.objects.filter(autor=diretor).values_list("campo", flat=True))
+    assert campos == {"fim"}

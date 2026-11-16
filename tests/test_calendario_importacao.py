@@ -7,7 +7,13 @@ from pathlib import Path
 import pytest
 from openpyxl import Workbook
 
-from core.models import CicloCalendario, DiaCalendario, RegistroAlteracao, TemaRedacao
+from core.models import (
+    CicloCalendario,
+    DiaCalendario,
+    PeriodoLetivo,
+    RegistroAlteracao,
+    TemaRedacao,
+)
 from ingestao.calendario import TIPOS
 from ingestao.leitura import ler_tabela
 
@@ -176,3 +182,44 @@ def test_ciclo_atualiza_data_simulado(diretor):
     r = _rodar("ciclos", [_ciclo("02/02/2026", "15/02/2026", "15/02/2026")], diretor)
     assert r.atualizados == 1
     assert CicloCalendario.objects.get().data_simulado == date(2026, 2, 15)
+
+
+def _periodo(ini, fim, descricao="", n=2):
+    return {"inicio": ini, "fim": fim, "descricao": descricao, "_linha": n}
+
+
+def test_importa_periodos_reimporta_e_atualiza(diretor):
+    linhas = [
+        _periodo("02/02/2026", "03/07/2026", "1º período"),
+        _periodo("20/07/2026", "11/12/2026", n=3),
+    ]
+    r = _rodar("periodos", linhas, diretor)
+    assert (r.criados, r.inconsistentes) == (2, [])
+    r = _rodar("periodos", linhas, diretor)
+    assert (r.criados, r.atualizados, r.sem_alteracao) == (0, 0, 2)
+    r = _rodar("periodos", [_periodo("02/02/2026", "10/07/2026")], diretor)
+    assert r.atualizados == 1
+    assert PeriodoLetivo.objects.get(inicio=date(2026, 2, 2)).fim == date(2026, 7, 10)
+    assert RegistroAlteracao.objects.filter(modelo="core.periodoletivo", campo="fim").count() == 1
+
+
+def test_periodo_sobreposto_fim_antes_do_inicio_e_outro_ano_sao_inconsistentes(diretor):
+    linhas = [
+        _periodo("02/02/2026", "03/07/2026", n=2),
+        _periodo("03/07/2026", "10/07/2026", n=3),  # sobreposto
+        _periodo("10/08/2026", "09/08/2026", n=4),  # fim antes do início
+        _periodo("04/01/2027", "10/01/2027", n=5),  # outro ano
+        _periodo("", "10/01/2026", n=6),
+    ]
+    r = _rodar("periodos", linhas, diretor)
+    assert r.criados == 1 and sorted(n for n, _ in r.inconsistentes) == [3, 4, 5, 6]
+    assert not any("foi violada" in m for _, m in r.inconsistentes)
+
+
+def test_periodos_mais_dias_de_excecao_formam_o_calendario(diretor):
+    from core import calendario as cal
+
+    _rodar("periodos", [_periodo("02/02/2026", "03/07/2026")], diretor)
+    _rodar("dias", [_dia("16/02/2026", "N", "Carnaval")], diretor)
+    assert cal.eh_dia_letivo(date(2026, 2, 3)) is True
+    assert cal.eh_dia_letivo(date(2026, 2, 16)) is False
