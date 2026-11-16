@@ -8,6 +8,8 @@ from decimal import Decimal
 from zoneinfo import ZoneInfo
 
 import pytest
+from django.apps import apps
+from django.conf import settings
 from django.db import IntegrityError, transaction
 
 from core.historico import ExclusaoProibidaError
@@ -390,3 +392,14 @@ def test_representacoes_textuais(aluno, ciclo, alerta, regra, diretor):
         str(intervencao),
     ]
     assert all(textos)
+
+
+def test_todo_modelo_esta_na_tabela_do_modelo_de_dados():
+    texto = (settings.BASE_DIR / "docs/modelo-de-dados.md").read_text(encoding="utf-8")
+    ausentes = [
+        f"{app}.{modelo.__name__}"
+        for app in ("core", "inteligencia")
+        for modelo in apps.get_app_config(app).get_models()
+        if f"`{app}.{modelo.__name__}`" not in texto
+    ]
+    assert ausentes == []

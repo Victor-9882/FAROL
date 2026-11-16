@@ -18,6 +18,7 @@ Implementação física do Diagrama de Classes e do DER do Relatório Descritivo
 | `core.Alerta` | Alerta | Motivo obrigatório (NF004); guarda a regra e o ciclo que o geraram |
 | `core.Intervencao` | Intervenção | Ligada ao aluno e, opcionalmente, ao alerta (RF019) |
 | `core.RegistroAlteracao` | **nova** | Auditoria: autor, data, campo, valor anterior e novo (NF009); reutilizada por RF008 e RF018 |
+| `core.RegistroImportacao` | **nova** | Trilha de uploads: quem importou, quando e o resumo (NF007, NF009) |
 | `inteligencia.RegraAlerta` | (só no Diagrama de Classes) | Uma regra ativa por tipo; limiares no banco (RF018) |
 
 ## Garantias
@@ -30,7 +31,7 @@ Implementação física do Diagrama de Classes e do DER do Relatório Descritivo
 
 ## Diferenças em relação ao DER do Lab 03
 
-Precisam de uma Solicitação de Mudança para atualizar o DER e o Relatório Descritivo:
+Registradas na SM #41, para atualizar o DER, o Diagrama de Classes e o Relatório Descritivo:
 
 1. **Tabela `HistoricoTurma`** (aluno, turma, início, fim). O DER guarda só a turma atual, o que não atende à RN011. Esse problema foi apontado pela revisão estática do Plano de Testes.
 2. **`Intervencao.aluno`**. No DER, a intervenção se liga só ao alerta, mas o RF019 admite intervenção sem alerta.
@@ -40,6 +41,11 @@ Precisam de uma Solicitação de Mudança para atualizar o DER e o Relatório De
 6. **`CicloCalendario` sem `temaRedacaoSemana`**, com `data_simulado`. Cada ciclo tem duas semanas e, portanto, dois temas (RN007); os temas ficam na tabela `TemaRedacao`, e o ciclo registra a data do simulado.
 7. **Tabela `RegistroAlteracao`** (autor, modelo, objeto, campo, valor anterior e novo). O DER não tem trilha de auditoria, exigida pela NF009.
 8. **Tabelas `DiaCalendario` e `TemaRedacao`**. O DER não tem onde guardar feriados, recessos (RN005) nem os temas semanais (RN007).
+9. **Tabela `PeriodoLetivo`** (RN005). Define os períodos de aula; as férias ficam entre dois períodos.
+10. **`Aluno.situacao` e `Aluno.data_saida`** (RF006). Registram desligamento, evasão e lançamento inválido; o DER não tem situação do aluno.
+11. **Tabela `RegistroImportacao`** (NF007, NF009). Trilha dos uploads de importação, sem conteúdo de arquivo.
+12. **`CicloCalendario.data_simulado`** (RN006). Data do simulado dentro do ciclo.
+13. **`inteligencia.RegraAlerta`**. Existe só no Diagrama de Classes, não no DER; guarda os limiares no banco (RF018).
 
 ## Cadastro (RF006)
 
@@ -48,7 +54,7 @@ Precisam de uma Solicitação de Mudança para atualizar o DER e o Relatório De
 - **Matrícula**: única por ano, sem vínculo entre anos, imutável (chave). Digitada errada: o Diretor cria o aluno com a matrícula correta e marca o lançamento errado como `INVALIDO`; ele é preservado, mas escondido das listas por padrão e fora dos indicadores.
 - **`Aluno.corrigir_ingresso(data)`**: atualiza `data_ingresso` e o início do primeiro período de turma; recusa data igual ou posterior ao fim desse período.
 - **`Aluno.objects.ingressados_ate(data)`**: alunos com `data_ingresso <= data` (RN004). **`ativos()`**: `situacao = ATIVO`.
-- **Situação do aluno** (Solicitação de Mudança do DER): `situacao` (`ATIVO`, `DESLIGADO`, `EVADIDO`, `INVALIDO`) e `data_saida`. `DESLIGADO` e `EVADIDO` exigem `data_saida >= data_ingresso`; `ATIVO` exige `data_saida` vazia; `INVALIDO` não exige data. A importação não altera a situação; a situação não altera o `HistoricoTurma`.
+- **Situação do aluno** (diferença 10 da seção "Diferenças em relação ao DER do Lab 03", SM #41): `situacao` (`ATIVO`, `DESLIGADO`, `EVADIDO`, `INVALIDO`) e `data_saida`. `DESLIGADO` e `EVADIDO` exigem `data_saida >= data_ingresso`; `ATIVO` exige `data_saida` vazia; `INVALIDO` não exige data. A importação não altera a situação; a situação não altera o `HistoricoTurma`.
 - **Modelos para download** (qualquer usuário autenticado): `alunos/importar/modelo.xlsx` e `.csv`, gerados em memória por `ingestao/modelos.py` (`gerar_modelo(nome, colunas, exemplos, formato)`, reutilizável por RF003 a RF005) com o cabeçalho canônico de `COLUNAS` e duas linhas sintéticas (matrícula `S9000xx`). O modelo baixado importa sem divergência.
 - **LGPD**: conforme a SM #58, o Membro vê as listas de alunos e turmas, com nomes. Baixar os modelos de planilha é permitido ao Membro; importar cadastro e criar ou editar aluno ou turma é só do Diretor. Arquivos importados não são guardados.
 - **Trilha de uploads** (`core.RegistroImportacao`, NF007): ao importar (não ao conferir) grava-se autor, data e hora, tipo, nome do arquivo (sanitizado, máx. 255), tamanho, ano letivo, data de mudança e as contagens do resumo. Nunca o conteúdo, nomes ou matrículas de alunos. Sem exclusão nem edição. Só o Diretor vê, em `importacoes/` (filtro `?usuario=`).
