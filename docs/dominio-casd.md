@@ -47,7 +47,13 @@ Quando um fato daqui mudar um requisito, ele precisa de uma Solicitação de Mud
 
 - **Dias de aula:** o extensivo e o semiextensivo têm aula de **segunda a sexta**.
 - **Não letivos:** feriados, emendas e férias (RN005). As férias do meio do ano ficam em julho.
-- **Modelo de dia letivo proposto na revisão do PR #63:** dia letivo é o dia de segunda a sexta dentro de um período letivo que não seja feriado nem emenda. A alternativa, listar cada dia letivo, foi descartada: um dia esquecido apagaria faltas sem aviso no RF003. Confira no PR #63 a implementação final.
+- **Dia letivo, como está implementado (PR #63):**
+  - é letivo o dia de **segunda a sexta dentro de um `PeriodoLetivo`**, desde que não exista `DiaCalendario(letivo=False)` naquela data (feriado ou emenda);
+  - um `DiaCalendario(letivo=True)` é a exceção contrária (por exemplo, um sábado com aula) e conta por si;
+  - as férias são o intervalo entre dois períodos.
+
+  O Diretor cadastra só os períodos (alguns por ano) e as exceções (15 a 20 por ano). Use sempre `core.calendario.eh_dia_letivo` e `dias_letivos` na hora do cálculo. A alternativa, listar cada dia letivo, foi descartada: um dia esquecido apagaria faltas sem aviso no RF003.
+- **Tema de redação vigente:** `core.calendario.tema_em(data)` devolve o tema da terça anterior (janela de 7 dias), ou `None` na semana sem tema.
 - **Ciclo de desempenho (RN006):** as duas semanas entre simulados. Os simulados do CASD aparecem no calendário interno com nomes variados (por exemplo, "ENEM 1 CASD", "Simulado Nivelamento").
 - **Semanas do ITA:** o calendário interno numera as semanas pelo calendário do ITA ("1ª" a "8ª" e "semaninha"). Na **semaninha**, o CASD continua com aulas normais (salvo férias ou feriado), mas os alunos do ITA folgam e o efetivo da gestão diminui. Isso **não** muda o que é dia letivo nem os ciclos. A referência é tratada na #64.
 
@@ -81,7 +87,8 @@ Quando um fato daqui mudar um requisito, ele precisa de uma Solicitação de Mud
 |---|---|
 | Membro vê nomes nas listas de cadastro; importar é só do Diretor | SM #58 |
 | Formato da matrícula | Comentário de revisão no PR #57; este documento |
-| Modelo de dia letivo, aulas de segunda a sexta | Revisão do PR #63 |
+| Modelo de dia letivo, aulas de segunda a sexta | Revisão e implementação no PR #63 |
+| Datas de ciclo com resultados de simulado | Comentário na #15 (RF004) |
 | Semanas do ITA | #64 |
 | Fonte dos temas de redação | Comentário na #16 |
 | Aviso de passagens em dia não letivo no RF003 | Comentário na #14 |
