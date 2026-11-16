@@ -2,7 +2,10 @@
 {% block titulo %}Calendário · FAROL{% endblock %}
 {% block conteudo %}
   <h1>Calendário letivo{% if ano %} de {{ ano }}{% endif %}</h1>
-  {% if user.is_diretor %}<p><a href="{% url 'web:calendario_importar' %}">Importar planilha</a></p>{% endif %}
+  {% if user.is_diretor %}<p><a href="{% url 'web:calendario_importar' %}">Importar planilha</a> ·
+    Novo: <a href="{% url 'web:calendario_item_novo' 'dias' %}">dia</a> ·
+    <a href="{% url 'web:calendario_item_novo' 'ciclos' %}">ciclo</a> ·
+    <a href="{% url 'web:calendario_item_novo' 'temas' %}">tema</a></p>{% endif %}
   <form method="get">
     <label>Ano <input type="number" name="ano" value="{{ ano|default_if_none:'' }}"></label>
     <button type="submit">Ver</button>
@@ -12,7 +15,7 @@
   {% else %}
     <h2>Ciclos e temas de redação</h2>
     <table>
-      <thead><tr><th>Ciclo</th><th>Início</th><th>Fim</th><th>Simulado</th><th>Temas (terças)</th></tr></thead>
+      <thead><tr><th>Ciclo</th><th>Início</th><th>Fim</th><th>Simulado</th><th>Temas (terças)</th>{% if user.is_diretor %}<th></th>{% endif %}</tr></thead>
       <tbody>
       {% for c in ciclos %}
         <tr>
@@ -21,16 +24,22 @@
           <td>{{ c.data_fim|date:"d/m/Y" }}</td>
           <td>{{ c.data_simulado|date:"d/m/Y"|default:"—" }}</td>
           <td>{% for t in c.temas %}{{ t.data|date:"d/m" }}: {{ t.tema }}{% if not forloop.last %}; {% endif %}{% endfor %}</td>
+          {% if user.is_diretor %}<td><a href="{% url 'web:calendario_item' 'ciclos' c.pk %}">Editar</a></td>{% endif %}
         </tr>
       {% empty %}
-        <tr><td colspan="5">Nenhum ciclo cadastrado.</td></tr>
+        <tr><td colspan="6">Nenhum ciclo cadastrado.</td></tr>
       {% endfor %}
       </tbody>
     </table>
+    <h2>Temas por semana</h2>
+    <ul>
+      {% for t in temas %}<li>{{ t.data|date:"d/m/Y" }} · {{ t.tema }}{% if user.is_diretor %} · <a href="{% url 'web:calendario_item' 'temas' t.pk %}">Editar</a>{% endif %}</li>
+      {% empty %}<li>Nenhum tema cadastrado.</li>{% endfor %}
+    </ul>
     <h2>Dias não letivos</h2>
     <p>{{ total_letivos }} dias letivos no ano. Fins de semana sem registro não são letivos.</p>
     <ul>
-      {% for d in nao_letivos %}<li>{{ d.data|date:"d/m/Y" }}{% if d.descricao %} · {{ d.descricao }}{% endif %}</li>
+      {% for d in nao_letivos %}<li>{{ d.data|date:"d/m/Y" }}{% if d.descricao %} · {{ d.descricao }}{% endif %}{% if user.is_diretor %} · <a href="{% url 'web:calendario_item' 'dias' d.pk %}">Editar</a>{% endif %}</li>
       {% empty %}<li>Nenhum dia não letivo cadastrado.</li>{% endfor %}
     </ul>
   {% endif %}

@@ -6,7 +6,13 @@ from datetime import date
 import pytest
 from django.urls import reverse
 
-from core.models import CicloCalendario, DiaCalendario, RegistroImportacao, TemaRedacao
+from core.models import (
+    CicloCalendario,
+    DiaCalendario,
+    RegistroAlteracao,
+    RegistroImportacao,
+    TemaRedacao,
+)
 from ingestao.calendario import TIPOS
 from ingestao.leitura import ler_tabela
 from tests.conftest import SENHA
@@ -15,6 +21,10 @@ pytestmark = pytest.mark.django_db
 
 ESCRITA = [
     ("web:calendario_importar", {}),
+    ("web:calendario_item_novo", {"tipo": "dias"}),
+    ("web:calendario_item_novo", {"tipo": "ciclos"}),
+    ("web:calendario_item_novo", {"tipo": "temas"}),
+    ("web:calendario_item", {"tipo": "dias", "pk": 1}),
 ]
 
 
@@ -102,3 +112,86 @@ def test_modelo_baixado_importa_sem_inconsistencia(client, membro, tipo, formato
 def test_modelo_desconhecido_404(client, membro, tipo, formato):
     client.force_login(membro)
     assert client.get(reverse("web:calendario_modelo", args=[tipo, formato])).status_code == 404
+
+
+def test_editar_registra_auditoria(cliente_diretor, diretor):
+    dia = DiaCalendario.objects.create(data=date(2026, 2, 16), letivo=True)
+    url = reverse("web:calendario_item", args=["dias", dia.pk])
+    assert cliente_diretor.get(url).status_code == 200
+    r = cliente_diretor.post(url, {"data": "2026-02-16", "descricao": "Carnaval"})
+    assert r.status_code == 302
+    dia.refresh_from_db()
+    assert dia.letivo is False and dia.descricao == "Carnaval"
+    campos = set(RegistroAlteracao.objects.filter(autor=diretor).values_list("campo", flat=True))
+    assert campos == {"letivo", "descricao"}
+
+
+def test_editar_tema_corrige_texto_e_data(cliente_diretor):
+    tema = TemaRedacao.objects.create(data=date(2026, 2, 3), tema="Errado")
+    url = reverse("web:calendario_item", args=["temas", tema.pk])
+    cliente_diretor.post(url, {"data": "2026-02-10", "tema": "Certo"})
+    tema.refresh_from_db()
+    assert (tema.data, tema.tema) == (date(2026, 2, 10), "Certo")
+    assert RegistroAlteracao.objects.filter(modelo="core.temaredacao").count() == 2
+
+
+def test_tema_fora_da_terca_vira_erro_de_formulario(cliente_diretor):
+    r = cliente_diretor.post(
+        reverse("web:calendario_item_novo", args=["temas"]),
+        {"data": "2026-02-02", "tema": "x"},
+    )
+    assert r.status_code == 200 and "terças-feiras" in r.content.decode()
+    assert TemaRedacao.objects.count() == 0
+
+
+def test_novo_dia_nao_audita(cliente_diretor):
+    r = cliente_diretor.post(
+        reverse("web:calendario_item_novo", args=["dias"]),
+        {"data": "2026-02-16", "letivo": "on", "descricao": ""},
+    )
+    assert r.status_code == 302 and DiaCalendario.objects.count() == 1
+    assert RegistroAlteracao.objects.count() == 0
+
+
+def test_ciclo_sobreposto_vira_erro_de_formulario(cliente_diretor):
+    CicloCalendario.objects.create(data_inicio=date(2026, 2, 2), data_fim=date(2026, 2, 15))
+    r = cliente_diretor.post(
+        reverse("web:calendario_item_novo", args=["ciclos"]),
+        {"data_inicio": "2026-02-15", "data_fim": "2026-02-28"},
+    )
+    assert r.status_code == 200 and CicloCalendario.objects.count() == 1
+
+
+def test_ciclo_simulado_fora_vira_erro_de_formulario(cliente_diretor):
+    r = cliente_diretor.post(
+        reverse("web:calendario_item_novo", args=["ciclos"]),
+        {"data_inicio": "2026-02-02", "data_fim": "2026-02-15", "data_simulado": "2026-02-16"},
+    )
+    assert r.status_code == 200 and CicloCalendario.objects.count() == 0
+
+
+def test_ciclo_fora_de_14_dias_salva_com_aviso(cliente_diretor):
+    r = cliente_diretor.post(
+        reverse("web:calendario_item_novo", args=["ciclos"]),
+        {"data_inicio": "2026-02-02", "data_fim": "2026-02-10"},
+        follow=True,
+    )
+    assert CicloCalendario.objects.count() == 1 and "9 dias" in r.content.decode()
+
+
+def test_item_inexistente_ou_tipo_desconhecido_404(cliente_diretor):
+    assert (
+        cliente_diretor.get(reverse("web:calendario_item", args=["dias", 999])).status_code == 404
+    )
+    assert cliente_diretor.get(reverse("web:calendario_item_novo", args=["xx"])).status_code == 404
+
+
+def test_nao_existe_rota_de_exclusao(cliente_diretor):
+    dia = DiaCalendario.objects.create(data=date(2026, 2, 16), letivo=True)
+    for sufixo in ("excluir/", "apagar/", "remover/"):
+        url = reverse("web:calendario_item", args=["dias", dia.pk]) + sufixo
+        assert cliente_diretor.post(url).status_code == 404
+    r = cliente_diretor.post(
+        reverse("web:calendario_item", args=["dias", dia.pk]), {"_delete": "1"}
+    )
+    assert DiaCalendario.objects.count() == 1 and r.status_code in (200, 302)

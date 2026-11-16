@@ -21,6 +21,7 @@
       </form>
     {% endif %}
   </header>
+  {% if messages %}<ul>{% for m in messages %}<li>{{ m }}</li>{% endfor %}</ul>{% endif %}
   <main>{% block conteudo %}{% endblock %}</main>
 </body>
 </html>

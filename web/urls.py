@@ -30,6 +30,8 @@ urlpatterns = [
         calendario.calendario_modelo,
         name="calendario_modelo",
     ),
+    path("calendario/<slug:tipo>/novo/", calendario.calendario_item, name="calendario_item_novo"),
+    path("calendario/<slug:tipo>/<int:pk>/", calendario.calendario_item, name="calendario_item"),
     path("definir-senha/<uidb64>/<token>/", views.DefinirSenha.as_view(), name="definir_senha"),
     path("saude/", views.saude, name="saude"),
 ]

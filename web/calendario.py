@@ -4,19 +4,21 @@ Leitura: qualquer usuário autenticado (sem dado pessoal). Importar e editar: s�
 com auditoria (NF009). Não há exclusão (NF007). Baixar modelos: qualquer autenticado.
 """
 
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db import transaction
 from django.db.models import Max
 from django.http import Http404, HttpResponse
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, redirect, render
 
+from core.auditoria import historico_de
 from core.models import CicloCalendario, DiaCalendario, RegistroImportacao, TemaRedacao
 from ingestao.calendario import TIPOS
 from ingestao.leitura import ArquivoInvalidoError, ler_tabela, nome_arquivo_seguro
 from ingestao.modelos import gerar_modelo
 
 from .acesso import diretor_required
-from .forms_calendario import ImportacaoCalendarioForm
+from .forms_calendario import FORMULARIOS, ImportacaoCalendarioForm
 
 
 def _tipo(slug):
@@ -102,3 +104,24 @@ def calendario_modelo(request, tipo, formato):
     resposta = HttpResponse(conteudo, content_type=mime)
     resposta["Content-Disposition"] = f'attachment; filename="{nome}"'
     return resposta
+
+
+@diretor_required
+def calendario_item(request, tipo, pk=None):
+    """Novo (`pk` ausente) e edição de um dia, ciclo ou tema. Sem exclusão (NF007)."""
+    t = _tipo(tipo)
+    alvo = get_object_or_404(t.modelo, pk=pk) if pk is not None else None
+    form = FORMULARIOS[tipo](request.POST or None, instance=alvo, autor=request.user)
+    if request.method == "POST" and form.is_valid():
+        form.save()
+        aviso = getattr(form, "aviso", "")
+        if aviso:
+            messages.warning(request, f"Salvo, mas há um aviso: {aviso}.")
+        return redirect("web:calendario")
+    contexto = {
+        "form": form,
+        "alvo": alvo,
+        "rotulo": t.rotulo,
+        "historico": historico_de(alvo) if alvo else [],
+    }
+    return render(request, "web/calendario_form.html", contexto)
