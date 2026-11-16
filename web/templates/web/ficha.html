@@ -66,6 +66,7 @@
   </ul>
 
   <h2>Intervenções</h2>
+  <p><a href="{% url 'web:intervencoes' %}?aluno={{ aluno.matricula }}">Ver no histórico</a></p>
   <ul>
   {% for i in intervencoes %}
     <li>{{ i.data|date:"d/m/Y" }} · {{ i.get_tipo_display }} · {{ i.responsavel }}{% if i.desfecho %} · {{ i.get_desfecho_display }}{% endif %}<br>{{ i.descricao }}</li>
