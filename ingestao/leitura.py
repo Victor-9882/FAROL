@@ -17,7 +17,7 @@ from datetime import date, datetime
 from django.conf import settings
 
 TAMANHO_MAXIMO = 5 * 1024 * 1024  # bytes
-EXTENSOES = (".csv", ".xlsx")
+EXTENSOES = (".csv", ".xlsx", ".xlsm")  # .xlsm: relatório do P+ (as macros nunca rodam)
 LINHAS_PARA_CABECALHO = 10
 MAX_COLUNAS = 50  # o XLSX em modo somente leitura preenche até a dimensão declarada da aba
 
@@ -60,7 +60,7 @@ def _celula(valor):
     return valor
 
 
-def _linhas_csv(conteudo: bytes, limite: int) -> list[list]:
+def _linhas_csv(conteudo: bytes, limite: int, max_colunas=MAX_COLUNAS) -> list[list]:
     try:
         texto = conteudo.decode("utf-8-sig")
     except UnicodeDecodeError:
@@ -68,10 +68,10 @@ def _linhas_csv(conteudo: bytes, limite: int) -> list[list]:
     primeira = texto.split("\n", 1)[0]
     separador = ";" if primeira.count(";") >= primeira.count(",") else ","
     leitor = csv.reader(io.StringIO(texto, newline=""), delimiter=separador)
-    return [linha[:MAX_COLUNAS] for linha in itertools.islice(leitor, limite + 2)]
+    return [linha[:max_colunas] for linha in itertools.islice(leitor, limite + 2)]
 
 
-def _linhas_xlsx(conteudo: bytes, limite: int) -> list[list]:
+def _linhas_xlsx(conteudo: bytes, limite: int, aba=None, max_colunas=MAX_COLUNAS) -> list[list]:
     from openpyxl import load_workbook
 
     try:
@@ -79,7 +79,15 @@ def _linhas_xlsx(conteudo: bytes, limite: int) -> list[list]:
     except (zipfile.BadZipFile, KeyError, ValueError, OSError) as erro:
         raise ArquivoInvalidoError("O arquivo XLSX não pôde ser lido.") from erro
     try:
-        linhas = livro.worksheets[0].iter_rows(values_only=True, max_col=MAX_COLUNAS)
+        planilha = livro.worksheets[0]
+        if aba:
+            procurada = normalizar_cabecalho(aba)
+            planilha = next(
+                (p for p in livro.worksheets if normalizar_cabecalho(p.title) == procurada), None
+            )
+            if planilha is None:
+                raise ArquivoInvalidoError(f"A aba “{aba}” não existe no arquivo.")
+        linhas = planilha.iter_rows(values_only=True, max_col=max_colunas)
         return [list(linha) for linha in itertools.islice(linhas, limite + 2)]
     finally:
         livro.close()
@@ -99,6 +107,32 @@ def _achar_cabecalho(bruto: list[list], colunas, opcionais=frozenset()) -> int:
     return 0
 
 
+def ler_bruto(
+    arquivo, nome_arquivo: str, *, aba=None, limite_linhas=None, max_colunas=MAX_COLUNAS
+) -> list[list]:
+    """Linhas cruas (listas de células) da aba `aba` do XLSX/XLSM (ou da primeira) ou do CSV,
+    com as mesmas defesas de `ler_tabela`: extensão, tamanho e limite de linhas.
+
+    Serve às planilhas que não são uma tabela simples, como a grade de presença (uma
+    coluna por dia) e o relatório do P+ (duas abas)."""
+    limite = limite_linhas if limite_linhas is not None else settings.IMPORTACAO_LIMITE_LINHAS
+    nome = (nome_arquivo or "").lower()
+    if not nome.endswith(EXTENSOES):
+        raise ArquivoInvalidoError("Só são aceitos arquivos .csv, .xlsx e .xlsm.")
+    conteudo = arquivo.read()
+    if len(conteudo) > TAMANHO_MAXIMO:
+        raise ArquivoInvalidoError("O arquivo excede o tamanho máximo permitido.")
+    if nome.endswith(".csv"):
+        bruto = [linha[:max_colunas] for linha in _linhas_csv(conteudo, limite, max_colunas)]
+    else:
+        bruto = _linhas_xlsx(conteudo, limite, aba, max_colunas)
+    if len(bruto) < 2:
+        raise ArquivoInvalidoError("O arquivo não tem linhas de dados.")
+    if len(bruto) > limite + 1:
+        raise ArquivoInvalidoError(f"O arquivo excede o limite de {limite} linhas.")
+    return [[_celula(v) for v in linha] for linha in bruto]
+
+
 def ler_tabela(
     arquivo,
     nome_arquivo: str,
@@ -106,6 +140,7 @@ def ler_tabela(
     colunas: dict[str, tuple[str, ...]] | None = None,
     opcionais=frozenset(),
     limite_linhas: int | None = None,
+    aba: str | None = None,
 ):
     """Lê a primeira aba (XLSX) ou o CSV e devolve uma lista de dicionários.
 
@@ -115,23 +150,10 @@ def ler_tabela(
     traga todas as colunas. As colunas em `opcionais` podem faltar no arquivo.
     Linhas totalmente vazias são puladas. Datas do XLSX viram `date`; matrícula numérica
     vira texto inteiro. `limite_linhas` troca o limite de linhas de dados, que por padrão é
-    `settings.IMPORTACAO_LIMITE_LINHAS`.
+    `settings.IMPORTACAO_LIMITE_LINHAS` (lido na chamada). `aba` escolhe a aba do XLSX pelo
+    nome (sem distinção de caixa e acento).
     """
-    # Lido na chamada (e não na importação do módulo): `settings` e o ambiente valem sempre.
-    limite = limite_linhas if limite_linhas is not None else settings.IMPORTACAO_LIMITE_LINHAS
-    nome = (nome_arquivo or "").lower()
-    if not nome.endswith(EXTENSOES):
-        raise ArquivoInvalidoError("Só são aceitos arquivos .csv e .xlsx.")
-    conteudo = arquivo.read()
-    if len(conteudo) > TAMANHO_MAXIMO:
-        raise ArquivoInvalidoError("O arquivo excede o tamanho máximo permitido.")
-    bruto = (
-        _linhas_xlsx(conteudo, limite) if nome.endswith(".xlsx") else _linhas_csv(conteudo, limite)
-    )
-    if len(bruto) < 2:
-        raise ArquivoInvalidoError("O arquivo não tem linhas de dados.")
-    if len(bruto) > limite + 1:
-        raise ArquivoInvalidoError(f"O arquivo excede o limite de {limite} linhas.")
+    bruto = ler_bruto(arquivo, nome_arquivo, aba=aba, limite_linhas=limite_linhas)
 
     inicio = _achar_cabecalho(bruto, colunas, opcionais)
     cabecalho = [normalizar_cabecalho(c) for c in bruto[inicio]]
@@ -148,7 +170,7 @@ def ler_tabela(
 
     linhas = []
     for numero, valores in enumerate(bruto[inicio + 1 :], start=inicio + 2):
-        celulas = [_celula(v) for v in valores]
+        celulas = valores
         if all(v is None or v == "" for v in celulas):
             continue
         linha = {c: v for c, v in zip(cabecalho, celulas, strict=False) if c}

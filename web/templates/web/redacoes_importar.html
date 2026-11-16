@@ -2,16 +2,16 @@
 {% block titulo %}Importar redações · FAROL{% endblock %}
 {% block conteudo %}
   <h1>Importar redações (Corrija-me)</h1>
-  <p>Envie a exportação do Corrija-me: uma linha por aluno e tema, com a terça-feira do tema
-    (RN007), o título, a matrícula, a entrega (S ou N) e as cinco competências (0 a 200).
-    O tema da terça que ainda não estiver cadastrado é criado com o título do arquivo; se já
-    estiver, o cadastrado é mantido e o resumo avisa quando o título difere.
-    A redação não entregue fica registrada, sem notas.</p>
-  <p>Linhas com matrícula em branco, fora do padrão ou sem aluno no cadastro ficam em
-    <a href="{% url 'web:pendencias' %}">Pendências</a> para associação manual, com o nome como
-    verificação (RN003). Reimportar atualiza o que mudou, com auditoria.</p>
-  <p><a href="{% url 'web:redacoes_modelo' 'xlsx' %}">Baixar modelo (.xlsx)</a> ·
-    <a href="{% url 'web:redacoes_modelo' 'csv' %}">Baixar modelo (.csv)</a></p>
+  <p>Envie a exportação do Corrija-me de <strong>um</strong> tema e escolha a terça-feira em que
+    ele foi lançado (RN007). A coluna <strong>RM</strong> precisa trazer a matrícula do aluno
+    (RN003). O tema da terça que ainda não estiver cadastrado é criado com o título do arquivo.</p>
+  <p>O Corrija-me só exporta quem entregou: os alunos ativos que não aparecem no arquivo ficam
+    registrados como <strong>não entregue</strong>, por isso envie a exportação completa do tema.
+    A escala segue a banca: ENEM com cinco competências de 0 a 200; outras bancas com a nota
+    final da banca. Linhas sem aluno no cadastro ficam em
+    <a href="{% url 'web:pendencias' %}">Pendências</a>, e associá-las corrige o "não entregue".
+    Reimportar atualiza o que mudou, com auditoria.</p>
+  <p><a href="{% url 'web:redacoes_modelo' 'xlsx' %}">Baixar modelo (.xlsx)</a></p>
   <form method="post" enctype="multipart/form-data" id="importacao-form">
     {% csrf_token %}
     {% for campo in form %}

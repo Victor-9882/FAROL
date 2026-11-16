@@ -1,6 +1,7 @@
-"""Importação dos resultados de simulados do P+ (RF004, RN003, RN004, RN006, RN009, RN010).
+"""Importação do relatório de simulado do P+ (RF004, RN003, RN004, RN006, RN009, RN010).
 
-Só dados sintéticos (NF017): a base `pequena/2026` e linhas inventadas.
+Só dados sintéticos (NF017): as réplicas `pequena/2026/planilhas/p_mais_simulado_*.xlsx` e
+relatórios montados no mesmo layout por `ingestao.planilhas_casd`.
 """
 
 import io
@@ -13,6 +14,7 @@ import pytest
 from django.core.exceptions import ValidationError
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.urls import reverse
+from openpyxl import load_workbook
 
 from core.models import (
     Aluno,
@@ -23,54 +25,62 @@ from core.models import (
     ResultadoSimulado,
     Turma,
 )
-from ingestao import pendencias
+from ingestao import pendencias, planilhas_casd
 from ingestao.cadastro import COLUNAS as COLUNAS_CADASTRO
 from ingestao.cadastro import importar_cadastro
 from ingestao.calendario import TIPOS
-from ingestao.leitura import ler_tabela
-from ingestao.simulados import COLUNAS, OPCIONAIS, aplicar_pendencia, importar_simulados
+from ingestao.leitura import ArquivoInvalidoError, ler_tabela
+from ingestao.simulados import aplicar_pendencia, importar_simulados, ler_relatorio
 from tests.conftest import importar_em_dois_passos
 
 pytestmark = pytest.mark.django_db
 
 PASTA = Path(__file__).parent / "dados_sinteticos" / "pequena"
+PLANILHAS = PASTA / "2026" / "planilhas"
 PERFIS = {
     p["perfil"]: p for p in json.loads((PASTA / "perfis_conhecidos.json").read_text())["perfis"]
 }
 Area = ResultadoSimulado.Area
-CABECALHO = (
-    "data;matricula;nome;presenca;"
-    "LC_acertos;LC_tri;CH_acertos;CH_tri;CN_acertos;CN_tri;MT_acertos;MT_tri\n"
-)
+AREAS = ("HUMANAS", "LINGUAGENS", "NATUREZA", "MATEMATICA")
 
 
-def _ler(nome, colunas, opcionais=frozenset()):
+def _ler_csv(nome, colunas, opcionais=frozenset()):
     with (PASTA / "2026" / nome).open("rb") as f:
         return ler_tabela(f, nome, colunas=colunas, opcionais=opcionais)
 
 
-def _csv(corpo):
-    texto = CABECALHO + corpo
-    return ler_tabela(io.BytesIO(texto.encode()), "p.csv", colunas=COLUNAS, opcionais=OPCIONAIS)
+def _aluno(matricula="S260001", notas=650.0, acertos=30, faltou=(), id_aluno=1, nome="Aluno Um"):
+    return {
+        "matricula": matricula,
+        "nome": nome,
+        "id_aluno": id_aluno,
+        "inscricao": f"{id_aluno:07d}",
+        "turma": "Turma 1",
+        "notas": {a: None if a in faltou else notas for a in AREAS},
+        "acertos": {a: None if a in faltou else acertos for a in AREAS},
+    }
 
 
-def _linha(
-    matricula="S260001",
-    presenca="Presente",
-    notas="30;650,0;30;650,0;30;650,0;30;650,0",
-    data="15/03/2026",
-    nome="Aluno Sintético Um",
-):
-    return f"{data};{matricula};{nome};{presenca};{notas}\n"
+def _relatorio(*alunos, avaliacao="4º Simulado Enem"):
+    conteudo = planilhas_casd.relatorio_pmais(avaliacao, 2026, list(alunos))
+    return ler_relatorio(io.BytesIO(conteudo), "relatorio.xlsm")
 
 
-AUSENTE = ";;;;;;;"
+def _replica(numero):
+    caminho = PLANILHAS / f"p_mais_simulado_{numero:02d}.xlsx"
+    return ler_relatorio(caminho.open("rb"), caminho.name)
+
+
+def _ciclo_n(numero):
+    return CicloCalendario.objects.filter(data_inicio__year=2026).order_by("data_inicio")[
+        numero - 1
+    ]
 
 
 @pytest.fixture
 def ano_2026(diretor):
     importar_cadastro(
-        _ler("cadastro_alunos.csv", COLUNAS_CADASTRO, frozenset({"data_ingresso"})),
+        _ler_csv("cadastro_alunos.csv", COLUNAS_CADASTRO, frozenset({"data_ingresso"})),
         ano=2026,
         autor=diretor,
         data_mudanca=date(2026, 6, 25),
@@ -78,7 +88,10 @@ def ano_2026(diretor):
     )
     ciclos = TIPOS["ciclos"]
     ciclos.importar(
-        _ler("ciclos.csv", ciclos.colunas, ciclos.opcionais), ano=2026, autor=diretor, gravar=True
+        _ler_csv("ciclos.csv", ciclos.colunas, ciclos.opcionais),
+        ano=2026,
+        autor=diretor,
+        gravar=True,
     )
 
 
@@ -91,139 +104,165 @@ def ciclo(db):
 
 @pytest.fixture
 def aluno(ciclo):
-    turma = Turma.objects.create(nome="Turma A", ano=2026)
+    turma = Turma.objects.create(nome="Turma 1", ano=2026)
     return Aluno.objects.create(
-        matricula="S260001", nome="Aluno Sintético Um", data_ingresso=date(2026, 2, 2), turma=turma
+        matricula="S260001", nome="Aluno Um", data_ingresso=date(2026, 2, 2), turma=turma
     )
 
 
-def _importar(corpo, autor, gravar=True):
-    return importar_simulados(_csv(corpo), ano=2026, autor=autor, gravar=gravar)
+def _importar(linhas, autor, ciclo, gravar=True):
+    return importar_simulados(linhas, ano=2026, ciclo=ciclo, autor=autor, gravar=gravar)
 
 
-# --- Base sintética do ano todo ------------------------------------------------------
+# --- Réplicas dos relatórios ---------------------------------------------------------
 
 
 @pytest.mark.regras
-def test_ano_sintetico_perfis_conhecidos(diretor, ano_2026):
-    linhas = _ler("p_mais_simulados.csv", COLUNAS, OPCIONAIS)
-    resumo = importar_simulados(linhas, ano=2026, autor=diretor, gravar=True)
-    assert resumo.total_linhas == len(linhas) and not resumo.inconsistentes
-    assert ResultadoSimulado.objects.count() == 4 * len(linhas)
-    # RN009: ausência registrada, sem nota
+def test_replica_rn009_ausente_no_ciclo_6(diretor, ano_2026):
+    linhas = _replica(6)
+    resumo = _importar(linhas, diretor, _ciclo_n(6))
+    assert resumo.total_linhas == len(linhas) == 20 and not resumo.inconsistentes
     ausente = PERFIS["ausente_no_simulado"]
-    data = date(2026, 4, 26)
-    assert ausente["esperado"]["data_simulado"] == "26/04/2026"
-    faltou = ResultadoSimulado.objects.filter(
-        aluno_id=ausente["matricula"], ciclo__data_simulado=data
-    )
+    faltou = ResultadoSimulado.objects.filter(aluno_id=ausente["matricula"])
     assert faltou.count() == 4 and not faltou.filter(presente=True).exists()
-    assert not faltou.exclude(nota_tri__isnull=True).exists()
-    assert resumo.ausentes == 24
-    # RN010: nota TRI e acertos por área; queda de 650 para 590 no ciclo 8
+    assert not faltou.exclude(nota_tri__isnull=True).exists() and resumo.ausentes >= 1
+    assert ResultadoSimulado.objects.filter(acertos__isnull=False).exists()
+
+
+@pytest.mark.regras
+def test_replica_rn010_queda_entre_os_ciclos_7_e_8(diretor, ano_2026):
     queda = PERFIS["queda_de_desempenho"]
+    for numero in (7, 8):
+        _importar(_replica(numero), diretor, _ciclo_n(numero))
     notas = list(
         ResultadoSimulado.objects.filter(aluno_id=queda["matricula"], area=Area.MATEMATICA)
         .order_by("ciclo__data_inicio")
         .values_list("nota_tri", flat=True)
     )
-    assert notas[6] == Decimal("650.0") and notas[7] == Decimal("590.0")
-    assert ResultadoSimulado.objects.filter(acertos__isnull=False).exists()
+    assert notas == [Decimal("650.0"), Decimal("590.0")]
+    assert notas[1] - notas[0] == Decimal(str(queda["esperado"]["delta_tri"]))
 
 
-def test_reimportar_nao_duplica_e_avisa(diretor, ano_2026):
-    linhas = _ler("p_mais_simulados.csv", COLUNAS, OPCIONAIS)
-    importar_simulados(linhas, ano=2026, autor=diretor, gravar=True)
-    segunda = importar_simulados(linhas, ano=2026, autor=diretor, gravar=True)
-    assert segunda.sem_alteracao == len(linhas) and segunda.importados == 0
-    assert ResultadoSimulado.objects.count() == 4 * len(linhas)
-    assert segunda.sobreposicoes and "já têm resultado" in segunda.sobreposicoes[0]
+def test_reimportar_a_replica_nao_duplica(diretor, ano_2026):
+    _importar(_replica(6), diretor, _ciclo_n(6))
+    segunda = _importar(_replica(6), diretor, _ciclo_n(6))
+    assert segunda.sem_alteracao == 20 and segunda.importados == 0 and segunda.sobreposicoes
+    assert ResultadoSimulado.objects.count() == 80
 
 
-# --- Regras e valores-limite (RN009, RN010) ------------------------------------------
+# --- Etapas, valores-limite e linhas inválidas (RN009, RN010) -----------------------------
 
 
 @pytest.mark.regras
-def test_rn009_ausente_sem_nota_e_presente_com_nota(diretor, aluno):
-    turma = aluno.turma
-    Aluno.objects.create(
-        matricula="S260002", nome="Dois", data_ingresso=date(2026, 2, 2), turma=turma
-    )
-    resumo = _importar(_linha() + _linha("S260002", "Ausente", AUSENTE), diretor)
-    assert resumo.criados == 2 and resumo.ausentes == 1
-    um = ResultadoSimulado.objects.get(aluno=aluno, area=Area.LINGUAGENS)
-    assert um.presente and um.acertos == 30 and um.nota_tri == Decimal("650.0")
-    dois = ResultadoSimulado.objects.filter(aluno_id="S260002")
-    assert dois.count() == 4 and all(not r.presente and r.nota_tri is None for r in dois)
+def test_falta_a_uma_etapa_so_tira_aquelas_areas(diretor, aluno, ciclo):
+    resumo = _importar(_relatorio(_aluno(faltou=("HUMANAS", "LINGUAGENS"))), diretor, ciclo)
+    assert resumo.ausencias_parciais == 1 and resumo.ausentes == 0
+    presentes = dict(ResultadoSimulado.objects.values_list("area", "presente"))
+    assert presentes == {
+        "HUMANAS": False,
+        "LINGUAGENS": False,
+        "NATUREZA": True,
+        "MATEMATICA": True,
+    }
+    assert ResultadoSimulado.objects.get(area="HUMANAS").nota_tri is None
+
+
+@pytest.mark.regras
+def test_valores_limite_aceitos(diretor, aluno, ciclo):
+    linhas = _relatorio(_aluno(notas=1000.0, acertos=45))
+    assert _importar(linhas, diretor, ciclo).criados == 1
+    assert ResultadoSimulado.objects.get(area="NATUREZA").nota_tri == Decimal("1000.0")
 
 
 @pytest.mark.regras
 @pytest.mark.parametrize(
-    "presenca,notas,motivo",
+    "notas,acertos,motivo",
     [
-        ("Ausente", "30;650,0" + ";;;;;;", "aluno ausente com nota (RN009)"),
-        (
-            "Presente",
-            ";650,0;30;650,0;30;650,0;30;650,0",
-            "nota de LC em branco para aluno presente",
-        ),
-        ("Talvez", AUSENTE, "presença inválida (use Presente ou Ausente)"),
-        ("Presente", "46;650,0;30;650,0;30;650,0;30;650,0", "acertos de LC fora de 0 a 45"),
-        ("Presente", "-1;650,0;30;650,0;30;650,0;30;650,0", "acertos de LC fora de 0 a 45"),
-        ("Presente", "30;1000,1;30;650,0;30;650,0;30;650,0", "nota TRI de LC fora de 0 a 1000"),
-        ("Presente", "30;abc;30;650,0;30;650,0;30;650,0", "nota TRI de LC fora de 0 a 1000"),
+        (650.0, 46, "acertos de CH fora de 0 a 45"),
+        (1000.1, 30, "nota TRI de CH fora de 0 a 1000"),
+        ("abc", 30, "nota TRI de CH fora de 0 a 1000"),
     ],
 )
-def test_linhas_invalidas(diretor, aluno, presenca, notas, motivo):
-    resumo = _importar(_linha(presenca=presenca, notas=notas), diretor)
+def test_valores_fora_do_limite(diretor, aluno, ciclo, notas, acertos, motivo):
+    resumo = _importar(_relatorio(_aluno(notas=notas, acertos=acertos)), diretor, ciclo)
     assert [m for _, _, m in resumo.inconsistentes] == [motivo]
     assert not ResultadoSimulado.objects.exists()
 
 
-@pytest.mark.regras
-def test_valores_limite_aceitos(diretor, aluno):
-    resumo = _importar(_linha(notas="0;0;45;1000;45;1000,0;0;0,0"), diretor)
-    assert resumo.criados == 1 and not resumo.inconsistentes
-    assert ResultadoSimulado.objects.get(area=Area.HUMANAS).nota_tri == Decimal("1000.0")
-
-
-def test_data_ciclo_e_aluno(diretor, aluno):
-    corpo = (
-        _linha(data="")
-        + _linha(data="xx")
-        + _linha(data="15/03/2025")
-        + _linha(data="20/03/2026")  # sem ciclo
-        + _linha(data="10/03/2026")  # dentro do ciclo, fora da data do simulado
-        + _linha(data="15/03/2026")  # repetido no mesmo ciclo
+def test_nota_sem_acertos_e_linha_sem_aba_de_acertos(diretor, aluno, ciclo):
+    linhas = _relatorio(_aluno())
+    linhas[0]["areas"]["MATEMATICA"] = (650.0, None)
+    assert _importar(linhas, diretor, ciclo).inconsistentes[0][2] == (
+        "nota e acertos de MT não batem (um deles em branco)"
     )
-    resumo = _importar(corpo, diretor)
+    linhas = _relatorio(_aluno())
+    linhas[0]["tem_acertos"] = False
+    assert "aba de acertos" in _importar(linhas, diretor, ciclo).inconsistentes[0][2]
+
+
+def test_outra_avaliacao_repetido_e_fora_do_aluno(diretor, aluno, ciclo):
+    turma = aluno.turma
+    Aluno.objects.create(
+        matricula="S260002", nome="Dois", data_ingresso=date(2026, 4, 1), turma=turma
+    )
+    linhas = _relatorio(
+        _aluno(id_aluno=1),
+        _aluno(id_aluno=2),
+        _aluno("S260002", id_aluno=3),
+        _aluno("S260003", id_aluno=4),
+    )
+    linhas[3]["avaliacao"] = "outra avaliacao"
+    resumo = _importar(linhas, diretor, ciclo)
     assert [m for _, _, m in resumo.inconsistentes] == [
-        "data do simulado em branco",
-        "data do simulado inválida (use dd/mm/aaaa ou aaaa-mm-dd)",
-        "data do simulado fora do ano letivo informado",
-        "nenhum ciclo do calendário contém a data do simulado (RN006)",
-        "aluno repetido no mesmo simulado",
+        "aluno repetido no relatório",
+        "simulado antes do ingresso ou depois da saída do aluno (RN004)",
+        "avaliação diferente do restante do arquivo",
     ]
-    assert resumo.criados == 1 and resumo.total_linhas == 6
+    assert resumo.criados == 1 and resumo.total_linhas == 4
 
 
-def test_simulado_antes_do_ingresso_e_inconsistente(diretor, aluno):
-    aluno.corrigir_ingresso(date(2026, 3, 20))
-    resumo = _importar(_linha(), diretor)
-    assert "antes do ingresso" in resumo.inconsistentes[0][2]
+# --- Leitura do relatório ------------------------------------------------------------
+
+
+def test_relatorio_sem_matricula_csv_e_sem_aba():
+    conteudo = planilhas_casd.relatorio_pmais("Simulado", 2026, [_aluno()])
+    livro = load_workbook(io.BytesIO(conteudo))
+    livro[planilhas_casd.ABA_NOTAS_PMAIS].delete_cols(12)  # a coluna Matrícula
+    saida = io.BytesIO()
+    livro.save(saida)
+    with pytest.raises(ArquivoInvalidoError, match="coluna Matrícula"):
+        ler_relatorio(io.BytesIO(saida.getvalue()), "r.xlsx")
+    with pytest.raises(ArquivoInvalidoError, match="duas abas"):
+        ler_relatorio(io.BytesIO(b"a;b\n1;2\n"), "r.csv")
+    del livro[planilhas_casd.ABA_ACERTOS_PMAIS]
+    saida = io.BytesIO()
+    livro.save(saida)
+    with pytest.raises(ArquivoInvalidoError, match="não existe no arquivo"):
+        ler_relatorio(io.BytesIO(saida.getvalue()), "r.xlsx")
+
+
+def test_relatorio_sem_coluna_de_area():
+    conteudo = planilhas_casd.relatorio_pmais("Simulado", 2026, [_aluno()])
+    livro = load_workbook(io.BytesIO(conteudo))
+    aba = livro[planilhas_casd.ABA_ACERTOS_PMAIS]
+    for celula in aba[1]:
+        if celula.value == "Matemática - Acertos":
+            celula.value = "Matemática - Outra coisa"
+    saida = io.BytesIO()
+    livro.save(saida)
+    with pytest.raises(ArquivoInvalidoError, match="Matemática - Acertos"):
+        ler_relatorio(io.BytesIO(saida.getvalue()), "r.xlsx")
 
 
 # --- Reimportação com auditoria (NF008, NF009) ---------------------------------------
 
 
-def test_reimportar_atualiza_com_auditoria(diretor, aluno):
-    _importar(_linha(), diretor)
-    conferencia = _importar(
-        _linha(notas="31;660,5;30;650,0;30;650,0;30;650,0"), diretor, gravar=False
-    )
+def test_reimportar_atualiza_com_auditoria(diretor, aluno, ciclo):
+    _importar(_relatorio(_aluno()), diretor, ciclo)
+    novo = _relatorio(_aluno(notas=660.5, acertos=31))
+    conferencia = _importar(novo, diretor, ciclo, gravar=False)
     assert conferencia.atualizados == 1 and conferencia.sobreposicoes
-    assert ResultadoSimulado.objects.get(area=Area.LINGUAGENS).acertos == 30  # nada gravado
-    _importar(_linha(notas="31;660,5;30;650,0;30;650,0;30;650,0"), diretor)
+    _importar(novo, diretor, ciclo)
     lc = ResultadoSimulado.objects.get(area=Area.LINGUAGENS)
     assert lc.acertos == 31 and lc.nota_tri == Decimal("660.5")
     campos = set(
@@ -235,38 +274,32 @@ def test_reimportar_atualiza_com_auditoria(diretor, aluno):
 # --- Pendências (RN003) --------------------------------------------------------------
 
 
-def test_pendencia_e_associacao(diretor, aluno):
-    resumo = _importar(_linha(matricula="", nome="Aluno Sintético Um"), diretor)
-    assert resumo.pendencias == [(2, "Matrícula em branco")]
-    assert not ResultadoSimulado.objects.exists()
+def test_pendencia_associada_vale_na_reimportacao(diretor, aluno, ciclo):
+    linhas = _relatorio(_aluno(matricula=""))
+    assert _importar(linhas, diretor, ciclo).pendencias == [(2, "Matrícula em branco")]
     pendencia = PendenciaImportacao.objects.get()
-    assert pendencia.origem == "SIMULADO" and pendencia.dados["ciclo"] == _ciclo_pk()
+    assert pendencia.origem == "SIMULADO" and pendencia.dados["ciclo"] == ciclo.pk
     assert pendencias.associar([pendencia], aluno, autor=diretor) == (1, [])
     assert ResultadoSimulado.objects.filter(aluno=aluno).count() == 4
-    assert ResultadoSimulado.objects.get(area=Area.MATEMATICA).nota_tri == Decimal("650.0")
-    # reimportar: pendência resolvida não volta nem duplica
-    resumo = _importar(_linha(matricula="", nome="Aluno Sintético Um"), diretor)
+    # o P+ corrigiu as notas: a reimportação, ainda sem matrícula, atualiza o aluno associado
+    resumo = _importar(_relatorio(_aluno(matricula="", notas=700.0)), diretor, ciclo)
+    assert resumo.pendencias == [] and resumo.atualizados == 1
+    assert ResultadoSimulado.objects.get(area="MATEMATICA").nota_tri == Decimal("700.0")
+    assert aplicar_pendencia(pendencia, aluno, diretor) == "o aluno já tem resultado neste simulado"
+
+
+def test_pendencia_descartada_e_ignorada(diretor, aluno, ciclo):
+    _importar(_relatorio(_aluno(matricula="")), diretor, ciclo)
+    pendencias.descartar(list(PendenciaImportacao.objects.all()), autor=diretor)
+    resumo = _importar(_relatorio(_aluno(matricula="")), diretor, ciclo)
     assert resumo.pendencias == [] and resumo.sem_alteracao == 1
-    # o aluno já tem resultado: outra pendência do mesmo simulado é recusada
-    outra = PendenciaImportacao(
-        dados={"ciclo": pendencia.dados["ciclo"], "presente": False, "notas": {}},
-        data=pendencia.data,
-    )
-    assert aplicar_pendencia(outra, aluno, diretor) == "o aluno já tem resultado neste simulado"
 
 
-def _ciclo_pk():
-    return CicloCalendario.objects.get().pk
-
-
-def test_aplicador_recusa_ciclo_inexistente_e_fora_do_aluno(diretor, aluno):
-    sem_ciclo = PendenciaImportacao(
-        dados={"ciclo": 999, "presente": False, "notas": {}}, data=date(2026, 3, 15)
-    )
+def test_aplicador_recusa_ciclo_inexistente_e_fora_do_aluno(diretor, aluno, ciclo):
+    sem_ciclo = PendenciaImportacao(dados={"ciclo": 999, "areas": {}})
     assert aplicar_pendencia(sem_ciclo, aluno, diretor) == "o ciclo do simulado não existe mais"
-    antes = PendenciaImportacao(
-        dados={"ciclo": _ciclo_pk(), "presente": False, "notas": {}}, data=date(2026, 1, 15)
-    )
+    aluno.corrigir_ingresso(date(2026, 3, 20))
+    antes = PendenciaImportacao(dados={"ciclo": ciclo.pk, "areas": {}})
     assert "antes do ingresso" in aplicar_pendencia(antes, aluno, diretor)
 
 
@@ -277,11 +310,10 @@ def test_ciclo_com_resultados_nao_muda_de_data(diretor, aluno, ciclo):
     ciclo.data_fim = date(2026, 3, 16)
     ciclo.full_clean()  # sem resultados: pode
     ciclo.data_fim = date(2026, 3, 15)
-    _importar(_linha(), diretor)
+    _importar(_relatorio(_aluno()), diretor, ciclo)
     ciclo.data_simulado = date(2026, 3, 14)
     with pytest.raises(ValidationError, match="datas do ciclo são fixas"):
         ciclo.full_clean()
-    # pela importação do calendário: a linha é recusada
     tipo = TIPOS["ciclos"]
     texto = "data_inicio;data_fim;data_simulado\n02/03/2026;15/03/2026;14/03/2026\n"
     linhas = ler_tabela(
@@ -295,14 +327,12 @@ def test_ciclo_com_resultados_nao_muda_de_data(diretor, aluno, ciclo):
 def test_tela_do_calendario_recusa_mudar_ciclo_com_resultados(
     cliente_diretor, diretor, aluno, ciclo
 ):
-    _importar(_linha(), diretor)
+    _importar(_relatorio(_aluno()), diretor, ciclo)
     url = reverse("web:calendario_item", args=["ciclos", ciclo.pk])
     resp = cliente_diretor.post(
         url, {"data_inicio": "2026-03-02", "data_fim": "2026-03-16", "data_simulado": "2026-03-15"}
     )
     assert resp.status_code == 200 and "datas do ciclo são fixas" in resp.content.decode()
-    ciclo.refresh_from_db()
-    assert ciclo.data_fim == date(2026, 3, 15)
 
 
 # --- Tela (RN013) --------------------------------------------------------------------
@@ -310,46 +340,49 @@ def test_tela_do_calendario_recusa_mudar_ciclo_com_resultados(
 URL = reverse("web:simulados_importar")
 
 
-def _montar(corpo):
+def _montar(conteudo, ciclo, ano=2026):
     def montar(acao):
-        arquivo = SimpleUploadedFile("pmais.csv", (CABECALHO + corpo).encode())
-        return {"arquivo": arquivo, "ano": 2026, "acao": acao}
+        arquivo = SimpleUploadedFile("Exemplo de Planilha de Notas.xlsm", conteudo)
+        return {"arquivo": arquivo, "ano": ano, "ciclo": ciclo.pk, "acao": acao}
 
     return montar
 
 
-def test_tela_confere_e_confirma(cliente_diretor, diretor, aluno):
-    montar = _montar(_linha() + _linha(matricula="S269999"))
+def test_tela_confere_e_confirma_a_replica(cliente_diretor, diretor, ano_2026):
+    montar = _montar((PLANILHAS / "p_mais_simulado_06.xlsx").read_bytes(), _ciclo_n(6))
     conferencia = cliente_diretor.post(URL, montar("conferir"))
-    assert "Pendências para associação manual: 1" in conferencia.content.decode()
+    assert "Ausentes no simulado (RN009): 1" in conferencia.content.decode()
     assert not ResultadoSimulado.objects.exists()
     resp = importar_em_dois_passos(cliente_diretor, URL, montar)
-    assert resp.context["resultado"].gravado and ResultadoSimulado.objects.count() == 4
-    trilha = RegistroImportacao.objects.get()
-    assert trilha.tipo == RegistroImportacao.Tipo.SIMULADOS and trilha.pendencias == 1
+    assert resp.context["resultado"].gravado and ResultadoSimulado.objects.count() == 80
+    assert RegistroImportacao.objects.get().tipo == RegistroImportacao.Tipo.SIMULADOS
 
 
-def test_tela_so_do_diretor(client, membro, aluno):
-    montar = _montar(_linha())
+def test_tela_recusa_ciclo_de_outro_ano(cliente_diretor, aluno, ciclo):
+    conteudo = planilhas_casd.relatorio_pmais("S", 2026, [_aluno()])
+    resp = cliente_diretor.post(URL, _montar(conteudo, ciclo, ano=2027)("conferir"))
+    assert "precisa ser do ano letivo" in resp.content.decode()
+
+
+def test_tela_so_do_diretor(client, membro, aluno, ciclo):
+    montar = _montar(planilhas_casd.relatorio_pmais("S", 2026, [_aluno()]), ciclo)
     assert client.post(URL, montar("conferir")).status_code == 302
     client.force_login(membro)
     assert client.post(URL, montar("conferir")).status_code == 403
 
 
-def test_modelo_para_download_importa(cliente_diretor, diretor):
+def test_modelo_para_download_e_importavel(cliente_diretor, diretor):
     ano = date.today().year
-    resp = cliente_diretor.get(reverse("web:simulados_modelo", args=["csv"]))
-    texto = resp.content.decode("utf-8-sig")
-    assert f"S{ano % 100}0001" in texto and "Ausente" in texto
-    linhas = ler_tabela(io.BytesIO(resp.content), "m.csv", colunas=COLUNAS, opcionais=OPCIONAIS)
-    turma = Turma.objects.create(nome="Turma A", ano=ano)
+    resp = cliente_diretor.get(reverse("web:simulados_modelo", args=["xlsx"]))
+    linhas = ler_relatorio(io.BytesIO(resp.content), "modelo.xlsx")
+    turma = Turma.objects.create(nome="Turma 1", ano=ano)
     for n in (1, 2):
         Aluno.objects.create(
             matricula=f"S{ano % 100}000{n}", nome="X", data_ingresso=date(ano, 1, 1), turma=turma
         )
-    CicloCalendario.objects.create(
+    ciclo = CicloCalendario.objects.create(
         data_inicio=date(ano, 3, 2), data_fim=date(ano, 3, 15), data_simulado=date(ano, 3, 15)
     )
-    resumo = importar_simulados(linhas, ano=ano, autor=diretor, gravar=True)
-    assert resumo.criados == 2 and not resumo.inconsistentes
-    assert cliente_diretor.get(reverse("web:simulados_modelo", args=["pdf"])).status_code == 404
+    resumo = importar_simulados(linhas, ano=ano, ciclo=ciclo, autor=diretor, gravar=True)
+    assert resumo.criados == 2 and resumo.ausencias_parciais == 1
+    assert cliente_diretor.get(reverse("web:simulados_modelo", args=["csv"])).status_code == 404

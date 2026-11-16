@@ -405,8 +405,16 @@ class ResultadoSimulado(HistoricoPreservado):
 COMPETENCIAS_REDACAO = ("nota_c1", "nota_c2", "nota_c3", "nota_c4", "nota_c5")
 
 
+def _competencia(rotulo):
+    # Decimal com uma casa: a banca VUNESP do Corrija-me dá notas como 21,4 (RF005).
+    return models.DecimalField(rotulo, max_digits=4, decimal_places=1, null=True, blank=True)
+
+
 class ResultadoRedacao(HistoricoPreservado):
-    """Entrega e notas por competência de uma redação semanal (RN007)."""
+    """Entrega e notas por competência de uma redação semanal (RN007).
+
+    A escala depende da banca do Corrija-me: ENEM tem cinco competências de 0 a 200; outras
+    bancas (VUNESP) têm menos critérios e notas decimais, e a nota final vem da banca."""
 
     aluno = models.ForeignKey(Aluno, on_delete=models.PROTECT, related_name="redacoes")
     tema_semana = models.DateField(
@@ -414,11 +422,16 @@ class ResultadoRedacao(HistoricoPreservado):
     )
     tema = models.CharField(max_length=200, blank=True)
     entregue = models.BooleanField()
-    nota_c1 = models.PositiveSmallIntegerField("competência 1", null=True, blank=True)
-    nota_c2 = models.PositiveSmallIntegerField("competência 2", null=True, blank=True)
-    nota_c3 = models.PositiveSmallIntegerField("competência 3", null=True, blank=True)
-    nota_c4 = models.PositiveSmallIntegerField("competência 4", null=True, blank=True)
-    nota_c5 = models.PositiveSmallIntegerField("competência 5", null=True, blank=True)
+    banca = models.CharField(max_length=80, blank=True, help_text="Banca do Corrija-me.")
+    nota_c1 = _competencia("competência 1")
+    nota_c2 = _competencia("competência 2")
+    nota_c3 = _competencia("competência 3")
+    nota_c4 = _competencia("competência 4")
+    nota_c5 = _competencia("competência 5")
+    nota_final = models.DecimalField(
+        "nota final", max_digits=6, decimal_places=2, null=True, blank=True,
+        help_text="Nota final informada pela banca.",
+    )  # fmt: skip
 
     COMPETENCIAS = COMPETENCIAS_REDACAO
 
@@ -436,6 +449,7 @@ class ResultadoRedacao(HistoricoPreservado):
                     nota_c3__isnull=True,
                     nota_c4__isnull=True,
                     nota_c5__isnull=True,
+                    nota_final__isnull=True,
                 ),
                 name="redacao_nao_entregue_sem_nota",
             ),
@@ -452,8 +466,11 @@ class ResultadoRedacao(HistoricoPreservado):
         return f"{self.aluno_id} — tema de {self.tema_semana}"
 
     @property
-    def nota_total(self) -> int | None:
-        """Soma das cinco competências (0 a 1000), ou None se alguma faltar."""
+    def nota_total(self):
+        """A nota final da banca ou, sem ela, a soma das cinco competências (ENEM, 0 a 1000);
+        None se faltar alguma."""
+        if self.nota_final is not None:
+            return self.nota_final
         notas = [getattr(self, c) for c in self.COMPETENCIAS]
         return None if None in notas else sum(notas)
 

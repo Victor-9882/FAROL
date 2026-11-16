@@ -8,7 +8,8 @@ from django.shortcuts import render
 
 from core.models import RegistroImportacao
 from ingestao import frequencia
-from ingestao.modelos import gerar_modelo
+from ingestao.modelos import TIPO_XLSX
+from ingestao.planilhas_casd import ABA_PRESENCA
 
 from .acesso import diretor_required
 from .forms_importacao import ImportacaoFrequenciaForm
@@ -20,29 +21,15 @@ def frequencia_importar(request):
     """Conferir sempre antes de gravar (ver `web.importacao`). O arquivo nunca é persistido."""
     form = ImportacaoFrequenciaForm(request.POST or None, request.FILES or None)
     dados = form.is_valid() and form.cleaned_data
-    parametros = (
-        {
-            "ano": dados["ano"],
-            "inicio": dados["inicio"].isoformat(),
-            "fim": dados["fim"].isoformat(),
-        }
-        if dados
-        else {}
-    )
+    aba = (dados["aba"] or ABA_PRESENCA) if dados else ""
     resultado = executar_importacao(
         request,
         form,
-        colunas=frequencia.COLUNAS,
-        opcionais=frequencia.OPCIONAIS,
-        parametros=parametros,
-        limite_linhas=frequencia.limite_linhas(),
-        importar=lambda linhas, gravar: frequencia.importar_frequencia(
-            linhas,
-            ano=dados["ano"],
-            inicio=dados["inicio"],
-            fim=dados["fim"],
-            autor=request.user,
-            gravar=gravar,
+        colunas=None,
+        parametros={"ano": dados["ano"], "aba": aba} if dados else {},
+        ler=lambda arquivo, nome: frequencia.ler_grade(arquivo, nome, ano=dados["ano"], aba=aba),
+        importar=lambda grade, gravar: frequencia.importar_frequencia(
+            grade, ano=dados["ano"], autor=request.user, gravar=gravar
         ),
         registrar=lambda nome, tamanho, resumo: registrar_trilha(
             autor=request.user,
@@ -59,13 +46,10 @@ def frequencia_importar(request):
 
 @login_required
 def frequencia_modelo(request, formato):
-    ano = date.today().year
-    try:
-        conteudo, mime, nome = gerar_modelo(
-            "modelo_catraca", list(frequencia.COLUNAS), frequencia.exemplos(ano), formato
-        )
-    except ValueError:
-        raise Http404 from None
-    resposta = HttpResponse(conteudo, content_type=mime)
-    resposta["Content-Disposition"] = f'attachment; filename="{nome}"'
+    """Grade no layout real, com linhas sintéticas. Só .xlsx: a grade tem várias linhas de
+    cabeçalho e uma coluna por dia."""
+    if formato != "xlsx":
+        raise Http404
+    resposta = HttpResponse(frequencia.exemplo(date.today().year), content_type=TIPO_XLSX)
+    resposta["Content-Disposition"] = 'attachment; filename="modelo_presenca_anual.xlsx"'
     return resposta

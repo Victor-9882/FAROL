@@ -1,17 +1,17 @@
 {% extends "web/base.html" %}
 {% block titulo %}Importar frequência · FAROL{% endblock %}
 {% block conteudo %}
-  <h1>Importar frequência da catraca</h1>
-  <p>Envie a exportação da catraca (uma linha por passagem: data, matrícula e, se houver, nome) e
-    informe o período. Para cada aluno e cada dia letivo do período, o FAROL registra presença se
-    houve passagem e falta se não houve, sem tolerância de atraso (RN001). Feriados, emendas e
-    férias não contam (RN005), e o aluno só conta a partir do ingresso (RN004).</p>
-  <p>Passagens com matrícula em branco, fora do padrão ou sem aluno no cadastro ficam em
-    <a href="{% url 'web:pendencias' %}">Pendências</a> para associação manual (RN003).
-    Reimportar um período já importado substitui a presença, sem mexer nas ausências justificadas,
-    e o resumo avisa antes de confirmar.</p>
-  <p><a href="{% url 'web:frequencia_modelo' 'xlsx' %}">Baixar modelo (.xlsx)</a> ·
-    <a href="{% url 'web:frequencia_modelo' 'csv' %}">Baixar modelo (.csv)</a></p>
+  <h1>Importar frequência (grade de presença)</h1>
+  <p>Envie a planilha <em>Controle de Presença</em> do ano, com a grade da aba
+    "Presença Anual": uma linha por aluno e uma coluna por dia, com <strong>P</strong> (presente),
+    <strong>F</strong> (falta), <strong>J</strong> (falta justificada) ou <strong>S</strong>
+    (sem aula). A grade precisa da coluna <strong>Matrícula</strong>: é por ela que cada linha é
+    ligada ao aluno (RN003).</p>
+  <p>Só entram os dias letivos do calendário do FAROL (RN005) e a partir do ingresso do aluno
+    (RN004). O resumo avisa quando a grade e o calendário discordam. Linhas sem aluno no cadastro
+    ficam em <a href="{% url 'web:pendencias' %}">Pendências</a>. A grade pode ser reenviada ao
+    longo do ano: só o que mudou é alterado, com auditoria, e o resumo avisa antes de confirmar.</p>
+  <p><a href="{% url 'web:frequencia_modelo' 'xlsx' %}">Baixar modelo (.xlsx)</a></p>
   <form method="post" enctype="multipart/form-data" id="importacao-form">
     {% csrf_token %}
     {% for campo in form %}

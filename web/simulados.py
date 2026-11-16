@@ -8,7 +8,7 @@ from django.shortcuts import render
 
 from core.models import RegistroImportacao
 from ingestao import simulados
-from ingestao.modelos import gerar_modelo
+from ingestao.modelos import TIPO_XLSX
 
 from .acesso import diretor_required
 from .forms_importacao import ImportacaoSimuladosForm
@@ -23,11 +23,11 @@ def simulados_importar(request):
     resultado = executar_importacao(
         request,
         form,
-        colunas=simulados.COLUNAS,
-        opcionais=simulados.OPCIONAIS,
-        parametros={"ano": dados["ano"]} if dados else {},
+        colunas=None,
+        parametros={"ano": dados["ano"], "ciclo": dados["ciclo"].pk} if dados else {},
+        ler=simulados.ler_relatorio,
         importar=lambda linhas, gravar: simulados.importar_simulados(
-            linhas, ano=dados["ano"], autor=request.user, gravar=gravar
+            linhas, ano=dados["ano"], ciclo=dados["ciclo"], autor=request.user, gravar=gravar
         ),
         registrar=lambda nome, tamanho, resumo: registrar_trilha(
             autor=request.user,
@@ -44,13 +44,9 @@ def simulados_importar(request):
 
 @login_required
 def simulados_modelo(request, formato):
-    ano = date.today().year
-    try:
-        conteudo, mime, nome = gerar_modelo(
-            "modelo_simulados", list(simulados.COLUNAS), simulados.exemplos(ano), formato
-        )
-    except ValueError:
-        raise Http404 from None
-    resposta = HttpResponse(conteudo, content_type=mime)
-    resposta["Content-Disposition"] = f'attachment; filename="{nome}"'
+    """Relatório do P+ no layout real (duas abas), com alunos sintéticos. Só .xlsx."""
+    if formato != "xlsx":
+        raise Http404
+    resposta = HttpResponse(simulados.exemplo(date.today().year), content_type=TIPO_XLSX)
+    resposta["Content-Disposition"] = 'attachment; filename="modelo_relatorio_pmais.xlsx"'
     return resposta

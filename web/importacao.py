@@ -41,9 +41,12 @@ def executar_importacao(
     importar,
     registrar,
     limite_linhas=None,
+    ler=None,
 ) -> ResultadoImportacao:
     """`importar(linhas, gravar) -> ResumoImportacao`; `registrar(nome, tamanho, resumo)` grava
-    a trilha. `parametros` são os valores do formulário (em texto) que o token deve proteger."""
+    a trilha. `parametros` são os valores do formulário (em texto) que o token deve proteger.
+    `ler(arquivo, nome)` substitui `ler_tabela` nas planilhas que não são uma tabela simples
+    (grade de presença, relatório do P+); deve levantar `ArquivoInvalidoError`."""
     resultado = ResultadoImportacao()
     if request.method != "POST" or not form.is_valid():
         return resultado
@@ -51,13 +54,16 @@ def executar_importacao(
     conteudo = arquivo.read()
     digital = impressao_digital(conteudo)
     try:
-        linhas = ler_tabela(
-            io.BytesIO(conteudo),
-            arquivo.name,
-            colunas=colunas,
-            opcionais=opcionais,
-            limite_linhas=limite_linhas,
-        )
+        if ler is not None:
+            linhas = ler(io.BytesIO(conteudo), arquivo.name)
+        else:
+            linhas = ler_tabela(
+                io.BytesIO(conteudo),
+                arquivo.name,
+                colunas=colunas,
+                opcionais=opcionais,
+                limite_linhas=limite_linhas,
+            )
     except ArquivoInvalidoError as erro:
         form.add_error("arquivo", str(erro))
         return resultado

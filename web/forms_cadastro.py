@@ -168,7 +168,7 @@ class TurmaForm(forms.ModelForm):
 def validar_arquivo(arquivo):
     """Extensão e tamanho do upload; o conteúdo é validado por `ler_tabela`."""
     if not arquivo.name.lower().endswith(leitura.EXTENSOES):
-        raise forms.ValidationError("Envie um arquivo .csv ou .xlsx.")
+        raise forms.ValidationError("Envie um arquivo .csv, .xlsx ou .xlsm.")
     if arquivo.size > leitura.TAMANHO_MAXIMO:
         raise forms.ValidationError("O arquivo excede o tamanho máximo permitido.")
     return arquivo

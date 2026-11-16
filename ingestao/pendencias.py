@@ -89,6 +89,29 @@ def chave_pendencia(origem, ano, matricula, nome, referencia) -> str:
     return hashlib.sha256(texto.encode()).hexdigest()
 
 
+def pendencia_existente(*, origem, ano, matricula, nome, referencia):
+    """A pendência já registrada para esta linha, se houver (com o aluno associado)."""
+    chave = chave_pendencia(origem, ano, matricula, nome, referencia)
+    return PendenciaImportacao.objects.filter(chave=chave).select_related("aluno").first()
+
+
+def aluno_da_linha(localizador, *, origem, ano, matricula, nome, referencia):
+    """Devolve `(aluno, motivo)`. Sem aluno pela matrícula, uma pendência já associada vale
+    como o aluno escolhido pelo Diretor (a reimportação atualiza os dados dele); já
+    descartada devolve `(None, RESOLVIDA)`; senão, `(None, motivo da pendência)`."""
+    aluno, motivo = localizador.localizar(matricula)
+    if aluno is not None:
+        return aluno, ""
+    pendencia = pendencia_existente(
+        origem=origem, ano=ano, matricula=matricula, nome=nome, referencia=referencia
+    )
+    if pendencia is not None and pendencia.situacao == Situacao.ASSOCIADA:
+        return pendencia.aluno, ""
+    if pendencia is not None and pendencia.situacao == Situacao.DESCARTADA:
+        return None, RESOLVIDA
+    return None, motivo
+
+
 def registrar_pendencia(
     *, origem, motivo, ano, data, matricula, nome, referencia, dados: dict
 ) -> str:

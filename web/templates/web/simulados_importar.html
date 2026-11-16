@@ -1,16 +1,16 @@
 {% extends "web/base.html" %}
-{% block titulo %}Importar simulados · FAROL{% endblock %}
+{% block titulo %}Importar simulado · FAROL{% endblock %}
 {% block conteudo %}
-  <h1>Importar resultados de simulados (P+)</h1>
-  <p>Envie a exportação do P+: uma linha por aluno e simulado, com a data, a matrícula, a presença
-    (Presente ou Ausente) e, por área (LC, CH, CN, MT), os acertos (0 a 45) e a nota TRI (RN010).
-    O simulado entra no ciclo do calendário que tem essa data; cadastre os ciclos antes.
-    A ausência fica registrada, sem nota, e o aluno não é avaliado em desempenho no ciclo (RN009).</p>
-  <p>Linhas com matrícula em branco, fora do padrão ou sem aluno no cadastro ficam em
-    <a href="{% url 'web:pendencias' %}">Pendências</a> (RN003). Reimportar atualiza o que mudou,
-    com auditoria. Depois que um ciclo tem resultados, as datas dele não mudam.</p>
-  <p><a href="{% url 'web:simulados_modelo' 'xlsx' %}">Baixar modelo (.xlsx)</a> ·
-    <a href="{% url 'web:simulados_modelo' 'csv' %}">Baixar modelo (.csv)</a></p>
+  <h1>Importar simulado (relatório do P+)</h1>
+  <p>Envie o relatório do P+ de <strong>um</strong> simulado (.xlsm ou .xlsx, como exportado) e
+    escolha o ciclo em que ele conta. O FAROL lê a nota TRI de cada área na aba
+    "Resultados e Classificações TRI" e os acertos na aba "Acertos e Porcentagens TRI" (RN010).
+    A aba de resultados precisa da coluna <strong>Matrícula</strong> (RN003).</p>
+  <p>Área com nota e acertos em branco é falta naquela etapa: o aluno fica sem nota na área e não
+    é avaliado em desempenho nela (RN009). Linhas sem aluno no cadastro ficam em
+    <a href="{% url 'web:pendencias' %}">Pendências</a>. Reimportar atualiza o que mudou, com
+    auditoria. Depois que um ciclo tem resultados, as datas dele não mudam.</p>
+  <p><a href="{% url 'web:simulados_modelo' 'xlsx' %}">Baixar modelo (.xlsx)</a></p>
   <form method="post" enctype="multipart/form-data" id="importacao-form">
     {% csrf_token %}
     {% for campo in form %}

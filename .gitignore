@@ -30,6 +30,8 @@ secrets/
 *.sql.gz
 dados/
 backups/
+# Amostras reais das planilhas do CASD (nomes e e-mails de alunos): só no Drive (NF017).
+docs/modelos reais de planilhas/
 # ...exceto a base sintética usada em testes.
 !tests/dados_sinteticos/**/*.csv
 !tests/dados_sinteticos/**/*.tsv
