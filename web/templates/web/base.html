@@ -58,6 +58,7 @@
         <a href="{% url 'web:calendario' %}">Calendário</a>
         {% if user.is_diretor %}<a href="{% url 'web:importacoes' %}">Importações</a>
         <a href="{% url 'web:pendencias' %}">Pendências</a>
+        <a href="{% url 'web:intervencoes' %}">Intervenções</a>
         <a href="{% url 'web:usuarios' %}">Usuários</a>{% endif %}
       </nav>
       <form method="post" action="{% url 'web:logout' %}">
