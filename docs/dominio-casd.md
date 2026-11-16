@@ -74,7 +74,7 @@ Quando um fato daqui mudar um requisito, ele precisa de uma Solicitação de Mud
 ## 5. Redação
 
 - **Temas (RN007):** um tema novo toda terça-feira, publicado manualmente no **Corrija-me** pelo membro de redações, junto com os professores de redação. Os temas não estão na planilha do calendário.
-- A importação do RF005 (#16) deve criar ou ligar o `TemaRedacao` a partir da exportação do Corrija-me. O cadastro manual serve para corrigir ou antecipar.
+- A importação do RF005 (#16) cria o `TemaRedacao` da terça a partir da exportação do Corrija-me, quando ainda não existe; se já existe, mantém o cadastrado e avisa se o título difere. O cadastro manual serve para corrigir ou antecipar.
 
 ## 6. Dados reais
 

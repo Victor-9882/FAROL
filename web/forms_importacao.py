@@ -36,3 +36,7 @@ class ImportacaoFrequenciaForm(_ImportacaoForm):
 
 class ImportacaoSimuladosForm(_ImportacaoForm):
     """Só arquivo e ano: o ciclo de cada simulado vem da data no calendário (RN006)."""
+
+
+class ImportacaoRedacoesForm(_ImportacaoForm):
+    """Só arquivo e ano: o tema de cada linha vem da terça-feira (RN007)."""
