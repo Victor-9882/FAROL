@@ -156,6 +156,13 @@ Em todas as três, uma pendência já associada vale para o aluno escolhido nas 
   - frequência por ciclo, alertas (inclusive os desativados), intervenções, redações e histórico de turmas.
 - **Gráficos:** SVG gerado no servidor (`web/graficos.py`), sem JavaScript nem CDN; escala com a tela (NF001) e escapa todo texto.
 
+## Limiares das regras (RF018, #28)
+
+- **Tela `regras/`:** todos veem as regras ativas, com o limiar e a descrição em linguagem simples (NF021), e os limiares anteriores. Só o Diretor altera (`regras/<tipo>/`).
+- **Faixas aceitas:** frequência, de 1 a 7 faltas, inteiro; desempenho, de 1 a 500 pontos, com até duas casas.
+- **Pré-visualização obrigatória:** a tela mostra quantos alunos seriam sinalizados com o limiar atual e com o novo. Na frequência, conta as semanas do ciclo de referência; no desempenho, o ciclo de referência (`alertas.simular_*`, sem gravar). "Salvar" só vale para o mesmo valor pré-visualizado.
+- **Troca (`regras.alterar_limiar`):** desativa a regra vigente e cria outra, com a descrição gerada a partir de `config/regras_padrao.yaml`. Os alertas antigos continuam apontando para o limiar que os gerou. Audita com `RegistroAlteracao`: `ativa` da regra antiga e `limiar` anterior e novo da nova, com autor e data (NF009). Em seguida, os alertas do ano são regerados (`alertas.gerar_ano`).
+
 ## Suposições a confirmar
 
 - **Limiares dos alertas:** provisórios até a definição com a Direção (FAROL_Contexto, "Questões em aberto", itens 2 e 3). Frequência: 3 faltas não justificadas na semana; desempenho: queda de 30 pontos TRI. Evolução no RF015 usa o mesmo limiar para cima. O Diretor muda os limiares no sistema (RF018).

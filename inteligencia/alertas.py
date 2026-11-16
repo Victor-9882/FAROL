@@ -234,3 +234,31 @@ def apos_pendencias(pendencias) -> None:
                 gerar_frequencia_periodo(datas[0], datas[-1], pendencia.ano)
         elif pendencia.origem == "SIMULADO":
             gerar_desempenho_ano(pendencia.ano)
+
+
+def simular_frequencia(semanas: tuple[date, date] | None, ano: int, limiar) -> int:
+    """Quantos alunos teriam alerta de frequência em alguma das `semanas` com o `limiar`
+    (pré-visualização do RF018). Não grava nada."""
+    if semanas is None:
+        return 0
+    sinalizados = set()
+    semana = segunda(semanas[0])
+    while semana <= semanas[1]:
+        domingo = semana + timedelta(days=6)
+        alunos = list(consultas.alunos_do_ano(ano, ate=domingo))
+        for matricula, f in consultas.frequencias(alunos, semana, domingo).items():
+            if f.faltas >= limiar:
+                sinalizados.add(matricula)
+        semana += timedelta(days=7)
+    return len(sinalizados)
+
+
+def simular_desempenho(ciclo: CicloCalendario | None, limiar) -> int:
+    """Quantos alunos teriam alerta de queda no `ciclo` com o `limiar` (RF018). Não grava."""
+    if ciclo is None:
+        return 0
+    alunos = list(consultas.alunos_do_ano(ciclo.data_inicio.year))
+    historicos = consultas.historicos(alunos)
+    return sum(
+        1 for a in alunos if historicos.get(a.pk) and _queda(historicos[a.pk], ciclo.pk, limiar)
+    )

@@ -1,0 +1,32 @@
+{% extends "web/base.html" %}
+{% block titulo %}Alterar limiar · FAROL{% endblock %}
+{% block conteudo %}
+  <p><a href="{% url 'web:regras' %}">← Regras</a></p>
+  <h1>{{ rotulo }}</h1>
+  {% if atual %}
+    <p>Limiar atual: <strong>{{ atual.limiar|floatformat:"-2" }}</strong> {{ unidade }}.
+      Hoje, {{ previa_atual }} aluno(s) seriam sinalizados
+      {% if tipo == "FREQUENCIA" %}nas semanas de {{ ref.semanas_alerta.0|date:"d/m" }} a {{ ref.semanas_alerta.1|date:"d/m/Y" }}{% elif ref.ciclo %}no ciclo {{ ref.numero_ciclo }}{% endif %}.</p>
+    <p class="suave">{{ atual.descricao }}</p>
+  {% endif %}
+  <form method="post">
+    {% csrf_token %}
+    <p><label>Novo limiar ({{ unidade }}) <input type="text" name="limiar" value="{{ valor }}" inputmode="decimal" required></label></p>
+    {% if erro %}<p class="queda">{{ erro }}</p>{% endif %}
+    <button type="submit" name="acao" value="previsualizar">Pré-visualizar</button>
+    {% if previa is not None %}
+      <section class="cartao" style="margin-top:1rem">
+        <p>Com o limiar <strong>{{ limiar|floatformat:"-2" }}</strong>, <strong>{{ previa }}</strong> aluno(s) seriam sinalizados
+          (hoje: {{ previa_atual|default:"0" }}).</p>
+        <p class="suave">{{ descricao }}</p>
+        <input type="hidden" name="previsto" value="{{ limiar }}">
+        <button type="submit" name="acao" value="salvar">Salvar este limiar</button>
+        <p class="suave">Salvar registra quem alterou, quando e o valor anterior (NF009) e recalcula os alertas do ano.</p>
+      </section>
+    {% endif %}
+  </form>
+  {% if historico %}
+    <h2>Histórico</h2>
+    <ul>{% for h in historico %}<li>{{ h.criado_em|date:"d/m/Y H:i" }} · {{ h.autor }} · {{ h.campo }}: {{ h.valor_anterior }} → {{ h.valor_novo }}</li>{% endfor %}</ul>
+  {% endif %}
+{% endblock %}
