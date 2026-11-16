@@ -119,6 +119,15 @@ Em todas as três, uma pendência já associada vale para o aluno escolhido nas 
 - **Linhas:** reenvio do mesmo aluno vale o mais recente (`DATA ENVIO`) e os demais contam como ignorados; outra atividade (`ID DA ATIVIDADE` diferente do mais frequente) e tema fora da janela do aluno são inconsistentes.
 - **Reimportação e pendência:** auditoria por campo; referência = terça do tema.
 
+## Indicadores (#18, #19)
+
+- **`inteligencia/indicadores.py`:** funções de regra puras, sem banco nem tela. Cada decisão tem teste.
+  - **Frequência:** `frequencia(dias, letivos=..., ingresso=..., saida=...)` conta só dias letivos do calendário na hora do cálculo (RN005) e só da janela do aluno (RN004). Falta é o dia sem presença (RN001); a ausência justificada conta como presença na taxa (RN002). `Frequencia` traz dias, presenças, justificadas, faltas não justificadas, `taxa` e `percentual`.
+  - **Desempenho:** `notas_por_ciclo` monta o histórico (área ausente = `None`, RN009). `nota_total` é a média TRI das quatro áreas e só existe com as quatro (RN010, RN009). `delta(valores, ciclo)` compara com o último ciclo anterior em que o aluno foi avaliado (RN008); no primeiro simulado ou num ciclo em que faltou, não há delta. `classificar(variacao, limiar)`: queda se a variação é menor ou igual a -limiar, evolução se é maior ou igual a +limiar, estagnado entre os dois.
+  - **Redação:** `participacao(entregas)` dá entregues sobre registradas.
+- **`inteligencia/consultas.py`:** carrega em lote do banco (frequências, turma na data pelo histórico, RN011, históricos de notas, participações) e aplica as funções acima.
+- **Base sintética no banco de desenvolvimento:** `uv run python manage.py carregar_base_sintetica --autor <diretor>` (só com `DEBUG`) carrega cadastro, calendário, a grade de presença (pela importação real), todos os simulados e todas as redações de 2026, para ver o painel com dados.
+
 ## Suposições a confirmar
 
 - **Áreas do simulado:** as quatro áreas do ENEM (Linguagens, Humanas, Natureza, Matemática). Confirmar com a DES como o P+ separa as áreas, sobretudo nos simulados de FUVEST.
