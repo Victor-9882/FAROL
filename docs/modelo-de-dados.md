@@ -48,6 +48,8 @@ Registradas na SM #41, para atualizar o DER, o Diagrama de Classes e o Relatóri
 12. **`inteligencia.RegraAlerta`**. Existe só no Diagrama de Classes, não no DER; guarda os limiares no banco (RF018).
 13. **Tabela `PendenciaImportacao`** (RN003, NF006). Guarda as linhas de frequência, simulado e redação que não casaram com um aluno pela matrícula, até o Diretor associá-las ou descartá-las.
 
+14. **Tabela `relatorios.NotificacaoCiclo`** (RF017). Registra que o e-mail de fechamento de um ciclo já foi enviado, para o envio ocorrer uma só vez por ciclo. O DER não tem onde guardar isso.
+
 ## Cadastro (RF006)
 
 - **Colunas aceitas** (CSV `;` ou `,`, ou XLSX, primeira aba; cabeçalho sem distinção de caixa, acento ou espaço): `matricula`, `nome` (ou `nome_completo`, `aluno`), `turma` e, **opcional**, `data_ingresso` (ou `ingresso`, `data_de_ingresso`): se a coluna faltar ou a célula vier vazia, o aluno novo ingressa em 1º de janeiro do ano letivo informado e, em aluno existente, o ingresso não é conferido (preenchida e diferente, vira divergência). Datas em `dd/mm/aaaa` ou `aaaa-mm-dd`. Limites: 5 MB e 5.000 linhas.
@@ -162,6 +164,13 @@ Em todas as três, uma pendência já associada vale para o aluno escolhido nas 
 - **Faixas aceitas:** frequência, de 1 a 7 faltas, inteiro; desempenho, de 1 a 500 pontos, com até duas casas.
 - **Pré-visualização obrigatória:** a tela mostra quantos alunos seriam sinalizados com o limiar atual e com o novo. Na frequência, conta as semanas do ciclo de referência; no desempenho, o ciclo de referência (`alertas.simular_*`, sem gravar). "Salvar" só vale para o mesmo valor pré-visualizado.
 - **Troca (`regras.alterar_limiar`):** desativa a regra vigente e cria outra, com a descrição gerada a partir de `config/regras_padrao.yaml`. Os alertas antigos continuam apontando para o limiar que os gerou. Audita com `RegistroAlteracao`: `ativa` da regra antiga e `limiar` anterior e novo da nova, com autor e data (NF009). Em seguida, os alertas do ano são regerados (`alertas.gerar_ano`).
+
+## Notificação de ciclo (RF017, #32)
+
+- **`relatorios.NotificacaoCiclo`** (`HistoricoPreservado`, diferença 14 da SM #41): `ciclo` (um para um) e `destinatarios` (só a contagem). Não guarda endereços nem o corpo; `criado_em` é a data do envio. É a garantia de idempotência: um e-mail por ciclo.
+- **Comando `notificar_ciclo`** (`--data AAAA-MM-DD`, `--reenviar`): envia o e-mail do ciclo mais recente já fechado (`data_fim < hoje`) e com resultados de simulado. Não regera alertas: rode `gerar_alertas` antes. Ciclos antigos não notificados são ignorados.
+- **Conteúdo:** só números agregados e nomes de turma (total, frequência, participação, queda, estagnados, evolução, sem avaliação, sem presença, alertas ativos), sem nome nem matrícula (RN013, NF013). Texto puro, com o aviso de que alertas são indicativos (RN012). O link do painel só aparece com `SITE_URL` definido.
+- **Destinatários:** usuários ativos com e-mail, exceto superusuários (Diretor e Membro). Uma mensagem por destinatário. Se o SMTP falhar, o registro é desfeito; sem destinatários, nada é registrado.
 
 ## Suposições a confirmar
 
