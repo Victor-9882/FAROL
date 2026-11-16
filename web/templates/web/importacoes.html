@@ -7,7 +7,7 @@
     <button type="submit">Filtrar</button>
   </form>
   <table>
-    <thead><tr><th>Data e hora</th><th>Usuário</th><th>Arquivo</th><th>Ano</th><th>Tipo</th><th>Criados</th><th>Atualizados</th><th>Mudanças de turma</th><th>Sem alteração</th><th>Turmas criadas</th><th>Divergências</th><th>Inconsistentes</th></tr></thead>
+    <thead><tr><th>Data e hora</th><th>Usuário</th><th>Arquivo</th><th>Ano</th><th>Tipo</th><th>Criados</th><th>Atualizados</th><th>Mudanças de turma</th><th>Sem alteração</th><th>Turmas criadas</th><th>Divergências</th><th>Inconsistentes</th><th>Pendências</th></tr></thead>
     <tbody>
     {% for r in registros %}
       <tr>
@@ -23,9 +23,10 @@
         <td>{{ r.turmas_criadas }}</td>
         <td>{{ r.divergencias }}</td>
         <td>{{ r.inconsistentes }}</td>
+        <td>{{ r.pendencias }}</td>
       </tr>
     {% empty %}
-      <tr><td colspan="12">Nenhuma importação registrada.</td></tr>
+      <tr><td colspan="13">Nenhuma importação registrada.</td></tr>
     {% endfor %}
     </tbody>
   </table>

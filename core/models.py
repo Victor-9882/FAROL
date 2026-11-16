@@ -585,6 +585,9 @@ class RegistroImportacao(HistoricoPreservado):
         CALENDARIO = "CALENDARIO", "Dias não letivos e exceções"
         CICLOS = "CICLOS", "Ciclos"
         TEMAS = "TEMAS", "Temas de redação"
+        FREQUENCIA = "FREQUENCIA", "Frequência (catraca)"
+        SIMULADOS = "SIMULADOS", "Simulados (P+)"
+        REDACOES = "REDACOES", "Redações (Corrija-me)"
 
     autor = models.ForeignKey(
         Usuario, on_delete=models.PROTECT, related_name="importacoes_registradas"
@@ -601,6 +604,9 @@ class RegistroImportacao(HistoricoPreservado):
     turmas_criadas = models.PositiveIntegerField(default=0)
     divergencias = models.PositiveIntegerField(default=0)
     inconsistentes = models.PositiveIntegerField(default=0)
+    pendencias = models.PositiveIntegerField(
+        "pendências", default=0, help_text="Linhas sem aluno, à espera de associação (RN003)."
+    )
 
     class Meta:
         verbose_name = "registro de importação"
@@ -609,3 +615,78 @@ class RegistroImportacao(HistoricoPreservado):
 
     def __str__(self):
         return f"{self.tipo} {self.nome_arquivo} por {self.autor_id}"
+
+
+class PendenciaImportacao(HistoricoPreservado):
+    """Linha importada que não casou com um aluno, à espera de associação manual (RN003, NF006).
+
+    Casos: matrícula em branco, fora do padrão, de outro ano letivo, não encontrada ou de
+    aluno inválido. Guarda a matrícula e o nome informados (o nome é só sugestão e
+    verificação, RN003) e, em `dados`, o que a linha traria (data, presença, notas), para
+    ser aplicado quando o Diretor associar a pendência a um aluno. Só o Diretor vê.
+    Reimportar a mesma linha encontra a mesma pendência pela `chave` (NF008).
+    """
+
+    class Origem(models.TextChoices):
+        FREQUENCIA = "FREQUENCIA", "Frequência (catraca)"
+        SIMULADO = "SIMULADO", "Simulado (P+)"
+        REDACAO = "REDACAO", "Redação (Corrija-me)"
+
+    class Motivo(models.TextChoices):
+        EM_BRANCO = "EM_BRANCO", "Matrícula em branco"
+        FORA_DO_PADRAO = "FORA_DO_PADRAO", "Matrícula fora do padrão"
+        OUTRO_ANO = "OUTRO_ANO", "Matrícula de outro ano letivo"
+        NAO_ENCONTRADA = "NAO_ENCONTRADA", "Matrícula não encontrada"
+        ALUNO_INVALIDO = "ALUNO_INVALIDO", "Matrícula de aluno inválido"
+
+    class Situacao(models.TextChoices):
+        PENDENTE = "PENDENTE", "Pendente"
+        ASSOCIADA = "ASSOCIADA", "Associada"
+        DESCARTADA = "DESCARTADA", "Descartada"
+
+    origem = models.CharField(max_length=12, choices=Origem.choices)
+    motivo = models.CharField(max_length=16, choices=Motivo.choices)
+    ano = models.PositiveSmallIntegerField("ano letivo")
+    data = models.DateField(help_text="Dia da passagem, do simulado ou terça do tema.")
+    matricula_informada = models.CharField("matrícula informada", max_length=30, blank=True)
+    nome_informado = models.CharField("nome informado", max_length=150, blank=True)
+    dados = models.JSONField(default=dict, blank=True)
+    chave = models.CharField(max_length=64, unique=True, editable=False)
+    situacao = models.CharField(
+        "situação", max_length=10, choices=Situacao.choices, default=Situacao.PENDENTE
+    )
+    aluno = models.ForeignKey(
+        Aluno,
+        on_delete=models.PROTECT,
+        related_name="pendencias_associadas",
+        null=True,
+        blank=True,
+    )
+    resolvida_por = models.ForeignKey(
+        Usuario,
+        on_delete=models.PROTECT,
+        related_name="pendencias_resolvidas",
+        null=True,
+        blank=True,
+    )
+    resolvida_em = models.DateTimeField(null=True, blank=True)
+
+    class Meta:
+        verbose_name = "pendência de importação"
+        verbose_name_plural = "pendências de importação"
+        ordering = ["data", "id"]
+        indexes = [models.Index(fields=["situacao", "origem", "ano"])]
+        constraints = [
+            models.CheckConstraint(
+                condition=~Q(situacao="ASSOCIADA") | Q(aluno__isnull=False),
+                name="pendencia_associada_tem_aluno",
+            ),
+            models.CheckConstraint(
+                condition=Q(situacao="PENDENTE")
+                | Q(resolvida_por__isnull=False, resolvida_em__isnull=False),
+                name="pendencia_resolvida_tem_autor",
+            ),
+        ]
+
+    def __str__(self):
+        return f"{self.get_origem_display()} em {self.data}: {self.get_situacao_display()}"

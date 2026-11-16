@@ -1,0 +1,66 @@
+{% extends "web/base.html" %}
+{% block titulo %}Pendências de importação · FAROL{% endblock %}
+{% block conteudo %}
+  <h1>Pendências de importação</h1>
+  <p>Linhas da catraca, do P+ ou do Corrija-me que não casaram com um aluno pela matrícula (RN003).
+    Selecione as linhas do mesmo aluno, informe a matrícula dele e associe; ou descarte as que
+    não são de nenhum aluno. O nome informado serve só para conferir.</p>
+  <form method="get">
+    <label>Origem
+      <select name="origem">
+        <option value="">Todas</option>
+        {% for valor, rotulo in origens %}<option value="{{ valor }}"{% if filtros.origem == valor %} selected{% endif %}>{{ rotulo }}</option>{% endfor %}
+      </select>
+    </label>
+    <label>Situação
+      <select name="situacao">
+        <option value="todas"{% if filtros.situacao == "todas" %} selected{% endif %}>Todas</option>
+        {% for valor, rotulo in situacoes %}<option value="{{ valor }}"{% if filtros.situacao == valor %} selected{% endif %}>{{ rotulo }}</option>{% endfor %}
+      </select>
+    </label>
+    <label>Ano letivo <input type="number" name="ano" value="{{ filtros.ano }}" min="2000" max="2100"></label>
+    <button type="submit">Filtrar</button>
+  </form>
+
+  <form method="post">
+    {% csrf_token %}
+    {% if confirmacao %}
+      <section role="alert">
+        <p><strong>O nome informado difere do cadastro.</strong> No cadastro, a matrícula
+          {{ confirmacao.aluno.matricula }} é de <strong>{{ confirmacao.aluno.nome }}</strong>.
+          Confira os nomes das linhas selecionadas.</p>
+        <label><input type="checkbox" name="confirmar_nome" value="1"> Confirmo que as linhas
+          selecionadas são deste aluno</label>
+      </section>
+    {% endif %}
+    <table>
+      <thead><tr><th></th><th>Origem</th><th>Data</th><th>Motivo</th><th>Matrícula informada</th><th>Nome informado</th><th>Situação</th><th>Aluno associado</th></tr></thead>
+      <tbody>
+      {% for p in pagina %}
+        <tr>
+          <td>{% if p.situacao == "PENDENTE" %}<input type="checkbox" name="pendencia" value="{{ p.pk }}" aria-label="Selecionar"{% if confirmacao and p.pk in confirmacao.selecionadas %} checked{% endif %}>{% endif %}</td>
+          <td>{{ p.get_origem_display }}</td>
+          <td>{{ p.data|date:"d/m/Y" }}</td>
+          <td>{{ p.get_motivo_display }}</td>
+          <td>{{ p.matricula_informada|default:"—" }}</td>
+          <td>{{ p.nome_informado|default:"—" }}</td>
+          <td>{{ p.get_situacao_display }}</td>
+          <td>{% if p.aluno %}{{ p.aluno.matricula }}{% endif %}</td>
+        </tr>
+      {% empty %}
+        <tr><td colspan="8">Nenhuma pendência com estes filtros.</td></tr>
+      {% endfor %}
+      </tbody>
+    </table>
+    {% if pagina.has_other_pages %}
+      <p>Página {{ pagina.number }} de {{ pagina.paginator.num_pages }}
+        {% if pagina.has_previous %}· <a href="?origem={{ filtros.origem }}&situacao={{ filtros.situacao }}&ano={{ filtros.ano }}&pagina={{ pagina.previous_page_number }}">anterior</a>{% endif %}
+        {% if pagina.has_next %}· <a href="?origem={{ filtros.origem }}&situacao={{ filtros.situacao }}&ano={{ filtros.ano }}&pagina={{ pagina.next_page_number }}">próxima</a>{% endif %}</p>
+    {% endif %}
+    <p>
+      <label>Matrícula do aluno <input type="text" name="matricula" value="{{ matricula }}" maxlength="20"></label>
+      <button type="submit" name="acao" value="associar">Associar selecionadas</button>
+      <button type="submit" name="acao" value="descartar">Descartar selecionadas</button>
+    </p>
+  </form>
+{% endblock %}

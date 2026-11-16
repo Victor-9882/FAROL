@@ -19,6 +19,7 @@ Implementação física do Diagrama de Classes e do DER do Relatório Descritivo
 | `core.Intervencao` | Intervenção | Ligada ao aluno e, opcionalmente, ao alerta (RF019) |
 | `core.RegistroAlteracao` | **nova** | Auditoria: autor, data, campo, valor anterior e novo (NF009); reutilizada por RF008 e RF018 |
 | `core.RegistroImportacao` | **nova** | Trilha de uploads: quem importou, quando e o resumo (NF007, NF009) |
+| `core.PendenciaImportacao` | **nova** | Linha importada sem aluno correspondente, à espera de associação manual (RN003, NF006) |
 | `inteligencia.RegraAlerta` | (só no Diagrama de Classes) | Uma regra ativa por tipo; limiares no banco (RF018) |
 
 ## Garantias
@@ -45,6 +46,7 @@ Registradas na SM #41, para atualizar o DER, o Diagrama de Classes e o Relatóri
 10. **`Aluno.situacao` e `Aluno.data_saida`** (RF006). Registram desligamento, evasão e lançamento inválido; o DER não tem situação do aluno.
 11. **Tabela `RegistroImportacao`** (NF007, NF009). Trilha dos uploads de importação, sem conteúdo de arquivo.
 12. **`inteligencia.RegraAlerta`**. Existe só no Diagrama de Classes, não no DER; guarda os limiares no banco (RF018).
+13. **Tabela `PendenciaImportacao`** (RN003, NF006). Guarda as linhas de frequência, simulado e redação que não casaram com um aluno pela matrícula, até o Diretor associá-las ou descartá-las.
 
 ## Cadastro (RF006)
 
@@ -75,6 +77,16 @@ Sem migração: é código compartilhado por todas as importações.
 - **Limite de linhas (NF025):** `settings.IMPORTACAO_LIMITE_LINHAS` (variável de ambiente de mesmo nome, padrão 5000); `ler_tabela(limite_linhas=...)` troca o valor por chamada. O valor é lido na chamada, não na importação do módulo.
 - **Importação nova:** escreva `_validar(linha)` e a aplicação por linha; use `triar`, `transacao_de_importacao` e `linha_isolada`, devolva um `ResumoImportacao` e chame `executar_importacao` na view (`importar(linhas, gravar)` e `registrar(nome, tamanho, resumo)`), com `diretor_required`. Reaproveite os parciais `web/_importacao_resumo.html` e `web/_importacao_script.html`.
 - **NF011:** `tests/test_importacao_web.py` mede conferir e confirmar 500 alunos em menos de 2 minutos.
+
+## Pendências de importação (RN003, #69)
+
+- **Quando:** nas importações de frequência (RF003), simulados (RF004) e redação (RF005), a linha cuja matrícula está em branco, fora do padrão, é de outro ano letivo, não existe no cadastro ou é de aluno `INVALIDO` vira uma `PendenciaImportacao` em vez de ser descartada. Nunca se adivinha o aluno pelo nome (RN003). No resumo, essas linhas aparecem em "Pendências" e entram no total de linhas.
+- **`ingestao/pendencias.py`:** `LocalizadorAlunos(matriculas, ano).localizar(matricula)` devolve o aluno ou o motivo; `registrar_pendencia(...)` é idempotente pela `chave` (sha256 de origem, ano, matrícula e nome informados, este sem caixa nem acento, e da referência da origem: dia, ciclo ou tema). Reimportar a mesma linha reencontra a pendência e atualiza `dados`; se ela já foi associada ou descartada, a linha é ignorada (NF008).
+- **Associação** (`associar(pendencias, aluno, autor=..., confirmar_nome=False)`): em grupo, para as linhas do mesmo aluno. Recusa aluno `INVALIDO` ou de outro ano letivo. Se algum nome informado difere do cadastro (caixa, acento e espaço à parte), exige `confirmar_nome`. Cada importação registra com `@aplicador(origem)` a função que grava o que a linha traria (`dados`); ela roda num savepoint, e a recusa ou a restrição do banco deixa só aquela pendência como estava.
+- **Descarte** (`descartar`): a pendência fica `DESCARTADA`, preservada (NF007).
+- **Auditoria (NF009):** associar e descartar gravam `RegistroAlteracao` só do campo `situacao`; quem e quando ficam em `resolvida_por` e `resolvida_em`. Nunca nome, matrícula ou notas na auditoria nem nas mensagens (as mensagens podem ir para o cookie de mensagens).
+- **Tela:** `pendencias/`, só do Diretor (RN013), com filtro por origem, situação e ano. O nome do cadastro aparece só na própria página, quando a associação pede confirmação.
+- **Trilha:** `RegistroImportacao.pendencias` conta as linhas que viraram pendência; os tipos `FREQUENCIA`, `SIMULADOS` e `REDACOES` ficam prontos para RF003 a RF005. `web.importacao.registrar_trilha` grava a trilha a partir do resumo.
 
 ## Suposições a confirmar
 

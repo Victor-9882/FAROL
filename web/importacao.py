@@ -12,6 +12,7 @@ from dataclasses import dataclass
 
 from django.db import transaction
 
+from core.models import RegistroImportacao
 from ingestao.base import ResumoImportacao
 from ingestao.confirmacao import emitir_token, impressao_digital, token_confere
 from ingestao.leitura import ArquivoInvalidoError, ler_tabela, nome_arquivo_seguro
@@ -90,3 +91,20 @@ def executar_importacao(
         resumo=resumo.assinatura(),
     )
     return resultado
+
+
+def registrar_trilha(*, autor, tipo, ano, nome, tamanho, resumo, **extras):
+    """Trilha do upload (NF007, NF009): só nome do arquivo, tamanho e contagens do resumo."""
+    return RegistroImportacao.objects.create(
+        autor=autor,
+        tipo=tipo,
+        nome_arquivo=nome,
+        tamanho_bytes=tamanho,
+        ano=ano,
+        criados=resumo.criados,
+        atualizados=resumo.atualizados,
+        sem_alteracao=resumo.sem_alteracao,
+        inconsistentes=len(resumo.inconsistentes),
+        pendencias=len(resumo.pendencias),
+        **extras,
+    )

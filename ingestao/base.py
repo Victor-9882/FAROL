@@ -20,7 +20,7 @@ MOTIVO_VALIDACAO = "registro recusado pela validação do modelo"
 @dataclass
 class ResumoImportacao:
     """Totais de uma importação. `total_linhas` sempre fecha com as linhas do arquivo:
-    importados + ignorados + divergentes + inconsistentes."""
+    importados + ignorados + divergentes + inconsistentes + pendências."""
 
     criados: int = 0
     atualizados: int = 0
@@ -30,6 +30,8 @@ class ResumoImportacao:
     # Registros do banco que a importação sobrepõe (NF008); preenchida pelas importações
     # de dados que se repetem (RF003 em diante). A conferência é a confirmação.
     sobreposicoes: list[str] = field(default_factory=list)
+    # Linhas sem aluno, guardadas para associação manual (RN003): `(linha, motivo)`.
+    pendencias: list[tuple[int, str]] = field(default_factory=list)
 
     @property
     def importados(self) -> int:
@@ -47,7 +49,13 @@ class ResumoImportacao:
 
     @property
     def total_linhas(self) -> int:
-        return self.importados + self.ignorados + self.divergentes + len(self.inconsistentes)
+        return (
+            self.importados
+            + self.ignorados
+            + self.divergentes
+            + len(self.inconsistentes)
+            + len(self.pendencias)
+        )
 
     def assinatura(self) -> list[int]:
         """Números que a conferência mostrou; o token de confirmação os carrega.
@@ -61,6 +69,7 @@ class ResumoImportacao:
             self.divergentes,
             len(self.inconsistentes),
             len(self.sobreposicoes),
+            len(self.pendencias),
         ]
 
 

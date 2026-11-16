@@ -93,8 +93,8 @@ def test_importados_e_divergentes_do_cadastro(diretor):
     assert resumo.divergentes == 1
     assert resumo.total_linhas == 3
     # criados, atualizados, sem alteração, divergentes, inconsistentes, sobreposições,
-    # mudanças de turma, turmas criadas: cada um separado no token
-    assert resumo.assinatura() == [1, 0, 0, 1, 0, 0, 1, 1]
+    # pendências, mudanças de turma, turmas criadas: cada um separado no token
+    assert resumo.assinatura() == [1, 0, 0, 1, 0, 0, 0, 1, 1]
 
 
 def test_transacao_sem_gravar_desfaz():
