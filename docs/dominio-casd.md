@@ -88,7 +88,7 @@ Quando um fato daqui mudar um requisito, ele precisa de uma Solicitação de Mud
 | Membro vê nomes nas listas de cadastro; importar é só do Diretor | SM #58 |
 | Formato da matrícula | Comentário de revisão no PR #57; este documento |
 | Modelo de dia letivo, aulas de segunda a sexta | Revisão e implementação no PR #63 |
-| Datas de ciclo com resultados de simulado | Comentário na #15 (RF004) |
+| Datas de ciclo com resultados de simulado | Pendente: sugestões na #15, a decidir no RF004 |
 | Semanas do ITA | #64 |
 | Fonte dos temas de redação | Comentário na #16 |
 | Aviso de passagens em dia não letivo no RF003 | Comentário na #14 |
