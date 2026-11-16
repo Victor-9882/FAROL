@@ -55,6 +55,7 @@ Quando um fato daqui mudar um requisito, ele precisa de uma Solicitação de Mud
   O Diretor cadastra só os períodos (alguns por ano) e as exceções (15 a 20 por ano). Use sempre `core.calendario.eh_dia_letivo` e `dias_letivos` na hora do cálculo. A alternativa, listar cada dia letivo, foi descartada: um dia esquecido apagaria faltas sem aviso no RF003.
 - **Tema de redação vigente:** `core.calendario.tema_em(data)` devolve o tema da terça anterior (janela de 7 dias), ou `None` na semana sem tema.
 - **Ciclo de desempenho (RN006):** as duas semanas entre simulados. Os simulados do CASD aparecem no calendário interno com nomes variados (por exemplo, "ENEM 1 CASD", "Simulado Nivelamento").
+- **Datas dos ciclos são fixas** e definidas no início do ano (confirmado pela equipe em 16/11/2026, ao decidir a pendência da #15). Por isso, ciclo que já tem resultado de simulado não muda de data, nem pela tela nem pela importação do calendário (RF004).
 - **Semanas do ITA:** o calendário interno numera as semanas pelo calendário do ITA ("1ª" a "8ª" e "semaninha"). Na **semaninha**, o CASD continua com aulas normais (salvo férias ou feriado), mas os alunos do ITA folgam e o efetivo da gestão diminui. Isso **não** muda o que é dia letivo nem os ciclos. A referência é tratada na #64.
 
 ### A planilha do calendário interno
@@ -88,7 +89,7 @@ Quando um fato daqui mudar um requisito, ele precisa de uma Solicitação de Mud
 | Membro vê nomes nas listas de cadastro; importar é só do Diretor | SM #58 |
 | Formato da matrícula | Comentário de revisão no PR #57; este documento |
 | Modelo de dia letivo, aulas de segunda a sexta | Revisão e implementação no PR #63 |
-| Datas de ciclo com resultados de simulado | Pendente: sugestões na #15, a decidir no RF004 |
+| Datas de ciclo fixas; ciclo com resultados não muda de data | Equipe, 16/11/2026 (#15); implementado no RF004 |
 | Semanas do ITA | #64 |
 | Fonte dos temas de redação | Comentário na #16 |
 | Aviso de passagens em dia não letivo no RF003 | Comentário na #14 |
