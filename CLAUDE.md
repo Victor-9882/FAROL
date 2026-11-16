@@ -18,6 +18,7 @@ Aplicação web de apoio à decisão para a Direção do CASD (CASDvest). Projet
 - **Auditoria (NF009):** toda alteração feita por tela ou importação grava `RegistroAlteracao` com `core.auditoria.registrar_alteracoes`. Nunca guarde senha, hash, token nem conteúdo de arquivo.
 - **Importações:** idempotentes (NF008); leem com `ingestao.leitura.ler_tabela` (limites de tamanho, linhas e colunas; o de linhas vem de `IMPORTACAO_LIMITE_LINHAS`). Use `ingestao.base` (`ResumoImportacao`, `triar`, `transacao_de_importacao`, `linha_isolada`) e, nas telas, `web.importacao.executar_importacao`: a conferência sem gravar é obrigatória e só o token dela (`ingestao.confirmacao`, sem estado no servidor) permite gravar. Mensagens de erro nunca incluem conteúdo de células.
 - **Matrícula:** valide com `ingestao.cadastro.validar_matricula`. Uma matrícula de outro ano letivo nunca muda um aluno de turma.
+- **Dia letivo (RN005):** para saber se um dia é letivo, use sempre `core.calendario.eh_dia_letivo` e `dias_letivos`, na hora do cálculo. Não deduza isso consultando `DiaCalendario`: ele guarda só as exceções aos períodos letivos.
 
 ## Ambiente e comandos
 
