@@ -5,7 +5,6 @@ from django.contrib.auth.views import LoginView, LogoutView
 from django.db import connection
 from django.http import JsonResponse
 from django.shortcuts import render
-from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 
 
@@ -28,10 +27,13 @@ class Login(LoginView):
     redirect_authenticated_user = True
 
 
+@method_decorator(login_not_required, name="dispatch")
 class Logout(LogoutView):
-    """Encerra a sessão. Só aceita POST, para que um link externo não deslogue ninguém."""
+    """Encerra a sessão. Só aceita POST, para que um link externo não deslogue ninguém.
 
-    next_page = reverse_lazy("web:login")
+    Pública de propósito: um POST anônimo (sessão já expirada) deve só voltar ao login,
+    sem passar pelo `login_required` global. O destino vem de LOGOUT_REDIRECT_URL.
+    """
 
 
 def inicio(request):
