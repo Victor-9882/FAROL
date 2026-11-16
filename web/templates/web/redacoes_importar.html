@@ -1,0 +1,24 @@
+{% extends "web/base.html" %}
+{% block titulo %}Importar redações · FAROL{% endblock %}
+{% block conteudo %}
+  <h1>Importar redações (Corrija-me)</h1>
+  <p>Envie a exportação do Corrija-me: uma linha por aluno e tema, com a terça-feira do tema
+    (RN007), o título, a matrícula, a entrega (S ou N) e as cinco competências (0 a 200).
+    O tema da terça que ainda não estiver cadastrado é criado com o título do arquivo; se já
+    estiver, o cadastrado é mantido e o resumo avisa quando o título difere.
+    A redação não entregue fica registrada, sem notas.</p>
+  <p>Linhas com matrícula em branco, fora do padrão ou sem aluno no cadastro ficam em
+    <a href="{% url 'web:pendencias' %}">Pendências</a> para associação manual, com o nome como
+    verificação (RN003). Reimportar atualiza o que mudou, com auditoria.</p>
+  <p><a href="{% url 'web:redacoes_modelo' 'xlsx' %}">Baixar modelo (.xlsx)</a> ·
+    <a href="{% url 'web:redacoes_modelo' 'csv' %}">Baixar modelo (.csv)</a></p>
+  <form method="post" enctype="multipart/form-data" id="importacao-form">
+    {% csrf_token %}
+    {% for campo in form %}
+      <p>{{ campo.label_tag }} {{ campo }}{% if campo.help_text %} <small>{{ campo.help_text }}</small>{% endif %}</p>
+    {% endfor %}
+    <button type="submit" name="acao" value="conferir">Conferir</button>
+  </form>
+  {% include "web/_importacao_resumo.html" with detalhe="web/_importacao_detalhe_redacoes.html" %}
+  {% include "web/_importacao_script.html" %}
+{% endblock %}
