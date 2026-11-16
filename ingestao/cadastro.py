@@ -12,12 +12,13 @@ Resultados e mensagens citam só linha, matrícula e motivo, nunca o nome (LGPD)
 import re
 import unicodedata
 from dataclasses import dataclass, field
-from datetime import date, datetime
+from datetime import date
 
 from django.db import transaction
 
 from core.auditoria import registrar_alteracoes
 from core.models import Aluno, Turma
+from ingestao.leitura import ler_data
 
 COLUNAS = {
     "matricula": ("rm",),
@@ -59,19 +60,6 @@ def _chave_nome(texto) -> str:
     return sem_acento.casefold()
 
 
-def _data(valor) -> date | None:
-    if isinstance(valor, datetime):
-        return valor.date()
-    if isinstance(valor, date):
-        return valor
-    for formato in ("%d/%m/%Y", "%Y-%m-%d"):
-        try:
-            return datetime.strptime(str(valor or "").strip(), formato).date()
-        except ValueError:
-            continue
-    return None
-
-
 # `AA` + modalidade (30 extensivo, 31 semiextensivo) + 3 dígitos; `AA` = ano letivo % 100.
 MATRICULA_REAL = re.compile(r"^(\d{2})(30|31)\d{3}$")  # CASDvest
 MATRICULA_SINTETICA = re.compile(r"^S(\d{2})\d{4}$")  # base sintética (NF017)
@@ -106,7 +94,7 @@ def _validar(linha, ano) -> tuple[dict | None, str]:
         return None, f"turma com mais de {_MAX_TURMA} caracteres"
     bruta = linha.get("data_ingresso")
     informada = not (bruta is None or str(bruta).strip() == "")
-    ingresso = _data(bruta) if informada else None
+    ingresso = ler_data(bruta) if informada else None
     if informada and ingresso is None:
         return None, "data de ingresso inválida (use dd/mm/aaaa ou aaaa-mm-dd)"
     return {

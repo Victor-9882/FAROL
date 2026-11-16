@@ -5,8 +5,6 @@ visíveis ao Membro). Baixar modelos: qualquer autenticado (sem dado real).
 Importar, novo e editar: só o Diretor, que audita em `importacoes/`. Não há exclusão (NF007).
 """
 
-import os
-
 from django.contrib.auth.decorators import login_required
 from django.db import transaction
 from django.db.models import Count, Max
@@ -16,7 +14,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from core.auditoria import historico_de
 from core.models import Aluno, RegistroImportacao, Turma
 from ingestao.cadastro import COLUNAS, EXEMPLOS, OPCIONAIS, importar_cadastro
-from ingestao.leitura import ArquivoInvalidoError, ler_tabela
+from ingestao.leitura import ArquivoInvalidoError, ler_tabela, nome_arquivo_seguro
 from ingestao.modelos import gerar_modelo
 
 from .acesso import diretor_required
@@ -107,8 +105,7 @@ def turma_editar(request, pk):
 
 def _registrar(autor, arquivo, dados, resumo):
     """Trilha do upload: só nome (sanitizado), tamanho e contagens."""
-    nome = os.path.basename(arquivo.name.replace("\\", "/"))
-    nome = "".join(c for c in nome if c.isprintable())[:255] or "arquivo"
+    nome = nome_arquivo_seguro(arquivo)
     RegistroImportacao.objects.create(
         autor=autor,
         nome_arquivo=nome,
