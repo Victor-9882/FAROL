@@ -11,11 +11,18 @@
     {{ form.as_p }}
     <button type="submit">Salvar</button>
   </form>
-  {% if alvo %}
+  {% if link %}
+    <h2>Link para {{ alvo.username }}</h2>
+    <p>Repasse este link ao usuário por um canal seguro. Ele serve para definir a senha uma única vez e expira em poucos dias. A senha anterior do usuário, se havia, deixou de valer. Este link não será exibido de novo.</p>
+    <p><code>{{ link }}</code></p>
+  {% endif %}
+  {% if alvo and alvo.is_active %}
     <form method="post" action="{% url 'web:usuario_link_senha' alvo.pk %}">
       {% csrf_token %}
       <button type="submit">Gerar link para definir senha</button>
     </form>
+  {% endif %}
+  {% if alvo %}
     <h2>Histórico de alterações</h2>
     <ul>
     {% for r in historico %}
