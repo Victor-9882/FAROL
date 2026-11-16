@@ -216,11 +216,28 @@ class HistoricoTurma(HistoricoPreservado):
 # --- Calendário ----------------------------------------------------------------------
 
 
+class DiaCalendario(HistoricoPreservado):
+    """Um dia do calendário letivo: letivo ou não (feriado, recesso). RN005."""
+
+    data = models.DateField(unique=True)
+    letivo = models.BooleanField("dia letivo")
+    descricao = models.CharField("descrição", max_length=100, blank=True)
+
+    class Meta:
+        verbose_name = "dia do calendário"
+        verbose_name_plural = "dias do calendário"
+        ordering = ["data"]
+
+    def __str__(self):
+        return f"{self.data:%d/%m/%Y} ({'letivo' if self.letivo else 'não letivo'})"
+
+
 class CicloCalendario(HistoricoPreservado):
     """Ciclo de desempenho: as duas semanas entre simulados (RN006)."""
 
     data_inicio = models.DateField("início", unique=True)
     data_fim = models.DateField("fim")
+    data_simulado = models.DateField("data do simulado", null=True, blank=True)
 
     class Meta:
         verbose_name = "ciclo"
@@ -231,10 +248,50 @@ class CicloCalendario(HistoricoPreservado):
                 condition=Q(data_fim__gt=models.F("data_inicio")),
                 name="ciclo_fim_apos_inicio",
             ),
+            models.CheckConstraint(
+                condition=Q(data_simulado__isnull=True)
+                | Q(
+                    data_simulado__gte=models.F("data_inicio"),
+                    data_simulado__lte=models.F("data_fim"),
+                ),
+                name="ciclo_simulado_dentro_do_ciclo",
+            ),
         ]
 
     def __str__(self):
         return f"Ciclo {self.data_inicio:%d/%m/%Y} a {self.data_fim:%d/%m/%Y}"
+
+    def clean(self):
+        super().clean()
+        if self.data_inicio and self.data_fim:
+            outros = CicloCalendario.objects.exclude(pk=self.pk).filter(
+                data_inicio__lte=self.data_fim, data_fim__gte=self.data_inicio
+            )
+            if outros.exists():
+                raise ValidationError("O ciclo se sobrepõe a outro ciclo (RN006).")
+
+
+class TemaRedacao(HistoricoPreservado):
+    """Tema da redação semanal, divulgado às terças-feiras; vale até a segunda seguinte (RN007)."""
+
+    data = models.DateField("terça-feira do tema", unique=True)
+    tema = models.CharField(max_length=200)
+
+    class Meta:
+        verbose_name = "tema de redação"
+        verbose_name_plural = "temas de redação"
+        ordering = ["data"]
+        constraints = [
+            models.CheckConstraint(condition=Q(data__week_day=3), name="tema_lancado_na_terca"),
+        ]
+
+    def __str__(self):
+        return f"{self.data:%d/%m/%Y}: {self.tema}"
+
+    def clean(self):
+        super().clean()
+        if self.data and self.data.weekday() != 1:
+            raise ValidationError({"data": "O tema é divulgado às terças-feiras (RN007)."})
 
 
 # --- Registros importados (Ingestão) -------------------------------------------------
@@ -494,6 +551,9 @@ class RegistroImportacao(HistoricoPreservado):
 
     class Tipo(models.TextChoices):
         CADASTRO = "CADASTRO", "Cadastro de alunos e turmas"
+        CALENDARIO = "CALENDARIO", "Calendário letivo"
+        CICLOS = "CICLOS", "Ciclos"
+        TEMAS = "TEMAS", "Temas de redação"
 
     autor = models.ForeignKey(
         Usuario, on_delete=models.PROTECT, related_name="importacoes_registradas"
@@ -505,6 +565,7 @@ class RegistroImportacao(HistoricoPreservado):
     data_mudanca = models.DateField("data de mudança de turma", null=True, blank=True)
     criados = models.PositiveIntegerField(default=0)
     mudancas_turma = models.PositiveIntegerField(default=0)
+    atualizados = models.PositiveIntegerField(default=0)
     sem_alteracao = models.PositiveIntegerField(default=0)
     turmas_criadas = models.PositiveIntegerField(default=0)
     divergencias = models.PositiveIntegerField(default=0)
