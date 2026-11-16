@@ -45,6 +45,7 @@ MIDDLEWARE = [
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "django.contrib.auth.middleware.LoginRequiredMiddleware",  # NF014: negar por padrão
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
@@ -79,6 +80,9 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # Autenticação (RF001, NF014). O usuário tem perfil Diretor ou Membro (RN013).
 AUTH_USER_MODEL = "core.Usuario"
+LOGIN_URL = "web:login"
+LOGIN_REDIRECT_URL = "web:inicio"
+LOGOUT_REDIRECT_URL = "web:login"
 
 AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},

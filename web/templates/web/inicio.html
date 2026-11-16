@@ -1,0 +1,10 @@
+{% extends "web/base.html" %}
+{% block conteudo %}
+  <h1>Início</h1>
+  <p>Perfil: {{ user.get_perfil_display }}.</p>
+  {% if user.is_diretor %}
+    <p>Você pode consultar dados nominais dos alunos.</p>
+  {% else %}
+    <p>Você vê apenas indicadores agregados.</p>
+  {% endif %}
+{% endblock %}
