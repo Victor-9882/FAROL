@@ -20,6 +20,7 @@ Implementação física do Diagrama de Classes e do DER do Relatório Descritivo
 
 - **Sem exclusão física (NF007):** todos os modelos acima, menos `Usuario`, herdam de `core.historico.HistoricoPreservado`. `delete()` gera `ExclusaoProibidaError`, tanto no objeto quanto em querysets. As chaves estrangeiras usam `PROTECT`. Um usuário de gestão anterior é desativado (`is_active = False`), não excluído.
 - **Sem duplicidade (NF008):** restrições `unique` no banco para frequência, simulado, redação e turma. A importação deve usar `update_or_create` sobre essas chaves.
+- **Perfil e contas (RN013, NF013):** só superusuário cria, altera ou exclui `Usuario` no admin, incluindo `perfil`, senha de terceiros, grupos e permissões. Staff sem superusuário tem no máximo leitura. As contas de superusuário são detidas pelos Diretores. A gestão de usuários pelo Diretor fica para o RF002.
 - **Mudança de turma (RN011):** use `aluno.mudar_turma(nova_turma, data)`. O período anterior é fechado e outro é aberto. `aluno.turma_em(data)` responde em que turma o aluno estava numa data.
 
 ## Diferenças em relação ao DER do Lab 03
