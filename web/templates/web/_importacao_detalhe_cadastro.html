@@ -1,0 +1,10 @@
+<ul>
+  <li>Alunos criados: {{ resumo.criados }}</li>
+  <li>Mudanças de turma: {{ resumo.mudancas_turma }}</li>
+  <li>Sem alteração: {{ resumo.sem_alteracao }}</li>
+  <li>Turmas criadas: {{ resumo.turmas_criadas }}</li>
+</ul>
+{% if resumo.divergencias %}
+  <h3>Divergências (linha ignorada)</h3>
+  <ul>{% for linha, matricula, motivo in resumo.divergencias %}<li>Linha {{ linha }} · {{ matricula }} · {{ motivo }}</li>{% endfor %}</ul>
+{% endif %}

@@ -1,0 +1,23 @@
+<script>
+  /* Conferir sem perder o arquivo anexado (#59): envia por fetch e troca só o resultado.
+     Qualquer mudança no formulário descarta a conferência (e o botão de confirmar). */
+  (function () {
+    var form = document.getElementById("importacao-form");
+    var alvo = document.getElementById("importacao-resultado");
+    if (!form || !alvo || !window.fetch || !window.FormData || !window.DOMParser) return;
+    form.addEventListener("submit", function (e) {
+      if (!e.submitter || e.submitter.value !== "conferir") return;
+      e.preventDefault();
+      var dados = new FormData(form);
+      dados.set("acao", "conferir");
+      fetch(form.action || window.location.href, {
+        method: "POST", body: dados, credentials: "same-origin",
+      }).then(function (r) { return r.text(); }).then(function (texto) {
+        var novo = new DOMParser().parseFromString(texto, "text/html")
+          .getElementById("importacao-resultado");
+        if (novo) alvo.innerHTML = novo.innerHTML; else form.submit();
+      }).catch(function () { form.submit(); });
+    });
+    form.addEventListener("change", function () { alvo.innerHTML = ""; });
+  })();
+</script>
