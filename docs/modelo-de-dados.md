@@ -38,7 +38,7 @@ Registradas na SM #41, para atualizar o DER, o Diagrama de Classes e o Relatóri
 2. **`Intervencao.aluno`**. No DER, a intervenção se liga só ao alerta, mas o RF019 admite intervenção sem alerta.
 3. **`ResultadoSimulado.presente`**. Registra a ausência no simulado, que não é avaliada em desempenho (RN009). Um ausente não tem nota (restrição no banco).
 4. **`ResultadoRedacao`**: `nota_competencias` virou cinco colunas (`nota_c1` a `nota_c5`), decimais com uma casa (a banca VUNESP do Corrija-me dá notas como 21,4). Também foram acrescentados `entregue` (já presente no Diagrama de Classes), `tema`, `banca` e `nota_final`. O tema é identificado pela terça-feira em que foi lançado (RN007).
-5. **`Alerta.regra`, `Alerta.ciclo` e `Alerta.area`**. Registram qual regra e qual limiar geraram o alerta e a área do alerta de desempenho (RF015).
+5. **`Alerta.regra`, `Alerta.ciclo`, `Alerta.area`, `Alerta.semana` e `Alerta.ativo`**. Registram qual regra e qual limiar geraram o alerta, a área do alerta de desempenho (RF015), a semana do alerta de frequência (NF005) e se ele ainda vale depois de uma correção dos dados (NF007).
 6. **`CicloCalendario` sem `temaRedacaoSemana`**, com `data_simulado`. Cada ciclo tem duas semanas e, portanto, dois temas (RN007); os temas ficam na tabela `TemaRedacao`, e o ciclo registra a data do simulado (RN006).
 7. **Tabela `RegistroAlteracao`** (autor, modelo, objeto, campo, valor anterior e novo). O DER não tem trilha de auditoria, exigida pela NF009.
 8. **Tabelas `DiaCalendario` e `TemaRedacao`**. O DER não tem onde guardar feriados, recessos (RN005) nem os temas semanais (RN007).
@@ -128,7 +128,19 @@ Em todas as três, uma pendência já associada vale para o aluno escolhido nas 
 - **`inteligencia/consultas.py`:** carrega em lote do banco (frequências, turma na data pelo histórico, RN011, históricos de notas, participações) e aplica as funções acima.
 - **Base sintética no banco de desenvolvimento:** `uv run python manage.py carregar_base_sintetica --autor <diretor>` (só com `DEBUG`) carrega cadastro, calendário, a grade de presença (pela importação real), todos os simulados e todas as redações de 2026, para ver o painel com dados.
 
+## Alertas (#24, #25, #26)
+
+- **Regras (`inteligencia.RegraAlerta`):** uma ativa por tipo, com limiar e descrição em linguagem simples (NF021). Valores padrão em `config/regras_padrao.yaml` (IC-10), carregados pela migração de dados `inteligencia.0002` só quando não há regra ativa do tipo; depois, o limiar vive no banco (RF018). `inteligencia.regras.vigente(tipo)` devolve a regra ativa; sem ela, nada é gerado.
+- **Frequência (RF014), por semana de segunda a domingo:** faltas não justificadas em dias letivos (`consultas.frequencias`, RN001, RN002, RN005) maiores ou iguais ao limiar. O motivo cita as faltas, a semana, os dias letivos e o limiar.
+- **Desempenho (RF015), por ciclo:** queda quando a nota total (média das quatro áreas) ou alguma área cai pelo menos o limiar em relação ao último simulado em que o aluno foi avaliado (RN008). Quem faltou não é avaliado (RN009); no primeiro simulado não há alerta. A `area` é vazia quando a nota total caiu; senão, é a área da maior queda. O motivo lista cada queda (antes → depois e a diferença) e o limiar.
+- **NF005 e NF007:** no máximo um alerta por aluno, tipo e semana (`semana`) ou ciclo (`ciclo`), com restrição no banco. Regerar atualiza o mesmo alerta; o que deixou de valer fica `ativo=False`, sem exclusão.
+- **Quando são gerados:** ao confirmar a importação da grade de presença (as semanas da grade) e do P+ (todos os ciclos do ano, porque um ciclo novo muda o delta do seguinte); ao associar pendências; na carga da base sintética; e por `manage.py gerar_alertas --ano AAAA`, que é idempotente e pode rodar por agendador.
+- **Indicativos (RN012, NF022):** nenhum alerta muda nada no aluno; servem para a Direção olhar.
+
 ## Suposições a confirmar
+
+- **Limiares dos alertas:** provisórios até a definição com a Direção (FAROL_Contexto, "Questões em aberto", itens 2 e 3). Frequência: 3 faltas não justificadas na semana; desempenho: queda de 30 pontos TRI. Evolução no RF015 usa o mesmo limiar para cima. O Diretor muda os limiares no sistema (RF018).
+- **Evolução consistente (RF016, #27):** critério ainda não definido com a Direção; não implementado.
 
 - **Áreas do simulado:** as quatro áreas do ENEM (Linguagens, Humanas, Natureza, Matemática). Confirmar com a DES como o P+ separa as áreas, sobretudo nos simulados de FUVEST.
 - **Formato da matrícula:** confirmado em 16/11/2026. É sempre de 7 dígitos: `AA` (ano letivo) + `30` (extensivo) ou `31` (semiextensivo) + 3 dígitos, e o aluno recebe uma matrícula nova a cada ano. Detalhes em [dominio-casd.md](dominio-casd.md), seção 2. O campo continua como texto de até 20 caracteres, o que também comporta o formato da base sintética.

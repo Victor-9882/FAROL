@@ -12,6 +12,7 @@ from django.shortcuts import redirect, render
 
 from core.models import Aluno, PendenciaImportacao
 from ingestao.pendencias import NOME_DIVERGENTE, AssociacaoRecusada, associar, descartar
+from inteligencia import alertas
 
 from .acesso import diretor_required
 
@@ -61,6 +62,7 @@ def _processar(request):
         messages.error(request, f"Associação recusada: {erro}.")
         return None
     if associadas:
+        alertas.apos_pendencias([p for p in selecionadas if p.pk not in dict(recusas)])
         messages.success(request, f"{associadas} pendência(s) associada(s).")
     for _, motivo in recusas:
         messages.error(request, f"Uma pendência não foi associada: {motivo}.")
