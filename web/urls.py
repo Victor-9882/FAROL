@@ -1,6 +1,7 @@
 from django.urls import path
 
 from . import (
+    auxilios,
     cadastro,
     calendario,
     ficha,
@@ -19,6 +20,12 @@ urlpatterns = [
     path("", painel.inicio, name="inicio"),
     path("painel/<slug:categoria>/", painel.painel_lista, name="painel_lista"),
     path("indicadores/", painel.indicadores, name="indicadores"),
+    path("relatorios/auxilios/", auxilios.relatorio, name="auxilios"),
+    path(
+        "relatorios/auxilios/modelo/<slug:formato>/",
+        auxilios.modelo,
+        name="auxilios_modelo",
+    ),
     path("regras/", regras.lista, name="regras"),
     path("regras/<slug:tipo>/", regras.editar, name="regra_editar"),
     path("entrar/", views.Login.as_view(), name="login"),

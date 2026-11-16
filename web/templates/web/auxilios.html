@@ -1,0 +1,81 @@
+{% extends "web/base.html" %}
+{% load farol %}
+{% block titulo %}Relatório de auxílios · FAROL{% endblock %}
+{% block conteudo %}
+  <h1>Relatório dos alunos beneficiados por auxílios</h1>
+  <p>Envie uma planilha só com a coluna <strong>matrícula</strong> dos alunos beneficiados. O
+    relatório compara esses alunos com os demais do ano, na hora, e <strong>nada é gravado</strong>:
+    nem o arquivo, nem a lista, nem o tipo de auxílio (SM #80). Matrícula sem aluno no cadastro é
+    só contada, sem virar pendência. Ao sair desta página a lista se perde: envie-a de novo para
+    gerar outro relatório.</p>
+  <p class="indicativo">Ser beneficiado é dado socioeconômico: use o relatório só para a prestação
+    de contas e não compartilhe a lista nominal (RN013, RN014). Os números são indicativos (RN012).</p>
+  <p><a href="{% url 'web:auxilios_modelo' 'xlsx' %}">Baixar modelo (.xlsx)</a> ·
+    <a href="{% url 'web:auxilios_modelo' 'csv' %}">Baixar modelo (.csv)</a></p>
+  <form method="post" enctype="multipart/form-data" autocomplete="off">
+    {% csrf_token %}
+    {% if erro %}<ul class="errorlist"><li>{{ erro }}</li></ul>{% endif %}
+    {% for campo in form %}
+      <p>{{ campo.label_tag }} {{ campo }}{% if campo.help_text %} <small>{{ campo.help_text }}</small>{% endif %}
+        {{ campo.errors }}</p>
+    {% endfor %}
+    <button type="submit">Gerar relatório</button>
+  </form>
+
+  {% with r=relatorio %}
+  {% if r %}
+    <h2>Resumo para a prestação de contas · {{ r.ref.ano }}</h2>
+    <p class="suave">Sem nomes nem matrículas.
+      {% if r.ref.ciclo %}Ciclo {{ r.ref.numero_ciclo }} ({{ r.ref.ciclo.data_inicio|date:"d/m/Y" }} a {{ r.ref.ciclo.data_fim|date:"d/m/Y" }}).
+      {% elif r.ref.semana %}Semana de {{ r.ref.semana|date:"d/m/Y" }}.{% else %}Sem frequência nem simulado importados no ano.{% endif %}</p>
+    <ul>
+      <li>Matrículas válidas no arquivo: {{ r.lidas }}</li>
+      <li>Encontradas entre os alunos do ano: {{ r.beneficiados.alunos }}</li>
+      <li>Sem aluno correspondente (só contagem, nada guardado): {{ r.sem_aluno }}</li>
+      <li>Linhas recusadas: {{ r.recusadas|length }}</li>
+    </ul>
+    {% if r.recusadas %}
+      <ul>{% for linha, motivo in r.recusadas %}<li>Linha {{ linha }} · {{ motivo }}</li>{% endfor %}</ul>
+    {% endif %}
+    <div class="rolagem"><table>
+      <thead><tr><th>Indicador</th><th>{{ r.beneficiados.rotulo }}</th><th>{{ r.demais.rotulo }}</th></tr></thead>
+      <tbody>
+        <tr><td>Número de alunos</td><td>{{ r.beneficiados.alunos }}</td><td>{{ r.demais.alunos }}</td></tr>
+        <tr><td>Frequência (presença com justificadas)</td>
+          <td>{% if r.beneficiados.frequencia.dias %}{{ r.beneficiados.frequencia.percentual }}%{% else %}sem dados{% endif %}</td>
+          <td>{% if r.demais.frequencia.dias %}{{ r.demais.frequencia.percentual }}%{% else %}sem dados{% endif %}</td></tr>
+        <tr><td>Participação nas redações</td>
+          <td>{% if r.beneficiados.participacao.registradas %}{{ r.beneficiados.participacao.percentual }}%{% else %}sem dados{% endif %}</td>
+          <td>{% if r.demais.participacao.registradas %}{{ r.demais.participacao.percentual }}%{% else %}sem dados{% endif %}</td></tr>
+        {% for chave, rotulo in categorias %}
+        <tr><td>Último ciclo: {{ rotulo }}</td>
+          <td>{{ r.beneficiados.classificacao|dictkey:chave|default:0 }}</td>
+          <td>{{ r.demais.classificacao|dictkey:chave|default:0 }}</td></tr>
+        {% endfor %}
+        <tr><td>Alunos com alerta ativo</td><td>{{ r.beneficiados.alunos_com_alerta }}</td><td>{{ r.demais.alunos_com_alerta }}</td></tr>
+        <tr><td>Intervenções registradas</td><td>{{ r.beneficiados.total_intervencoes }}</td><td>{{ r.demais.total_intervencoes }}</td></tr>
+        {% for desfecho in desfechos %}
+        <tr><td>&nbsp;&nbsp;{{ desfecho }}</td>
+          <td>{{ r.beneficiados.intervencoes|dictkey:desfecho|default:0 }}</td>
+          <td>{{ r.demais.intervencoes|dictkey:desfecho|default:0 }}</td></tr>
+        {% endfor %}
+      </tbody>
+    </table></div>
+
+    <h2>Lista nominal (não incluir na prestação de contas)</h2>
+    <div class="rolagem"><table>
+      <thead><tr><th>Aluno</th><th>Matrícula</th><th>Turma atual</th><th>Frequência</th><th>Último ciclo</th><th>Alertas ativos</th><th>Intervenções</th></tr></thead>
+      <tbody>
+      {% for x in r.nominal %}
+        <tr><td><a href="{% url 'web:ficha' x.aluno.matricula %}">{{ x.aluno.nome }}</a></td><td>{{ x.aluno.matricula }}</td>
+          <td>{{ x.aluno.turma.nome }}</td>
+          <td>{% if x.frequencia.dias %}{{ x.frequencia.percentual }}%{% else %}sem dados{% endif %}</td>
+          <td>{{ x.rotulo_categoria }}</td><td>{{ x.alertas }}</td><td>{{ x.intervencoes }}</td></tr>
+      {% empty %}
+        <tr><td colspan="7" class="vazio">Nenhuma matrícula do arquivo corresponde a um aluno do ano.</td></tr>
+      {% endfor %}
+      </tbody>
+    </table></div>
+  {% endif %}
+  {% endwith %}
+{% endblock %}
