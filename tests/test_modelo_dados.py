@@ -278,6 +278,8 @@ def test_ciclo_termina_depois_de_comecar():
 
 @pytest.fixture
 def regra():
+    # A migração inteligencia.0002 já carrega as regras padrão: desativa para criar a do teste.
+    RegraAlerta.objects.update(ativa=False)
     return RegraAlerta.objects.create(
         tipo_regra=RegraAlerta.Tipo.FREQUENCIA,
         limiar=Decimal("3"),

@@ -1,0 +1,21 @@
+# Valores padrão das regras de alerta (IC-10, RF018, NF021).
+#
+# PROVISÓRIOS: os limiares ainda não foram combinados com a Direção do CASD (FAROL_Contexto,
+# "Questões em aberto", itens 2 e 3). Eles só valem na primeira carga (migração de dados);
+# depois, o Diretor os ajusta pelo sistema, sem mudar este arquivo nem o código.
+#
+# `descricao` explica a regra em linguagem simples e aparece na tela (NF021, NF022).
+
+FREQUENCIA:
+  limiar: 3
+  descricao: >-
+    Sinaliza o aluno com pelo menos {limiar} faltas não justificadas em dias letivos de uma
+    mesma semana (segunda a domingo). Falta justificada e dia sem aula não contam.
+
+DESEMPENHO:
+  limiar: 30
+  descricao: >-
+    Ao fim do ciclo, compara a nota TRI do aluno com a do último simulado em que ele foi
+    avaliado. Sinaliza queda quando a média das quatro áreas ou alguma área cai pelo menos
+    {limiar} pontos. Subir pelo menos {limiar} pontos é evolução; entre os dois, estagnado.
+    Quem faltou ao simulado não é avaliado naquele ciclo.

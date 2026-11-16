@@ -29,6 +29,7 @@ from ingestao.cadastro import importar_cadastro
 from ingestao.calendario import TIPOS
 from ingestao.frequencia import importar_frequencia, ler_grade
 from ingestao.leitura import ler_tabela
+from inteligencia.alertas import gerar_ano
 
 BASE = Path(settings.BASE_DIR) / "tests" / "dados_sinteticos" / "pequena"
 SIGLAS = {"LC": "LINGUAGENS", "CH": "HUMANAS", "CN": "NATUREZA", "MT": "MATEMATICA"}
@@ -120,4 +121,10 @@ def carregar(ano: int, *, autor, base: Path = BASE) -> dict:
             )
         )
     ResultadoRedacao.objects.bulk_create(redacoes, ignore_conflicts=True)
-    return {"alunos": len(alunos), "simulados": len(novos), "redacoes": len(redacoes)}
+    frequencia, desempenho = gerar_ano(ano)
+    return {
+        "alunos": len(alunos),
+        "simulados": len(novos),
+        "redacoes": len(redacoes),
+        "alertas": frequencia.novos + desempenho.novos,
+    }

@@ -9,10 +9,25 @@ from django.shortcuts import render
 from core.models import RegistroImportacao
 from ingestao import simulados
 from ingestao.modelos import TIPO_XLSX
+from inteligencia import alertas
 
 from .acesso import diretor_required
 from .forms_importacao import ImportacaoSimuladosForm
 from .importacao import executar_importacao, registrar_trilha
+
+
+def _registrar(request, dados, nome, tamanho, resumo):
+    """Trilha do upload e, com as notas gravadas, os alertas de desempenho do ano (RF015):
+    um ciclo novo muda também o delta do ciclo seguinte (RN008)."""
+    registrar_trilha(
+        autor=request.user,
+        tipo=RegistroImportacao.Tipo.SIMULADOS,
+        ano=dados["ano"],
+        nome=nome,
+        tamanho=tamanho,
+        resumo=resumo,
+    )
+    alertas.gerar_desempenho_ano(dados["ano"])
 
 
 @diretor_required
@@ -29,14 +44,7 @@ def simulados_importar(request):
         importar=lambda linhas, gravar: simulados.importar_simulados(
             linhas, ano=dados["ano"], ciclo=dados["ciclo"], autor=request.user, gravar=gravar
         ),
-        registrar=lambda nome, tamanho, resumo: registrar_trilha(
-            autor=request.user,
-            tipo=RegistroImportacao.Tipo.SIMULADOS,
-            ano=dados["ano"],
-            nome=nome,
-            tamanho=tamanho,
-            resumo=resumo,
-        ),
+        registrar=lambda nome, tamanho, resumo: _registrar(request, dados, nome, tamanho, resumo),
     )
     contexto = {"form": form, "resultado": resultado, "resumo": resultado.resumo}
     return render(request, "web/simulados_importar.html", contexto)

@@ -10,10 +10,24 @@ from core.models import RegistroImportacao
 from ingestao import frequencia
 from ingestao.modelos import TIPO_XLSX
 from ingestao.planilhas_casd import ABA_PRESENCA
+from inteligencia import alertas
 
 from .acesso import diretor_required
 from .forms_importacao import ImportacaoFrequenciaForm
 from .importacao import executar_importacao, registrar_trilha
+
+
+def _registrar(request, dados, nome, tamanho, resumo):
+    """Trilha do upload e, com a frequência gravada, os alertas das semanas da grade (RF014)."""
+    registrar_trilha(
+        autor=request.user,
+        tipo=RegistroImportacao.Tipo.FREQUENCIA,
+        ano=dados["ano"],
+        nome=nome,
+        tamanho=tamanho,
+        resumo=resumo,
+    )
+    alertas.gerar_frequencia_periodo(resumo.inicio, resumo.fim, dados["ano"])
 
 
 @diretor_required
@@ -31,14 +45,7 @@ def frequencia_importar(request):
         importar=lambda grade, gravar: frequencia.importar_frequencia(
             grade, ano=dados["ano"], autor=request.user, gravar=gravar
         ),
-        registrar=lambda nome, tamanho, resumo: registrar_trilha(
-            autor=request.user,
-            tipo=RegistroImportacao.Tipo.FREQUENCIA,
-            ano=dados["ano"],
-            nome=nome,
-            tamanho=tamanho,
-            resumo=resumo,
-        ),
+        registrar=lambda nome, tamanho, resumo: _registrar(request, dados, nome, tamanho, resumo),
     )
     contexto = {"form": form, "resultado": resultado, "resumo": resultado.resumo}
     return render(request, "web/frequencia_importar.html", contexto)

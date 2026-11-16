@@ -479,7 +479,12 @@ class ResultadoRedacao(HistoricoPreservado):
 
 
 class Alerta(HistoricoPreservado):
-    """Sinalização indicativa sobre um aluno (RN012). Sempre traz tipo e motivo (NF004)."""
+    """Sinalização indicativa sobre um aluno (RN012). Sempre traz tipo e motivo (NF004).
+
+    No máximo um alerta de cada tipo por aluno e semana (NF005): o de frequência é da
+    `semana` (segunda-feira); o de desempenho, do `ciclo`. Regerar os alertas atualiza o
+    mesmo registro; o que deixou de valer (dado corrigido) fica `ativo=False`, nunca é
+    excluído (NF007)."""
 
     class Tipo(models.TextChoices):
         FREQUENCIA = "FREQUENCIA", "Frequência"
@@ -504,6 +509,12 @@ class Alerta(HistoricoPreservado):
     area = models.CharField(
         "área", max_length=12, choices=ResultadoSimulado.Area.choices, blank=True
     )
+    semana = models.DateField(
+        null=True, blank=True, help_text="Segunda-feira da semana do alerta de frequência."
+    )
+    ativo = models.BooleanField(
+        default=True, help_text="Desligado quando o dado que o gerou foi corrigido."
+    )
 
     class Meta:
         verbose_name = "alerta"
@@ -511,6 +522,16 @@ class Alerta(HistoricoPreservado):
         ordering = ["-data_geracao"]
         constraints = [
             models.CheckConstraint(condition=~Q(motivo=""), name="alerta_com_motivo"),
+            models.UniqueConstraint(
+                fields=["aluno", "tipo", "semana"],
+                condition=Q(semana__isnull=False),
+                name="um_alerta_por_tipo_e_semana",
+            ),
+            models.UniqueConstraint(
+                fields=["aluno", "tipo", "ciclo"],
+                condition=Q(ciclo__isnull=False),
+                name="um_alerta_por_tipo_e_ciclo",
+            ),
         ]
 
     def __str__(self):
