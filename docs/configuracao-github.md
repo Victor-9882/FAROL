@@ -172,4 +172,4 @@ gh release create v0.2.0 --generate-notes --title "v0.2.0 — Ingestão"
 - [x] Marker `regras` registrado no `pyproject.toml`. Falta marcar os testes das RN001, RN002, RN005, RN008 e RN009 quando forem escritos.
 - [x] `fail_under` definido em `[tool.coverage.report]`.
 - [x] `.env.example`, `Dockerfile` e `docker-compose.yml`.
-- [ ] `config/regras_padrao.yaml`, quando os limiares forem definidos com o cliente.
+- [x] `config/regras_padrao.yaml` com valores provisórios (#24); revisar quando os limiares forem definidos com o cliente.

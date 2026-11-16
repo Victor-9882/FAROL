@@ -8,6 +8,7 @@ from . import (
     painel,
     pendencias,
     redacoes,
+    regras,
     simulados,
     views,
 )
@@ -18,6 +19,8 @@ urlpatterns = [
     path("", painel.inicio, name="inicio"),
     path("painel/<slug:categoria>/", painel.painel_lista, name="painel_lista"),
     path("indicadores/", painel.indicadores, name="indicadores"),
+    path("regras/", regras.lista, name="regras"),
+    path("regras/<slug:tipo>/", regras.editar, name="regra_editar"),
     path("entrar/", views.Login.as_view(), name="login"),
     path("sair/", views.Logout.as_view(), name="logout"),
     path("usuarios/", views.usuarios, name="usuarios"),

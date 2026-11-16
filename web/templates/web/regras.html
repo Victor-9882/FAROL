@@ -1,0 +1,23 @@
+{% extends "web/base.html" %}
+{% block titulo %}Regras de alerta · FAROL{% endblock %}
+{% block conteudo %}
+  <h1>Regras de alerta</h1>
+  <p class="indicativo">As regras são simples e interpretáveis (NF021) e os alertas, indicativos (RN012).
+    Os limiares atuais são provisórios, até a definição com a Direção do CASD.</p>
+  {% for tipo, regra, unidade in regras %}
+    <div class="cartao" style="margin-bottom:.75rem">
+      <h2 style="margin-top:0">{% if regra %}{{ regra.get_tipo_regra_display }}{% endif %}</h2>
+      {% if regra %}
+        <p><strong>Limiar: {{ regra.limiar|floatformat:"-2" }}</strong> {{ unidade }} · desde {{ regra.criado_em|date:"d/m/Y H:i" }}</p>
+        <p>{{ regra.descricao }}</p>
+      {% else %}
+        <p class="vazio">Sem regra ativa: nenhum alerta deste tipo é gerado.</p>
+      {% endif %}
+      {% if user.is_diretor %}<p><a href="{% url 'web:regra_editar' tipo %}">Alterar o limiar</a></p>{% endif %}
+    </div>
+  {% endfor %}
+  {% if historico %}
+    <h2>Limiares anteriores</h2>
+    <ul>{% for r in historico %}<li>{{ r.get_tipo_regra_display }}: {{ r.limiar|floatformat:"-2" }} (criada em {{ r.criado_em|date:"d/m/Y" }})</li>{% endfor %}</ul>
+  {% endif %}
+{% endblock %}
