@@ -1,0 +1,36 @@
+{% extends "web/base.html" %}
+{% block titulo %}Importar cadastro · FAROL{% endblock %}
+{% block conteudo %}
+  <h1>Importar cadastro de alunos</h1>
+  <p><a href="{% url 'web:alunos' %}">Voltar à lista</a></p>
+  <p>Colunas: matrícula, nome, turma e, opcionalmente, data de ingresso (se faltar ou vier vazia, vale
+    o 1º de janeiro do ano letivo informado; em alunos já cadastrados ela só é conferida se
+    preenchida). Nome e data de ingresso de alunos já
+    cadastrados nunca são sobrescritos: diferenças aparecem como divergências, para correção manual.
+    Use "Conferir" para simular sem gravar.</p>
+  <p><a href="{% url 'web:cadastro_modelo_xlsx' %}">Baixar modelo (.xlsx)</a> ·
+    <a href="{% url 'web:cadastro_modelo_csv' %}">Baixar modelo (.csv)</a></p>
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" name="acao" value="conferir">Conferir</button>
+    <button type="submit" name="acao" value="importar">Importar</button>
+  </form>
+  {% if resumo %}
+    <h2>{% if gravado %}Importação concluída{% else %}Conferência (nada foi gravado){% endif %}</h2>
+    <ul>
+      <li>Alunos criados: {{ resumo.criados }}</li>
+      <li>Mudanças de turma: {{ resumo.mudancas_turma }}</li>
+      <li>Sem alteração: {{ resumo.sem_alteracao }}</li>
+      <li>Turmas criadas: {{ resumo.turmas_criadas }}</li>
+    </ul>
+    {% if resumo.divergencias %}
+      <h3>Divergências (linha ignorada)</h3>
+      <ul>{% for linha, matricula, motivo in resumo.divergencias %}<li>Linha {{ linha }} · {{ matricula }} · {{ motivo }}</li>{% endfor %}</ul>
+    {% endif %}
+    {% if resumo.inconsistentes %}
+      <h3>Linhas inconsistentes (ignoradas)</h3>
+      <ul>{% for linha, matricula, motivo in resumo.inconsistentes %}<li>Linha {{ linha }} · {{ matricula }} · {{ motivo }}</li>{% endfor %}</ul>
+    {% endif %}
+  {% endif %}
+{% endblock %}

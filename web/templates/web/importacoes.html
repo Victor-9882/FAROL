@@ -1,0 +1,30 @@
+{% extends "web/base.html" %}
+{% block titulo %}Importações · FAROL{% endblock %}
+{% block conteudo %}
+  <h1>Importações</h1>
+  <form method="get">
+    <label>Usuário <input type="text" name="usuario" value="{{ usuario }}"></label>
+    <button type="submit">Filtrar</button>
+  </form>
+  <table>
+    <thead><tr><th>Data e hora</th><th>Usuário</th><th>Arquivo</th><th>Ano</th><th>Criados</th><th>Mudanças de turma</th><th>Sem alteração</th><th>Turmas criadas</th><th>Divergências</th><th>Inconsistentes</th></tr></thead>
+    <tbody>
+    {% for r in registros %}
+      <tr>
+        <td>{{ r.criado_em|date:"d/m/Y H:i" }}</td>
+        <td>{{ r.autor.username }}</td>
+        <td>{{ r.nome_arquivo }}</td>
+        <td>{{ r.ano }}</td>
+        <td>{{ r.criados }}</td>
+        <td>{{ r.mudancas_turma }}</td>
+        <td>{{ r.sem_alteracao }}</td>
+        <td>{{ r.turmas_criadas }}</td>
+        <td>{{ r.divergencias }}</td>
+        <td>{{ r.inconsistentes }}</td>
+      </tr>
+    {% empty %}
+      <tr><td colspan="10">Nenhuma importação registrada.</td></tr>
+    {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

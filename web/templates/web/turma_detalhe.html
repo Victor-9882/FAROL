@@ -1,0 +1,13 @@
+{% extends "web/base.html" %}
+{% block titulo %}{{ turma.nome }} · FAROL{% endblock %}
+{% block conteudo %}
+  <h1>{{ turma.nome }} ({{ turma.ano }})</h1>
+  <p><a href="{% url 'web:turmas' %}">Voltar às turmas</a></p>
+  <ul>
+  {% for a in alunos %}
+    <li>{{ a.matricula }} · {{ a.nome }} · {{ a.get_situacao_display }}</li>
+  {% empty %}
+    <li>Nenhum aluno nesta turma.</li>
+  {% endfor %}
+  </ul>
+{% endblock %}
