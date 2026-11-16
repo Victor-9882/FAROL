@@ -32,3 +32,7 @@ class ImportacaoFrequenciaForm(_ImportacaoForm):
             elif ano and (inicio.year != ano or fim.year != ano):
                 self.add_error("inicio", "O período precisa estar dentro do ano letivo informado.")
         return dados
+
+
+class ImportacaoSimuladosForm(_ImportacaoForm):
+    """Só arquivo e ano: o ciclo de cada simulado vem da data no calendário (RN006)."""

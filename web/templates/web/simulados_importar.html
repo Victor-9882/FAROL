@@ -1,0 +1,23 @@
+{% extends "web/base.html" %}
+{% block titulo %}Importar simulados · FAROL{% endblock %}
+{% block conteudo %}
+  <h1>Importar resultados de simulados (P+)</h1>
+  <p>Envie a exportação do P+: uma linha por aluno e simulado, com a data, a matrícula, a presença
+    (Presente ou Ausente) e, por área (LC, CH, CN, MT), os acertos (0 a 45) e a nota TRI (RN010).
+    O simulado entra no ciclo do calendário que tem essa data; cadastre os ciclos antes.
+    A ausência fica registrada, sem nota, e o aluno não é avaliado em desempenho no ciclo (RN009).</p>
+  <p>Linhas com matrícula em branco, fora do padrão ou sem aluno no cadastro ficam em
+    <a href="{% url 'web:pendencias' %}">Pendências</a> (RN003). Reimportar atualiza o que mudou,
+    com auditoria. Depois que um ciclo tem resultados, as datas dele não mudam.</p>
+  <p><a href="{% url 'web:simulados_modelo' 'xlsx' %}">Baixar modelo (.xlsx)</a> ·
+    <a href="{% url 'web:simulados_modelo' 'csv' %}">Baixar modelo (.csv)</a></p>
+  <form method="post" enctype="multipart/form-data" id="importacao-form">
+    {% csrf_token %}
+    {% for campo in form %}
+      <p>{{ campo.label_tag }} {{ campo }}{% if campo.help_text %} <small>{{ campo.help_text }}</small>{% endif %}</p>
+    {% endfor %}
+    <button type="submit" name="acao" value="conferir">Conferir</button>
+  </form>
+  {% include "web/_importacao_resumo.html" with detalhe="web/_importacao_detalhe_simulados.html" %}
+  {% include "web/_importacao_script.html" %}
+{% endblock %}

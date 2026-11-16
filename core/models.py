@@ -295,6 +295,14 @@ class CicloCalendario(HistoricoPreservado):
             )
             if outros.exists():
                 raise ValidationError("O ciclo se sobrepõe a outro ciclo (RN006).")
+        if self.pk and self.simulados.exists():
+            salvo = CicloCalendario.objects.get(pk=self.pk)
+            campos = ("data_inicio", "data_fim", "data_simulado")
+            if any(getattr(salvo, c) != getattr(self, c) for c in campos):
+                raise ValidationError(
+                    "O ciclo já tem resultados de simulado: as datas do ciclo são fixas, "
+                    "definidas no início do ano (RN006, RF004)."
+                )
 
 
 class TemaRedacao(HistoricoPreservado):

@@ -1,6 +1,6 @@
 from django.urls import path
 
-from . import cadastro, calendario, frequencia, pendencias, views
+from . import cadastro, calendario, frequencia, pendencias, simulados, views
 
 app_name = "web"
 
@@ -25,6 +25,12 @@ urlpatterns = [
         "frequencia/importar/modelo/<slug:formato>/",
         frequencia.frequencia_modelo,
         name="frequencia_modelo",
+    ),
+    path("simulados/importar/", simulados.simulados_importar, name="simulados_importar"),
+    path(
+        "simulados/importar/modelo/<slug:formato>/",
+        simulados.simulados_modelo,
+        name="simulados_modelo",
     ),
     path("turmas/", cadastro.turmas, name="turmas"),
     path("turmas/nova/", cadastro.turma_nova, name="turma_nova"),

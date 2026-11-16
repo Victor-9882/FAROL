@@ -98,6 +98,15 @@ Sem migração: é código compartilhado por todas as importações.
 - **Associação de pendência:** marca o aluno presente naquele dia (cria ou altera o registro, com auditoria). Recusa dia não letivo ou fora da janela do aluno.
 - **Gravação em lote:** `bulk_create` e `bulk_update` em lotes de 2.000 (NF011).
 
+## Simulados do P+ (RF004, #15)
+
+- **Arquivo:** uma linha por aluno e simulado: `data`, `matricula`, `nome` (opcional), `presenca` (`Presente`/`Ausente`, também S/N), `simulado` (opcional, não é guardado) e, por área (`lc`, `ch`, `cn`, `mt`), `<area>_acertos` e `<area>_tri` (RN010). Modelo para download em `simulados/importar/modelo/<csv|xlsx>/`, com o ano atual.
+- **Ciclo (RN006):** o ciclo do ano cuja `data_simulado` é a data da linha ou, se nenhum, o que contém a data. Sem ciclo, a linha é inconsistente: os ciclos precisam ser cadastrados antes.
+- **Valores:** acertos de 0 a 45 por área; TRI de 0 a 1000 com uma casa decimal (vírgula ou ponto). Presente exige as oito notas; ausente (RN009) não pode ter nota e grava as quatro áreas com `presente=False` e sem nota. Simulado antes do ingresso (RN004) ou depois da saída do aluno é inconsistente; aluno repetido no mesmo simulado também.
+- **Reimportação:** atualiza o que mudou, com `RegistroAlteracao` por campo (NF009); o resumo avisa quantos alunos já tinham resultado (NF008). Conta linhas: criada, atualizada ou sem alteração.
+- **Pendências (RN003):** referência = ciclo; `dados` guarda presença e notas. Associar grava as quatro áreas para o aluno e recusa se ele já tem resultado no simulado ou se o simulado é de fora da janela dele.
+- **Datas do ciclo fixas:** `CicloCalendario.clean()` recusa mudar `data_inicio`, `data_fim` ou `data_simulado` de ciclo que já tem resultado de simulado. Vale para a tela e para a importação do calendário (`docs/dominio-casd.md`, seção 4).
+
 ## Suposições a confirmar
 
 - **Áreas do simulado:** as quatro áreas do ENEM (Linguagens, Humanas, Natureza, Matemática). Confirmar com a DES como o P+ separa as áreas, sobretudo nos simulados de FUVEST.
