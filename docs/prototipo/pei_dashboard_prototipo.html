@@ -1,0 +1,2142 @@
+<title>PEI da Esfera</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+  :root{
+    --surface-0:#f5f3ef; --surface-1:#ffffff; --surface-2:#faf9f6;
+    --border:#e3e0d8; --border-strong:#cfcbc0;
+    --text-primary:#171a1d; --text-secondary:#585d58; --text-muted:#8b8f86;
+    --brand:#1f4e79; --brand-strong:#163c60; --brand-tint:#e8eff5;
+    --good:#0ca30c; --warning:#fab219; --serious:#ec835a; --critical:#d03b3b;
+    --good-tint:#e3f6e0; --warning-tint:#fff3d6; --serious-tint:#fde3d8; --critical-tint:#fbdcdc;
+    --cat-1:#2a78d6; --cat-2:#eb6834; --cat-3:#1baf7a; --cat-4:#eda100; --cat-5:#e87ba4; --cat-6:#7a6fd0;
+    --shadow: 0 1px 2px rgba(23,26,29,.06), 0 6px 20px -8px rgba(23,26,29,.18);
+    color-scheme: light;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --surface-0:#15171a; --surface-1:#1d2023; --surface-2:#202427;
+      --border:#2b2f33; --border-strong:#3a3f44;
+      --text-primary:#f2f1ee; --text-secondary:#b7bcc2; --text-muted:#7d838b;
+      --brand:#5b9bd5; --brand-strong:#7fb2e0; --brand-tint:#1b2733;
+      --good-tint:#12291a; --warning-tint:#332510; --serious-tint:#33201a; --critical-tint:#331616;
+      --cat-1:#3987e5; --cat-2:#d95926; --cat-3:#199e70; --cat-4:#c98500; --cat-5:#d55181; --cat-6:#9c90ea;
+      --shadow: 0 1px 2px rgba(0,0,0,.4), 0 12px 30px -10px rgba(0,0,0,.6);
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"]{
+    --surface-0:#15171a; --surface-1:#1d2023; --surface-2:#202427;
+    --border:#2b2f33; --border-strong:#3a3f44;
+    --text-primary:#f2f1ee; --text-secondary:#b7bcc2; --text-muted:#7d838b;
+    --brand:#5b9bd5; --brand-strong:#7fb2e0; --brand-tint:#1b2733;
+    --good-tint:#12291a; --warning-tint:#332510; --serious-tint:#33201a; --critical-tint:#331616;
+    --cat-1:#3987e5; --cat-2:#d95926; --cat-3:#199e70; --cat-4:#c98500; --cat-5:#d55181; --cat-6:#9c90ea;
+    --shadow: 0 1px 2px rgba(0,0,0,.4), 0 12px 30px -10px rgba(0,0,0,.6);
+    color-scheme: dark;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0; background:var(--surface-0); color:var(--text-primary);
+    font-family:'Inter',system-ui,sans-serif; font-size:14px; line-height:1.45;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,h4,.display{font-family:'Sora',system-ui,sans-serif; text-wrap:balance}
+  .mono{font-family:'IBM Plex Mono',ui-monospace,monospace; font-variant-numeric:tabular-nums}
+  img{max-width:100%}
+  [hidden]{display:none!important}
+  button{font:inherit; cursor:pointer}
+
+  .app{ max-width:1320px; margin:0 auto; padding:20px 20px 56px; }
+
+  header.top{
+    display:flex; align-items:flex-end; justify-content:space-between; gap:16px;
+    flex-wrap:wrap; padding-bottom:16px; margin-bottom:14px; border-bottom:1px solid var(--border);
+  }
+  header.top .id{display:flex; flex-direction:column; gap:4px}
+  header.top h1{margin:0; font-size:22px; font-weight:700; color:var(--brand-strong)}
+  header.top p{margin:0; color:var(--text-secondary); font-size:13px; max-width:56ch}
+  .legend{display:flex; gap:10px; flex-wrap:wrap}
+  .legend .chip{
+    display:flex; align-items:center; gap:6px; padding:5px 10px 5px 8px; border-radius:999px;
+    background:var(--surface-1); border:1px solid var(--border); font-size:12px; color:var(--text-secondary);
+  }
+  .legend .dot{width:9px; height:9px; border-radius:50%; flex:none}
+
+  /* -------- navegação de topo: Plano / Alertas -------- */
+  .view-tabs{display:flex; gap:8px; margin-bottom:18px}
+  .view-tabs button{
+    padding:9px 16px; border-radius:10px; border:1px solid var(--border); background:var(--surface-1);
+    color:var(--text-secondary); font-size:13px; font-weight:600; display:flex; align-items:center; gap:7px;
+  }
+  .view-tabs button.ativo{background:var(--brand); border-color:var(--brand); color:#fff}
+  .badge-contagem{
+    background:var(--critical); color:#fff; font-size:10.5px; font-weight:700; border-radius:999px;
+    min-width:18px; height:18px; padding:0 5px; display:inline-flex; align-items:center; justify-content:center;
+  }
+  .view-tabs button.ativo .badge-contagem{background:rgba(255,255,255,.3)}
+
+  .layout{ display:grid; grid-template-columns: 270px minmax(0,1fr); gap:18px; align-items:start; }
+  @media (max-width: 820px){ .layout{grid-template-columns:1fr} }
+
+  .panel{
+    background:var(--surface-1); border:1px solid var(--border); border-radius:14px;
+    box-shadow:var(--shadow); padding:16px;
+  }
+  .panel + .panel{ margin-top:18px }
+  .panel h2{font-size:13px; margin:0 0 12px; letter-spacing:.02em; text-transform:uppercase; color:var(--text-muted); font-weight:600}
+
+  /* -------- sidebar: lista de alunos -------- */
+  .aluno-lista{display:flex; flex-direction:column; gap:6px}
+  .aluno-card{
+    display:flex; align-items:center; gap:8px; width:100%; text-align:left;
+    padding:7px 6px 7px 8px; border-radius:10px; border:1px solid transparent; background:none; color:inherit;
+  }
+  .aluno-card:hover{background:var(--surface-2)}
+  .check-pessoal{ width:15px; height:15px; flex:none; accent-color:var(--brand); }
+  .avatar{
+    width:32px; height:32px; border-radius:50%; display:flex; align-items:center; justify-content:center;
+    font-family:'Sora',sans-serif; font-weight:600; font-size:12px; color:#fff; flex:none;
+  }
+  .nome-btn{flex:1; min-width:0; display:flex; align-items:center; gap:8px; background:none; border:none; color:inherit; padding:0; text-align:left}
+  .nome-btn .info{min-width:0}
+  .nome-btn .nome{font-weight:600; font-size:12.5px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; display:block}
+  .nome-btn .sub{font-size:10.5px; color:var(--text-muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; display:block}
+  .status-pill{
+    flex:none; font-family:'Sora',sans-serif; font-weight:700; font-size:11px;
+    width:20px; height:20px; border-radius:6px; display:flex; align-items:center; justify-content:center;
+  }
+  .chevron{flex:none; background:none; border:none; color:var(--text-muted); font-size:14px; padding:2px 4px}
+  .chevron:hover{color:var(--brand)}
+
+  /* -------- modo tabs -------- */
+  .modo-tabs{display:flex; gap:6px; flex-wrap:wrap; margin-bottom:12px}
+  .modo-tabs button{
+    padding:7px 14px; border-radius:9px; border:1px solid var(--border); background:var(--surface-2);
+    color:var(--text-secondary); font-size:12.5px; font-weight:600;
+  }
+  .modo-tabs button.ativo{background:var(--brand); border-color:var(--brand); color:#fff}
+  .subtoggle{display:flex; gap:6px; margin-bottom:14px; flex-wrap:wrap}
+  .subtoggle button{
+    padding:5px 12px; border-radius:999px; border:1px solid var(--border); background:var(--surface-2);
+    color:var(--text-secondary); font-size:12px; font-weight:600; display:flex; align-items:center; gap:5px;
+  }
+  .subtoggle button.ativo{background:var(--brand-tint); border-color:var(--brand); color:var(--brand-strong)}
+  .subtoggle button i{width:8px; height:8px; border-radius:50%; display:inline-block; flex:none}
+  .pessoal-dica{font-size:12px; color:var(--text-muted); margin:-4px 0 12px}
+
+  .plano-head{display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:2px; flex-wrap:wrap; gap:8px}
+  .toggle-tabela{
+    font-size:12px; color:var(--brand); background:none; border:1px solid var(--border); border-radius:8px; padding:5px 10px;
+  }
+  .toggle-tabela:hover{border-color:var(--brand)}
+  svg text{fill:var(--text-secondary); font-family:'Inter',sans-serif}
+  .eixo-label{font-size:11px; fill:var(--text-muted)}
+  .faixa-label{font-size:9px; fill:var(--text-muted)}
+  .faixa-line{stroke:var(--border-strong); stroke-width:1; stroke-dasharray:2 3}
+  .quad-label{font-family:'Sora',sans-serif; font-weight:700; font-size:13px}
+  .grid-line{stroke:var(--border-strong); stroke-width:1}
+  .traj-line{stroke:var(--text-muted); stroke-width:1.6; fill:none; opacity:.6}
+  .pt{cursor:pointer}
+  .pt-anterior{opacity:.55}
+  .pt-atual{stroke:var(--surface-1); stroke-width:2}
+  .pt-hit{fill:transparent; cursor:pointer}
+  .pt-label{font-size:11px; font-weight:600; fill:var(--text-primary); pointer-events:none}
+
+  .tabela-wrap{overflow-x:auto}
+  table{border-collapse:collapse; width:100%; font-size:12.5px}
+  table caption{text-align:left; font-size:11px; color:var(--text-muted); margin-bottom:6px}
+  th,td{padding:6px 8px; border-bottom:1px solid var(--border); text-align:left; white-space:nowrap}
+  th{color:var(--text-muted); font-weight:600; font-size:11px; text-transform:uppercase; letter-spacing:.02em; user-select:none}
+  th[data-campo]{cursor:pointer}
+  th[data-campo]:hover{color:var(--brand)}
+  th .seta{color:var(--brand); margin-left:3px}
+  td.num{font-family:'IBM Plex Mono',monospace; font-variant-numeric:tabular-nums}
+  .quad-tag{
+    display:inline-flex; align-items:center; justify-content:center; width:20px; height:20px; border-radius:6px;
+    font-family:'Sora',sans-serif; font-weight:700; font-size:11px;
+  }
+
+  .empty-state{display:flex; align-items:center; justify-content:center; min-height:220px; color:var(--text-muted); font-size:12.5px; text-align:center; padding:20px}
+
+  /* -------- zoom (aluno e turma) -------- */
+  .zoom-legend{display:flex; flex-wrap:wrap; gap:6px 10px; margin-top:8px}
+  .zoom-legend span{display:flex; align-items:center; gap:4px; font-size:10.5px; color:var(--text-secondary)}
+  .zoom-legend i{width:8px; height:8px; border-radius:50%; display:inline-block; flex:none}
+  .zoom-pt-label{font-size:10px; fill:var(--text-secondary)}
+  .zoom-cabecalho{display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin-bottom:2px}
+
+  footer.rodape{margin-top:24px; text-align:center; color:var(--text-muted); font-size:11.5px}
+
+  /* -------- faixas SE/SD -------- */
+  .faixa-chip{
+    display:inline-flex; align-items:center; gap:4px; font-size:10.5px; font-weight:600; padding:1px 7px;
+    border-radius:999px; white-space:nowrap;
+  }
+
+  /* -------- modal: ficha expandida -------- */
+  .modal-backdrop{
+    position:fixed; inset:0; background:rgba(10,12,14,.55); display:flex; align-items:flex-start;
+    justify-content:center; padding:32px 16px; overflow-y:auto; z-index:50;
+  }
+  .modal{
+    background:var(--surface-1); border-radius:16px; max-width:920px; width:100%;
+    box-shadow:0 30px 80px -20px rgba(0,0,0,.5); border:1px solid var(--border);
+  }
+  .modal-head{
+    display:flex; align-items:center; gap:14px; padding:20px 22px; border-bottom:1px solid var(--border);
+    position:sticky; top:0; background:var(--surface-1); border-radius:16px 16px 0 0; z-index:1;
+  }
+  .modal-head .avatar{width:46px; height:46px; font-size:16px}
+  .modal-head h3{margin:0; font-size:18px}
+  .modal-head .mat{font-size:12px; color:var(--text-muted)}
+  .modal-actions{margin-left:auto; display:flex; gap:8px}
+  .modal-actions button{
+    padding:8px 14px; border-radius:9px; border:1px solid var(--border); background:var(--surface-2);
+    color:var(--text-secondary); font-size:12.5px; font-weight:600;
+  }
+  .modal-actions button.primario{background:var(--brand); border-color:var(--brand); color:#fff}
+  .modal-actions button.fechar{width:34px; padding:8px 0; text-align:center}
+  .modal-body{padding:22px; display:flex; flex-direction:column; gap:20px}
+  .modal-secao h4{
+    font-size:12px; margin:0 0 12px; letter-spacing:.02em; text-transform:uppercase; color:var(--text-muted); font-weight:600;
+  }
+
+  .scorecards-row{display:grid; grid-template-columns:repeat(3,1fr); gap:10px}
+  .scorecard{background:var(--surface-2); border:1px solid var(--border); border-radius:10px; padding:12px}
+  .scorecard .lbl{font-size:10.5px; color:var(--text-muted); text-transform:uppercase; letter-spacing:.03em; display:flex; justify-content:space-between}
+  .scorecard .val-row{display:flex; gap:14px; margin-top:4px; align-items:baseline}
+  .scorecard .val-row div{font-family:'Sora',sans-serif; font-weight:700; font-size:18px}
+  .scorecard .val-row small{display:block; font-family:'Inter'; font-weight:500; font-size:9.5px; color:var(--text-muted); text-transform:none; letter-spacing:0}
+  .scorecard .quad-chip{
+    display:inline-flex; align-items:center; justify-content:center; width:22px; height:22px; border-radius:6px;
+    font-family:'Sora',sans-serif; font-weight:700; font-size:12px;
+  }
+
+  .componentes{display:flex; flex-direction:column; gap:8px}
+  .comp-row{display:flex; align-items:center; gap:8px; font-size:11.5px}
+  .comp-row .comp-lbl{width:110px; flex:none; color:var(--text-secondary)}
+  .comp-bar{flex:1; height:7px; border-radius:4px; background:var(--surface-2); overflow:hidden; border:1px solid var(--border)}
+  .comp-bar > span{display:block; height:100%; border-radius:4px; background:var(--brand)}
+  .comp-row .comp-val{width:38px; text-align:right; font-family:'IBM Plex Mono',monospace}
+
+  .alertas-modal-lista{display:flex; flex-direction:column; gap:8px}
+  .alerta-banner{border-left:3px solid var(--border-strong); background:var(--surface-2); border-radius:8px; padding:9px 12px}
+  .alerta-banner-tit{font-family:'Sora',sans-serif; font-weight:700; font-size:12px; margin-bottom:2px}
+  .alerta-banner p{margin:0; font-size:12px; color:var(--text-secondary)}
+  .alerta-banner-vazio{font-size:12.5px; color:var(--text-muted); background:var(--surface-2); border:1px dashed var(--border-strong); border-radius:10px; padding:12px; text-align:center}
+
+  .acoes-lista{display:flex; flex-direction:column; gap:8px}
+  .acao-item{border-radius:10px; padding:11px 12px; border:1px solid var(--border); background:var(--surface-2)}
+  .acao-item .tag{display:flex; align-items:center; gap:6px; font-family:'Sora',sans-serif; font-weight:700; font-size:11.5px; margin-bottom:3px}
+  .acao-item .tag .dot{width:8px; height:8px; border-radius:50%; flex:none}
+  .acao-item p{margin:0; font-size:12.5px; color:var(--text-primary)}
+
+  .fatos-grid{display:grid; grid-template-columns:1fr 1fr; gap:0 24px}
+  @media (max-width:620px){ .fatos-grid{grid-template-columns:1fr} }
+  .fatos{display:flex; flex-direction:column; gap:0; font-size:12px}
+  .fatos .linha{display:flex; justify-content:space-between; gap:10px; padding:6px 0; border-bottom:1px dashed var(--border)}
+  .fatos .k{color:var(--text-muted)}
+  .fatos .v{text-align:right; font-weight:500; max-width:60%}
+  .flag{color:var(--critical); font-weight:600}
+
+  .evolucao-wrap{display:flex; gap:20px; flex-wrap:wrap; align-items:flex-start}
+  .evolucao-svg{flex:1; min-width:260px}
+  .evolucao-legenda{display:flex; flex-direction:column; gap:6px; font-size:12px; padding-top:4px}
+  .evolucao-legenda span{display:flex; align-items:center; gap:6px}
+  .evolucao-legenda i{width:14px; height:3px; border-radius:2px; display:inline-block}
+
+  /* -------- alertas -------- */
+  .resumo-alertas{display:flex; gap:10px; flex-wrap:wrap; margin-bottom:18px}
+  .alerta-secao{margin-bottom:20px}
+  .alerta-secao h3{font-size:14px; margin:0 0 10px}
+  .alerta-lista{display:grid; grid-template-columns:repeat(auto-fill, minmax(280px,1fr)); gap:10px}
+  .alerta-card{
+    text-align:left; background:var(--surface-2); border:1px solid var(--border); border-left:4px solid var(--border-strong);
+    border-radius:10px; padding:11px 12px; color:inherit; display:flex; flex-direction:column; gap:6px;
+  }
+  .alerta-card:hover{background:var(--brand-tint)}
+  .alerta-top{display:flex; align-items:center; gap:9px}
+  .alerta-nome{font-weight:600; font-size:12.5px}
+  .alerta-titulo{font-size:11px; color:var(--text-muted)}
+  .alerta-desc{margin:0; font-size:12px; color:var(--text-secondary)}
+
+  @media print{
+    body *{visibility:hidden}
+    #modal-ficha, #modal-ficha *{visibility:visible}
+    #modal-ficha{position:absolute; left:0; top:0; width:100%; padding:16px; background:#fff; color:#000}
+    #modal-ficha, #modal-ficha *{-webkit-print-color-adjust:exact; print-color-adjust:exact}
+    .no-print{display:none!important}
+    .modal{box-shadow:none; border:none; max-width:none}
+    .modal-head{position:static}
+    .modal-secao{break-inside:avoid; page-break-inside:avoid}
+  }
+</style>
+
+<div class="app">
+  <header class="top">
+    <div class="id">
+      <h1>PEI da Esfera</h1>
+      <p>Protótipo com dados inventados — só pra decidir como o PEI de verdade vai se parecer.</p>
+    </div>
+    <div class="legend" id="legenda-status"></div>
+  </header>
+
+  <div class="view-tabs" id="view-tabs"></div>
+
+  <div id="view-plano">
+    <div class="layout">
+      <section class="panel" aria-label="Lista de alunos">
+        <h2>Alunos <span id="lbl-lista-modo" style="text-transform:none; font-weight:400"></span></h2>
+        <p class="pessoal-dica" id="dica-pessoal" hidden>Marque a caixinha pra escolher quem entra no modo pessoal.</p>
+        <div class="aluno-lista" id="lista-alunos"></div>
+      </section>
+
+      <div>
+        <section class="panel" aria-label="Plano SE por SD">
+          <div class="modo-tabs" id="modo-tabs"></div>
+          <div class="subtoggle" id="ciclo-subtoggle" hidden></div>
+          <div class="plano-head">
+            <h2 style="margin:0">Plano SE × SD</h2>
+            <button class="toggle-tabela" id="btn-tabela">Ver como tabela</button>
+          </div>
+          <div id="plano-svg-wrap"></div>
+          <div class="tabela-wrap" id="tabela-wrap" hidden></div>
+        </section>
+
+        <section class="panel" aria-label="Zoom por matéria da turma">
+          <div class="zoom-cabecalho">
+            <h2 style="margin:0">Zoom por matéria <span id="lbl-zoom-turma-escopo" style="text-transform:none; font-weight:400; color:var(--text-muted)"></span></h2>
+          </div>
+          <p style="margin:2px 0 10px; font-size:12px; color:var(--text-secondary)">"Todas" mostra onde a turma mais falta/não entrega × onde vai pior. Clique numa matéria pra ver a evolução dela sozinha entre os ciclos.</p>
+          <div class="subtoggle" id="turma-materia-seletor"></div>
+          <div id="zoom-turma-wrap"></div>
+        </section>
+      </div>
+    </div>
+
+    <footer class="rodape">Geral = média entre ciclos · Por ciclo = um ciclo só · Modo pessoal = trajetória (linha) de quem você escolher</footer>
+  </div>
+
+  <div id="view-alertas" hidden>
+    <section class="panel" aria-label="Alertas">
+      <h2>Quem precisa de atenção agora</h2>
+      <div class="resumo-alertas" id="resumo-alertas"></div>
+      <div id="lista-alertas"></div>
+    </section>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="modal-backdrop" hidden>
+  <div class="modal" id="modal-ficha"></div>
+</div>
+
+<script>
+
+/* Baixar PDF: gera o PDF na própria página e oferece o download (window.print() é bloqueado dentro do artifact). */
+async function baixarPDF(el, nome, btn){
+  const dl = window.claude ? await window.claude.use('downloads') : {
+    save: async ({filename, data}) => {
+      const u = URL.createObjectURL(data), a = document.createElement('a');
+      a.href = u; a.download = filename; document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(() => URL.revokeObjectURL(u), 4000);
+    }
+  };
+  if(!dl || !window.html2pdf){ window.print(); return; }
+  const rotulo = btn.textContent, raiz = document.documentElement, tema = raiz.getAttribute('data-theme');
+  btn.disabled = true; btn.textContent = 'Gerando PDF…';
+  raiz.setAttribute('data-theme','light');
+  try{
+    const blob = await html2pdf().set({
+      margin:[10,8,10,8],
+      image:{type:'jpeg', quality:0.95},
+      html2canvas:{
+        scale:2, backgroundColor:'#ffffff', useCORS:true,
+        ignoreElements: n => n.classList && n.classList.contains('no-print'),
+        onclone: doc => doc.querySelectorAll('.modal-head').forEach(h => h.style.position = 'static')
+      },
+      jsPDF:{unit:'mm', format:'a4', orientation:'portrait'},
+      pagebreak:{mode:['css','legacy'], avoid:['.modal-secao','.gabarito-item','tr']}
+    }).from(el).outputPdf('blob');
+    await dl.save({filename:nome, data:blob});
+    btn.textContent = rotulo;
+  }catch(e){
+    btn.textContent = (e && e.code==='declined') ? rotulo : 'Não deu pra gerar o PDF';
+    if(e && e.code!=='declined') setTimeout(()=>{ btn.textContent = rotulo; }, 3000);
+  }finally{
+    if(tema===null) raiz.removeAttribute('data-theme'); else raiz.setAttribute('data-theme', tema);
+    btn.disabled = false;
+  }
+}
+
+const STATUS = {
+  A: { nome:'A · Manter',          cor:'var(--good)',     tint:'var(--good-tint)' },
+  B: { nome:'B · Reforço focado',  cor:'var(--warning)',  tint:'var(--warning-tint)' },
+  C: { nome:'C · Contato individual', cor:'var(--serious)', tint:'var(--serious-tint)' },
+  D: { nome:'D · Contato urgente', cor:'var(--critical)', tint:'var(--critical-tint)' },
+};
+const CAT = ['var(--cat-1)','var(--cat-2)','var(--cat-3)','var(--cat-4)','var(--cat-5)','var(--cat-6)'];
+const ACAO_TIPO_COR = {A:'var(--good)', B:'var(--warning)', C:'var(--serious)', D:'var(--critical)',
+                        critico:'var(--critical)', materia:'var(--cat-2)', evasao:'var(--serious)', social:'var(--cat-1)'};
+const RANK_QUAD = {A:0, B:1, C:2, D:3};
+
+const __DADOS_EMBUTIDOS = {
+  "materias": [
+    "Portugues",
+    "Matematica",
+    "Biologia",
+    "Historia",
+    "Fisica"
+  ],
+  "materias_zoom": [
+    "Portugues",
+    "Matematica",
+    "Biologia",
+    "Historia",
+    "Fisica",
+    "Redacao"
+  ],
+  "mat_label": {
+    "Portugues": "Português",
+    "Matematica": "Matemática",
+    "Biologia": "Biologia",
+    "Historia": "História",
+    "Fisica": "Física",
+    "Redacao": "Redação"
+  },
+  "ciclos": [
+    1,
+    2
+  ],
+  "alunos": [
+    {
+      "matricula": 2601101,
+      "nome": "Pedro Lanches Gonçalves",
+      "turma": "Extensivo",
+      "pontos": [
+        {
+          "ciclo": 1,
+          "se": 0.867,
+          "sd": -0.168,
+          "componentes_se": {
+            "presenca_sede": 0.8,
+            "presenca_simulado": 1.0,
+            "entrega_redacao": 1
+          },
+          "zoom_materias": [
+            {
+              "materia": "Portugues",
+              "subpresenca": 0.85,
+              "sd_materia": 0.05,
+              "nota": 610
+            },
+            {
+              "materia": "Matematica",
+              "subpresenca": 0.55,
+              "sd_materia": -0.923,
+              "nota": 340
+            },
+            {
+              "materia": "Biologia",
+              "subpresenca": 0.85,
+              "sd_materia": -0.048,
+              "nota": 600
+            },
+            {
+              "materia": "Historia",
+              "subpresenca": 0.85,
+              "sd_materia": 0.0,
+              "nota": 590
+            },
+            {
+              "materia": "Fisica",
+              "subpresenca": 0.85,
+              "sd_materia": 0.083,
+              "nota": 580
+            },
+            {
+              "materia": "Redacao",
+              "subpresenca": 1,
+              "sd_materia": 0.0,
+              "nota": 600
+            }
+          ],
+          "rh": {
+            "dias_letivos": 40,
+            "dias_presentes": 32,
+            "faltas_justificadas": 2,
+            "flag_psicologico": false,
+            "motivo_flag": null,
+            "ultimo_contato_faltante": null
+          },
+          "ens": {
+            "reforco_total": 10,
+            "reforco_presencas": 2,
+            "plantao_presencas": 3
+          },
+          "sd_efetivo": -0.168,
+          "sd_fonte": "ciclo_atual",
+          "quadrante_efetivo": "B"
+        },
+        {
+          "ciclo": 2,
+          "se": 0.867,
+          "sd": -0.115,
+          "componentes_se": {
+            "presenca_sede": 0.8,
+            "presenca_simulado": 1.0,
+            "entrega_redacao": 1
+          },
+          "zoom_materias": [
+            {
+              "materia": "Portugues",
+              "subpresenca": 0.85,
+              "sd_materia": 0.1,
+              "nota": 620
+            },
+            {
+              "materia": "Matematica",
+              "subpresenca": 0.58,
+              "sd_materia": -0.846,
+              "nota": 360
+            },
+            {
+              "materia": "Biologia",
+              "subpresenca": 0.85,
+              "sd_materia": 0.0,
+              "nota": 610
+            },
+            {
+              "materia": "Historia",
+              "subpresenca": 0.85,
+              "sd_materia": 0.045,
+              "nota": 600
+            },
+            {
+              "materia": "Fisica",
+              "subpresenca": 0.85,
+              "sd_materia": 0.125,
+              "nota": 590
+            },
+            {
+              "materia": "Redacao",
+              "subpresenca": 1,
+              "sd_materia": 0.1,
+              "nota": 620
+            }
+          ],
+          "rh": {
+            "dias_letivos": 40,
+            "dias_presentes": 32,
+            "faltas_justificadas": 1,
+            "flag_psicologico": false,
+            "motivo_flag": null,
+            "ultimo_contato_faltante": null
+          },
+          "ens": {
+            "reforco_total": 10,
+            "reforco_presencas": 3,
+            "plantao_presencas": 2
+          },
+          "sd_efetivo": -0.115,
+          "sd_fonte": "ciclo_atual",
+          "quadrante_efetivo": "B"
+        }
+      ],
+      "geral": {
+        "se": 0.867,
+        "sd": -0.142,
+        "sd_fonte": "media_ciclos_reais",
+        "quadrante": "B",
+        "componentes_se": {
+          "presenca_sede": 0.8,
+          "presenca_simulado": 1.0,
+          "entrega_redacao": 1
+        },
+        "zoom_materias": [
+          {
+            "materia": "Portugues",
+            "subpresenca": 0.85,
+            "sd_materia": 0.075
+          },
+          {
+            "materia": "Matematica",
+            "subpresenca": 0.565,
+            "sd_materia": -0.885
+          },
+          {
+            "materia": "Biologia",
+            "subpresenca": 0.85,
+            "sd_materia": -0.024
+          },
+          {
+            "materia": "Historia",
+            "subpresenca": 0.85,
+            "sd_materia": 0.022
+          },
+          {
+            "materia": "Fisica",
+            "subpresenca": 0.85,
+            "sd_materia": 0.104
+          },
+          {
+            "materia": "Redacao",
+            "subpresenca": 1,
+            "sd_materia": 0.05
+          }
+        ],
+        "rh": {
+          "dias_letivos": 80,
+          "dias_presentes": 64,
+          "faltas_justificadas": 3,
+          "flag_psicologico": false,
+          "motivo_flag": "",
+          "ultimo_contato_faltante": ""
+        },
+        "ens": {
+          "reforco_total": 20,
+          "reforco_presencas": 5,
+          "plantao_presencas": 5
+        }
+      },
+      "ultimo_quadrante": "B",
+      "acoes": [
+        {
+          "tipo": "B",
+          "origem": "Quadrante B",
+          "texto": "Reforço presencial focado (dentro do horário da sede). Mostrar evolução pro aluno."
+        },
+        {
+          "tipo": "materia",
+          "origem": "Fraco em Matemática",
+          "texto": "Desempenho bem abaixo da própria média em Matemática (não é geral — é específico dessa matéria). Reforço focado em Matemática."
+        }
+      ],
+      "acao_sugerida": "Reforço presencial focado (dentro do horário da sede). Mostrar evolução pro aluno.",
+      "matricula_dados": {
+        "Horas_Trabalho_Semana": 10,
+        "Transporte": "Ônibus",
+        "Tempo_Transporte_Min": 40,
+        "Materia_Mais_Dificil": "Matemática",
+        "Espera_Bolsa": 0,
+        "Espera_Chamada_Faculdade": 0,
+        "Ficha_Psicologica": "Sem sinais relevantes registrados na ficha."
+      }
+    },
+    {
+      "matricula": 2601102,
+      "nome": "Maria Luiza de Sá Barros Gomes",
+      "turma": "Extensivo",
+      "pontos": [
+        {
+          "ciclo": 1,
+          "se": -0.367,
+          "sd": 0.007,
+          "componentes_se": {
+            "presenca_sede": 0.45,
+            "presenca_simulado": 0.5,
+            "entrega_redacao": 0
+          },
+          "zoom_materias": [
+            {
+              "materia": "Portugues",
+              "subpresenca": 0.45,
+              "sd_materia": 0.0,
+              "nota": 600
+            },
+            {
+              "materia": "Matematica",
+              "subpresenca": 0.4,
+              "sd_materia": 0.038,
+              "nota": 590
+            },
+            {
+              "materia": "Biologia",
+              "subpresenca": 0.45,
+              "sd_materia": 0.0,
+              "nota": 610
+            },
+            {
+              "materia": "Historia",
+              "subpresenca": 0.4,
+              "sd_materia": -0.045,
+              "nota": 580
+            },
+            {
+              "materia": "Fisica",
+              "subpresenca": 0.45,
+              "sd_materia": 0.042,
+              "nota": 570
+            },
+            {
+              "materia": "Redacao",
+              "subpresenca": 0,
+              "sd_materia": null,
+              "nota": null
+            }
+          ],
+          "rh": {
+            "dias_letivos": 40,
+            "dias_presentes": 18,
+            "faltas_justificadas": 1,
+            "flag_psicologico": false,
+            "motivo_flag": null,
+            "ultimo_contato_faltante": null
+          },
+          "ens": {
+            "reforco_total": 10,
+            "reforco_presencas": 1,
+            "plantao_presencas": 0
+          },
+          "sd_efetivo": 0.007,
+          "sd_fonte": "ciclo_atual",
+          "quadrante_efetivo": "C"
+        },
+        {
+          "ciclo": 2,
+          "se": -0.833,
+          "sd": null,
+          "componentes_se": {
+            "presenca_sede": 0.25,
+            "presenca_simulado": 0.0,
+            "entrega_redacao": 0
+          },
+          "zoom_materias": [
+            {
+              "materia": "Portugues",
+              "subpresenca": 0.25,
+              "sd_materia": null,
+              "nota": null
+            },
+            {
+              "materia": "Matematica",
+              "subpresenca": 0.2,
+              "sd_materia": null,
+              "nota": null
+            },
+            {
+              "materia": "Biologia",
+              "subpresenca": 0.25,
+              "sd_materia": null,
+              "nota": null
+            },
+            {
+              "materia": "Historia",
+              "subpresenca": 0.22,
+              "sd_materia": null,
+              "nota": null
+            },
+            {
+              "materia": "Fisica",
+              "subpresenca": 0.25,
+              "sd_materia": null,
+              "nota": null
+            },
+            {
+              "materia": "Redacao",
+              "subpresenca": 0,
+              "sd_materia": null,
+              "nota": null
+            }
+          ],
+          "rh": {
+            "dias_letivos": 40,
+            "dias_presentes": 10,
+            "faltas_justificadas": 0,
+            "flag_psicologico": true,
+            "motivo_flag": "Sinais de possível desmotivação / mudança de rotina em casa",
+            "ultimo_contato_faltante": "2026-09-10 (ligação — respondeu que ia melhorar a frequência)"
+          },
+          "ens": {
+            "reforco_total": 10,
+            "reforco_presencas": 0,
+            "plantao_presencas": 0
+          },
+          "sd_efetivo": 0.007,
+          "sd_fonte": "ultimo_disponivel",
+          "quadrante_efetivo": "C"
+        }
+      ],
+      "geral": {
+        "se": -0.6,
+        "sd": 0.007,
+        "sd_fonte": "media_ciclos_reais",
+        "quadrante": "C",
+        "componentes_se": {
+          "presenca_sede": 0.35,
+          "presenca_simulado": 0.25,
+          "entrega_redacao": 0
+        },
+        "zoom_materias": [
+          {
+            "materia": "Portugues",
+            "subpresenca": 0.35,
+            "sd_materia": 0.0
+          },
+          {
+            "materia": "Matematica",
+            "subpresenca": 0.3,
+            "sd_materia": 0.038
+          },
+          {
+            "materia": "Biologia",
+            "subpresenca": 0.35,
+            "sd_materia": 0.0
+          },
+          {
+            "materia": "Historia",
+            "subpresenca": 0.31,
+            "sd_materia": -0.045
+          },
+          {
+            "materia": "Fisica",
+            "subpresenca": 0.35,
+            "sd_materia": 0.042
+          },
+          {
+            "materia": "Redacao",
+            "subpresenca": 0,
+            "sd_materia": null
+          }
+        ],
+        "rh": {
+          "dias_letivos": 80,
+          "dias_presentes": 28,
+          "faltas_justificadas": 1,
+          "flag_psicologico": true,
+          "motivo_flag": "Sinais de possível desmotivação / mudança de rotina em casa",
+          "ultimo_contato_faltante": "2026-09-10 (ligação — respondeu que ia melhorar a frequência)"
+        },
+        "ens": {
+          "reforco_total": 20,
+          "reforco_presencas": 1,
+          "plantao_presencas": 0
+        }
+      },
+      "ultimo_quadrante": "C",
+      "acoes": [
+        {
+          "tipo": "critico",
+          "origem": "Simulado faltando",
+          "texto": "Maria faltou o simulado inteiro no último ciclo — SD mostrado é herdado do ciclo anterior. Prioridade: entender o motivo antes de qualquer outra ação."
+        },
+        {
+          "tipo": "C",
+          "origem": "Quadrante C",
+          "texto": "Contato individual: por que está faltando? Flagrar padrão — risco de evasão silenciosa."
+        },
+        {
+          "tipo": "evasao",
+          "origem": "Evade Redação",
+          "texto": "Maria não entrega especificamente em Redação (0% vs. 28% de média nas outras). Investigar: horário, professor, dificuldade específica?"
+        },
+        {
+          "tipo": "critico",
+          "origem": "Flag psicológico",
+          "texto": "Flag ativo no RH: \"Sinais de possível desmotivação / mudança de rotina em casa\". Encaminhar / acompanhar com a assistência social."
+        },
+        {
+          "tipo": "social",
+          "origem": "Aguardando bolsa",
+          "texto": "Aguardando bolsa — verificar status do pedido e necessidade de suporte imediato."
+        }
+      ],
+      "acao_sugerida": "Maria faltou o simulado inteiro no último ciclo — SD mostrado é herdado do ciclo anterior. Prioridade: entender o motivo antes de qualquer outra ação.",
+      "matricula_dados": {
+        "Horas_Trabalho_Semana": 20,
+        "Transporte": "Ônibus (2 conduções)",
+        "Tempo_Transporte_Min": 70,
+        "Materia_Mais_Dificil": "Não soube dizer",
+        "Espera_Bolsa": 1,
+        "Espera_Chamada_Faculdade": 0,
+        "Ficha_Psicologica": "Ficha aponta possíveis sinais de ansiedade; marcou 'Outros' em sintomas — ver anotação manuscrita."
+      }
+    },
+    {
+      "matricula": 2601103,
+      "nome": "Guilherme Otaviano Nogueira Parente",
+      "turma": "Extensivo",
+      "pontos": [
+        {
+          "ciclo": 1,
+          "se": 0.95,
+          "sd": 0.68,
+          "componentes_se": {
+            "presenca_sede": 0.925,
+            "presenca_simulado": 1.0,
+            "entrega_redacao": 1
+          },
+          "zoom_materias": [
+            {
+              "materia": "Portugues",
+              "subpresenca": 0.92,
+              "sd_materia": 0.8,
+              "nota": 760
+            },
+            {
+              "materia": "Matematica",
+              "subpresenca": 0.92,
+              "sd_materia": 0.615,
+              "nota": 740
+            },
+            {
+              "materia": "Biologia",
+              "subpresenca": 0.95,
+              "sd_materia": 0.81,
+              "nota": 780
+            },
+            {
+              "materia": "Historia",
+              "subpresenca": 0.9,
+              "sd_materia": 0.591,
+              "nota": 720
+            },
+            {
+              "materia": "Fisica",
+              "subpresenca": 0.92,
+              "sd_materia": 0.583,
+              "nota": 700
+            },
+            {
+              "materia": "Redacao",
+              "subpresenca": 1,
+              "sd_materia": 0.85,
+              "nota": 770
+            }
+          ],
+          "rh": {
+            "dias_letivos": 40,
+            "dias_presentes": 37,
+            "faltas_justificadas": 0,
+            "flag_psicologico": false,
+            "motivo_flag": null,
+            "ultimo_contato_faltante": null
+          },
+          "ens": {
+            "reforco_total": 10,
+            "reforco_presencas": 8,
+            "plantao_presencas": 6
+          },
+          "sd_efetivo": 0.68,
+          "sd_fonte": "ciclo_atual",
+          "quadrante_efetivo": "A"
+        },
+        {
+          "ciclo": 2,
+          "se": 0.967,
+          "sd": 0.804,
+          "componentes_se": {
+            "presenca_sede": 0.95,
+            "presenca_simulado": 1.0,
+            "entrega_redacao": 1
+          },
+          "zoom_materias": [
+            {
+              "materia": "Portugues",
+              "subpresenca": 0.95,
+              "sd_materia": 0.95,
+              "nota": 790
+            },
+            {
+              "materia": "Matematica",
+              "subpresenca": 0.95,
+              "sd_materia": 0.731,
+              "nota": 770
+            },
+            {
+              "materia": "Biologia",
+              "subpresenca": 0.97,
+              "sd_materia": 0.905,
+              "nota": 800
+            },
+            {
+              "materia": "Historia",
+              "subpresenca": 0.93,
+              "sd_materia": 0.727,
+              "nota": 750
+            },
+            {
+              "materia": "Fisica",
+              "subpresenca": 0.95,
+              "sd_materia": 0.708,
+              "nota": 730
+            },
+            {
+              "materia": "Redacao",
+              "subpresenca": 1,
+              "sd_materia": 1,
+              "nota": 800
+            }
+          ],
+          "rh": {
+            "dias_letivos": 40,
+            "dias_presentes": 38,
+            "faltas_justificadas": 0,
+            "flag_psicologico": false,
+            "motivo_flag": null,
+            "ultimo_contato_faltante": null
+          },
+          "ens": {
+            "reforco_total": 10,
+            "reforco_presencas": 8,
+            "plantao_presencas": 7
+          },
+          "sd_efetivo": 0.804,
+          "sd_fonte": "ciclo_atual",
+          "quadrante_efetivo": "A"
+        }
+      ],
+      "geral": {
+        "se": 0.958,
+        "sd": 0.742,
+        "sd_fonte": "media_ciclos_reais",
+        "quadrante": "A",
+        "componentes_se": {
+          "presenca_sede": 0.938,
+          "presenca_simulado": 1.0,
+          "entrega_redacao": 1
+        },
+        "zoom_materias": [
+          {
+            "materia": "Portugues",
+            "subpresenca": 0.935,
+            "sd_materia": 0.875
+          },
+          {
+            "materia": "Matematica",
+            "subpresenca": 0.935,
+            "sd_materia": 0.673
+          },
+          {
+            "materia": "Biologia",
+            "subpresenca": 0.96,
+            "sd_materia": 0.858
+          },
+          {
+            "materia": "Historia",
+            "subpresenca": 0.915,
+            "sd_materia": 0.659
+          },
+          {
+            "materia": "Fisica",
+            "subpresenca": 0.935,
+            "sd_materia": 0.645
+          },
+          {
+            "materia": "Redacao",
+            "subpresenca": 1,
+            "sd_materia": 0.925
+          }
+        ],
+        "rh": {
+          "dias_letivos": 80,
+          "dias_presentes": 75,
+          "faltas_justificadas": 0,
+          "flag_psicologico": false,
+          "motivo_flag": "",
+          "ultimo_contato_faltante": ""
+        },
+        "ens": {
+          "reforco_total": 20,
+          "reforco_presencas": 16,
+          "plantao_presencas": 13
+        }
+      },
+      "ultimo_quadrante": "A",
+      "acoes": [
+        {
+          "tipo": "A",
+          "origem": "Quadrante A",
+          "texto": "Manter. Reconhecer evolução, propor desafios extras / aprofundamento. Monitorar pra não perder."
+        }
+      ],
+      "acao_sugerida": "Manter. Reconhecer evolução, propor desafios extras / aprofundamento. Monitorar pra não perder.",
+      "matricula_dados": {
+        "Horas_Trabalho_Semana": 0,
+        "Transporte": "Carro (família)",
+        "Tempo_Transporte_Min": 15,
+        "Materia_Mais_Dificil": "Nenhuma em especial",
+        "Espera_Bolsa": 0,
+        "Espera_Chamada_Faculdade": 1,
+        "Ficha_Psicologica": "Sem sinais relevantes registrados na ficha."
+      }
+    },
+    {
+      "matricula": 2601104,
+      "nome": "João Gondim Vieira Franco",
+      "turma": "Extensivo",
+      "pontos": [
+        {
+          "ciclo": 1,
+          "se": 0.8,
+          "sd": 0.05,
+          "componentes_se": {
+            "presenca_sede": 0.7,
+            "presenca_simulado": 1.0,
+            "entrega_redacao": 1
+          },
+          "zoom_materias": [
+            {
+              "materia": "Portugues",
+              "subpresenca": 0.72,
+              "sd_materia": 0.05,
+              "nota": 610
+            },
+            {
+              "materia": "Matematica",
+              "subpresenca": 0.72,
+              "sd_materia": 0.077,
+              "nota": 600
+            },
+            {
+              "materia": "Biologia",
+              "subpresenca": 0.72,
+              "sd_materia": -0.024,
+              "nota": 605
+            },
+            {
+              "materia": "Historia",
+              "subpresenca": 0.7,
+              "sd_materia": 0.023,
+              "nota": 595
+            },
+            {
+              "materia": "Fisica",
+              "subpresenca": 0.72,
+              "sd_materia": 0.125,
+              "nota": 590
+            },
+            {
+              "materia": "Redacao",
+              "subpresenca": 1,
+              "sd_materia": 0.0,
+              "nota": 600
+            }
+          ],
+          "rh": {
+            "dias_letivos": 40,
+            "dias_presentes": 28,
+            "faltas_justificadas": 1,
+            "flag_psicologico": false,
+            "motivo_flag": null,
+            "ultimo_contato_faltante": null
+          },
+          "ens": {
+            "reforco_total": 10,
+            "reforco_presencas": 4,
+            "plantao_presencas": 3
+          },
+          "sd_efetivo": 0.05,
+          "sd_fonte": "ciclo_atual",
+          "quadrante_efetivo": "A"
+        },
+        {
+          "ciclo": 2,
+          "se": -0.85,
+          "sd": null,
+          "componentes_se": {
+            "presenca_sede": 0.225,
+            "presenca_simulado": 0.0,
+            "entrega_redacao": 0
+          },
+          "zoom_materias": [
+            {
+              "materia": "Portugues",
+              "subpresenca": 0.22,
+              "sd_materia": null,
+              "nota": null
+            },
+            {
+              "materia": "Matematica",
+              "subpresenca": 0.2,
+              "sd_materia": null,
+              "nota": null
+            },
+            {
+              "materia": "Biologia",
+              "subpresenca": 0.2,
+              "sd_materia": null,
+              "nota": null
+            },
+            {
+              "materia": "Historia",
+              "subpresenca": 0.18,
+              "sd_materia": null,
+              "nota": null
+            },
+            {
+              "materia": "Fisica",
+              "subpresenca": 0.2,
+              "sd_materia": null,
+              "nota": null
+            },
+            {
+              "materia": "Redacao",
+              "subpresenca": 0,
+              "sd_materia": null,
+              "nota": null
+            }
+          ],
+          "rh": {
+            "dias_letivos": 40,
+            "dias_presentes": 9,
+            "faltas_justificadas": 1,
+            "flag_psicologico": false,
+            "motivo_flag": null,
+            "ultimo_contato_faltante": "2026-09-15 (mensagem enviada — ainda sem resposta)"
+          },
+          "ens": {
+            "reforco_total": 10,
+            "reforco_presencas": 0,
+            "plantao_presencas": 0
+          },
+          "sd_efetivo": 0.05,
+          "sd_fonte": "ultimo_disponivel",
+          "quadrante_efetivo": "C"
+        }
+      ],
+      "geral": {
+        "se": -0.025,
+        "sd": 0.05,
+        "sd_fonte": "media_ciclos_reais",
+        "quadrante": "C",
+        "componentes_se": {
+          "presenca_sede": 0.462,
+          "presenca_simulado": 0.5,
+          "entrega_redacao": 0.5
+        },
+        "zoom_materias": [
+          {
+            "materia": "Portugues",
+            "subpresenca": 0.47,
+            "sd_materia": 0.05
+          },
+          {
+            "materia": "Matematica",
+            "subpresenca": 0.46,
+            "sd_materia": 0.077
+          },
+          {
+            "materia": "Biologia",
+            "subpresenca": 0.46,
+            "sd_materia": -0.024
+          },
+          {
+            "materia": "Historia",
+            "subpresenca": 0.44,
+            "sd_materia": 0.023
+          },
+          {
+            "materia": "Fisica",
+            "subpresenca": 0.46,
+            "sd_materia": 0.125
+          },
+          {
+            "materia": "Redacao",
+            "subpresenca": 0.5,
+            "sd_materia": 0.0
+          }
+        ],
+        "rh": {
+          "dias_letivos": 80,
+          "dias_presentes": 37,
+          "faltas_justificadas": 2,
+          "flag_psicologico": false,
+          "motivo_flag": "",
+          "ultimo_contato_faltante": "2026-09-15 (mensagem enviada — ainda sem resposta)"
+        },
+        "ens": {
+          "reforco_total": 20,
+          "reforco_presencas": 4,
+          "plantao_presencas": 3
+        }
+      },
+      "ultimo_quadrante": "C",
+      "acoes": [
+        {
+          "tipo": "critico",
+          "origem": "Simulado faltando",
+          "texto": "João faltou o simulado inteiro no último ciclo — SD mostrado é herdado do ciclo anterior. Prioridade: entender o motivo antes de qualquer outra ação."
+        },
+        {
+          "tipo": "C",
+          "origem": "Quadrante C",
+          "texto": "Contato individual: por que está faltando? Flagrar padrão — risco de evasão silenciosa."
+        }
+      ],
+      "acao_sugerida": "João faltou o simulado inteiro no último ciclo — SD mostrado é herdado do ciclo anterior. Prioridade: entender o motivo antes de qualquer outra ação.",
+      "matricula_dados": {
+        "Horas_Trabalho_Semana": 5,
+        "Transporte": "A pé",
+        "Tempo_Transporte_Min": 20,
+        "Materia_Mais_Dificil": "Física",
+        "Espera_Bolsa": 0,
+        "Espera_Chamada_Faculdade": 0,
+        "Ficha_Psicologica": "Sem sinais relevantes registrados na ficha."
+      }
+    }
+  ],
+  "zoom_turma": {
+    "geral": [
+      {
+        "materia": "Portugues",
+        "subpresenca": 0.651,
+        "sd_materia": 0.25,
+        "n_alunos": 4
+      },
+      {
+        "materia": "Matematica",
+        "subpresenca": 0.565,
+        "sd_materia": -0.024,
+        "n_alunos": 4
+      },
+      {
+        "materia": "Biologia",
+        "subpresenca": 0.655,
+        "sd_materia": 0.202,
+        "n_alunos": 4
+      },
+      {
+        "materia": "Historia",
+        "subpresenca": 0.629,
+        "sd_materia": 0.165,
+        "n_alunos": 4
+      },
+      {
+        "materia": "Fisica",
+        "subpresenca": 0.649,
+        "sd_materia": 0.229,
+        "n_alunos": 4
+      },
+      {
+        "materia": "Redacao",
+        "subpresenca": 0.625,
+        "sd_materia": 0.325,
+        "n_alunos": 3
+      }
+    ],
+    "1": [
+      {
+        "materia": "Portugues",
+        "subpresenca": 0.735,
+        "sd_materia": 0.225,
+        "n_alunos": 4
+      },
+      {
+        "materia": "Matematica",
+        "subpresenca": 0.647,
+        "sd_materia": -0.048,
+        "n_alunos": 4
+      },
+      {
+        "materia": "Biologia",
+        "subpresenca": 0.742,
+        "sd_materia": 0.185,
+        "n_alunos": 4
+      },
+      {
+        "materia": "Historia",
+        "subpresenca": 0.713,
+        "sd_materia": 0.142,
+        "n_alunos": 4
+      },
+      {
+        "materia": "Fisica",
+        "subpresenca": 0.735,
+        "sd_materia": 0.208,
+        "n_alunos": 4
+      },
+      {
+        "materia": "Redacao",
+        "subpresenca": 0.75,
+        "sd_materia": 0.283,
+        "n_alunos": 3
+      }
+    ],
+    "2": [
+      {
+        "materia": "Portugues",
+        "subpresenca": 0.568,
+        "sd_materia": 0.525,
+        "n_alunos": 2
+      },
+      {
+        "materia": "Matematica",
+        "subpresenca": 0.482,
+        "sd_materia": -0.057,
+        "n_alunos": 2
+      },
+      {
+        "materia": "Biologia",
+        "subpresenca": 0.568,
+        "sd_materia": 0.453,
+        "n_alunos": 2
+      },
+      {
+        "materia": "Historia",
+        "subpresenca": 0.545,
+        "sd_materia": 0.386,
+        "n_alunos": 2
+      },
+      {
+        "materia": "Fisica",
+        "subpresenca": 0.562,
+        "sd_materia": 0.416,
+        "n_alunos": 2
+      },
+      {
+        "materia": "Redacao",
+        "subpresenca": 0.5,
+        "sd_materia": 0.55,
+        "n_alunos": 2
+      }
+    ]
+  }
+};
+let DADOS = null;
+let viewAtiva = 'plano';       // 'plano' | 'alertas'
+let modoAtivo = 'geral';       // 'geral' | 'ciclo' | 'pessoal'
+let cicloAtivo = null;         // usado quando modoAtivo === 'ciclo'
+let pessoalSelecionados = new Set();
+let modalMatricula = null;
+let modalEscopo = 'geral';     // escopo do zoom dentro do modal: 'geral' | ciclo
+let turmaMateriaSel = null;    // matéria isolada no zoom da turma (null = "Todas")
+let modalMateriaSel = null;    // matéria isolada no zoom do aluno (null = "Todas")
+let ordemTabela = {campo:'nome', dir:1};
+
+async function iniciar(){
+  DADOS = __DADOS_EMBUTIDOS;
+  cicloAtivo = DADOS.ciclos[DADOS.ciclos.length-1];
+  montarLegenda();
+  montarViewTabs();
+  montarModoTabs();
+  render();
+  document.getElementById('btn-tabela').addEventListener('click', alternarTabela);
+  document.getElementById('modal-backdrop').addEventListener('click', (e)=>{
+    if(e.target.id==='modal-backdrop') fecharModal();
+  });
+  document.addEventListener('keydown', (e)=>{ if(e.key==='Escape') fecharModal(); });
+}
+
+function iniciais(nome){
+  return nome.split(' ').filter(Boolean).slice(0,2).map(p=>p[0]).join('').toUpperCase();
+}
+function corAvatar(matricula){
+  const cores = ['#2a78d6','#eb6834','#1baf7a','#e87ba4'];
+  return cores[matricula % cores.length];
+}
+function fmt(v){ return v==null ? '—' : (v>=0?'+':'') + v.toFixed(2); }
+function pct(v){ return v==null ? '—' : Math.round(v*100)+'%'; }
+function primeiroNome(nome){ return nome.split(' ')[0]; }
+function corTextoStatus(q){ return (q==='B'||q==='C') ? '#1a1a1a' : '#ffffff'; }
+
+/* ---------------- faixas de SD: percentil exato (z-score → CDF normal), não faixa larga ---------------- */
+function erf(x){
+  // aproximação Abramowitz-Stegun 7.1.26 (erro máx. ~1.5e-7) — suficiente pra um percentil de exibição
+  const sinal = x < 0 ? -1 : 1;
+  x = Math.abs(x);
+  const a1=0.254829592, a2=-0.284496736, a3=1.421413741, a4=-1.453152027, a5=1.061405429, p=0.3275911;
+  const t = 1/(1+p*x);
+  const y = 1 - (((((a5*t+a4)*t)+a3)*t+a2)*t+a1)*t*Math.exp(-x*x);
+  return sinal*y;
+}
+function faixaSD(sd){
+  if(sd==null) return {label:'—', cor:'var(--text-muted)', topPct:null};
+  // SD = clip(z/2, -1, 1) → desfaz o /2 pra recuperar o z e jogar na CDF normal.
+  // Em SD=±1 (clipado) o percentil mostrado é o de z=±2 (~2,3%) — o piso/teto do que dá pra exibir.
+  const z = sd*2;
+  const cdf = 0.5*(1+erf(z/Math.SQRT2));
+  const topPct = (1-cdf)*100;
+  const casas = (v)=> (Math.round(v*10)/10).toFixed(1).replace('.', ',');
+  const label = topPct<=50 ? `Top ${casas(topPct)}%` : `Bottom ${casas(100-topPct)}%`;
+  let cor;
+  if(sd>=0.5) cor='var(--good)';
+  else if(sd>=0) cor='var(--text-secondary)';
+  else if(sd>=-0.5) cor='var(--warning)';
+  else cor='var(--critical)';
+  return {label, cor, topPct};
+}
+function faixaSE(se){
+  if(se==null) return {label:'—', cor:'var(--text-muted)'};
+  if(se>=0.6) return {label:'Muito engajado', cor:'var(--good)'};
+  if(se>=0.2) return {label:'Engajado', cor:'var(--good)'};
+  if(se>=-0.2) return {label:'Neutro', cor:'var(--text-secondary)'};
+  if(se>=-0.6) return {label:'Pouco engajado', cor:'var(--warning)'};
+  return {label:'Desengajado', cor:'var(--critical)'};
+}
+function chipFaixa(f){
+  return `<span class="faixa-chip" style="color:${f.cor}; background:color-mix(in srgb, ${f.cor} 14%, transparent)">${f.label}</span>`;
+}
+
+function montarLegenda(){
+  const el = document.getElementById('legenda-status');
+  el.innerHTML = Object.entries(STATUS).map(([k,s])=>`
+    <span class="chip"><span class="dot" style="background:${s.cor}"></span>${s.nome}</span>
+  `).join('');
+}
+
+/* ---------------- navegação de topo ---------------- */
+function montarViewTabs(){
+  const alertas = calcularAlertas();
+  const nCriticos = alertas.filter(a=>a.sev==='critico'||a.sev==='atencao').length;
+  document.getElementById('view-tabs').innerHTML = `
+    <button data-view="plano" class="${viewAtiva==='plano'?'ativo':''}">Plano</button>
+    <button data-view="alertas" class="${viewAtiva==='alertas'?'ativo':''}">Alertas ${nCriticos?`<span class="badge-contagem">${nCriticos}</span>`:''}</button>
+  `;
+  document.querySelectorAll('#view-tabs button').forEach(b=>{
+    b.addEventListener('click', ()=>{ viewAtiva = b.dataset.view; renderView(); });
+  });
+}
+function renderView(){
+  document.querySelectorAll('#view-tabs button').forEach(b=> b.classList.toggle('ativo', b.dataset.view===viewAtiva));
+  document.getElementById('view-plano').hidden = viewAtiva!=='plano';
+  document.getElementById('view-alertas').hidden = viewAtiva!=='alertas';
+  if(viewAtiva==='alertas') montarAlertas();
+}
+
+/* ---------------- modos: geral / ciclo / pessoal ---------------- */
+function montarModoTabs(){
+  const tabs = [['geral','Geral'], ['ciclo','Por ciclo'], ['pessoal','Modo pessoal']];
+  document.getElementById('modo-tabs').innerHTML = tabs.map(([id,label])=>
+    `<button data-modo="${id}" class="${modoAtivo===id?'ativo':''}">${label}</button>`).join('');
+  document.querySelectorAll('#modo-tabs button').forEach(b=>{
+    b.addEventListener('click', ()=>{ modoAtivo = b.dataset.modo; render(); });
+  });
+}
+
+// Ponto único de entrada: troca de modo (geral/ciclo/pessoal) precisa
+// atualizar TODAS as visões da aba Plano — lista, plano SE×SD, tabela e
+// zoom por matéria (que em modo pessoal passa a mostrar só quem tá
+// selecionado, não a turma toda).
+function render(){
+  renderView();
+  document.querySelectorAll('#modo-tabs button').forEach(b=> b.classList.toggle('ativo', b.dataset.modo===modoAtivo));
+
+  const subtoggle = document.getElementById('ciclo-subtoggle');
+  if(modoAtivo==='ciclo'){
+    subtoggle.hidden = false;
+    subtoggle.innerHTML = DADOS.ciclos.map(c=>
+      `<button data-ciclo="${c}" class="${c===cicloAtivo?'ativo':''}">Ciclo ${c}</button>`).join('');
+    subtoggle.querySelectorAll('button').forEach(b=>{
+      b.addEventListener('click', ()=>{ cicloAtivo = Number(b.dataset.ciclo); render(); });
+    });
+  } else {
+    subtoggle.hidden = true;
+  }
+
+  document.getElementById('dica-pessoal').hidden = modoAtivo!=='pessoal';
+  document.getElementById('lbl-lista-modo').textContent =
+    modoAtivo==='pessoal' ? `— selecione (${pessoalSelecionados.size})` : '';
+
+  montarListaAlunos();
+  montarPlano();
+  montarTabela();
+  montarZoomTurma();
+}
+
+/* ---------------- sidebar ---------------- */
+function pontoParaModo(aluno){
+  if(modoAtivo==='ciclo') return aluno.pontos.find(p=>p.ciclo===cicloAtivo);
+  return aluno.geral; // 'geral' e 'pessoal' mostram o resumo geral na listinha
+}
+
+function montarListaAlunos(){
+  const alunos = [...DADOS.alunos].sort((a,b)=> a.nome.localeCompare(b.nome, 'pt-BR'));
+  const el = document.getElementById('lista-alunos');
+  el.innerHTML = alunos.map(a=>{
+    const p = pontoParaModo(a);
+    const q = p.quadrante_efetivo!==undefined ? p.quadrante_efetivo : p.quadrante;
+    const sd = p.sd_efetivo!==undefined ? p.sd_efetivo : p.sd;
+    const st = q ? STATUS[q] : null;
+    const marcado = pessoalSelecionados.has(a.matricula);
+    return `
+      <div class="aluno-card">
+        <input type="checkbox" class="check-pessoal" data-mat="${a.matricula}" ${marcado?'checked':''} ${modoAtivo==='pessoal'?'':'hidden'}>
+        <button class="nome-btn" data-mat="${a.matricula}">
+          <span class="avatar" style="background:${corAvatar(a.matricula)}">${iniciais(a.nome)}</span>
+          <span class="info">
+            <span class="nome">${a.nome}</span>
+            <span class="sub">${faixaSE(p.se).label} · ${faixaSD(sd).label}</span>
+          </span>
+        </button>
+        <span class="status-pill" style="background:${st?st.cor:'var(--text-muted)'}; color:${q?corTextoStatus(q):'#fff'}">${q||'?'}</span>
+        <button class="chevron" data-mat="${a.matricula}" title="Expandir ficha">▸</button>
+      </div>`;
+  }).join('');
+
+  el.querySelectorAll('.check-pessoal').forEach(cb=>{
+    cb.addEventListener('change', ()=>{
+      const mat = Number(cb.dataset.mat);
+      if(cb.checked) pessoalSelecionados.add(mat); else pessoalSelecionados.delete(mat);
+      render();
+    });
+  });
+  el.querySelectorAll('.nome-btn, .chevron').forEach(b=>{
+    b.addEventListener('click', ()=> abrirModal(Number(b.dataset.mat)));
+  });
+}
+
+/* ---------------- Plano SE x SD ---------------- */
+const PLANO_SIZE = 560, PLANO_PAD_L = 46, PLANO_PAD_R = 20, PLANO_PAD_T = 20, PLANO_PAD_B = 40;
+const PLANO_W = PLANO_SIZE - PLANO_PAD_L - PLANO_PAD_R, PLANO_H = PLANO_SIZE - PLANO_PAD_T - PLANO_PAD_B;
+function px(se){ return PLANO_PAD_L + (se+1)/2 * PLANO_W; }
+function py(sd){ return PLANO_PAD_T + (1-(sd+1)/2) * PLANO_H; }
+function rectQuad(x,y,w,h,tint){ return `<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="${tint}"/>`; }
+function resolveVar(name){ return getComputedStyle(document.body).getPropertyValue(name).trim(); }
+
+function fundoQuadrantes(){
+  const meioX = px(0), meioY = py(0);
+  return rectQuad(px(0), PLANO_PAD_T, PLANO_PAD_L+PLANO_W-meioX, meioY-PLANO_PAD_T, STATUS.A.tint)
+       + rectQuad(px(0), meioY, PLANO_PAD_L+PLANO_W-meioX, PLANO_PAD_T+PLANO_H-meioY, STATUS.B.tint)
+       + rectQuad(PLANO_PAD_L, PLANO_PAD_T, meioX-PLANO_PAD_L, meioY-PLANO_PAD_T, STATUS.C.tint)
+       + rectQuad(PLANO_PAD_L, meioY, meioX-PLANO_PAD_L, PLANO_PAD_T+PLANO_H-meioY, STATUS.D.tint);
+}
+function eixosPlano(){
+  return `
+    <line class="grid-line" x1="${PLANO_PAD_L}" y1="${py(0)}" x2="${PLANO_PAD_L+PLANO_W}" y2="${py(0)}"/>
+    <line class="grid-line" x1="${px(0)}" y1="${PLANO_PAD_T}" x2="${px(0)}" y2="${PLANO_PAD_T+PLANO_H}"/>
+    <text class="quad-label" x="${px(0)+PLANO_W/4-6}" y="${PLANO_PAD_T+16}" fill="${resolveVar('--good')}">A</text>
+    <text class="quad-label" x="${px(0)+PLANO_W/4-6}" y="${PLANO_PAD_T+PLANO_H-8}" fill="${resolveVar('--warning')}">B</text>
+    <text class="quad-label" x="${PLANO_PAD_L+PLANO_W/4-6}" y="${PLANO_PAD_T+16}" fill="${resolveVar('--serious')}">C</text>
+    <text class="quad-label" x="${PLANO_PAD_L+PLANO_W/4-6}" y="${PLANO_PAD_T+PLANO_H-8}" fill="${resolveVar('--critical')}">D</text>
+    <text class="eixo-label" x="${PLANO_PAD_L+PLANO_W-2}" y="${PLANO_PAD_T+PLANO_H+22}" text-anchor="end">SE (engajamento) →</text>
+    <text class="eixo-label" x="${PLANO_PAD_L}" y="${PLANO_PAD_T-6}">↑ SD (desempenho)</text>
+    <text class="eixo-label mono" x="${PLANO_PAD_L}" y="${PLANO_PAD_T+PLANO_H+22}">-1</text>
+    <text class="eixo-label mono" x="${PLANO_PAD_L+PLANO_W}" y="${PLANO_PAD_T+PLANO_H+22}" text-anchor="end">+1</text>
+  `;
+}
+function pontoSvg(a, se, sd, quad, isUltimo, ciclo){
+  if(se==null || sd==null) return '';
+  const r = isUltimo ? 7 : 5;
+  const cor = quad ? STATUS[quad].cor : resolveVar('--text-muted');
+  return `
+    <g class="pt" data-mat="${a.matricula}" data-ciclo="${ciclo??''}">
+      <circle cx="${px(se)}" cy="${py(sd)}" r="${r}" fill="${cor}" class="${isUltimo?'pt-atual':'pt-anterior'}"/>
+      ${isUltimo?`<text class="pt-label" x="${px(se)+10}" y="${py(sd)+4}">${primeiroNome(a.nome)}</text>`:''}
+      <circle cx="${px(se)}" cy="${py(sd)}" r="12" class="pt-hit"><title>${a.nome}${ciclo?` — ciclo ${ciclo}`:' — geral'}\nSE ${fmt(se)} (${faixaSE(se).label})\nSD ${fmt(sd)} (${faixaSD(sd).label})</title></circle>
+    </g>`;
+}
+
+function montarPlano(){
+  const wrap = document.getElementById('plano-svg-wrap');
+  let pontos = '', trajetorias = '';
+
+  if(modoAtivo==='pessoal'){
+    const selecionados = DADOS.alunos.filter(a=>pessoalSelecionados.has(a.matricula));
+    if(selecionados.length===0){
+      wrap.innerHTML = `<div class="empty-state">Marque um ou mais alunos na lista à esquerda pra ver a trajetória deles entre ciclos.</div>`;
+      return;
+    }
+    selecionados.forEach(a=>{
+      const pts = a.pontos.filter(p=>p.sd_efetivo!=null);
+      if(pts.length>1){
+        const d = pts.map(p=>`${px(p.se)},${py(p.sd_efetivo)}`).join(' L ');
+        trajetorias += `<path class="traj-line" d="M ${d}" marker-end="url(#seta)"/>`;
+      }
+      pts.forEach((p,i)=>{
+        pontos += pontoSvg(a, p.se, p.sd_efetivo, p.quadrante_efetivo, i===pts.length-1, p.ciclo);
+      });
+    });
+  } else {
+    DADOS.alunos.forEach(a=>{
+      const p = modoAtivo==='ciclo' ? a.pontos.find(pp=>pp.ciclo===cicloAtivo) : a.geral;
+      const sd = p.sd_efetivo!==undefined ? p.sd_efetivo : p.sd;
+      const quad = p.quadrante_efetivo!==undefined ? p.quadrante_efetivo : p.quadrante;
+      pontos += pontoSvg(a, p.se, sd, quad, true, modoAtivo==='ciclo'?cicloAtivo:null);
+    });
+  }
+
+  wrap.innerHTML = `
+  <svg viewBox="0 0 ${PLANO_SIZE} ${PLANO_SIZE}" role="img" aria-label="Plano de engajamento por desempenho" style="width:100%; height:auto">
+    <defs>
+      <marker id="seta" viewBox="0 0 8 8" refX="6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+        <path d="M0,0 L8,4 L0,8 z" fill="var(--text-muted)"/>
+      </marker>
+    </defs>
+    ${fundoQuadrantes()}
+    ${eixosPlano()}
+    ${trajetorias}
+    ${pontos}
+  </svg>`;
+
+  wrap.querySelectorAll('.pt').forEach(g=>{
+    g.addEventListener('click', ()=> abrirModal(Number(g.dataset.mat)));
+  });
+}
+
+/* ---------------- tabela alternativa (ordenável) ---------------- */
+function linhasTabela(){
+  const linhas = [];
+  DADOS.alunos.forEach(a=>{
+    const fontes = modoAtivo==='pessoal'
+      ? a.pontos.map(p=>({label:'Ciclo '+p.ciclo, se:p.se, sd:p.sd_efetivo, sdFonte:p.sd_fonte, quad:p.quadrante_efetivo}))
+      : modoAtivo==='ciclo'
+        ? [(()=>{ const p=a.pontos.find(pp=>pp.ciclo===cicloAtivo); return {label:'Ciclo '+cicloAtivo, se:p.se, sd:p.sd_efetivo, sdFonte:p.sd_fonte, quad:p.quadrante_efetivo}; })()]
+        : [{label:'Geral', se:a.geral.se, sd:a.geral.sd, sdFonte:a.geral.sd_fonte, quad:a.geral.quadrante}];
+    fontes.forEach(f=> linhas.push({nome:a.nome, matricula:a.matricula, ...f}));
+  });
+  const {campo, dir} = ordemTabela;
+  linhas.sort((x,y)=>{
+    let vx=x[campo], vy=y[campo];
+    if(vx==null && vy==null) return 0;
+    if(vx==null) return 1; if(vy==null) return -1;
+    if(typeof vx==='string') return vx.localeCompare(vy,'pt-BR')*dir;
+    return (vx-vy)*dir;
+  });
+  return linhas;
+}
+function montarTabela(){
+  const el = document.getElementById('tabela-wrap');
+  const linhas = linhasTabela();
+  const cols = [['nome','Aluno'],['matricula','Matrícula'],['label','Recorte'],['se','SE'],['sd','SD'],['quad','Quadrante']];
+  const seta = (c)=> ordemTabela.campo===c ? `<span class="seta">${ordemTabela.dir===1?'▲':'▼'}</span>` : '';
+  el.innerHTML = `<table>
+    <caption>* SD herdado do último ciclo com simulado · clique numa coluna pra ordenar</caption>
+    <thead><tr>${cols.map(([c,l])=>`<th data-campo="${c}">${l}${seta(c)}</th>`).join('')}</tr></thead>
+    <tbody>${linhas.map(l=>`<tr>
+      <td>${l.nome}</td><td class="num">${l.matricula}</td><td>${l.label}</td>
+      <td class="num">${fmt(l.se)} ${chipFaixa(faixaSE(l.se))}</td>
+      <td class="num">${fmt(l.sd)}${l.sdFonte==='ultimo_disponivel'?' *':''} ${chipFaixa(faixaSD(l.sd))}</td>
+      <td>${l.quad?`<span class="quad-tag" style="background:${STATUS[l.quad].cor}; color:${corTextoStatus(l.quad)}">${l.quad}</span>`:'—'}</td>
+    </tr>`).join('')}</tbody>
+  </table>`;
+  el.querySelectorAll('th[data-campo]').forEach(th=>{
+    th.addEventListener('click', ()=>{
+      const campo = th.dataset.campo;
+      if(ordemTabela.campo===campo) ordemTabela = {campo, dir: ordemTabela.dir*-1};
+      else ordemTabela = {campo, dir:1};
+      montarTabela();
+    });
+  });
+}
+function alternarTabela(){
+  const svgWrap = document.getElementById('plano-svg-wrap');
+  const tabWrap = document.getElementById('tabela-wrap');
+  const mostrando = !tabWrap.hidden;
+  tabWrap.hidden = mostrando;
+  svgWrap.hidden = !mostrando;
+  document.getElementById('btn-tabela').textContent = mostrando ? 'Ver como tabela' : 'Ver como gráfico';
+}
+
+/* ---------------- zoom por matéria (reutilizável: aluno ou turma) ---------------- */
+const ZM_W=420, ZM_H=270, ZM_PAD_L=68, ZM_PAD_R=14, ZM_PAD_T=12, ZM_PAD_B=26;
+function zx(sp){ return ZM_PAD_L + sp * (ZM_W-ZM_PAD_L-ZM_PAD_R); }
+function zy(sd){ return ZM_PAD_T + (1-(sd+1)/2) * (ZM_H-ZM_PAD_T-ZM_PAD_B); }
+
+// linhas/rótulos de faixa no eixo Y (SD) — "sempre mostrar as faixas", em
+// todo gráfico que tenha SD num eixo
+function faixasEixoY(){
+  const sds = [0.75, 0.25, 0, -0.25, -0.75];
+  return sds.map(sd=>
+    `<line class="faixa-line" x1="${ZM_PAD_L}" y1="${zy(sd)}" x2="${ZM_W-ZM_PAD_R}" y2="${zy(sd)}"/>
+     <text class="faixa-label" x="${ZM_PAD_L-4}" y="${zy(sd)+3}" text-anchor="end">${faixaSD(sd).label}</text>`
+  ).join('');
+}
+
+// modo "Todas": um ponto por matéria, na foto do escopo atual (ciclo/geral)
+function svgZoomTodas(materias, opts){
+  opts = opts || {};
+  const temAlgumaNota = materias.some(m=>m.sd_materia!=null);
+  if(!temAlgumaNota){
+    return `<div class="empty-state" style="min-height:160px">Sem nota nesse recorte.</div>`;
+  }
+  let pontos = '', legenda = '';
+  materias.forEach((m,i)=>{
+    const cor = CAT[i%CAT.length];
+    const lbl = DADOS.mat_label[m.materia];
+    legenda += `<span><i style="background:${cor}"></i>${lbl}${opts.mostrarN && m.n_alunos!=null ? ` (${m.n_alunos})`:''}</span>`;
+    if(m.sd_materia==null || m.subpresenca==null) return;
+    pontos += `<g>
+      <circle cx="${zx(m.subpresenca)}" cy="${zy(m.sd_materia)}" r="2.3" fill="${cor}">
+        <title>${lbl}: ${pct(m.subpresenca)} ${opts.xLabel||'presença'}, SD ${fmt(m.sd_materia)} (${faixaSD(m.sd_materia).label})${m.nota?` · nota ${m.nota}`:''}</title>
+      </circle>
+    </g>`;
+  });
+  return `
+    <svg viewBox="0 0 ${ZM_W} ${ZM_H}" style="width:100%; height:auto">
+      ${faixasEixoY()}
+      <line class="grid-line" x1="${zx(0.5)}" y1="${ZM_PAD_T}" x2="${zx(0.5)}" y2="${ZM_H-ZM_PAD_B}" stroke-dasharray="2 3"/>
+      <text class="eixo-label" x="${ZM_PAD_L}" y="${ZM_H-6}">0%</text>
+      <text class="eixo-label" x="${ZM_W-ZM_PAD_R}" y="${ZM_H-6}" text-anchor="end">100% ${opts.xLabel||'presença'}</text>
+      ${pontos}
+    </svg>
+    <div class="zoom-legend">${legenda}</div>
+  `;
+}
+
+// modo "uma matéria": evolução (2 pontos, ciclo 1 → ciclo 2) nos MESMOS eixos
+function svgZoomEvolucao(porCiclo, materiaKey, cor, xLabel){
+  const pts = DADOS.ciclos.map(c=>({ciclo:c, ...( (porCiclo[c]||[]).find(z=>z.materia===materiaKey) || {} )}))
+                          .filter(p=>p.sd_materia!=null && p.subpresenca!=null);
+  if(pts.length===0){
+    return `<div class="empty-state" style="min-height:160px">Sem nota dessa matéria em nenhum ciclo.</div>`;
+  }
+  let linha = '', pontos = '';
+  if(pts.length>1){
+    linha = `<path class="traj-line" d="M ${pts.map(p=>`${zx(p.subpresenca)},${zy(p.sd_materia)}`).join(' L ')}" marker-end="url(#seta2)"/>`;
+  }
+  pts.forEach((p,i)=>{
+    const isUltimo = i===pts.length-1;
+    pontos += `<g>
+      <circle cx="${zx(p.subpresenca)}" cy="${zy(p.sd_materia)}" r="${isUltimo?8:6}" fill="${cor}" opacity="${isUltimo?1:0.55}">
+        <title>Ciclo ${p.ciclo}: ${pct(p.subpresenca)} ${xLabel||'presença'}, SD ${fmt(p.sd_materia)} (${faixaSD(p.sd_materia).label})${p.nota?` · nota ${p.nota}`:''}</title>
+      </circle>
+      <text class="zoom-pt-label" x="${zx(p.subpresenca)+10}" y="${zy(p.sd_materia)+3}" font-weight="${isUltimo?700:400}">Ciclo ${p.ciclo}</text>
+    </g>`;
+  });
+  return `
+    <svg viewBox="0 0 ${ZM_W} ${ZM_H}" style="width:100%; height:auto">
+      <defs>
+        <marker id="seta2" viewBox="0 0 8 8" refX="6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M0,0 L8,4 L0,8 z" fill="var(--text-muted)"/>
+        </marker>
+      </defs>
+      ${faixasEixoY()}
+      <line class="grid-line" x1="${zx(0.5)}" y1="${ZM_PAD_T}" x2="${zx(0.5)}" y2="${ZM_H-ZM_PAD_B}" stroke-dasharray="2 3"/>
+      <text class="eixo-label" x="${ZM_PAD_L}" y="${ZM_H-6}">0%</text>
+      <text class="eixo-label" x="${ZM_W-ZM_PAD_R}" y="${ZM_H-6}" text-anchor="end">100% ${xLabel||'presença'}</text>
+      ${linha}${pontos}
+    </svg>`;
+}
+
+// seletor "Todas | <matéria> ..." reutilizado no zoom da turma e no do aluno
+function montarSeletorMateria(elId, selecionada, onSelecionar){
+  const el = document.getElementById(elId);
+  const chips = [['__todas__','Todas', null]].concat(DADOS.materias_zoom.map((m,i)=>[m, DADOS.mat_label[m], CAT[i%CAT.length]]));
+  el.innerHTML = chips.map(([id,label,cor])=>{
+    const ativo = (selecionada===null && id==='__todas__') || selecionada===id;
+    return `<button data-materia="${id}" class="${ativo?'ativo':''}">${cor?`<i style="background:${cor}"></i>`:''}${label}</button>`;
+  }).join('');
+  el.querySelectorAll('button').forEach(b=>{
+    b.addEventListener('click', ()=>{ onSelecionar(b.dataset.materia==='__todas__' ? null : b.dataset.materia); });
+  });
+}
+
+function montarZoomTurma(){
+  const escopo = modoAtivo==='ciclo' ? String(cicloAtivo) : 'geral';
+  const emPessoal = modoAtivo==='pessoal' && pessoalSelecionados.size>0;
+  const alunosEscopo = emPessoal ? DADOS.alunos.filter(a=>pessoalSelecionados.has(a.matricula)) : DADOS.alunos;
+
+  document.getElementById('lbl-zoom-turma-escopo').textContent =
+    (emPessoal ? `— ${alunosEscopo.length} selecionado(s)` : '— turma toda') +
+    (escopo==='geral' ? ', acumulado' : `, ciclo ${escopo}`);
+
+  montarSeletorMateria('turma-materia-seletor', turmaMateriaSel, (m)=>{ turmaMateriaSel = m; montarZoomTurma(); });
+
+  const wrap = document.getElementById('zoom-turma-wrap');
+  if(turmaMateriaSel===null){
+    const materias = emPessoal ? agregarZoomMaterias(alunosEscopo, escopo) : DADOS.zoom_turma[escopo];
+    wrap.innerHTML = svgZoomTodas(materias, {xLabel:'presença/entrega', mostrarN:!emPessoal});
+  } else {
+    const porCiclo = {};
+    DADOS.ciclos.forEach(c=>{ porCiclo[c] = emPessoal ? agregarZoomMaterias(alunosEscopo, c) : DADOS.zoom_turma[String(c)]; });
+    const idx = DADOS.materias_zoom.indexOf(turmaMateriaSel);
+    wrap.innerHTML = svgZoomEvolucao(porCiclo, turmaMateriaSel, CAT[idx%CAT.length], 'presença/entrega');
+  }
+}
+
+// agrega zoom_materias de um conjunto de alunos (pra modo pessoal / futuras
+// seleções ad-hoc) — mesma lógica do calcular_zoom_turma em Python, só que
+// no cliente, pra não depender de pré-computar todo subconjunto possível.
+function agregarZoomMaterias(alunos, escopo){
+  const media = (vals)=>{ const v = vals.filter(x=>x!=null); return v.length ? v.reduce((a,b)=>a+b,0)/v.length : null; };
+  return DADOS.materias_zoom.map((m,i)=>{
+    const vals = alunos.map(a=>{
+      const zm = escopo==='geral' ? a.geral.zoom_materias : a.pontos.find(p=>p.ciclo===escopo).zoom_materias;
+      return zm[i];
+    });
+    return {
+      materia: m,
+      subpresenca: media(vals.map(v=>v.subpresenca)),
+      sd_materia: media(vals.map(v=>v.sd_materia)),
+      n_alunos: vals.filter(v=>v.sd_materia!=null).length,
+    };
+  });
+}
+
+/* ---------------- modal: ficha expandida ---------------- */
+function abrirModal(matricula){
+  modalMatricula = matricula;
+  modalEscopo = 'geral';
+  modalMateriaSel = null;
+  document.getElementById('modal-backdrop').hidden = false;
+  document.body.style.overflow = 'hidden';
+  renderModal();
+}
+function fecharModal(){
+  document.getElementById('modal-backdrop').hidden = true;
+  document.body.style.overflow = '';
+  modalMatricula = null;
+}
+
+function pontoModal(aluno){
+  if(modalEscopo==='geral') return {...aluno.geral, label:'Geral', quadrante_efetivo: aluno.geral.quadrante};
+  const p = aluno.pontos.find(pp=>pp.ciclo===modalEscopo);
+  return {...p, label:'Ciclo '+modalEscopo, sd: p.sd_efetivo};
+}
+
+function renderModal(){
+  const aluno = DADOS.alunos.find(a=>a.matricula===modalMatricula);
+  const ponto = pontoModal(aluno);
+  const q = ponto.quadrante_efetivo;
+  const st = q ? STATUS[q] : null;
+  const md = aluno.matricula_dados;
+
+  const escopoBotoes = [['geral','Geral'], ...DADOS.ciclos.map(c=>[c,'Ciclo '+c])].map(([id,label])=>
+    `<button data-escopo="${id}" class="${modalEscopo===id?'ativo':''}">${label}</button>`).join('');
+
+  const flagsRH = [];
+  if(ponto.rh.flag_psicologico) flagsRH.push(`<span class="flag">⚑ ${ponto.rh.motivo_flag}</span>`);
+  if(ponto.rh.ultimo_contato_faltante) flagsRH.push(`Último contato: ${ponto.rh.ultimo_contato_faltante}`);
+
+  let zoomHtml;
+  if(modalMateriaSel===null){
+    zoomHtml = svgZoomTodas(ponto.zoom_materias, {xLabel:'presença/entrega'});
+  } else {
+    const porCiclo = {};
+    DADOS.ciclos.forEach(c=>{ porCiclo[c] = aluno.pontos.find(p=>p.ciclo===c).zoom_materias; });
+    const idx = DADOS.materias_zoom.indexOf(modalMateriaSel);
+    zoomHtml = svgZoomEvolucao(porCiclo, modalMateriaSel, CAT[idx%CAT.length], 'presença/entrega');
+  }
+
+  document.getElementById('modal-ficha').innerHTML = `
+    <div class="modal-head">
+      <span class="avatar" style="background:${corAvatar(aluno.matricula)}">${iniciais(aluno.nome)}</span>
+      <div>
+        <h3>${aluno.nome}</h3>
+        <div class="mat mono">matrícula ${aluno.matricula} · ${aluno.turma}</div>
+      </div>
+      <div class="modal-actions no-print">
+        <button class="primario" id="btn-imprimir">Imprimir / Salvar PDF</button>
+        <button class="fechar" id="btn-fechar" aria-label="Fechar">✕</button>
+      </div>
+    </div>
+    <div class="modal-body">
+
+      ${montarAlertasAluno(aluno)}
+
+      <div class="modal-secao">
+        <h4>Evolução entre ciclos</h4>
+        ${svgEvolucao(aluno)}
+      </div>
+
+      <div class="modal-secao">
+        <div class="subtoggle" id="modal-subtoggle">${escopoBotoes}</div>
+        <div class="scorecards-row">
+          <div class="scorecard">
+            <div class="lbl">${ponto.label}</div>
+            <div class="val-row">
+              <div>${fmt(ponto.se)}<small>SE · ${faixaSE(ponto.se).label}</small></div>
+              <div style="color:${st?st.cor:'inherit'}">${fmt(ponto.sd)}<small>SD · ${faixaSD(ponto.sd).label}</small></div>
+              ${q?`<span class="quad-chip" style="background:${st.cor}; color:${corTextoStatus(q)}">${q}</span>`:''}
+            </div>
+          </div>
+          <div class="scorecard">
+            <div class="lbl">Presença sede / simulado</div>
+            <div class="val-row"><div style="font-size:14px">${pct(ponto.componentes_se.presenca_sede)} <small style="display:inline">sede</small></div></div>
+            <div class="val-row"><div style="font-size:14px">${pct(ponto.componentes_se.presenca_simulado)} <small style="display:inline">simulado</small></div></div>
+          </div>
+          <div class="scorecard">
+            <div class="lbl">Redação / reforço</div>
+            <div class="val-row"><div style="font-size:14px">${ponto.componentes_se.entrega_redacao===1?'Entregou':ponto.componentes_se.entrega_redacao===0?'Não entregou':pct(ponto.componentes_se.entrega_redacao)}</div></div>
+            <div class="val-row"><div style="font-size:14px">${ponto.ens.reforco_presencas}/${ponto.ens.reforco_total} <small style="display:inline">encontros</small></div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-secao">
+        <div class="zoom-cabecalho">
+          <h4 style="margin:0">Zoom por matéria ${modalMateriaSel===null? '— '+ponto.label.toLowerCase() : '— evolução'} (inclui redação)</h4>
+        </div>
+        <div class="subtoggle" id="modal-materia-seletor"></div>
+        ${zoomHtml}
+      </div>
+
+      <div class="modal-secao">
+        <h4>Ações sugeridas (${aluno.acoes.length})</h4>
+        <div class="acoes-lista">
+          ${aluno.acoes.map(ac=>`
+            <div class="acao-item">
+              <div class="tag" style="color:${ACAO_TIPO_COR[ac.tipo]||'var(--text-primary)'}">
+                <span class="dot" style="background:${ACAO_TIPO_COR[ac.tipo]||'var(--text-muted)'}"></span>${ac.origem}
+              </div>
+              <p>${ac.texto}</p>
+            </div>`).join('')}
+        </div>
+      </div>
+
+      <div class="modal-secao">
+        <h4>Todos os dados coletados</h4>
+        <div class="fatos-grid">
+          <div class="fatos">
+            <div class="linha"><span class="k">Dias presentes (geral)</span><span class="v">${aluno.geral.rh.dias_presentes}/${aluno.geral.rh.dias_letivos} (${aluno.geral.rh.faltas_justificadas} justif.)</span></div>
+            <div class="linha"><span class="k">Reforço (geral)</span><span class="v">${aluno.geral.ens.reforco_presencas}/${aluno.geral.ens.reforco_total} encontros</span></div>
+            <div class="linha"><span class="k">Plantão (geral)</span><span class="v">${aluno.geral.ens.plantao_presencas} presenças</span></div>
+            <div class="linha"><span class="k">Trabalha</span><span class="v">${md.Horas_Trabalho_Semana}h/semana</span></div>
+            <div class="linha"><span class="k">Transporte</span><span class="v">${md.Transporte} · ${md.Tempo_Transporte_Min}min</span></div>
+          </div>
+          <div class="fatos">
+            <div class="linha"><span class="k">Matéria mais difícil (autorrelato)</span><span class="v">${md.Materia_Mais_Dificil}</span></div>
+            <div class="linha"><span class="k">Espera bolsa</span><span class="v">${md.Espera_Bolsa?'Sim':'Não'}</span></div>
+            <div class="linha"><span class="k">Espera chamada faculdade</span><span class="v">${md.Espera_Chamada_Faculdade?'Sim':'Não'}</span></div>
+            ${flagsRH.length?`<div class="linha"><span class="k">RH</span><span class="v">${flagsRH.join('<br>')}</span></div>`:''}
+            <div class="linha"><span class="k">Ficha psicológica</span><span class="v">${md.Ficha_Psicologica}</span></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  `;
+
+  document.getElementById('btn-fechar').addEventListener('click', fecharModal);
+  document.getElementById('btn-imprimir').addEventListener('click', e=> baixarPDF(document.getElementById('modal-ficha'), 'PEI-'+aluno.matricula+'.pdf', e.currentTarget));
+  document.querySelectorAll('#modal-subtoggle button').forEach(b=>{
+    b.addEventListener('click', ()=>{
+      const v = b.dataset.escopo;
+      modalEscopo = v==='geral' ? 'geral' : Number(v);
+      renderModal();
+    });
+  });
+  montarSeletorMateria('modal-materia-seletor', modalMateriaSel, (m)=>{ modalMateriaSel = m; renderModal(); });
+}
+
+const EV_W=560, EV_H=170, EV_PAD_L=34, EV_PAD_R=16, EV_PAD_T=14, EV_PAD_B=26;
+function evx(i, n){ return EV_PAD_L + (n<=1?0:i/(n-1)) * (EV_W-EV_PAD_L-EV_PAD_R); }
+function evy(v){ return EV_PAD_T + (1-(v+1)/2) * (EV_H-EV_PAD_T-EV_PAD_B); }
+function svgEvolucao(aluno){
+  const pts = aluno.pontos;
+  const midY = evy(0);
+  const linhaSE = pts.map((p,i)=>`${evx(i,pts.length)},${evy(p.se)}`).join(' L ');
+  const linhaSD = pts.map((p,i)=>`${evx(i,pts.length)},${evy(p.sd_efetivo)}`).join(' L ');
+  const marcasSE = pts.map((p,i)=>`<circle cx="${evx(i,pts.length)}" cy="${evy(p.se)}" r="4" fill="${resolveVar('--cat-1')}"><title>Ciclo ${p.ciclo} — SE ${fmt(p.se)} (${faixaSE(p.se).label})</title></circle>`).join('');
+  const marcasSD = pts.map((p,i)=>`<circle cx="${evx(i,pts.length)}" cy="${evy(p.sd_efetivo)}" r="4" fill="${resolveVar('--cat-2')}"><title>Ciclo ${p.ciclo} — SD ${fmt(p.sd_efetivo)} (${faixaSD(p.sd_efetivo).label})${p.sd_fonte==='ultimo_disponivel'?' · herdado':''}</title></circle>`).join('');
+  const rotulos = pts.map((p,i)=>`<text class="eixo-label" x="${evx(i,pts.length)}" y="${EV_H-6}" text-anchor="middle">Ciclo ${p.ciclo}</text>`).join('');
+  return `
+  <div class="evolucao-wrap">
+    <div class="evolucao-svg">
+      <svg viewBox="0 0 ${EV_W} ${EV_H}" style="width:100%; height:auto">
+        <line class="grid-line" x1="${EV_PAD_L}" y1="${midY}" x2="${EV_W-EV_PAD_R}" y2="${midY}"/>
+        <path d="M ${linhaSE}" fill="none" stroke="${resolveVar('--cat-1')}" stroke-width="2"/>
+        <path d="M ${linhaSD}" fill="none" stroke="${resolveVar('--cat-2')}" stroke-width="2"/>
+        ${marcasSE}${marcasSD}${rotulos}
+        <text class="eixo-label" x="${EV_PAD_L}" y="${EV_PAD_T-2}">+1</text>
+        <text class="eixo-label" x="${EV_PAD_L}" y="${EV_H-EV_PAD_B+4}">-1</text>
+      </svg>
+    </div>
+    <div class="evolucao-legenda">
+      <span><i style="background:${resolveVar('--cat-1')}"></i>SE (engajamento) — ${faixaSE(pts[pts.length-1].se).label}</span>
+      <span><i style="background:${resolveVar('--cat-2')}"></i>SD (desempenho) — ${faixaSD(pts[pts.length-1].sd_efetivo).label}</span>
+    </div>
+  </div>`;
+}
+
+/* ---------------- Alertas ---------------- */
+function calcularAlertas(){
+  if(!DADOS) return [];
+  const alertas = [];
+  DADOS.alunos.forEach(a=>{
+    const pontos = a.pontos;
+    const ultimo = pontos[pontos.length-1];
+    const penultimo = pontos.length>1 ? pontos[pontos.length-2] : null;
+
+    if(ultimo.quadrante_efetivo === 'D'){
+      alertas.push({sev:'critico', aluno:a, titulo:'Quadrante D — contato urgente',
+                     desc:`SE ${fmt(ultimo.se)} (${faixaSE(ultimo.se).label}) · SD ${fmt(ultimo.sd_efetivo)} (${faixaSD(ultimo.sd_efetivo).label})`});
+    }
+    if(ultimo.sd_fonte === 'ultimo_disponivel'){
+      alertas.push({sev:'critico', aluno:a, titulo:'Faltou o simulado inteiro',
+                     desc:'SD mostrado é herdado do ciclo anterior — sem dado de desempenho atual.'});
+    }
+    if(ultimo.rh.flag_psicologico){
+      alertas.push({sev:'critico', aluno:a, titulo:'Flag psicológico ativo', desc: ultimo.rh.motivo_flag});
+    }
+    if(penultimo && penultimo.quadrante_efetivo && ultimo.quadrante_efetivo &&
+       penultimo.quadrante_efetivo !== ultimo.quadrante_efetivo){
+      const piorou = RANK_QUAD[ultimo.quadrante_efetivo] > RANK_QUAD[penultimo.quadrante_efetivo];
+      alertas.push({
+        sev: piorou ? 'atencao' : 'positivo', aluno:a,
+        titulo: `Mudou de quadrante: ${penultimo.quadrante_efetivo} → ${ultimo.quadrante_efetivo}`,
+        desc: piorou ? 'Piorou entre os ciclos — investigar o motivo e agir.' : 'Melhorou entre os ciclos — reconhecer o progresso.',
+      });
+    }
+    if(penultimo && penultimo.se!=null && ultimo.se!=null && (penultimo.se - ultimo.se) >= 0.5){
+      alertas.push({sev:'atencao', aluno:a, titulo:'Engajamento em queda forte',
+                     desc:`SE caiu de ${fmt(penultimo.se)} (${faixaSE(penultimo.se).label}) pra ${fmt(ultimo.se)} (${faixaSE(ultimo.se).label}).`});
+    }
+    if(md_espera_bolsa(a)) {
+      alertas.push({sev:'info', aluno:a, titulo:'Aguardando bolsa', desc:'Verificar status do pedido e necessidade de suporte imediato.'});
+    }
+    a.acoes.filter(ac=>['materia','evasao'].includes(ac.tipo)).forEach(ac=>{
+      alertas.push({sev: ac.tipo==='evasao'?'atencao':'info', aluno:a, titulo:ac.origem, desc:ac.texto});
+    });
+  });
+  const ordemSev = {critico:0, atencao:1, positivo:2, info:3};
+  return alertas.sort((x,y)=> ordemSev[x.sev]-ordemSev[y.sev]);
+}
+function md_espera_bolsa(a){ return !!a.matricula_dados.Espera_Bolsa; }
+function alertasDoAluno(matricula){ return calcularAlertas().filter(al=>al.aluno.matricula===matricula); }
+function corSev(sev){ return {critico:'var(--critical)', atencao:'var(--warning)', positivo:'var(--good)', info:'var(--text-muted)'}[sev]; }
+function montarAlertasAluno(aluno){
+  const alertas = alertasDoAluno(aluno.matricula);
+  if(!alertas.length){
+    return `<div class="modal-secao"><div class="alerta-banner-vazio">Sem alertas pra ${primeiroNome(aluno.nome)} no momento.</div></div>`;
+  }
+  return `<div class="modal-secao">
+    <h4>Alertas (${alertas.length})</h4>
+    <div class="alertas-modal-lista">
+      ${alertas.map(al=>`
+        <div class="alerta-banner" style="border-left-color:${corSev(al.sev)}">
+          <div class="alerta-banner-tit" style="color:${corSev(al.sev)}">${al.titulo}</div>
+          <p>${al.desc}</p>
+        </div>`).join('')}
+    </div>
+  </div>`;
+}
+
+function montarAlertas(){
+  const alertas = calcularAlertas();
+  const grupos = {critico:[], atencao:[], positivo:[], info:[]};
+  alertas.forEach(al=> grupos[al.sev].push(al));
+  const secoes = [
+    ['critico','Crítico — agir agora', 'var(--critical)'],
+    ['atencao','Atenção', 'var(--warning)'],
+    ['positivo','Positivo', 'var(--good)'],
+    ['info','Outros avisos', 'var(--text-muted)'],
+  ];
+
+  document.getElementById('resumo-alertas').innerHTML = secoes.map(([k,label,cor])=>
+    `<span class="chip"><span class="dot" style="background:${cor}"></span>${label}: ${grupos[k].length}</span>`).join('');
+
+  const corpo = secoes.map(([k,label,cor])=>{
+    if(!grupos[k].length) return '';
+    return `<div class="alerta-secao">
+      <h3 style="color:${cor}">${label} (${grupos[k].length})</h3>
+      <div class="alerta-lista">
+        ${grupos[k].map(al=>`
+          <button class="alerta-card" data-mat="${al.aluno.matricula}" style="border-left-color:${cor}">
+            <div class="alerta-top">
+              <span class="avatar" style="background:${corAvatar(al.aluno.matricula)}">${iniciais(al.aluno.nome)}</span>
+              <div>
+                <div class="alerta-nome">${al.aluno.nome}</div>
+                <div class="alerta-titulo">${al.titulo}</div>
+              </div>
+            </div>
+            <p class="alerta-desc">${al.desc}</p>
+          </button>`).join('')}
+      </div>
+    </div>`;
+  }).join('');
+
+  document.getElementById('lista-alertas').innerHTML =
+    corpo || `<div class="empty-state">Nenhum alerta — tudo tranquilo por aqui.</div>`;
+
+  document.querySelectorAll('.alerta-card').forEach(b=>{
+    b.addEventListener('click', ()=> abrirModal(Number(b.dataset.mat)));
+  });
+}
+
+iniciar();
+</script>

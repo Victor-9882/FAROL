@@ -7,6 +7,7 @@ Gerada por [`scripts/gerar_base_sintetica.py`](../../scripts/gerar_base_sintetic
 ```bash
 uv run python scripts/gerar_base_sintetica.py                     # pequena/ (versionada)
 uv run python scripts/gerar_base_sintetica.py --tamanho completa  # completa/ (não versionada)
+uv run python scripts/gerar_base_sintetica.py --tamanho carga     # carga/ (issue #35)
 uv run python scripts/gerar_base_sintetica.py --semente 7 --destino /tmp/outra
 ```
 
@@ -14,6 +15,22 @@ uv run python scripts/gerar_base_sintetica.py --semente 7 --destino /tmp/outra
 |---|---|---|---|---|
 | `pequena` | 20 por ano (60 no total) | 5 | 2024, 2025, 2026 | Testes automatizados; versionada |
 | `completa` | 500 por ano (1.500 no total) | 5 | 2024, 2025, 2026 | Teste de carga (NF010–NF012); cerca de 18 MB, gerada sob demanda |
+| `carga` | 500 por ano (1.500 no total) | 5 | 2024, 2025, 2026 | Alias explícito para preparar o teste de carga da issue #35; gerada sob demanda |
+
+Para preparar a base da issue #35, gere `carga/` e carregue cada ano no banco de desenvolvimento.
+São 500 alunos em cada ano e três anos letivos de histórico, com dados determinísticos e apenas
+sintéticos. Crie antes um usuário Diretor e use o mesmo banco nos três comandos:
+
+```bash
+uv run python scripts/gerar_base_sintetica.py --tamanho carga
+uv run python manage.py carregar_base_sintetica --base tests/dados_sinteticos/carga --ano 2024 --autor <diretor>
+uv run python manage.py carregar_base_sintetica --base tests/dados_sinteticos/carga --ano 2025 --autor <diretor>
+uv run python manage.py carregar_base_sintetica --base tests/dados_sinteticos/carga --ano 2026 --autor <diretor>
+```
+
+Os anos usam matrículas com prefixos diferentes; portanto, podem coexistir no mesmo banco para
+medir consultas longitudinais. `--base` só escolhe a pasta de entrada e continua sujeito à
+proteção do comando, que só funciona com `DEBUG` ligado.
 
 Se mudar o gerador, regere a base `pequena` e versione o resultado. O teste `test_base_versionada_corresponde_ao_gerador` falha se as duas divergirem.
 

@@ -15,6 +15,7 @@ from pathlib import Path
 
 from django.conf import settings
 from django.db import transaction
+from django.test.utils import override_settings
 
 from core.models import (
     Aluno,
@@ -46,8 +47,13 @@ def _csv(pasta: Path, nome: str, colunas=None, opcionais=frozenset()):
 
 
 @transaction.atomic
+@override_settings(IMPORTACAO_LIMITE_LINHAS=200_000)
 def carregar(ano: int, *, autor, base: Path = BASE) -> dict:
-    """Carrega o ano letivo `ano` da base sintética. Devolve as contagens gravadas."""
+    """Carrega um ano sintético, inclusive a base de carga, sem alterar limites de uploads.
+
+    O limite elevado vale apenas nesta função de desenvolvimento. As importações normais
+    continuam sujeitas a `IMPORTACAO_LIMITE_LINHAS`.
+    """
     pasta = base / str(ano)
     importar_cadastro(
         _csv(pasta, "cadastro_alunos.csv", COLUNAS_CADASTRO, frozenset({"data_ingresso"})),

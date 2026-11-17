@@ -7,7 +7,10 @@ from django.contrib.auth import get_user_model
 from django.test import override_settings
 from django.urls import URLPattern, URLResolver, get_resolver, reverse
 from django.urls.converters import get_converters
+from django.utils import timezone
 from django.utils.html import escape
+
+from core.models import Aluno, Turma
 
 SENHA = "senha-sintetica-123"  # nosec: dado de teste, sem relação com contas reais
 ROTAS_PUBLICAS = {"web:saude", "web:login", "web:definir_senha"}
@@ -190,6 +193,61 @@ def test_membro_nunca_recebe_nome_ou_matricula_por_url_direta(client, membro):
     corpo = resposta.content.decode()
     assert "Aluno Sintético" not in corpo
     assert "S0001" not in corpo
+
+
+@pytest.mark.django_db
+def test_membro_recebe_403_nas_rotas_nominais_da_aplicacao(client, membro):
+    """Issue #29: cobrir URLs reais que exibem ou alteram informação nominal.
+
+    As listas de cadastro de alunos/turmas ficam fora daqui: a SM #58 permite ao Membro
+    consultar essas listas. Ficha, faltas, alertas nominais, intervenções e importações
+    continuam restritos ao Diretor (RN013/NF013).
+    """
+    turma = Turma.objects.create(nome="Turma Sintética", ano=timezone.localdate().year)
+    aluno = Aluno.objects.create(
+        matricula="S0001",
+        nome="Aluno Sintético",
+        data_ingresso=timezone.localdate(),
+        turma=turma,
+    )
+    client.force_login(membro)
+    urls = [
+        reverse("web:ficha", args=[aluno.pk]),
+        reverse("web:faltas", args=[aluno.pk]),
+        reverse("web:aluno_editar", args=[aluno.pk]),
+        reverse("web:intervencao_nova", args=[aluno.pk]),
+        reverse("web:painel_lista", args=["FREQUENCIA"]),
+        reverse("web:painel_lista", args=["DESEMPENHO"]),
+        reverse("web:painel_grupo", args=["A"]),
+        reverse("web:intervencoes"),
+        reverse("web:pendencias"),
+        reverse("web:auxilios"),
+    ]
+    for url in urls:
+        resposta = client.get(url)
+        assert resposta.status_code == 403, url
+        corpo = resposta.content.decode()
+        assert aluno.nome not in corpo, url
+        assert aluno.pk not in corpo, url
+
+
+@pytest.mark.django_db
+def test_membro_nao_recebe_dados_nominais_nas_telas_agregadas(client, membro):
+    """As telas consultivas permitidas não devem vazar nome/matrícula do aluno."""
+    turma = Turma.objects.create(nome="Turma Sintética", ano=timezone.localdate().year)
+    Aluno.objects.create(
+        matricula="S0001",
+        nome="Aluno Sintético Confidencial",
+        data_ingresso=timezone.localdate(),
+        turma=turma,
+    )
+    client.force_login(membro)
+    for url in (reverse("web:inicio"), reverse("web:indicadores"), reverse("web:turmas")):
+        resposta = client.get(url)
+        assert resposta.status_code == 200, url
+        corpo = resposta.content.decode()
+        assert "Aluno Sintético Confidencial" not in corpo, url
+        assert "S0001" not in corpo, url
 
 
 @override_settings(ROOT_URLCONF="tests.urls_acesso")
