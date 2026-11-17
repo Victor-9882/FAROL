@@ -44,6 +44,8 @@
       </div>
     </div>
 
+    {% if quadro %}{% include "web/_grupos.html" %}{% endif %}
+
     <h2>Situação das turmas{% if ref.ciclo %} no ciclo {{ ref.numero_ciclo }}{% endif %}</h2>
     <p class="suave">Período: {{ ref.inicio|date:"d/m/Y" }} a {{ ref.fim|date:"d/m/Y" }}.
       {% if ref.ciclo %}Desempenho pelo delta da nota TRI média contra o último simulado do próprio aluno (RN008){% if limiar %}, limiar de {{ limiar|floatformat:"0" }} pontos{% endif %}; quem faltou ao simulado ou fez o primeiro não é avaliado (RN009).{% else %}Ainda não há resultado de simulado neste ano.{% endif %}</p>

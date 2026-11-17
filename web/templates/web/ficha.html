@@ -15,6 +15,32 @@
     <div class="cartao"><div class="valor queda">{{ alertas|length }}</div><div class="rotulo">Alertas registrados</div></div>
   </div>
 
+  <h2>Presença × notas</h2>
+  {% if grupo_atual %}
+    {% with g=grupo_atual_info %}
+    <p class="grupo-{{ g.letra|lower }}">Ciclo {{ grupo_atual.numero }}: <span class="letra">{{ g.letra }}</span> <strong>{{ g.nome }}</strong> · {{ g.presenca }} · {{ g.notas }}.</p>
+    <div class="medidores grupo-{{ g.letra|lower }}">
+      {% with m=grupo_atual.indice_presenca|medidor %}
+      <div class="cartao"><div class="rotulo">Índice de presença ({{ grupo_atual.frequencia.percentual }}%)</div>
+        <div class="valor">{{ grupo_atual.indice_presenca|indice }}</div>
+        <div class="medidor"><span style="left: {{ m.0 }}%; width: {{ m.1 }}%"></span></div>
+        <div class="escala"><span>−1</span><span>0</span><span>+1</span></div></div>
+      {% endwith %}
+      {% with m=grupo_atual.indice_notas|medidor %}
+      <div class="cartao"><div class="rotulo">Índice de notas (Δ {{ grupo_atual.delta_total.valor|pontos }} pontos)</div>
+        <div class="valor">{{ grupo_atual.indice_notas|indice }}</div>
+        <div class="medidor"><span style="left: {{ m.0 }}%; width: {{ m.1 }}%"></span></div>
+        <div class="escala"><span>−1</span><span>0</span><span>+1</span></div></div>
+      {% endwith %}
+    </div>
+    {% endwith %}
+    <h3>Trajetória nos quatro grupos</h3>
+    {{ grafico_trajetoria }}
+    <p class="suave">Cada círculo é um ciclo (o número dentro dele); a seta aponta para o mais recente. Os índices e os grupos são os do painel: presença <code>2 · presença − 1</code> e notas pelo Δ contra o último simulado, em desvios-padrão do curso (RN008). O grupo só descreve a posição (RN012).</p>
+  {% else %}
+    <p class="vazio">Ainda sem ciclo com presença e Δ de nota (primeiro simulado ou faltou, RN009).</p>
+  {% endif %}
+
   <h2>Evolução das notas</h2>
   <p class="suave">A classificação compara o aluno com o próprio histórico: a nota do ciclo menos a do último simulado em que ele foi avaliado (RN008){% if limiar %}, limiar de {{ limiar|floatformat:"0" }} pontos{% endif %}. A média da turma aparece só como referência. Quem faltou não é avaliado no ciclo (RN009).</p>
   {{ grafico_notas }}

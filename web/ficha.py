@@ -10,6 +10,7 @@ from inteligencia import ficha as dados_ficha
 
 from . import graficos
 from .acesso import diretor_required
+from .templatetags.farol import indice, pontos
 
 
 @diretor_required
@@ -38,4 +39,25 @@ def ficha(request, matricula):
         titulo="Presença por ciclo (%)",
         unidade="%",
     )
+    # Trajetória no plano presença × notas, ciclo a ciclo (#92).
+    dados["grafico_trajetoria"] = graficos.plano(
+        [
+            {
+                "presenca": linha.indice_presenca,
+                "notas": linha.indice_notas,
+                "grupo": linha.grupo,
+                "rotulo": str(linha.numero),
+                "titulo": (
+                    f"Ciclo {linha.numero}: grupo {linha.grupo} · presença "
+                    f"{linha.frequencia.percentual}% ({indice(linha.indice_presenca)}) · "
+                    f"Δ {pontos(linha.delta_total.valor)} pontos ({indice(linha.indice_notas)})"
+                ),
+            }
+            for linha in dados["com_grupo"]
+        ],
+        titulo="Trajetória do aluno no plano presença × notas, ciclo a ciclo",
+        trajetoria=True,
+    )
+    atual = dados["grupo_atual"]
+    dados["grupo_atual_info"] = dados["grupos"][atual.grupo] if atual else None
     return render(request, "web/ficha.html", {"aluno": aluno, **dados})

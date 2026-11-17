@@ -164,6 +164,13 @@ Em todas as três, uma pendência já associada vale para o aluno escolhido nas 
   - notas por ciclo e por área, com o delta contra o próprio histórico e a classificação (RN008);
   - a média da turma no ciclo só como referência, nunca para classificar;
   - frequência por ciclo, alertas (inclusive os desativados), intervenções, redações e histórico de turmas.
+- **Quatro grupos de presença × notas (RF010, RF011, RF012, `inteligencia/grupos.py`, #92):** a visão do protótipo de telas (`docs/prototipo/`), com os índices normalizados de −1 a +1 do protótipo do PEI. Nada é gravado: tudo é calculado na hora.
+  - **Índice de presença:** `2 · taxa − 1`, como o SE do PEI, com a frequência do ciclo (RN001, RN002, RN004, RN005). 0% vira −1, 50% vira 0 e 100% vira +1. Sem dia letivo no ciclo, não há índice.
+  - **Índice de notas:** `limitar(z / 2, −1, +1)`, como o SD do PEI, com `z = Δ / σ`. Δ é o delta da nota TRI média contra o último simulado em que o aluno foi avaliado (o mesmo da RN008 e do alerta de queda), e σ é o desvio-padrão populacional dos Δ de todo o curso no ciclo, mesmo com filtro de turma. Sem Δ (faltou ou primeiro simulado, RN009) ou sem σ, não há índice.
+  - **Grupos pelo zero de cada eixo** (o zero conta como "igual ou acima"): A · Em dia (presença de 50% ou mais, nota igual ou acima do último simulado), B · Nota abaixo, C · Presença abaixo e D · Ambas abaixo. Sem um dos índices, o aluno fica fora dos grupos no ciclo. Não há limiar nem regra nova; mudar o zero da presença (por exemplo, para 75%) exige Solicitação de Mudança.
+  - **Painel:** cartões dos grupos com contagem e %, plano presença × notas (um ponto por aluno), grupos por turma e a parte de cada grupo em cada ciclo, com filtro de ciclo (padrão: o de referência) e de turma (as outras turmas ficam em cinza no plano). O Diretor toca num grupo e abre a lista (`painel/grupos/<letra>/`, nominal, só Diretor), ou num ponto e abre a ficha. O Membro vê os números e os pontos sem nome, matrícula nem link (RN013).
+  - **Ficha:** os dois índices do último ciclo com grupo, com medidor, e a trajetória do aluno no plano, ciclo a ciclo.
+  - **RN012:** os rótulos só descrevem a posição; nenhum grupo sugere ação nem muda nada no aluno.
 - **Gráficos:** SVG gerado no servidor (`web/graficos.py`), sem JavaScript nem CDN; escala com a tela (NF001) e escapa todo texto.
 
 ## Relatório de auxílios (RF021, #33, SM #80)
