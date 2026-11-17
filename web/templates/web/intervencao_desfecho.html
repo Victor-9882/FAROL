@@ -1,0 +1,19 @@
+{% extends "web/base.html" %}
+{% block titulo %}Desfecho da intervenção · FAROL{% endblock %}
+{% block conteudo %}
+  <p><a href="{% url 'web:ficha' aluno.matricula %}">← Ficha do aluno</a></p>
+  <h1>Desfecho da intervenção · {{ aluno.nome }}</h1>
+  <p class="indicativo">Registro de acompanhamento: os alertas são indicativos e a intervenção não é punição (RN012).</p>
+  <dl>
+    <dt>Data</dt><dd>{{ intervencao.data|date:"d/m/Y" }}</dd>
+    <dt>Tipo</dt><dd>{{ intervencao.get_tipo_display }}</dd>
+    <dt>Responsável</dt><dd>{{ intervencao.responsavel }}</dd>
+    <dt>Alerta de origem</dt><dd>{% if intervencao.alerta %}{{ intervencao.alerta.get_tipo_display }} · {{ intervencao.alerta.data_geracao|date:"d/m/Y" }}{% else %}—{% endif %}</dd>
+    <dt>Descrição</dt><dd>{{ intervencao.descricao }}</dd>
+  </dl>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Salvar desfecho</button>
+  </form>
+{% endblock %}

@@ -60,19 +60,19 @@
   <ul>
   {% for a in alertas %}
     <li><strong>{{ a.get_tipo_display }}</strong>{% if a.area %} · {{ a.get_area_display }}{% endif %}
-      · {{ a.data_geracao|date:"d/m/Y" }}{% if not a.ativo %} <span class="suave">(não vale mais: dado corrigido)</span>{% endif %}<br>{{ a.motivo }}</li>
+      · {{ a.data_geracao|date:"d/m/Y" }}{% if not a.ativo %} <span class="suave">(não vale mais: dado corrigido)</span>{% endif %}<br>{{ a.motivo }}<br><a href="{% url 'web:intervencao_nova' aluno.matricula %}?alerta={{ a.pk }}">Registrar intervenção</a></li>
   {% empty %}
     <li class="vazio">Nenhum alerta.</li>
   {% endfor %}
   </ul>
 
   <h2>Intervenções</h2>
-  <p><a href="{% url 'web:intervencoes' %}?aluno={{ aluno.matricula }}">Ver no histórico</a></p>
+  <p><a href="{% url 'web:intervencao_nova' aluno.matricula %}">Registrar intervenção</a> · <a href="{% url 'web:intervencoes' %}?aluno={{ aluno.matricula }}">Ver no histórico</a></p>
   <ul>
   {% for i in intervencoes %}
-    <li>{{ i.data|date:"d/m/Y" }} · {{ i.get_tipo_display }} · {{ i.responsavel }}{% if i.desfecho %} · {{ i.get_desfecho_display }}{% endif %}<br>{{ i.descricao }}</li>
+    <li>{{ i.data|date:"d/m/Y" }} · {{ i.get_tipo_display }} · {{ i.responsavel }}{% if i.desfecho %} · {{ i.get_desfecho_display }}{% endif %}<br>{{ i.descricao }}<br><a href="{% url 'web:intervencao_desfecho' i.pk %}">{% if i.desfecho %}Atualizar desfecho{% else %}Registrar desfecho{% endif %}</a></li>
   {% empty %}
-    <li class="vazio">Nenhuma intervenção registrada (RF019, em breve).</li>
+    <li class="vazio">Nenhuma intervenção registrada.</li>
   {% endfor %}
   </ul>
 

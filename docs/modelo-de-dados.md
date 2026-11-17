@@ -48,6 +48,8 @@ Registradas na SM #41, para atualizar o DER, o Diagrama de Classes e o Relatóri
 12. **`inteligencia.RegraAlerta`**. Existe só no Diagrama de Classes, não no DER; guarda os limiares no banco (RF018).
 13. **Tabela `PendenciaImportacao`** (RN003, NF006). Guarda as linhas de frequência, simulado e redação que não casaram com um aluno pela matrícula, até o Diretor associá-las ou descartá-las.
 
+14. **Tabela `relatorios.NotificacaoCiclo`** (RF017). Registra que o e-mail de fechamento de um ciclo já foi enviado, para o envio ocorrer uma só vez por ciclo. O DER não tem onde guardar isso.
+
 ## Cadastro (RF006)
 
 - **Colunas aceitas** (CSV `;` ou `,`, ou XLSX, primeira aba; cabeçalho sem distinção de caixa, acento ou espaço): `matricula`, `nome` (ou `nome_completo`, `aluno`), `turma` e, **opcional**, `data_ingresso` (ou `ingresso`, `data_de_ingresso`): se a coluna faltar ou a célula vier vazia, o aluno novo ingressa em 1º de janeiro do ano letivo informado e, em aluno existente, o ingresso não é conferido (preenchida e diferente, vira divergência). Datas em `dd/mm/aaaa` ou `aaaa-mm-dd`. Limites: 5 MB e 5.000 linhas.
@@ -171,11 +173,27 @@ Em todas as três, uma pendência já associada vale para o aluno escolhido nas 
 - **Pré-visualização obrigatória:** a tela mostra quantos alunos seriam sinalizados com o limiar atual e com o novo. Na frequência, conta as semanas do ciclo de referência; no desempenho, o ciclo de referência (`alertas.simular_*`, sem gravar). "Salvar" só vale para o mesmo valor pré-visualizado.
 - **Troca (`regras.alterar_limiar`):** desativa a regra vigente e cria outra, com a descrição gerada a partir de `config/regras_padrao.yaml`. Os alertas antigos continuam apontando para o limiar que os gerou. Audita com `RegistroAlteracao`: `ativa` da regra antiga e `limiar` anterior e novo da nova, com autor e data (NF009). Em seguida, os alertas do ano são regerados (`alertas.gerar_ano`).
 
+## Notificação de ciclo (RF017, #32)
+
+- **`relatorios.NotificacaoCiclo`** (`HistoricoPreservado`, diferença 14 da SM #41): `ciclo` (um para um) e `destinatarios` (só a contagem). Não guarda endereços nem o corpo; `criado_em` é a data do envio. É a garantia de idempotência: um e-mail por ciclo.
+- **Comando `notificar_ciclo`** (`--data AAAA-MM-DD`, `--reenviar`): envia o e-mail do ciclo mais recente já fechado (`data_fim < hoje`) e com resultados de simulado. Não regera alertas: rode `gerar_alertas` antes. Ciclos antigos não notificados são ignorados.
+- **Conteúdo:** só números agregados e nomes de turma (total, frequência, participação, queda, estagnados, evolução, sem avaliação, sem presença, alertas ativos), sem nome nem matrícula (RN013, NF013). Texto puro, com o aviso de que alertas são indicativos (RN012). O link do painel só aparece com `SITE_URL` definido.
+- **Destinatários:** usuários ativos com e-mail, exceto superusuários (Diretor e Membro). Uma mensagem por destinatário. Se o SMTP falhar, o registro é desfeito; sem destinatários, nada é registrado.
+
 ## Histórico de intervenções (RF020, #31)
 
-- **Tela `intervencoes/`:** só do Diretor (RN013, NF013); o Membro recebe 403. Somente leitura: sem editar nem excluir (NF007). Não há migração.
+- **Tela `intervencoes/`:** só do Diretor (RN013, NF013); o Membro recebe 403. A lista não edita nada nem exclui (NF007), mas leva ao registro do desfecho (RF019, #30). Não há migração.
 - **Escopo:** todas as intervenções, de todos os anos e gestões, inclusive de alunos não ativos e de usuários revogados. Ordem `-data, -id`, 50 por página; os links de página preservam os filtros.
 - **Filtros (GET):** `aluno` (matrícula exata ou parte do nome; é busca de consulta, não associação, RN003), `tipo`, `desfecho` (inclui `PENDENTE`, o desfecho ainda em branco) e período `de`/`ate` sobre `Intervencao.data`, inclusivo nas duas pontas. `de` posterior a `ate` é erro de formulário e a lista fica vazia.
+
+## Registro de intervenções (RF019, #30)
+
+- **Rotas:** `alunos/<matrícula>/intervencoes/nova/` registra; `intervencoes/<id>/desfecho/` registra ou atualiza o desfecho. As duas são só do Diretor (RN013, NF013), no GET e no POST. Não há migração.
+- **Campos:** tipo, data (não futura), responsável (começa com o nome do usuário logado), descrição, alerta de origem opcional e desfecho opcional. `aluno` e `usuario` (quem registrou) nunca vêm do POST. Só os alertas do próprio aluno podem ser a origem, inclusive os que não valem mais; `?alerta=<id>` pré-seleciona o alerta e é ignorado se inválido ou de outro aluno.
+- **Alunos:** `INVALIDO` não recebe intervenção (404); `DESLIGADO` e `EVADIDO` recebem.
+- **Auditoria (NF009):** criar não gera `RegistroAlteracao`, pois autor e data já ficam em `usuario` e `criado_em`. Mudar o desfecho grava uma linha (campo `desfecho`, valores anterior e novo, autor), sem texto livre.
+- **Depois de criada:** só o desfecho muda; desfecho definido pode trocar de valor, mas não volta a pendente. Sem exclusão (NF007).
+- **RN012:** registrar não altera a situação do aluno nem o alerta; a tela avisa que a intervenção não é punição.
 
 ## Suposições a confirmar
 
