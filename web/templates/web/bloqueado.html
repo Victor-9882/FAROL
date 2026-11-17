@@ -1,0 +1,7 @@
+{% extends "web/base.html" %}
+{% block titulo %}Entrada bloqueada · FAROL{% endblock %}
+{% block conteudo %}
+  <h1>Entrada bloqueada</h1>
+  <p>Muitas tentativas de entrada. Aguarde alguns minutos e tente de novo.</p>
+  <p><a href="{% url 'web:login' %}">Voltar à tela de entrada</a></p>
+{% endblock %}

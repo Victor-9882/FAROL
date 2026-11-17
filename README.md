@@ -75,6 +75,8 @@ O código é montado como volume, então alterações aparecem sem reconstruir a
 
    A aplicação fica em <http://localhost:8000/saude/> e o admin em <http://localhost:8000/admin/>.
 
+Sem `DJANGO_DEBUG=True` ou `DJANGO_HTTPS=False`, o site redireciona para HTTPS e os cookies só valem por HTTPS (ver `docs/seguranca.md`, seção "Sessão, cookies e HTTPS").
+
 Sem PostgreSQL instalado, dá para usar SQLite só para experimentar: `DATABASE_URL=sqlite:///db.sqlite3`. A CI sempre roda com PostgreSQL.
 
 ## Acessos
@@ -98,5 +100,7 @@ Marque com `@pytest.mark.regras` os testes das regras RN001, RN002, RN005, RN008
 ## Contribuir
 
 Antes de mexer em regras de negócio, leia [docs/dominio-casd.md](docs/dominio-casd.md), que reúne os fatos confirmados sobre o CASD (matrícula, acesso a dados nominais, calendário). O [CLAUDE.md](CLAUDE.md) resume as regras do projeto para quem usa o Claude Code.
+
+As decisões de segurança (login único e acesso ao admin) estão em [docs/seguranca.md](docs/seguranca.md).
 
 O fluxo de branches, commits e PRs está em [docs/configuracao-github.md](docs/configuracao-github.md), seção 9. Resumo: uma branch curta por issue (`tipo/RFxxx-descricao`), commits em Conventional Commits citando o requisito, PR revisado por outro integrante e CI verde.
