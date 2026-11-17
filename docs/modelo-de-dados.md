@@ -174,9 +174,18 @@ Em todas as três, uma pendência já associada vale para o aluno escolhido nas 
 
 ## Histórico de intervenções (RF020, #31)
 
-- **Tela `intervencoes/`:** só do Diretor (RN013, NF013); o Membro recebe 403. Somente leitura: sem editar nem excluir (NF007). Não há migração.
+- **Tela `intervencoes/`:** só do Diretor (RN013, NF013); o Membro recebe 403. A lista não edita nada nem exclui (NF007), mas leva ao registro do desfecho (RF019, #30). Não há migração.
 - **Escopo:** todas as intervenções, de todos os anos e gestões, inclusive de alunos não ativos e de usuários revogados. Ordem `-data, -id`, 50 por página; os links de página preservam os filtros.
 - **Filtros (GET):** `aluno` (matrícula exata ou parte do nome; é busca de consulta, não associação, RN003), `tipo`, `desfecho` (inclui `PENDENTE`, o desfecho ainda em branco) e período `de`/`ate` sobre `Intervencao.data`, inclusivo nas duas pontas. `de` posterior a `ate` é erro de formulário e a lista fica vazia.
+
+## Registro de intervenções (RF019, #30)
+
+- **Rotas:** `alunos/<matrícula>/intervencoes/nova/` registra; `intervencoes/<id>/desfecho/` registra ou atualiza o desfecho. As duas são só do Diretor (RN013, NF013), no GET e no POST. Não há migração.
+- **Campos:** tipo, data (não futura), responsável (começa com o nome do usuário logado), descrição, alerta de origem opcional e desfecho opcional. `aluno` e `usuario` (quem registrou) nunca vêm do POST. Só os alertas do próprio aluno podem ser a origem, inclusive os que não valem mais; `?alerta=<id>` pré-seleciona o alerta e é ignorado se inválido ou de outro aluno.
+- **Alunos:** `INVALIDO` não recebe intervenção (404); `DESLIGADO` e `EVADIDO` recebem.
+- **Auditoria (NF009):** criar não gera `RegistroAlteracao`, pois autor e data já ficam em `usuario` e `criado_em`. Mudar o desfecho grava uma linha (campo `desfecho`, valores anterior e novo, autor), sem texto livre.
+- **Depois de criada:** só o desfecho muda; desfecho definido pode trocar de valor, mas não volta a pendente. Sem exclusão (NF007).
+- **RN012:** registrar não altera a situação do aluno nem o alerta; a tela avisa que a intervenção não é punição.
 
 ## Suposições a confirmar
 
