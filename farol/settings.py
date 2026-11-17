@@ -11,6 +11,8 @@ from pathlib import Path
 import environ
 from django.core.exceptions import ImproperlyConfigured
 
+from farol.seguranca import opcoes_de_seguranca
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 env = environ.Env(
@@ -24,6 +26,8 @@ if (BASE_DIR / ".env").exists():
 SECRET_KEY = env("DJANGO_SECRET_KEY")
 DEBUG = env("DJANGO_DEBUG")
 ALLOWED_HOSTS = env("DJANGO_ALLOWED_HOSTS")
+# Sessão, cookies e HTTPS (RF001, NF013, NF014); variáveis em docs/seguranca.md.
+vars().update(opcoes_de_seguranca(env, DEBUG))
 
 
 # Aplicações: uma por camada da arquitetura (Relatório Descritivo, Seção 1.3).
@@ -111,8 +115,11 @@ AXES_COOLOFF_TIME = timedelta(minutes=LOGIN_BLOQUEIO_MINUTOS)
 # Só o nome de usuário entra na chave: sem proxy confiável, um X-Forwarded-For forjado
 # contornaria uma chave com IP, e com IP sozinho um NAT bloquearia todos.
 AXES_LOCKOUT_PARAMETERS = ["username"]
-# O aviso axes.W006 pede o IP na chave; a escolha é deliberada (ver docs/seguranca.md).
-SILENCED_SYSTEM_CHECKS = ["axes.W006"]
+# Avisos silenciados de propósito (ver docs/seguranca.md):
+# - axes.W006 pede o IP na chave do bloqueio; a chave é só o usuário, por falta de proxy confiável.
+# - security.W005 pede HSTS com includeSubDomains; o domínio do deploy ainda não está definido.
+# - security.W021 pede HSTS com preload; preload é compromisso de longo prazo, fora do escopo.
+SILENCED_SYSTEM_CHECKS = ["axes.W006", "security.W005", "security.W021"]
 AXES_RESET_ON_SUCCESS = True
 AXES_RESET_COOL_OFF_ON_FAILURE_DURING_LOCKOUT = False  # o resfriamento não é prorrogado
 AXES_LOCKOUT_TEMPLATE = "web/bloqueado.html"

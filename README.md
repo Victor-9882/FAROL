@@ -75,6 +75,8 @@ O código é montado como volume, então alterações aparecem sem reconstruir a
 
    A aplicação fica em <http://localhost:8000/saude/> e o admin em <http://localhost:8000/admin/>.
 
+Sem `DJANGO_DEBUG=True` ou `DJANGO_HTTPS=False`, o site redireciona para HTTPS e os cookies só valem por HTTPS (ver `docs/seguranca.md`, seção "Sessão, cookies e HTTPS").
+
 Sem PostgreSQL instalado, dá para usar SQLite só para experimentar: `DATABASE_URL=sqlite:///db.sqlite3`. A CI sempre roda com PostgreSQL.
 
 ## Acessos
