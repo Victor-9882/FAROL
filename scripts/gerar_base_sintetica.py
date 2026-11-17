@@ -11,7 +11,8 @@ o CASD não usa.
 
     uv run python scripts/gerar_base_sintetica.py                     # pequena, versionada
     uv run python scripts/gerar_base_sintetica.py --tamanho completa  # 500 alunos/ano
-    uv run python scripts/gerar_base_sintetica.py --tamanho carga     # mesma escala, para NF010–NF012
+    uv run python scripts/gerar_base_sintetica.py --tamanho carga
+    # 500 alunos por ano para o teste de carga (NF010–NF012)
 
 O formato dos arquivos está descrito em tests/dados_sinteticos/README.md.
 """
