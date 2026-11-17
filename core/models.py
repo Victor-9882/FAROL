@@ -5,12 +5,22 @@ com as diferenças registradas na SM #41 e listadas em `docs/modelo-de-dados.md`
 seção "Diferenças em relação ao DER do Lab 03".
 """
 
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import AbstractUser, UserManager
 from django.core.exceptions import ValidationError
 from django.db import models, transaction
 from django.db.models import Q
 
 from .historico import HistoricoPreservado, HistoricoQuerySet
+
+
+class UsuarioManager(UserManager):
+    """Gerenciador que só cria superusuário com perfil Diretor (RN013, NF013)."""
+
+    def create_superuser(self, username, email=None, password=None, **extra_fields):
+        extra_fields.setdefault("perfil", "DIRETOR")
+        if extra_fields["perfil"] != "DIRETOR":
+            raise ValueError("Superusuário precisa ter o perfil Diretor.")
+        return super().create_superuser(username, email, password, **extra_fields)
 
 
 class Usuario(AbstractUser):
@@ -27,9 +37,18 @@ class Usuario(AbstractUser):
     email = models.EmailField("e-mail", unique=True)
     perfil = models.CharField(max_length=10, choices=Perfil.choices, default=Perfil.MEMBRO)
 
+    objects = UsuarioManager()
+
     class Meta:
         verbose_name = "usuário"
         verbose_name_plural = "usuários"
+        constraints = [
+            models.CheckConstraint(
+                condition=~Q(is_superuser=True) | Q(perfil="DIRETOR"),
+                name="superusuario_e_diretor",
+                violation_error_message="Superusuário precisa ter o perfil Diretor.",
+            ),
+        ]
 
     @property
     def is_diretor(self) -> bool:

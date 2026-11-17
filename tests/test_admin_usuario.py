@@ -182,7 +182,7 @@ def test_admin_salvar_sem_mudanca_nao_gera_registro(client, superusuario, membro
 
 @pytest.mark.parametrize("campo", ["is_staff", "is_superuser"])
 def test_admin_promover_e_registrado(client, superusuario, campo):
-    alvo = get_user_model().objects.create_user("alvo", "alvo@exemplo.org", SENHA)
+    alvo = get_user_model().objects.create_user("alvo", "alvo@exemplo.org", SENHA, perfil="DIRETOR")
     client.force_login(superusuario)
     dados = _dados_edicao(alvo, is_staff=None)
     dados[campo] = "on"

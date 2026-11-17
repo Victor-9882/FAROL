@@ -92,7 +92,7 @@ Sem PostgreSQL instalado, dá para usar SQLite só para experimentar: `DATABASE_
 
 ## Acessos
 
-O primeiro Diretor é criado no terminal: `uv run python manage.py createsuperuser`, depois ajuste o perfil para Diretor no admin.
+O primeiro Diretor é criado no terminal: `uv run python manage.py createsuperuser`, que já cria a conta com perfil Diretor (todo superusuário é Diretor, garantido no banco).
 Dali em diante, o Diretor gere usuários em `/usuarios/`: cria, altera o perfil, revoga o acesso e gera um link de uso único para a pessoa definir a própria senha (a senha anterior deixa de valer).
 Toda alteração fica registrada (quem, quando, valor anterior). Superusuários são geridos só no admin.
 
