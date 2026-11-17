@@ -2,7 +2,7 @@
 {% block titulo %}Intervenções · FAROL{% endblock %}
 {% block conteudo %}
   <h1>Histórico de intervenções</h1>
-  <p>Todas as intervenções registradas, de todos os anos e gestões. Somente consulta.</p>
+  <p>Todas as intervenções registradas, de todos os anos e gestões. A lista não edita as intervenções; o desfecho se registra ou atualiza pelo link da coluna Desfecho.</p>
   <form method="get">
     {{ form.as_p }}
     <button type="submit">Filtrar</button>
@@ -18,7 +18,7 @@
         <td>{{ i.aluno.turma.nome }} · {{ i.aluno.turma.ano }}</td>
         <td>{{ i.get_tipo_display }}</td>
         <td>{{ i.responsavel }}</td>
-        <td>{% if i.desfecho %}{{ i.get_desfecho_display }}{% else %}Pendente{% endif %}</td>
+        <td>{% if i.desfecho %}{{ i.get_desfecho_display }}{% else %}Pendente{% endif %} · <a href="{% url 'web:intervencao_desfecho' i.pk %}">{% if i.desfecho %}atualizar{% else %}registrar{% endif %}</a></td>
         <td>{% if i.alerta %}{{ i.alerta.get_tipo_display }} · {{ i.alerta.data_geracao|date:"d/m/Y" }}{% else %}—{% endif %}</td>
         <td>{{ i.descricao }}</td>
         <td>{{ i.usuario.get_username }}</td>
