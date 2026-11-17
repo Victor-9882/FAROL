@@ -51,6 +51,17 @@ docker compose down               # para tudo; acrescente --volumes para apagar 
 
 O código é montado como volume, então alterações aparecem sem reconstruir a imagem. Só rode `--build` de novo quando mudar `pyproject.toml` ou `uv.lock`. No Linux, arquivos criados dentro do contêiner (por exemplo, por `makemigrations`) ficam com dono `root`. Prefira gerar migrações com o uv na própria máquina.
 
+### E-mail de fechamento do ciclo (RF017)
+
+Agende, depois de cada importação ou diariamente, primeiro `gerar_alertas` e em seguida `notificar_ciclo`. O comando envia o e-mail agregado (sem nomes de alunos) uma só vez por ciclo encerrado e com resultados de simulado; rodar de novo não reenvia.
+
+```bash
+docker compose exec app python manage.py gerar_alertas
+docker compose exec app python manage.py notificar_ciclo                 # --data AAAA-MM-DD; --reenviar força
+```
+
+Para conferir, abra o Mailpit em <http://localhost:8025>. Defina `SITE_URL` no `.env` para o e-mail trazer o link do painel.
+
 ## Rodar sem Docker
 
 1. Instale o uv: `curl -LsSf https://astral.sh/uv/install.sh | sh`

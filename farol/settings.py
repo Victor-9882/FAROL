@@ -144,6 +144,8 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 EMAIL_CONFIG = env.email("EMAIL_URL", default="consolemail://")
 vars().update(EMAIL_CONFIG)
 DEFAULT_FROM_EMAIL = env("DEFAULT_FROM_EMAIL", default="FAROL <farol@localhost>")
+# Endereço público do FAROL, para o link do e-mail. Vazio: o e-mail não traz link.
+SITE_URL = env("SITE_URL", default="")
 
 
 # Importações (NF025): máximo de linhas de dados por arquivo. Ajustável por ambiente.
