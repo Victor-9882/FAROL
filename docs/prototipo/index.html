@@ -5,8 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>FAROL · Protótipo</title>
 <!--
-  Protótipo navegável de média fidelidade (issue #8; RF010, RF011, RF019, NF001, NF002).
-  Arquivo único, sem dependências externas. Todos os dados são sintéticos (NF017).
+  Protótipo navegável de média fidelidade (issue #8; RF010, RF011, RF012, RF019, NF001, NF002).
+  Arquivo único, sem dependências externas. Todos os dados são sintéticos (NF017): o curso
+  (cerca de 500 alunos) é gerado com semente fixa, então os números são os mesmos a cada abertura.
   Abra no navegador do celular ou do computador; nada é gravado.
 -->
 <style>
@@ -17,16 +18,20 @@
     --texto: #18202c;
     --texto-2: #566173;
     --borda: #d9dee7;
+    --eixo-forte: #6b7686;
     --primaria: #1d4e89;
     --primaria-texto: #ffffff;
     --farol: #e8a317;
     --critico: #c0392b;
     --critico-fundo: #fbeceb;
-    --atencao: #b86e00;
+    --serio: #c2561a;
+    --serio-fundo: #fcebe0;
+    --atencao: #a06400;
     --atencao-fundo: #fdf3e1;
     --positivo: #1e7a46;
     --positivo-fundo: #e7f5ed;
     --neutro-fundo: #eef1f6;
+    --apagado: #c3cad5;
     --sombra: 0 1px 2px rgb(16 24 40 / 6%), 0 1px 3px rgb(16 24 40 / 10%);
   }
   @media (prefers-color-scheme: dark) {
@@ -37,15 +42,19 @@
       --texto: #e8edf4;
       --texto-2: #9aa6b8;
       --borda: #2d3949;
+      --eixo-forte: #8693a6;
       --primaria: #6ea8ff;
       --primaria-texto: #0d1420;
       --critico: #ff7b6e;
       --critico-fundo: #3a1f1d;
+      --serio: #ff9a5c;
+      --serio-fundo: #3a2418;
       --atencao: #f2b14c;
       --atencao-fundo: #3a2c14;
       --positivo: #5fcf8f;
       --positivo-fundo: #173323;
       --neutro-fundo: #212b38;
+      --apagado: #3a4658;
       --sombra: none;
     }
   }
@@ -56,15 +65,19 @@
     --texto: #e8edf4;
     --texto-2: #9aa6b8;
     --borda: #2d3949;
+    --eixo-forte: #8693a6;
     --primaria: #6ea8ff;
     --primaria-texto: #0d1420;
     --critico: #ff7b6e;
     --critico-fundo: #3a1f1d;
+    --serio: #ff9a5c;
+    --serio-fundo: #3a2418;
     --atencao: #f2b14c;
     --atencao-fundo: #3a2c14;
     --positivo: #5fcf8f;
     --positivo-fundo: #173323;
     --neutro-fundo: #212b38;
+    --apagado: #3a4658;
     --sombra: none;
   }
 
@@ -102,7 +115,7 @@
   .perfil button[aria-pressed="true"] { background: var(--primaria); color: var(--primaria-texto); }
 
   main { max-width: 640px; margin: 0 auto; padding: 12px 16px 48px; }
-  .secao { margin: 20px 0 8px; font-size: 12px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--texto-2); }
+  .secao { margin: 22px 0 8px; font-size: 12px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--texto-2); }
   .cartao {
     background: var(--superficie); border: 1px solid var(--borda); border-radius: 12px;
     box-shadow: var(--sombra); padding: 14px;
@@ -128,8 +141,33 @@
   .t-DESEMPENHO .n { color: var(--atencao); }
   .t-EVOLUCAO .n { color: var(--positivo); }
 
+  /* Os quatro grupos. A grade 2 × 2 repete a posição dos quadrantes no plano. */
+  .grupos { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .grupo-card {
+    position: relative; display: flex; flex-direction: column; gap: 2px; text-align: left;
+    border: 1px solid var(--borda); border-left: 5px solid var(--cor); border-radius: 12px;
+    padding: 10px 10px 10px 12px; background: var(--fundo-g); cursor: pointer; min-height: 118px;
+  }
+  .grupo-card[disabled] { cursor: default; }
+  .grupo-card .topo { display: flex; align-items: center; gap: 6px; }
+  .letra {
+    display: inline-grid; place-items: center; flex: none; width: 22px; height: 22px; border-radius: 6px;
+    background: var(--cor); color: var(--superficie); font-weight: 800; font-size: 13px;
+  }
+  .grupo-card .nome-g { font-weight: 700; font-size: 14px; color: var(--cor); }
+  .grupo-card .n { font-size: 26px; font-weight: 700; line-height: 1.1; margin-top: 4px; }
+  .grupo-card .n small { font-size: 13px; font-weight: 600; color: var(--texto-2); margin-left: 4px; }
+  .grupo-card .parte { font-size: 12px; font-weight: 700; color: var(--cor); margin-bottom: 2px; }
+  .grupo-card .crit { font-size: 12px; color: var(--texto-2); line-height: 1.35; }
+  .eixos-grupos { display: flex; justify-content: space-between; font-size: 11px; color: var(--texto-2); margin: 4px 2px 0; }
+  .g-A { --cor: var(--positivo); --fundo-g: var(--positivo-fundo); }
+  .g-B { --cor: var(--atencao); --fundo-g: var(--atencao-fundo); }
+  .g-C { --cor: var(--serio); --fundo-g: var(--serio-fundo); }
+  .g-D { --cor: var(--critico); --fundo-g: var(--critico-fundo); }
+
   .chips { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 2px; scrollbar-width: none; }
   .chips::-webkit-scrollbar { display: none; }
+  .chips + .chips { margin-top: 6px; }
   .chip {
     flex: none; border: 1px solid var(--borda); border-radius: 999px; padding: 5px 12px;
     background: var(--superficie); cursor: pointer; font-size: 13px;
@@ -137,11 +175,13 @@
   .chip[aria-pressed="true"] { background: var(--primaria); border-color: var(--primaria); color: var(--primaria-texto); }
 
   .tabela { width: 100%; border-collapse: collapse; font-size: 14px; }
-  .tabela th, .tabela td { padding: 8px 6px; text-align: right; border-bottom: 1px solid var(--borda); }
+  .tabela th, .tabela td { padding: 8px 6px; text-align: right; border-bottom: 1px solid var(--borda); vertical-align: top; }
   .tabela th:first-child, .tabela td:first-child { text-align: left; }
   .tabela th { font-size: 12px; color: var(--texto-2); font-weight: 600; }
   .tabela tr:last-child td { border-bottom: 0; }
   .tabela tr[data-link] { cursor: pointer; }
+  .tabela small { display: block; font-size: 11px; color: var(--texto-2); }
+  .rolavel { max-height: 420px; overflow-y: auto; }
 
   .lista { list-style: none; margin: 0; padding: 0; }
   .item {
@@ -162,6 +202,7 @@
   .s-DESEMPENHO { background: var(--atencao-fundo); color: var(--atencao); }
   .s-EVOLUCAO { background: var(--positivo-fundo); color: var(--positivo); }
   .s-neutro { background: var(--neutro-fundo); color: var(--texto-2); }
+  .selo.g-A, .selo.g-B, .selo.g-C, .selo.g-D { background: var(--fundo-g); color: var(--cor); }
 
   .motivo { border-left: 3px solid var(--borda); padding: 8px 10px; border-radius: 0 8px 8px 0; background: var(--superficie-2); }
   .motivo.m-FREQUENCIA { border-color: var(--critico); }
@@ -175,16 +216,43 @@
   .numero .v { font-size: 20px; font-weight: 700; }
   .numero .r { font-size: 12px; color: var(--texto-2); }
 
+  /* Medidor de −1 a +1, com o zero no meio. */
+  .indices { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 8px; }
+  .indice { background: var(--superficie); border: 1px solid var(--borda); border-radius: 12px; padding: 10px; }
+  .indice .v { font-size: 20px; font-weight: 700; font-variant-numeric: tabular-nums; }
+  .indice .r { font-size: 12px; color: var(--texto-2); }
+  .medidor { position: relative; height: 8px; margin: 8px 0 4px; border-radius: 4px; background: var(--superficie-2); }
+  .medidor::after { content: ""; position: absolute; left: 50%; top: -3px; bottom: -3px; width: 2px; margin-left: -1px; background: var(--eixo-forte); }
+  .medidor span { position: absolute; top: 0; bottom: 0; border-radius: 4px; }
+  .medidor-escala { display: flex; justify-content: space-between; font-size: 10px; color: var(--texto-2); }
+
   .grafico svg { display: block; width: 100%; height: auto; }
   .grafico text { fill: var(--texto-2); font-size: 11px; }
+  .grafico .q-nome { font-size: 11px; font-weight: 700; }
+  .grafico .q-letra { font-size: 15px; font-weight: 800; }
+  .grafico .eixo-titulo { font-size: 11px; font-weight: 600; fill: var(--texto); }
   .eixo { stroke: var(--borda); }
-  .quadrante-critico { fill: var(--critico-fundo); }
-  .quadrante-atencao { fill: var(--atencao-fundo); }
-  .quadrante-ok { fill: var(--positivo-fundo); }
-  .legenda { display: flex; gap: 14px; flex-wrap: wrap; font-size: 12px; color: var(--texto-2); margin-top: 6px; }
+  .eixo-zero { stroke: var(--eixo-forte); stroke-width: 1.5; }
+  .ponto { stroke: var(--superficie); stroke-width: .8; }
+  .legenda { display: flex; gap: 6px 14px; flex-wrap: wrap; font-size: 12px; color: var(--texto-2); margin-top: 6px; }
   .legenda i { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 5px; vertical-align: -1px; }
-  .alternar { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 8px; }
+  .alternar { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin: 10px 0 8px; }
   .link { border: 0; background: none; color: var(--primaria); cursor: pointer; font-size: 13px; padding: 4px 0; }
+
+  .turma-linha + .turma-linha { margin-top: 12px; }
+  .turma-linha .cab { display: flex; justify-content: space-between; gap: 8px; font-size: 13px; }
+  .turma-linha .cab strong { font-size: 14px; }
+  .barra-grupos { display: flex; height: 22px; border-radius: 6px; overflow: hidden; margin-top: 4px; background: var(--superficie-2); }
+  .barra-grupos span {
+    display: grid; place-items: center; background: var(--cor); color: var(--superficie);
+    font-size: 11px; font-weight: 700; min-width: 0; overflow: hidden; white-space: nowrap;
+  }
+
+  details.como-ler { margin-top: 10px; font-size: 13px; color: var(--texto-2); }
+  details.como-ler summary { cursor: pointer; color: var(--primaria); }
+  details.como-ler p, details.como-ler ul { margin: 6px 0; }
+  details.como-ler ul { padding-left: 18px; }
+  details.como-ler code { font-size: 12px; background: var(--superficie-2); padding: 1px 4px; border-radius: 4px; }
 
   .botao {
     display: block; width: 100%; border: 0; border-radius: 10px; padding: 12px; cursor: pointer;
@@ -198,7 +266,6 @@
   form textarea { min-height: 80px; resize: vertical; }
   .acoes { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 16px; }
   .bloqueado { text-align: center; padding: 28px 16px; color: var(--texto-2); }
-  .visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
 </style>
 </head>
 <body>
@@ -216,7 +283,7 @@
 "use strict";
 
 // ---------------------------------------------------------------------------
-// Dados sintéticos (NF017). Nomes e matrículas inventados.
+// Parâmetros (valores ilustrativos, a definir com a Direção: RF018)
 // ---------------------------------------------------------------------------
 const CICLOS = [
   "02/02–15/02", "16/02–01/03", "02/03–15/03", "16/03–29/03",
@@ -224,46 +291,64 @@ const CICLOS = [
 ];
 const CICLO_ATUAL = CICLOS.length; // ciclo 8
 const AREAS = { LC: "Linguagens", CH: "Humanas", CN: "Natureza", MT: "Matemática" };
-const LIMIAR_FREQUENCIA = 75; // % no ciclo: valor ilustrativo, a definir com a Direção (RF018)
+const LIMIAR_FREQUENCIA = 75; // % no ciclo, só para os alertas ilustrativos
+const LIMIAR_QUEDA = 30;      // pontos de TRI abaixo do último simulado (regra padrão do sistema)
+const DATA_ALERTA = "25/05/2026";
 const IMPORTACOES = "Catraca 25/05 · P+ 24/05 · Corrija-me 26/05";
+const NOMES_TURMAS = ["Turma A", "Turma B", "Turma C", "Turma D", "Turma E"];
+const TAMANHO_TURMAS = [102, 98, 100, 101, 99];
 
-// Série por ciclo: frequência (%) e nota TRI média. "areas" desloca a nota de cada área.
+// Os quatro grupos do plano. A ordem e as cores seguem o protótipo do PEI (A a D), mas os
+// rótulos só descrevem a posição: não sugerem ação nem classificam o aluno (RN012).
+const GRUPOS = {
+  A: { nome: "Em dia", presenca: "Presença de 50% ou mais", nota: "Nota igual ou acima do último simulado" },
+  B: { nome: "Nota abaixo", presenca: "Presença de 50% ou mais", nota: "Nota abaixo do último simulado" },
+  C: { nome: "Presença abaixo", presenca: "Presença abaixo de 50%", nota: "Nota igual ou acima do último simulado" },
+  D: { nome: "Ambas abaixo", presenca: "Presença abaixo de 50%", nota: "Nota abaixo do último simulado" },
+};
+const COR_GRUPO = { A: "var(--positivo)", B: "var(--atencao)", C: "var(--serio)", D: "var(--critico)" };
+const FUNDO_GRUPO = { A: "var(--positivo-fundo)", B: "var(--atencao-fundo)", C: "var(--serio-fundo)", D: "var(--critico-fundo)" };
+
+// ---------------------------------------------------------------------------
+// Dados sintéticos (NF017). Nomes e matrículas inventados.
+// ---------------------------------------------------------------------------
 function serie(freqs, tris) {
   return freqs.map((f, i) => ({ ciclo: i + 1, freq: f, tri: tris[i] }));
 }
-const ALUNOS = [
+// Alunos escritos à mão: cada um conta uma história que a Direção deve reconhecer no painel.
+const ALUNOS_EXEMPLO = [
   { matricula: "S260001", nome: "Nicolas Pereira Batista", turma: "Turma A",
     historicoTurmas: [["Turma A", "02/02/2026", null]],
     serie: serie([96, 92, 100, 94, 90, 88, 70, 58], [602, 610, 598, 615, 607, 611, 604, 600]),
     areas: { LC: 10, CH: 5, CN: -20, MT: 5 }, redacoes: [16, 16],
-    alertas: [{ tipo: "FREQUENCIA", motivo: "3 faltas não justificadas na semana de 18/05 (limiar: 3).", data: "25/05/2026" }],
+    alertas: [{ tipo: "FREQUENCIA", motivo: "3 faltas não justificadas na semana de 18/05 (limiar: 3).", data: DATA_ALERTA }],
     intervencoes: [] },
   { matricula: "S260006", nome: "Olívia Ferreira Lima", turma: "Turma A",
     historicoTurmas: [["Turma A", "02/02/2026", null]],
     serie: serie([94, 96, 92, 95, 93, 94, 92, 90], [650, 655, 648, 652, 650, 647, 651, 590]),
     areas: { LC: 0, CH: 10, CN: -5, MT: -5 }, redacoes: [15, 16],
-    alertas: [{ tipo: "DESEMPENHO", motivo: "Queda de 60 pontos na média TRI em relação ao próprio histórico (650 → 590). Maior queda: Matemática.", data: "25/05/2026" }],
+    alertas: [{ tipo: "DESEMPENHO", motivo: "Queda de 61 pontos na média TRI em relação ao último simulado (651 → 590). Maior queda: Matemática.", data: DATA_ALERTA }],
     intervencoes: [] },
   { matricula: "S260004", nome: "Caio Martins Rocha", turma: "Turma B",
     historicoTurmas: [["Turma A", "02/02/2026", "25/03/2026"], ["Turma B", "25/03/2026", null]],
     serie: serie([90, 72, 65, 60, 62, 58, 55, 50], [560, 548, 541, 530, 522, 515, 508, 470]),
     areas: { LC: -10, CH: 0, CN: 5, MT: 5 }, redacoes: [6, 16],
     alertas: [
-      { tipo: "FREQUENCIA", motivo: "4 faltas não justificadas na semana de 18/05 (limiar: 3).", data: "25/05/2026" },
-      { tipo: "DESEMPENHO", motivo: "Queda de 62 pontos na média TRI em relação ao próprio histórico (532 → 470). Maior queda: Linguagens.", data: "25/05/2026" },
+      { tipo: "FREQUENCIA", motivo: "4 faltas não justificadas na semana de 18/05 (limiar: 3).", data: DATA_ALERTA },
+      { tipo: "DESEMPENHO", motivo: "Queda de 38 pontos na média TRI em relação ao último simulado (508 → 470). Maior queda: Linguagens.", data: DATA_ALERTA },
     ],
     intervencoes: [{ tipo: "Contato", data: "14/04/2026", responsavel: "Diretor de RH", descricao: "Ligação após 3 semanas com faltas. Relatou mudança de horário no trabalho.", desfecho: "Em acompanhamento" }] },
   { matricula: "S260007", nome: "Yasmin Andrade Souza", turma: "Turma B",
     historicoTurmas: [["Turma B", "02/02/2026", null]],
     serie: serie([98, 100, 96, 98, 100, 98, 100, 96], [500, 515, 530, 545, 560, 575, 590, 605]),
     areas: { LC: 5, CH: -5, CN: 0, MT: 0 }, redacoes: [16, 16],
-    alertas: [{ tipo: "EVOLUCAO", motivo: "Nota TRI subiu nos últimos 7 ciclos seguidos (+105 pontos desde o ciclo 1).", data: "25/05/2026" }],
+    alertas: [{ tipo: "EVOLUCAO", motivo: "Nota TRI subiu nos últimos 7 ciclos seguidos (+105 pontos desde o ciclo 1).", data: DATA_ALERTA }],
     intervencoes: [] },
   { matricula: "S260012", nome: "Renan Campos Duarte", turma: "Turma C",
     historicoTurmas: [["Turma C", "09/03/2026", null]],
     serie: serie([null, null, 88, 84, 80, 74, 66, 62], [null, null, 540, 548, 556, 551, 560, 563]),
     areas: { LC: 0, CH: 0, CN: 10, MT: -10 }, redacoes: [7, 12],
-    alertas: [{ tipo: "FREQUENCIA", motivo: "3 faltas não justificadas na semana de 18/05 (limiar: 3).", data: "25/05/2026" }],
+    alertas: [{ tipo: "FREQUENCIA", motivo: "3 faltas não justificadas na semana de 18/05 (limiar: 3).", data: DATA_ALERTA }],
     intervencoes: [] },
   { matricula: "S260015", nome: "Helena Nogueira Pinto", turma: "Turma C",
     historicoTurmas: [["Turma C", "02/02/2026", null]],
@@ -279,32 +364,165 @@ const ALUNOS = [
     historicoTurmas: [["Turma E", "02/02/2026", null]],
     serie: serie([84, 80, 82, 78, 80, 76, 78, 80], [530, 538, 529, 535, 540, 533, 537, 498]),
     areas: { LC: 0, CH: -10, CN: 5, MT: 5 }, redacoes: [9, 16],
-    alertas: [{ tipo: "DESEMPENHO", motivo: "Queda de 37 pontos na média TRI em relação ao próprio histórico (535 → 498). Maior queda: Humanas.", data: "25/05/2026" }],
+    alertas: [{ tipo: "DESEMPENHO", motivo: "Queda de 39 pontos na média TRI em relação ao último simulado (537 → 498). Maior queda: Humanas.", data: DATA_ALERTA }],
     intervencoes: [] },
   { matricula: "S260024", nome: "Thiago Vieira Esteves", turma: "Turma E",
     historicoTurmas: [["Turma E", "02/02/2026", null]],
     serie: serie([100, 98, 100, 96, 98, 100, 96, 98], [640, 652, 661, 675, 684, 690, 702, 715]),
     areas: { LC: -5, CH: 0, CN: 5, MT: 0 }, redacoes: [16, 16],
-    alertas: [{ tipo: "EVOLUCAO", motivo: "Nota TRI subiu nos últimos 7 ciclos seguidos (+75 pontos desde o ciclo 1).", data: "25/05/2026" }],
+    alertas: [{ tipo: "EVOLUCAO", motivo: "Nota TRI subiu nos últimos 7 ciclos seguidos (+75 pontos desde o ciclo 1).", data: DATA_ALERTA }],
     intervencoes: [] },
 ];
-const TURMAS = ["Turma A", "Turma B", "Turma C", "Turma D", "Turma E"].map((nome, i) => ({
-  nome,
-  alunos: [102, 98, 100, 101, 99][i],
-  freq: [86, 79, 83, 88, 81][i],
-  tri: [584, 551, 572, 579, 563][i],
-  delta: [-4, -12, 3, 1, -7][i],
-}));
+
+// O resto do curso é gerado com semente fixa, para o painel mostrar a forma real de um curso
+// com cerca de 500 alunos. Os alertas desses alunos saem das mesmas regras ilustrativas.
+function geradorAleatorio(semente) {
+  let a = semente >>> 0;
+  return () => {
+    a = (a + 0x6d2b79f5) >>> 0;
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+const aleatorio = geradorAleatorio(20260524);
+function normal(media, desvio) {
+  const u = 1 - aleatorio(), v = aleatorio();
+  return media + desvio * Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v);
+}
+const limitar = (v, min, max) => Math.max(min, Math.min(max, v));
+const sortear = (lista) => lista[Math.floor(aleatorio() * lista.length)];
+
+const PRENOMES = ["Ana", "Bruno", "Carla", "Daniel", "Eduarda", "Felipe", "Gabriela", "Henrique", "Isabela", "João",
+  "Larissa", "Lucas", "Mariana", "Mateus", "Natália", "Otávio", "Paula", "Rafael", "Sabrina", "Tiago", "Vitória",
+  "Wesley", "Beatriz", "Diego", "Fernanda", "Gustavo", "Júlia", "Leonardo", "Letícia", "Pedro", "Camila", "Vinícius"];
+const SOBRENOMES = ["Almeida", "Barbosa", "Cardoso", "Castro", "Correia", "Dias", "Farias", "Freitas", "Lima", "Machado",
+  "Melo", "Moreira", "Nunes", "Oliveira", "Pires", "Ramos", "Santos", "Silva", "Souza", "Tavares", "Xavier", "Moura",
+  "Rezende", "Vasconcelos", "Antunes", "Brito"];
+
+function sobrenomesDistintos() {
+  const primeiro = sortear(SOBRENOMES);
+  let segundo = sortear(SOBRENOMES);
+  while (segundo === primeiro) segundo = sortear(SOBRENOMES);
+  return [primeiro, segundo];
+}
+
+function gerarAluno(matricula, turma) {
+  const semi = aleatorio() < 0.12;            // entra no semiextensivo, no ciclo 3
+  const inicio = semi ? 3 : 1;
+  // Uns 10% vêm se afastando da sede: é o grupo que o painel precisa mostrar.
+  const fBase = aleatorio() < 0.1 ? limitar(normal(52, 14), 10, 90) : limitar(normal(90, 7), 40, 100);
+  const fTend = normal(-0.3, 1.2);            // pontos de frequência por ciclo
+  const triBase = normal(565, 45);
+  const triTend = normal(1.5, 5);             // pontos de TRI por ciclo
+  const quedaFinal = aleatorio() < 0.07 ? normal(55, 12) : 0;
+  const freqs = [], tris = [];
+  for (let c = 1; c <= CICLOS.length; c++) {
+    if (c < inicio) { freqs.push(null); tris.push(null); continue; }
+    const f = Math.round(limitar(fBase + fTend * (c - 1) + normal(0, 4), 15, 100));
+    freqs.push(f);
+    const ausente = c > inicio && aleatorio() < 0.03; // faltou ao simulado (RN009)
+    const penalidade = Math.max(0, LIMIAR_FREQUENCIA - f) * 0.5;
+    const t = triBase + triTend * (c - 1) + normal(0, 12) - penalidade - (c === CICLOS.length ? quedaFinal : 0);
+    tris.push(ausente ? null : Math.round(t));
+  }
+  const area = () => Math.round(normal(0, 8) / 5) * 5;
+  const entregas = semi ? 12 : 16;
+  return {
+    matricula, turma, gerado: true,
+    nome: [sortear(PRENOMES), ...sobrenomesDistintos()].join(" "),
+    historicoTurmas: [[turma, semi ? "09/03/2026" : "02/02/2026", null]],
+    serie: serie(freqs, tris),
+    areas: { LC: area(), CH: area(), CN: area(), MT: area() },
+    redacoes: [Math.round(entregas * limitar(fBase / 100 + normal(0, 0.1), 0.2, 1)), entregas],
+    alertas: [], intervencoes: [],
+  };
+}
+
+const ALUNOS = [...ALUNOS_EXEMPLO];
+{
+  let seq = 100;
+  NOMES_TURMAS.forEach((turma, i) => {
+    const faltam = TAMANHO_TURMAS[i] - ALUNOS_EXEMPLO.filter((a) => a.turma === turma).length;
+    for (let k = 0; k < faltam; k++) ALUNOS.push(gerarAluno(`S26${String(seq++).padStart(4, "0")}`, turma));
+  });
+}
+
+// ---------------------------------------------------------------------------
+// Indicadores
+// ---------------------------------------------------------------------------
+function aluno(matricula) { return ALUNOS.find((a) => a.matricula === matricula); }
+function ponto(a, ciclo) { return a.serie[ciclo - 1]; }
+// Nota do último simulado anterior em que o aluno foi avaliado.
+function notaAnterior(a, ciclo) {
+  const anteriores = a.serie.slice(0, ciclo - 1).filter((p) => p.tri != null);
+  return anteriores.length ? anteriores[anteriores.length - 1].tri : null;
+}
+// Δ: nota TRI do ciclo menos a do último simulado do próprio aluno (RN008), como no sistema.
+function delta(a, ciclo) {
+  const anterior = notaAnterior(a, ciclo);
+  const atual = ponto(a, ciclo).tri;
+  return anterior == null || atual == null ? null : Math.round(atual - anterior);
+}
+
+// Índice de presença na sede, de −1 a +1, como o SE do PEI: 2 · presença − 1.
+// 0% → −1, 50% → 0, 100% → +1.
+function indicePresenca(freq) {
+  return freq == null ? null : (2 * freq) / 100 - 1;
+}
+
+// Índice de desempenho, de −1 a +1, como o SD do PEI: limitar(z / 2, −1, +1). A diferença é
+// a referência: z = Δ / σ, com Δ medido contra o último simulado do aluno (RN008) e σ o desvio-padrão
+// dos Δ do curso no ciclo. Assim, ±1 equivale a dois desvios-padrão.
+const cacheSigma = {};
+function sigmaDelta(ciclo) {
+  if (!(ciclo in cacheSigma)) {
+    const ds = ALUNOS.map((a) => delta(a, ciclo)).filter((d) => d != null);
+    const m = ds.reduce((s, d) => s + d, 0) / ds.length;
+    cacheSigma[ciclo] = ds.length > 1 ? Math.sqrt(ds.reduce((s, d) => s + (d - m) ** 2, 0) / ds.length) : null;
+  }
+  return cacheSigma[ciclo];
+}
+function indiceDesempenho(a, ciclo) {
+  const d = delta(a, ciclo), s = sigmaDelta(ciclo);
+  return d == null || !s ? null : limitar(d / s / 2, -1, 1);
+}
+function grupoDe(ip, id) {
+  if (ip == null || id == null) return null;
+  if (ip >= 0) return id >= 0 ? "A" : "B";
+  return id >= 0 ? "C" : "D";
+}
+function situacao(a, ciclo) {
+  const p = ponto(a, ciclo);
+  const ip = indicePresenca(p.freq), id = indiceDesempenho(a, ciclo);
+  return { freq: p.freq, tri: p.tri, delta: delta(a, ciclo), ip, id, grupo: grupoDe(ip, id) };
+}
+
+// Alertas dos alunos gerados: as mesmas regras, com os limiares ilustrativos.
+for (const a of ALUNOS.filter((x) => x.gerado)) {
+  const s = situacao(a, CICLO_ATUAL);
+  if (s.freq != null && s.freq < LIMIAR_FREQUENCIA) {
+    a.alertas.push({ tipo: "FREQUENCIA", motivo: `Frequência de ${s.freq}% no ciclo ${CICLO_ATUAL} (limiar: ${LIMIAR_FREQUENCIA}%).`, data: DATA_ALERTA });
+  }
+  if (s.delta != null && s.delta <= -LIMIAR_QUEDA) {
+    a.alertas.push({ tipo: "DESEMPENHO", motivo: `Queda de ${-s.delta} pontos na média TRI em relação ao último simulado (${notaAnterior(a, CICLO_ATUAL)} → ${s.tri}).`, data: DATA_ALERTA });
+  }
+  const ultimos = a.serie.slice(-5).map((p) => p.tri);
+  if (ultimos.every((t, i) => t != null && (i === 0 || t > ultimos[i - 1]))) {
+    a.alertas.push({ tipo: "EVOLUCAO", motivo: `Nota TRI subiu nos últimos 4 ciclos seguidos (+${ultimos[4] - ultimos[0]} pontos).`, data: DATA_ALERTA });
+  }
+}
+
 const TIPOS = {
   FREQUENCIA: { rotulo: "Frequência", quando: "semanal" },
-  DESEMPENHO: { rotulo: "Queda de desempenho", quando: "ciclo 8" },
-  EVOLUCAO: { rotulo: "Em evolução", quando: "ciclo 8" },
+  DESEMPENHO: { rotulo: "Queda de desempenho", quando: `ciclo ${CICLO_ATUAL}` },
+  EVOLUCAO: { rotulo: "Em evolução", quando: `ciclo ${CICLO_ATUAL}` },
 };
 
 // ---------------------------------------------------------------------------
 // Estado e utilitários
 // ---------------------------------------------------------------------------
-const estado = { perfil: "DIRETOR", ciclo: CICLO_ATUAL, painelTabela: false, area: "geral" };
+const estado = { perfil: "DIRETOR", ciclo: CICLO_ATUAL, turma: "", painelTabela: false, area: "geral" };
 const $tela = document.getElementById("tela");
 const $titulo = document.getElementById("titulo");
 const $voltar = document.getElementById("voltar");
@@ -316,60 +534,120 @@ function iniciais(nome) {
   const partes = nome.split(" ");
   return (partes[0][0] + partes[partes.length - 1][0]).toUpperCase();
 }
-function aluno(matricula) { return ALUNOS.find((a) => a.matricula === matricula); }
-function ponto(a, ciclo) { return a.serie[ciclo - 1]; }
-function mediaPropria(a, ate) {
-  const anteriores = a.serie.slice(0, ate - 1).filter((p) => p.tri != null);
-  return anteriores.length ? anteriores.reduce((s, p) => s + p.tri, 0) / anteriores.length : null;
+function sinal(n) { return n > 0 ? `+${n}` : n < 0 ? `−${-n}` : "0"; }
+function fmtIndice(v) {
+  if (v == null) return "—";
+  const t = Math.abs(v).toFixed(2).replace(".", ",");
+  return v > 0.004 ? `+${t}` : v < -0.004 ? `−${t}` : "0,00";
 }
-function delta(a, ciclo) {
-  const media = mediaPropria(a, ciclo);
-  const atual = ponto(a, ciclo).tri;
-  return media == null || atual == null ? null : Math.round(atual - media);
-}
-function sinal(n) { return n > 0 ? `+${n}` : `${n}`; }
+function pct(parte, total) { return total ? Math.round((parte / total) * 100) : 0; }
 function alertasDo(tipo) { return ALUNOS.filter((a) => a.alertas.some((x) => x.tipo === tipo)); }
 function ehDiretor() { return estado.perfil === "DIRETOR"; }
 function ir(hash) { location.hash = hash; }
+function doRecorte(turma) { return turma ? ALUNOS.filter((a) => a.turma === turma) : ALUNOS; }
+function contarGrupos(alunos, ciclo) {
+  const c = { A: 0, B: 0, C: 0, D: 0, fora: 0 };
+  for (const a of alunos) c[situacao(a, ciclo).grupo ?? "fora"]++;
+  return c;
+}
+function letra(g) { return `<span class="letra g-${g}">${g}</span>`; }
+function seloGrupo(g) { return g ? `<span class="selo g-${g}">${g} · ${GRUPOS[g].nome}</span>` : '<span class="selo s-neutro">Sem grupo</span>'; }
 
 const RODAPE_RN012 =
-  '<p class="aviso">Alertas são <strong>indicativos</strong>: apoiam a conversa com o aluno e nunca servem para punição, classificação pública ou exclusão (RN012).</p>';
+  '<p class="aviso">Alertas e grupos são <strong>indicativos</strong>: apoiam a conversa com o aluno e nunca servem para punição, classificação pública ou exclusão (RN012).</p>';
 const BLOQUEADO =
-  '<div class="cartao bloqueado"><p><strong>Disponível só para o perfil Diretor.</strong></p><p class="meta">Membros da diretoria veem apenas indicadores agregados, sem nomes (RN013).</p></div>';
+  '<div class="cartao bloqueado"><p><strong>Disponível só para o perfil Diretor.</strong></p><p class="meta">Membros da diretoria veem apenas indicadores agregados (RN013).</p></div>';
 
 // ---------------------------------------------------------------------------
 // Gráficos (SVG)
 // ---------------------------------------------------------------------------
-function dispersao(alunos, ciclo, comNomes) {
-  const L = 340, A = 260, m = { e: 34, d: 10, t: 10, b: 30 };
-  const x = (f) => m.e + (f / 100) * (L - m.e - m.d);
-  const y = (d) => m.t + ((80 - d) / 160) * (A - m.t - m.b);
-  const xl = x(LIMIAR_FREQUENCIA), y0 = y(0);
-  let pontos = "";
-  for (const a of alunos) {
-    const p = ponto(a, ciclo), d = delta(a, ciclo);
-    if (p.freq == null || d == null) continue;
-    const dc = Math.max(-78, Math.min(78, d));
-    const cor = p.freq < LIMIAR_FREQUENCIA && d < 0 ? "var(--critico)" : d < 0 || p.freq < LIMIAR_FREQUENCIA ? "var(--atencao)" : "var(--positivo)";
-    const aDireita = p.freq < 80;
-    const rotulo = comNomes ? `<text x="${x(p.freq) + (aDireita ? 8 : -8)}" y="${y(dc) + 4}" text-anchor="${aDireita ? "start" : "end"}">${esc(a.nome.split(" ")[0])}</text>` : "";
-    const alvo = comNomes ? ` data-aluno="${a.matricula}" style="cursor:pointer"` : "";
-    pontos += `<g${alvo}><circle cx="${x(p.freq)}" cy="${y(dc)}" r="6" fill="${cor}"><title>${comNomes ? esc(a.nome) + ": " : ""}frequência ${p.freq}%, Δ ${sinal(d)}</title></circle>${rotulo}</g>`;
+// Plano presença × desempenho, os dois eixos de −1 a +1. Os quatro quadrantes são os grupos.
+// opcoes.pontos: [{ip, id, grupo, matricula?, titulo, apagado?}]; opcoes.trajetoria: liga os pontos em ordem.
+function plano(opcoes) {
+  const L = 340, A = 356, m = { e: 30, d: 12, t: 26, b: 40 };
+  const W = L - m.e - m.d, H = A - m.t - m.b;
+  const x = (v) => m.e + ((v + 1) / 2) * W;
+  const y = (v) => m.t + ((1 - v) / 2) * H;
+  const x0 = x(0), y0 = y(0), xd = m.e + W, yb = m.t + H;
+  const quad = (g, x1, y1, w, h) => `<rect x="${x1}" y="${y1}" width="${w}" height="${h}" fill="${FUNDO_GRUPO[g]}"/>`;
+  const rotulo = (g, xx, yy, ancora) =>
+    `<text x="${xx}" y="${yy}" text-anchor="${ancora}"><tspan class="q-letra" fill="${COR_GRUPO[g]}">${g}</tspan><tspan class="q-nome" fill="${COR_GRUPO[g]}" dx="4">${GRUPOS[g].nome}</tspan></text>`;
+  const grade = [-0.5, 0.5].map((v) =>
+    `<line class="eixo" x1="${x(v)}" x2="${x(v)}" y1="${m.t}" y2="${yb}" stroke-dasharray="2 3"/>
+     <line class="eixo" x1="${m.e}" x2="${xd}" y1="${y(v)}" y2="${y(v)}" stroke-dasharray="2 3"/>`).join("");
+
+  let marcas = "";
+  if (opcoes.trajetoria) {
+    const pts = opcoes.pontos.filter((p) => p.ip != null && p.id != null);
+    if (pts.length > 1) {
+      // O último trecho para antes do círculo final, para a ponta da seta ficar visível.
+      const xy = pts.map((p) => [x(p.ip), y(p.id)]);
+      const [xa, ya] = xy[xy.length - 2], [xb, yb2] = xy[xy.length - 1];
+      const dist = Math.hypot(xb - xa, yb2 - ya), recuo = Math.min(10, dist / 2);
+      if (dist) xy[xy.length - 1] = [xb - ((xb - xa) / dist) * recuo, yb2 - ((yb2 - ya) / dist) * recuo];
+      marcas += `<polyline points="${xy.map(([a, b]) => `${a.toFixed(1)},${b.toFixed(1)}`).join(" ")}" fill="none" stroke="var(--eixo-forte)" stroke-width="1.5" marker-end="url(#seta)"/>`;
+    }
+    pts.forEach((p, i) => {
+      const ultimo = i === pts.length - 1;
+      marcas += `<g><circle class="ponto" cx="${x(p.ip)}" cy="${y(p.id)}" r="${ultimo ? 8 : 6}" fill="${COR_GRUPO[p.grupo]}"><title>${esc(p.titulo)}</title></circle>
+        <text x="${x(p.ip)}" y="${y(p.id) + 3.5}" text-anchor="middle" style="fill:var(--superficie);font-size:9px;font-weight:700">${p.rotulo}</text></g>`;
+    });
+  } else {
+    // Apagados primeiro, para os pontos do recorte ficarem por cima.
+    const ordenados = [...opcoes.pontos].sort((p, q) => Number(!!q.apagado) - Number(!!p.apagado));
+    for (const p of ordenados) {
+      if (p.ip == null || p.id == null) continue;
+      const cor = p.apagado ? "var(--apagado)" : COR_GRUPO[p.grupo];
+      const alvo = !p.apagado && p.matricula ? ` data-aluno="${p.matricula}" style="cursor:pointer"` : "";
+      marcas += `<circle class="ponto" cx="${x(p.ip).toFixed(1)}" cy="${y(p.id).toFixed(1)}" r="${p.apagado ? 2.6 : 3.6}" fill="${cor}"${alvo}><title>${esc(p.titulo)}</title></circle>`;
+    }
   }
-  return `<div class="grafico"><svg viewBox="0 0 ${L} ${A}" role="img" aria-label="Frequência no ciclo versus variação de desempenho">
-    <rect class="quadrante-critico" x="${m.e}" y="${y0}" width="${xl - m.e}" height="${A - m.b - y0}"/>
-    <rect class="quadrante-atencao" x="${xl}" y="${y0}" width="${L - m.d - xl}" height="${A - m.b - y0}"/>
-    <rect class="quadrante-atencao" x="${m.e}" y="${m.t}" width="${xl - m.e}" height="${y0 - m.t}"/>
-    <rect class="quadrante-ok" x="${xl}" y="${m.t}" width="${L - m.d - xl}" height="${y0 - m.t}"/>
-    <line class="eixo" x1="${m.e}" x2="${L - m.d}" y1="${y0}" y2="${y0}"/>
-    <line class="eixo" x1="${xl}" x2="${xl}" y1="${m.t}" y2="${A - m.b}" stroke-dasharray="4 3"/>
-    <text x="${m.e + 4}" y="${A - m.b - 6}">baixa frequência e queda</text>
-    <text x="${L - m.d - 4}" y="${m.t + 14}" text-anchor="end">em dia</text>
-    <text x="${m.e}" y="${A - 8}">0%</text><text x="${xl}" y="${A - 8}" text-anchor="middle">${LIMIAR_FREQUENCIA}%</text><text x="${L - m.d}" y="${A - 8}" text-anchor="end">100%</text>
-    <text x="${m.e - 6}" y="${m.t + 8}" text-anchor="end">+80</text><text x="${m.e - 6}" y="${y0 + 4}" text-anchor="end">0</text><text x="${m.e - 6}" y="${A - m.b}" text-anchor="end">−80</text>
-    ${pontos}
-  </svg>
-  <p class="meta">Horizontal: frequência no ciclo. Vertical: variação da nota TRI em relação à <strong>própria média</strong> do aluno (RN008).</p></div>`;
+
+  const fx = (f) => x(indicePresenca(f));
+  return `<div class="grafico"><svg viewBox="0 0 ${L} ${A}" role="img" aria-label="${esc(opcoes.rotulo)}">
+    <defs><marker id="seta" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="var(--eixo-forte)"/></marker></defs>
+    ${quad("C", m.e, m.t, x0 - m.e, y0 - m.t)}${quad("A", x0, m.t, xd - x0, y0 - m.t)}
+    ${quad("D", m.e, y0, x0 - m.e, yb - y0)}${quad("B", x0, y0, xd - x0, yb - y0)}
+    ${grade}
+    <line class="eixo-zero" x1="${m.e}" x2="${xd}" y1="${y0}" y2="${y0}"/>
+    <line class="eixo-zero" x1="${x0}" x2="${x0}" y1="${m.t}" y2="${yb}"/>
+    ${rotulo("C", m.e + 6, m.t + 16, "start")}${rotulo("A", xd - 6, m.t + 16, "end")}
+    ${rotulo("D", m.e + 6, yb - 8, "start")}${rotulo("B", xd - 6, yb - 8, "end")}
+    ${marcas}
+    <text x="${m.e - 5}" y="${m.t + 8}" text-anchor="end">+1</text>
+    <text x="${m.e - 5}" y="${y0 + 4}" text-anchor="end">0</text>
+    <text x="${m.e - 5}" y="${yb}" text-anchor="end">−1</text>
+    <text x="${m.e}" y="${yb + 13}" text-anchor="middle">−1</text>
+    <text x="${x0}" y="${yb + 13}" text-anchor="middle">0</text>
+    <text x="${xd}" y="${yb + 13}" text-anchor="end">+1</text>
+    <text x="${fx(50)}" y="${yb + 13}" text-anchor="middle" style="font-size:9px">50%</text>
+    <text x="${fx(90)}" y="${yb + 13}" text-anchor="middle" style="font-size:9px">90%</text>
+    <text class="eixo-titulo" x="${xd}" y="${yb + 30}" text-anchor="end">Presença na sede (0 = 50%) →</text>
+    <text class="eixo-titulo" x="${m.e}" y="${m.t - 10}">↑ Notas nos simulados (0 = último simulado)</text>
+  </svg></div>`;
+}
+
+// Barras empilhadas: distribuição dos grupos em cada ciclo, para ver o curso ao longo do tempo.
+function evolucaoGrupos(alunos) {
+  const L = 340, A = 170, m = { e: 30, d: 6, t: 8, b: 22 };
+  const ciclos = CICLOS.map((_, i) => i + 1).slice(1); // o ciclo 1 não tem histórico para comparar
+  const passo = (L - m.e - m.d) / ciclos.length, larg = passo * 0.68, H = A - m.t - m.b;
+  let barras = "";
+  for (const [k, c] of ciclos.entries()) {
+    const n = contarGrupos(alunos, c), total = n.A + n.B + n.C + n.D;
+    let topo = m.t;
+    const bx = m.e + k * passo + (passo - larg) / 2;
+    // De cima para baixo: A, C, B, D (o que está acima do zero de notas fica em cima).
+    for (const g of ["A", "C", "B", "D"]) {
+      const h = total ? (n[g] / total) * H : 0;
+      barras += `<rect x="${bx}" y="${topo}" width="${larg}" height="${h}" fill="${COR_GRUPO[g]}" opacity="${c === estado.ciclo ? 1 : 0.8}"><title>Ciclo ${c}: grupo ${g} (${GRUPOS[g].nome}) com ${n[g]} alunos, ${pct(n[g], total)}%</title></rect>`;
+      topo += h;
+    }
+    barras += `<text x="${bx + larg / 2}" y="${A - 7}" text-anchor="middle" style="${c === estado.ciclo ? "font-weight:700;fill:var(--texto)" : ""}">${c}</text>`;
+  }
+  const yp = (p) => m.t + (1 - p) * H;
+  const eixos = [0, 0.5, 1].map((p) => `<text x="${m.e - 5}" y="${yp(p) + 4}" text-anchor="end">${p * 100}%</text>`).join("");
+  return `<div class="grafico"><svg viewBox="0 0 ${L} ${A}" role="img" aria-label="Distribuição dos quatro grupos por ciclo">${eixos}${barras}</svg></div>`;
 }
 
 function linhas(a, area) {
@@ -400,25 +678,78 @@ function linhas(a, area) {
   <div class="legenda"><span><i style="background:var(--primaria)"></i>Nota TRI${area === "geral" ? " (média das áreas)" : " — " + AREAS[area]} (eixo esquerdo)</span><span><i style="background:var(--farol)"></i>Frequência (eixo direito)</span></div></div>`;
 }
 
+function medidor(v, grupo) {
+  if (v == null) return '<div class="medidor"></div>';
+  const meio = 50, pos = 50 + v * 50;
+  const [esq, dir] = v >= 0 ? [meio, pos] : [pos, meio];
+  return `<div class="medidor"><span style="left:${esq}%;width:${dir - esq}%;background:${COR_GRUPO[grupo] ?? "var(--eixo-forte)"}"></span></div>
+    <div class="medidor-escala"><span>−1</span><span>0</span><span>+1</span></div>`;
+}
+
+const COMO_LER = `<details class="como-ler"><summary>Como os índices são calculados</summary>
+  <p>Os dois eixos vão de −1 a +1, como no protótipo do PEI. O zero de cada eixo separa os quatro grupos.</p>
+  <ul>
+    <li><strong>Presença na sede:</strong> frequência do ciclo pela catraca, com falta justificada contando como presença (RN002). O índice é <code>2 · presença − 1</code>, a mesma conta do SE do PEI: 0% vira −1, 50% vira 0 e 100% vira +1.</li>
+    <li><strong>Notas nos simulados:</strong> Δ = nota TRI do ciclo menos a do último simulado em que o aluno foi avaliado (RN008). O índice é <code>limitar(z / 2, −1, +1)</code>, com <code>z = Δ / σ</code> e σ o desvio-padrão dos Δ do curso no ciclo, a mesma conta do SD do PEI. ±1 equivale a dois desvios-padrão.</li>
+    <li>Quem faltou ao simulado (RN009) ou ainda não tem ciclo anterior fica fora dos grupos naquele ciclo.</li>
+  </ul>
+  <p>Os grupos não usam limiar de alerta: o zero de cada eixo vem da própria conta.</p></details>`;
+
 // ---------------------------------------------------------------------------
 // Telas
 // ---------------------------------------------------------------------------
 function telaPainel() {
   const diretor = ehDiretor();
-  const ciclo = estado.ciclo;
+  const ciclo = estado.ciclo, turma = estado.turma;
+  const recorte = doRecorte(turma);
+  const n = contarGrupos(recorte, ciclo), total = n.A + n.B + n.C + n.D;
+  const sigma = sigmaDelta(ciclo);
+
   const cards = Object.entries(TIPOS).map(([tipo, t]) =>
     `<button class="alerta-card t-${tipo}" data-ir="#alertas/${tipo}" ${diretor ? "" : "disabled"}>
        <span class="n">${alertasDo(tipo).length}</span><span class="rotulo">${t.rotulo}</span><span class="quando">${t.quando}</span>
      </button>`).join("");
-  const chips = CICLOS.map((_, i) =>
+  const chipsCiclo = CICLOS.map((_, i) =>
     `<button class="chip" data-ciclo="${i + 1}" aria-pressed="${i + 1 === ciclo}">Ciclo ${i + 1}</button>`).reverse().join("");
-  const tabelaAlunos = `<table class="tabela"><thead><tr><th>Aluno</th><th>Freq.</th><th>TRI</th><th>Δ</th></tr></thead><tbody>${
-    ALUNOS.filter((a) => ponto(a, ciclo).freq != null).map((a) => {
-      const p = ponto(a, ciclo), d = delta(a, ciclo);
-      return `<tr data-link="#aluno/${a.matricula}"><td>${esc(a.nome)}</td><td>${p.freq}%</td><td>${p.tri ?? "—"}</td><td>${d == null ? "—" : sinal(d)}</td></tr>`;
-    }).join("")}</tbody></table>`;
-  const turmas = TURMAS.map((t) =>
-    `<tr><td>${t.nome}</td><td>${t.alunos}</td><td>${t.freq}%</td><td>${t.tri}</td><td>${sinal(t.delta)}</td></tr>`).join("");
+  const chipsTurma = [["", "Curso todo"], ...NOMES_TURMAS.map((t) => [t, t])].map(([v, r]) =>
+    `<button class="chip" data-turma="${v}" aria-pressed="${v === turma}">${r}</button>`).join("");
+  const cartaoGrupo = (g) =>
+    `<button class="grupo-card g-${g}" data-ir="#grupo/${g}" ${diretor ? "" : "disabled"}>
+       <span class="topo">${letra(g)}<span class="nome-g">${GRUPOS[g].nome}</span></span>
+       <span class="n">${n[g]}<small>alunos</small></span>
+       <span class="parte">${pct(n[g], total)}% dos ${total} com grupo</span>
+       <span class="crit">${GRUPOS[g].presenca}<br>${GRUPOS[g].nota}</span>
+     </button>`;
+
+  const pontos = ALUNOS.map((a) => {
+    const s = situacao(a, ciclo);
+    const titulo = `${diretor ? a.nome + " · " : ""}${a.turma} · grupo ${s.grupo ?? "—"}\npresença ${s.freq ?? "—"}% (${fmtIndice(s.ip)}) · Δ ${s.delta == null ? "—" : sinal(s.delta)} pts (${fmtIndice(s.id)})`;
+    return { ...s, titulo, matricula: diretor ? a.matricula : null, apagado: turma && a.turma !== turma };
+  });
+  const tabela = `<div class="rolavel"><table class="tabela"><thead><tr><th>Aluno</th><th>Grupo</th><th>Presença</th><th>Notas</th></tr></thead><tbody>${
+    recorte.map((a) => ({ a, s: situacao(a, ciclo) })).filter(({ s }) => s.grupo)
+      .sort((p, q) => p.s.grupo.localeCompare(q.s.grupo) || p.s.id - q.s.id)
+      .map(({ a, s }) => `<tr data-link="#aluno/${a.matricula}"><td>${esc(a.nome)}<small>${a.turma}</small></td><td>${letra(s.grupo)}</td>
+        <td>${fmtIndice(s.ip)}<small>${s.freq}%</small></td><td>${fmtIndice(s.id)}<small>Δ ${sinal(s.delta)} pts</small></td></tr>`).join("")
+  }</tbody></table></div>`;
+
+  const turmas = NOMES_TURMAS.map((t) => {
+    const alunos = doRecorte(t), c = contarGrupos(alunos, ciclo), tot = c.A + c.B + c.C + c.D;
+    const freqs = alunos.map((a) => ponto(a, ciclo).freq).filter((f) => f != null);
+    const media = (ciclo_) => {
+      const v = alunos.map((a) => ponto(a, ciclo_).tri).filter((x) => x != null);
+      return v.length ? v.reduce((s, x) => s + x, 0) / v.length : null;
+    };
+    const tri = media(ciclo), triAnt = ciclo > 1 ? media(ciclo - 1) : null;
+    const segmentos = ["A", "B", "C", "D"].map((g) => {
+      const p = pct(c[g], tot);
+      return p ? `<span class="g-${g}" style="width:${(c[g] / tot) * 100}%" title="${g} · ${GRUPOS[g].nome}: ${c[g]} (${p}%)">${p >= 9 ? g + " " + p + "%" : ""}</span>` : "";
+    }).join("");
+    return `<div class="turma-linha"><div class="cab"><strong>${t}</strong>
+        <span class="meta">${alunos.length} alunos · freq. ${Math.round(freqs.reduce((s, f) => s + f, 0) / freqs.length)}% · TRI ${Math.round(tri)}${triAnt == null ? "" : " (" + sinal(Math.round(tri - triAnt)) + ")"}</span></div>
+      <div class="barra-grupos" role="img" aria-label="${t}: ${["A", "B", "C", "D"].map((g) => `${g} ${c[g]}`).join(", ")}">${segmentos}</div></div>`;
+  }).join("");
+  const legendaGrupos = `<div class="legenda">${["A", "B", "C", "D"].map((g) => `<span><i style="background:${COR_GRUPO[g]}"></i>${g} · ${GRUPOS[g].nome}</span>`).join("")}</div>`;
 
   return `
     <p class="meta">Ciclo ${CICLO_ATUAL} (${CICLOS[CICLO_ATUAL - 1]}) · Última importação: ${IMPORTACOES}</p>
@@ -426,24 +757,51 @@ function telaPainel() {
     <div class="resumo-alertas">${cards}</div>
     ${diretor ? "" : '<p class="meta" style="margin-top:8px">Perfil Membro: só contagens, sem nomes (RN013).</p>'}
 
-    <h2 class="secao">Frequência × desempenho</h2>
-    <div class="cartao">
-      <div class="chips" role="group" aria-label="Ciclo">${chips}</div>
-      <div class="alternar" style="margin-top:10px">
-        <span class="meta">Ciclo ${ciclo} · ${CICLOS[ciclo - 1]}</span>
+    <h2 class="secao">O curso em quatro grupos</h2>
+    <div class="chips" role="group" aria-label="Ciclo">${chipsCiclo}</div>
+    <div class="chips" role="group" aria-label="Turma">${chipsTurma}</div>
+    ${total === 0
+      ? `<div class="cartao" style="margin-top:10px"><p class="meta">No ciclo 1 ainda não há simulado anterior para comparar as notas, então ninguém entra nos grupos (RF015).</p></div>`
+      : `<p class="meta" style="margin:10px 0 6px">${turma || "Curso todo"} · ciclo ${ciclo} (${CICLOS[ciclo - 1]}) · ${total} alunos nos grupos${n.fora ? ` · ${n.fora} sem nota no ciclo` : ""}</p>
+    <div class="grupos">${cartaoGrupo("C")}${cartaoGrupo("A")}${cartaoGrupo("D")}${cartaoGrupo("B")}</div>
+    <div class="eixos-grupos"><span>← presença abaixo de 50%</span><span>presença de 50% ou mais →</span></div>
+    ${diretor ? '<p class="meta">Toque num grupo para ver quem está nele.</p>' : ""}
+
+    <div class="cartao" style="margin-top:12px">
+      <div class="alternar" style="margin-top:0">
+        <strong style="font-size:14px">Presença × notas</strong>
         ${diretor ? `<button class="link" data-alternar>${estado.painelTabela ? "Ver como gráfico" : "Ver como tabela"}</button>` : ""}
       </div>
-      ${diretor && estado.painelTabela ? tabelaAlunos : dispersao(ALUNOS, ciclo, diretor)}
-      ${diretor ? '<p class="meta">Toque num ponto para abrir a ficha do aluno.</p>' : ""}
-    </div>
+      ${diretor && estado.painelTabela ? tabela : plano({ pontos, rotulo: "Presença na sede versus notas nos simulados, os dois de −1 a +1" })}
+      <p class="meta">Cada ponto é um aluno.${turma ? ` Em cinza, as outras turmas.` : ""}${diretor && !estado.painelTabela ? " Toque num ponto para abrir a ficha." : ""} σ dos Δ no ciclo: ${Math.round(sigma)} pontos.</p>
+      ${COMO_LER}
+    </div>`}
 
-    <h2 class="secao">Situação das turmas no ciclo</h2>
-    <div class="cartao"><table class="tabela">
-      <thead><tr><th>Turma</th><th>Alunos</th><th>Freq.</th><th>TRI</th><th>Δ</th></tr></thead>
-      <tbody>${turmas}</tbody></table>
-      <p class="meta">Δ: variação da nota TRI média da turma em relação ao ciclo anterior.</p>
-    </div>
+    <h2 class="secao">Grupos por turma no ciclo ${ciclo}</h2>
+    <div class="cartao">${turmas}${legendaGrupos}
+      <p class="meta">Entre parênteses: variação da nota TRI média da turma em relação ao ciclo anterior.</p></div>
+
+    <h2 class="secao">Evolução do ${turma ? turma.toLowerCase() : "curso"} entre ciclos</h2>
+    <div class="cartao">${evolucaoGrupos(recorte)}${legendaGrupos}
+      <p class="meta">Parte de cada ciclo em cada grupo. O ciclo 1 não aparece: ainda não há simulado anterior para comparar.</p></div>
     ${RODAPE_RN012}`;
+}
+
+function telaGrupo(g) {
+  if (!ehDiretor()) return BLOQUEADO;
+  const ciclo = estado.ciclo, turma = estado.turma;
+  const alunos = doRecorte(turma).map((a) => ({ a, s: situacao(a, ciclo) })).filter(({ s }) => s.grupo === g)
+    .sort((p, q) => q.s.ip ** 2 + q.s.id ** 2 - (p.s.ip ** 2 + p.s.id ** 2));
+  const itens = alunos.map(({ a, s }) => `<li class="item" data-ir="#aluno/${a.matricula}">
+      <span class="avatar">${iniciais(a.nome)}</span>
+      <span class="corpo"><span class="nome">${esc(a.nome)}</span><br><span class="meta">${a.turma} · ${a.matricula}</span><br>
+      <span class="meta">Presença ${s.freq}% (${fmtIndice(s.ip)}) · Notas Δ ${sinal(s.delta)} pts (${fmtIndice(s.id)})</span></span>
+      <span class="seta">›</span></li>`).join("");
+  return `<div class="cartao g-${g}" style="border-left:5px solid var(--cor);background:var(--fundo-g)">
+      <div style="display:flex;gap:8px;align-items:center">${letra(g)}<strong style="color:var(--cor)">${GRUPOS[g].nome}</strong></div>
+      <p class="meta" style="margin:6px 0 0">${GRUPOS[g].presenca} · ${GRUPOS[g].nota}</p></div>
+    <p class="meta">${turma || "Curso todo"} · ciclo ${ciclo} · ${alunos.length} aluno(s), começando pelos mais distantes do centro do plano</p>
+    <div class="cartao"><ul class="lista">${itens || '<li class="meta">Ninguém neste grupo.</li>'}</ul></div>${RODAPE_RN012}`;
 }
 
 function telaAlertas(tipo) {
@@ -451,21 +809,22 @@ function telaAlertas(tipo) {
   const alunos = alertasDo(tipo);
   const itens = alunos.map((a) => {
     const al = a.alertas.find((x) => x.tipo === tipo);
+    const g = situacao(a, CICLO_ATUAL).grupo;
     return `<li class="item" data-ir="#aluno/${a.matricula}">
       <span class="avatar">${iniciais(a.nome)}</span>
-      <span class="corpo"><span class="nome">${esc(a.nome)}</span><br><span class="meta">${a.turma} · ${a.matricula}</span>
+      <span class="corpo"><span class="nome">${esc(a.nome)}</span> ${g ? letra(g) : ""}<br><span class="meta">${a.turma} · ${a.matricula}</span>
       <div class="motivo m-${tipo}" style="margin-top:6px">${esc(al.motivo)}</div></span>
       <span class="seta">›</span></li>`;
   }).join("");
-  return `<p class="meta">${alunos.length} aluno(s) · gerado em ${alunos[0]?.alertas[0].data ?? "—"}</p>
+  return `<p class="meta">${alunos.length} aluno(s) · gerado em ${DATA_ALERTA}</p>
     <div class="cartao"><ul class="lista">${itens || '<li class="meta">Nenhum alerta deste tipo.</li>'}</ul></div>${RODAPE_RN012}`;
 }
 
 function telaAluno(matricula) {
   if (!ehDiretor()) return BLOQUEADO;
   const a = aluno(matricula);
-  if (!a) return '<p>Aluno não encontrado.</p>';
-  const p = ponto(a, CICLO_ATUAL), d = delta(a, CICLO_ATUAL);
+  if (!a) return "<p>Aluno não encontrado.</p>";
+  const s = situacao(a, CICLO_ATUAL);
   const alertas = a.alertas.map((x) =>
     `<div class="motivo m-${x.tipo}"><strong>${TIPOS[x.tipo].rotulo}</strong>${esc(x.motivo)}<br><span class="meta">${x.data}</span></div>`).join("")
     || '<p class="meta">Nenhum alerta ativo.</p>';
@@ -477,6 +836,12 @@ function telaAluno(matricula) {
       <span class="selo ${i.desfecho ? "s-neutro" : "s-DESEMPENHO"}" style="margin-left:6px">${esc(i.desfecho || "Desfecho pendente")}</span><br>
       <span class="meta">Responsável: ${esc(i.responsavel)}</span><br>${esc(i.descricao)}</span></li>`).join("")
     || '<li class="meta">Nenhuma intervenção registrada.</li>';
+  const colegas = doRecorte(a.turma).map((x) => ponto(x, CICLO_ATUAL).tri).filter((t) => t != null);
+  const triTurma = Math.round(colegas.reduce((soma, t) => soma + t, 0) / colegas.length);
+  const trajeto = a.serie.map((p) => {
+    const t = situacao(a, p.ciclo);
+    return { ...t, rotulo: p.ciclo, titulo: `Ciclo ${p.ciclo}: grupo ${t.grupo ?? "—"} · presença ${t.freq ?? "—"}% · Δ ${t.delta == null ? "—" : sinal(t.delta)} pts` };
+  });
 
   return `
     <div class="cartao" style="display:flex;gap:12px;align-items:center">
@@ -489,13 +854,23 @@ function telaAluno(matricula) {
     <h2 class="secao">Alertas (${a.alertas.length})</h2>
     ${alertas}
 
-    <h2 class="secao">Ciclo ${CICLO_ATUAL}</h2>
+    <h2 class="secao">Ciclo ${CICLO_ATUAL} · ${seloGrupo(s.grupo)}</h2>
     <div class="numeros">
-      <div class="numero"><div class="v">${p.freq}%</div><div class="r">frequência</div></div>
-      <div class="numero"><div class="v">${p.tri}</div><div class="r">TRI médio</div></div>
-      <div class="numero"><div class="v">${d == null ? "—" : sinal(d)}</div><div class="r">Δ vs. própria média</div></div>
+      <div class="numero"><div class="v">${s.freq ?? "—"}%</div><div class="r">frequência na sede</div></div>
+      <div class="numero"><div class="v">${s.tri ?? "—"}</div><div class="r">TRI médio</div></div>
+      <div class="numero"><div class="v">${s.delta == null ? "—" : sinal(s.delta)}</div><div class="r">Δ vs. último simulado</div></div>
     </div>
-    <p class="meta">Redações entregues no ano: ${a.redacoes[0]} de ${a.redacoes[1]} · Média da turma no ciclo: TRI ${TURMAS.find((t) => t.nome === a.turma).tri} (RF013)</p>
+    <div class="indices">
+      <div class="indice"><div class="r">Índice de presença</div><div class="v">${fmtIndice(s.ip)}</div>${medidor(s.ip, s.grupo)}</div>
+      <div class="indice"><div class="r">Índice de notas</div><div class="v">${fmtIndice(s.id)}</div>${medidor(s.id, s.grupo)}</div>
+    </div>
+    <p class="meta">Redações entregues no ano: ${a.redacoes[0]} de ${a.redacoes[1]} · Média da turma no ciclo: TRI ${triTurma} (RF013)</p>
+
+    <h2 class="secao">Trajetória nos quatro grupos</h2>
+    <div class="cartao">
+      ${plano({ pontos: trajeto, trajetoria: true, rotulo: "Trajetória do aluno no plano presença × notas, ciclo a ciclo" })}
+      <p class="meta">Cada círculo é um ciclo (o número dentro dele). A seta aponta para o ciclo mais recente.</p>
+    </div>
 
     <h2 class="secao">Evolução entre ciclos</h2>
     <div class="cartao">
@@ -539,6 +914,7 @@ function render() {
   const [rota, arg] = location.hash.replace(/^#/, "").split("/");
   let titulo = "", html = "";
   if (rota === "alertas" && TIPOS[arg]) { titulo = TIPOS[arg].rotulo; html = telaAlertas(arg); }
+  else if (rota === "grupo" && GRUPOS[arg]) { titulo = `Grupo ${arg} · ${GRUPOS[arg].nome}`; html = telaGrupo(arg); }
   else if (rota === "aluno") { titulo = "Ficha do aluno"; html = telaAluno(arg); }
   else if (rota === "intervencao" && aluno(arg)) { titulo = "Registrar intervenção"; html = telaIntervencao(arg); }
   else { titulo = ""; html = telaPainel(); }
@@ -548,22 +924,28 @@ function render() {
     : esc(titulo);
   $voltar.hidden = inicio;
   $tela.innerHTML = html;
-  window.scrollTo(0, 0);
+}
+
+function renderMantendoRolagem() {
+  const y = window.scrollY;
+  render();
+  window.scrollTo(0, y);
 }
 
 document.addEventListener("click", (e) => {
-  const alvo = e.target.closest("[data-ir],[data-link],[data-aluno],[data-ciclo],[data-area],[data-alternar],[data-perfil]");
+  const alvo = e.target.closest("[data-ir],[data-link],[data-aluno],[data-ciclo],[data-turma],[data-area],[data-alternar],[data-perfil]");
   if (!alvo || alvo.disabled) return;
   if (alvo.dataset.perfil) {
     estado.perfil = alvo.dataset.perfil;
     document.querySelectorAll("[data-perfil]").forEach((b) => b.setAttribute("aria-pressed", String(b === alvo)));
-    render();
+    renderMantendoRolagem();
   } else if (alvo.dataset.ir) { e.preventDefault(); ir(alvo.dataset.ir); }
   else if (alvo.dataset.link) ir(alvo.dataset.link);
   else if (alvo.dataset.aluno) ir(`#aluno/${alvo.dataset.aluno}`);
-  else if (alvo.dataset.ciclo) { estado.ciclo = Number(alvo.dataset.ciclo); render(); }
-  else if (alvo.dataset.area) { estado.area = alvo.dataset.area; render(); }
-  else if ("alternar" in alvo.dataset) { estado.painelTabela = !estado.painelTabela; render(); }
+  else if (alvo.dataset.ciclo) { estado.ciclo = Number(alvo.dataset.ciclo); renderMantendoRolagem(); }
+  else if ("turma" in alvo.dataset) { estado.turma = alvo.dataset.turma; renderMantendoRolagem(); }
+  else if (alvo.dataset.area) { estado.area = alvo.dataset.area; renderMantendoRolagem(); }
+  else if ("alternar" in alvo.dataset) { estado.painelTabela = !estado.painelTabela; renderMantendoRolagem(); }
 });
 
 document.addEventListener("submit", (e) => {
@@ -582,7 +964,7 @@ document.addEventListener("submit", (e) => {
 });
 
 $voltar.addEventListener("click", () => (history.length > 1 ? history.back() : ir("#")));
-window.addEventListener("hashchange", render);
+window.addEventListener("hashchange", () => { render(); window.scrollTo(0, 0); });
 render();
 </script>
 </body>
