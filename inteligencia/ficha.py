@@ -6,6 +6,8 @@
 - Média da turma no ciclo (turma da data, RN011): só como referência, nunca para classificar
   o aluno (RN008).
 - Frequência por ciclo (RN001, RN002, RN004, RN005), redações, alertas e intervenções.
+- Índices de presença e de notas e o grupo de cada ciclo (`inteligencia.grupos`, #92), para a
+  trajetória do aluno no plano presença × notas.
 """
 
 from dataclasses import dataclass, field
@@ -13,7 +15,7 @@ from decimal import Decimal
 
 from core.models import Aluno, CicloCalendario, ResultadoSimulado
 
-from . import consultas
+from . import consultas, grupos
 from . import indicadores as ind
 from .painel import limiar_desempenho
 
@@ -32,6 +34,9 @@ class LinhaCiclo:
     media_turma: Decimal | None = None
     frequencia: ind.Frequencia = field(default_factory=ind.Frequencia)
     avaliado: bool = False
+    indice_presenca: float | None = None
+    indice_notas: float | None = None
+    grupo: str | None = None
 
 
 def montar(aluno: Aluno) -> dict:
@@ -65,11 +70,21 @@ def montar(aluno: Aluno) -> dict:
             linha.media_turma = ind.media(
                 dict(ind.serie(historicos.get(c.pk, []))).get(ciclo.pk) for c in mesma
             )
+            linha.indice_presenca = grupos.indice_presenca(linha.frequencia.taxa)
+            linha.indice_notas = grupos.indice_notas(
+                linha.delta_total.valor if linha.delta_total else None,
+                grupos.sigma_do_ciclo(historicos, ciclo.pk),
+            )
+            linha.grupo = grupos.grupo(linha.indice_presenca, linha.indice_notas)
         linhas.append(linha)
     inicio = min((c.data_inicio for c in ciclos), default=aluno.data_ingresso)
     fim = max((c.data_fim for c in ciclos), default=aluno.data_ingresso)
+    com_grupo = [linha for linha in linhas if linha.grupo]
     return {
         "linhas": linhas,
+        "com_grupo": com_grupo,
+        "grupo_atual": com_grupo[-1] if com_grupo else None,
+        "grupos": grupos.GRUPOS,
         "avaliadas": [linha for linha in linhas if linha.avaliado],
         "frequencia_ano": consultas.frequencias([aluno], inicio, fim)[aluno.pk],
         "redacoes": aluno.redacoes.order_by("-tema_semana"),

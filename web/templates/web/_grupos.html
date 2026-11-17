@@ -1,0 +1,65 @@
+{% load farol %}
+<h2 id="grupos">O curso em quatro grupos · ciclo {{ quadro.numero }}</h2>
+<form class="filtros" method="get" action="{% url 'web:inicio' %}#grupos">
+  <input type="hidden" name="ano" value="{{ ref.ano }}">
+  <label>Ciclo
+    <select name="ciclo">
+      {% for numero, ciclo in quadro.ciclos %}<option value="{{ ciclo.pk }}"{% if ciclo.pk == quadro.ciclo.pk %} selected{% endif %}>Ciclo {{ numero }} ({{ ciclo.data_inicio|date:"d/m" }} a {{ ciclo.data_fim|date:"d/m" }})</option>{% endfor %}
+    </select>
+  </label>
+  <label>Turma
+    <select name="turma">
+      <option value="">Curso todo</option>
+      {% for turma in quadro.turmas %}<option value="{{ turma.pk }}"{% if turma.pk == quadro.turma_id %} selected{% endif %}>{{ turma.nome }}</option>{% endfor %}
+    </select>
+  </label>
+  <button type="submit">Ver</button>
+</form>
+
+{% if quadro.total %}
+  <p class="suave">{{ quadro.recorte }} · {{ quadro.total }} aluno(s) nos grupos{% if quadro.contagem.fora %} · {{ quadro.contagem.fora }} fora deles (faltou ao simulado, primeiro simulado ou sem dia letivo no ciclo, RN009){% endif %}.{% if user.is_diretor %} Toque num grupo para ver quem está nele.{% endif %}</p>
+  <div class="grupos">
+    {% for cartao in quadro.cartoes %}
+      <div class="grupo grupo-{{ cartao.grupo.letra|lower }}">
+        {% if user.is_diretor %}<a href="{% url 'web:painel_grupo' cartao.grupo.letra %}?{{ quadro.query }}">{% endif %}
+          <div><span class="letra">{{ cartao.grupo.letra }}</span> <span class="nome-grupo">{{ cartao.grupo.nome }}</span></div>
+          <div class="valor">{{ cartao.n }} <small>aluno(s)</small></div>
+          <div class="parte">{{ cartao.parte }}% dos {{ quadro.total }} nos grupos</div>
+          <div class="criterio">{{ cartao.grupo.presenca }}<br>{{ cartao.grupo.notas }}</div>
+        {% if user.is_diretor %}</a>{% endif %}
+      </div>
+    {% endfor %}
+  </div>
+  <div class="eixos-grupos"><span>← presença abaixo de 50%</span><span>presença de 50% ou mais →</span></div>
+
+  <h3>Presença × notas</h3>
+  {{ quadro.plano }}
+  <p class="suave">Cada ponto é um aluno{% if quadro.turma_id %}; em cinza, as outras turmas{% endif %}.{% if user.is_diretor %} Toque num ponto para abrir a ficha.{% endif %}</p>
+  <details>
+    <summary>Como os índices são calculados</summary>
+    <ul>
+      <li><strong>Presença na sede:</strong> <code>2 · presença − 1</code>, a mesma conta do protótipo do PEI. A presença é a do ciclo, com falta justificada contando como presença (RN002): 0% vira −1, 50% vira 0 e 100% vira +1.</li>
+      <li><strong>Notas nos simulados:</strong> <code>limitar(z / 2, −1, +1)</code>, com <code>z = Δ / σ</code>. Δ é a nota TRI média do ciclo menos a do último simulado em que o aluno foi avaliado (RN008), e σ é o desvio-padrão dos Δ do curso no ciclo{% if quadro.sigma %} ({{ quadro.sigma|floatformat:1 }} pontos){% endif %}. ±1 equivale a dois desvios.</li>
+      <li>O zero de cada eixo separa os grupos. Não há limiar novo: os limiares de alerta (Regras) não mudam os grupos.</li>
+    </ul>
+  </details>
+
+  <h3>Grupos por turma no ciclo {{ quadro.numero }}</h3>
+  {% for turma in quadro.por_turma %}
+    <div class="turma-grupos">
+      <div class="cab"><strong>{{ turma.nome }}</strong><span class="suave">{{ turma.total }} aluno(s) nos grupos</span></div>
+      <div class="barra-grupos" role="img" aria-label="{{ turma.nome }}:{% for g, n, parte, largura in turma.segmentos %} {{ g }} {{ n }}{% if not forloop.last %},{% endif %}{% endfor %}">
+        {% for g, n, parte, largura in turma.segmentos %}<span class="grupo-{{ g|lower }}" style="width: {{ largura }}%" title="{{ g }}: {{ n }} ({{ parte }}%)">{% if parte >= 9 %}{{ g }} {{ parte }}%{% endif %}</span>{% endfor %}
+      </div>
+    </div>
+  {% endfor %}
+  <ul class="legenda">
+    {% for cartao in quadro.cartoes %}<li><span class="cor" style="background: var(--grupo-{{ cartao.grupo.letra|lower }})"></span>{{ cartao.grupo.letra }} · {{ cartao.grupo.nome }}</li>{% endfor %}
+  </ul>
+
+  <h3>Grupos ao longo do ano ({{ quadro.recorte }})</h3>
+  {{ quadro.grafico_distribuicao }}
+  <p class="suave">Parte de cada grupo em cada ciclo com simulado. Em cima, quem manteve ou subiu a nota (A e C); embaixo, quem caiu (B e D).</p>
+{% else %}
+  <p class="vazio">Ninguém entra nos grupos no ciclo {{ quadro.numero }}{% if quadro.turma_id %} nesta turma{% endif %}: no primeiro simulado ainda não há nota anterior para comparar, e quem faltou não é avaliado (RN009).</p>
+{% endif %}

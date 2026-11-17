@@ -20,6 +20,7 @@ app_name = "web"
 
 urlpatterns = [
     path("", painel.inicio, name="inicio"),
+    path("painel/grupos/<str:letra>/", painel.painel_grupo, name="painel_grupo"),
     path("painel/<slug:categoria>/", painel.painel_lista, name="painel_lista"),
     path("indicadores/", painel.indicadores, name="indicadores"),
     path("relatorios/auxilios/", auxilios.relatorio, name="auxilios"),

@@ -1,0 +1,25 @@
+{% extends "web/base.html" %}
+{% load farol %}
+{% block titulo %}Grupo {{ grupo.letra }} · FAROL{% endblock %}
+{% block conteudo %}
+  <p><a href="{% url 'web:inicio' %}?ano={{ ref.ano }}&amp;ciclo={{ ciclo.pk }}#grupos">← Painel</a></p>
+  <h1><span class="grupo-{{ grupo.letra|lower }}"><span class="letra">{{ grupo.letra }}</span></span> {{ grupo.nome }}</h1>
+  <p class="suave">{{ recorte }} · ciclo {{ numero }} ({{ ciclo.data_inicio|date:"d/m" }} a {{ ciclo.data_fim|date:"d/m/Y" }}) · {{ grupo.presenca }} · {{ grupo.notas }}. {{ alunos|length }} aluno(s), começando pelos mais distantes do centro do plano.</p>
+  <p class="indicativo">Lista indicativa, para a Direção acompanhar (RN012). O grupo só descreve a posição do aluno no ciclo. Não compartilhe fora da Direção (RN013).</p>
+  <div class="rolagem"><table>
+    <thead><tr><th>Aluno</th><th>Turma</th><th class="num">Presença</th><th class="num">Notas</th><th>Intervenção</th></tr></thead>
+    <tbody>
+    {% for p in alunos %}
+      <tr>
+        <td><a href="{% url 'web:ficha' p.aluno.matricula %}">{{ p.aluno.nome }}</a><br><span class="suave">{{ p.aluno.matricula }}</span></td>
+        <td>{{ p.turma }}</td>
+        <td class="num">{{ p.frequencia.percentual }}%<br><span class="suave">{{ p.presenca|indice }}</span></td>
+        <td class="num">Δ {{ p.delta|pontos }}<br><span class="suave">{{ p.notas|indice }}</span></td>
+        <td><a href="{% url 'web:intervencao_nova' p.aluno.matricula %}">Registrar intervenção</a></td>
+      </tr>
+    {% empty %}
+      <tr><td colspan="5" class="vazio">Ninguém neste grupo no ciclo.</td></tr>
+    {% endfor %}
+    </tbody>
+  </table></div>
+{% endblock %}
