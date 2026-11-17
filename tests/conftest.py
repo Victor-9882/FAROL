@@ -8,6 +8,13 @@ from core.models import Turma
 SENHA = "senha-sintetica-123"  # nosec: dado de teste, sem relação com contas reais
 
 
+@pytest.fixture(autouse=True)
+def _suite_por_http(settings):
+    """A suíte fala HTTP puro; sem isto, o padrão de produção responderia 301 em tudo.
+    Os testes do modo HTTPS ligam `SECURE_SSL_REDIRECT` por conta própria."""
+    settings.SECURE_SSL_REDIRECT = False
+
+
 @pytest.fixture
 def diretor(db):
     return get_user_model().objects.create_user(
