@@ -41,6 +41,13 @@ Quando um fato daqui mudar um requisito, ele precisa de uma Solicitação de Mud
 - Continuam **só do Diretor**: ficha longitudinal (RF011), alertas por aluno (RF010), intervenções (RF019, RF020) e todas as importações (RF003 a RF007).
 - Em código, rota com dado nominal ou escrita usa `@diretor_required` (`web/acesso.py`).
 
+### Alunos beneficiados por auxílios (RF021, SM #80)
+
+- **Origem do dado:** nenhum documento do CASD define de onde vem a lista de beneficiados, e ser beneficiado é dado socioeconômico (fora do escopo, FAROL_Contexto, "não fará"). Pela **SM #80, opção A**, o Diretor envia a lista a cada uso, numa planilha só com matrículas, e o sistema a usa só em memória. **Nunca** se guarda a lista, o tipo de auxílio ou o fato de o aluno ser beneficiado.
+- **Exceção à regra de pendências:** matrícula do arquivo sem aluno no cadastro **não** vira `PendenciaImportacao` (gravá-la seria gravar o fato socioeconômico); aparece só como contagem. Nada é auditado, porque nada é alterado.
+- **Premissa a confirmar com a Direção do CASD:** o termo de consentimento (RN014) cobre esse uso. O relatório não deve ser usado antes dessa confirmação.
+- **Relatório:** o bloco agregado (sem nome nem matrícula) é o que vai para a prestação de contas; a lista nominal é separada e só do Diretor (RN013).
+
 ## 4. Calendário
 
 *Confirmado pela equipe em 16/11/2026 (revisão do PR #63).*

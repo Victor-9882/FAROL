@@ -1,0 +1,23 @@
+{% autoescape off %}Resumo agregado do ciclo {{ resumo.numero }} ({{ resumo.inicio|date:"d/m/Y" }} a {{ resumo.fim|date:"d/m/Y" }}). Não há nomes nem matrículas de alunos neste e-mail.
+
+TOTAL ({{ resumo.total.alunos }} alunos)
+- Frequência: {{ resumo.total.frequencia }}
+- Participação nas redações: {{ resumo.total.participacao }}
+- Queda de desempenho: {{ resumo.total.queda }}
+- Estagnados: {{ resumo.total.estagnado }}
+- Em evolução: {{ resumo.total.evolucao }}
+- Sem avaliação no ciclo: {{ resumo.total.sem_avaliacao }}
+- Sem presença no ciclo: {{ resumo.total.sem_presenca }}
+- Alertas ativos de frequência: {{ resumo.alertas_frequencia }}
+- Alertas ativos de desempenho: {{ resumo.alertas_desempenho }}
+
+POR TURMA
+{% for t in resumo.turmas %}
+{{ t.turma }} ({{ t.alunos }} alunos)
+- Frequência: {{ t.frequencia }}; participação: {{ t.participacao }}
+- Queda: {{ t.queda }}; estagnados: {{ t.estagnado }}; em evolução: {{ t.evolucao }}; sem avaliação: {{ t.sem_avaliacao }}; sem presença: {{ t.sem_presenca }}
+{% endfor %}{% if site_url %}
+Painel: {{ site_url }}/
+{% endif %}
+Os alertas são indicativos: apoiam a decisão da Direção e não substituem a análise de cada caso.
+{% endautoescape %}

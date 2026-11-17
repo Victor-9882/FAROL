@@ -51,6 +51,17 @@ docker compose down               # para tudo; acrescente --volumes para apagar 
 
 O código é montado como volume, então alterações aparecem sem reconstruir a imagem. Só rode `--build` de novo quando mudar `pyproject.toml` ou `uv.lock`. No Linux, arquivos criados dentro do contêiner (por exemplo, por `makemigrations`) ficam com dono `root`. Prefira gerar migrações com o uv na própria máquina.
 
+### E-mail de fechamento do ciclo (RF017)
+
+Agende, depois de cada importação ou diariamente, primeiro `gerar_alertas` e em seguida `notificar_ciclo`. O comando envia o e-mail agregado (sem nomes de alunos) uma só vez por ciclo encerrado e com resultados de simulado; rodar de novo não reenvia.
+
+```bash
+docker compose exec app python manage.py gerar_alertas
+docker compose exec app python manage.py notificar_ciclo                 # --data AAAA-MM-DD; --reenviar força
+```
+
+Para conferir, abra o Mailpit em <http://localhost:8025>. Defina `SITE_URL` no `.env` para o e-mail trazer o link do painel.
+
 ## Rodar sem Docker
 
 1. Instale o uv: `curl -LsSf https://astral.sh/uv/install.sh | sh`
@@ -75,6 +86,8 @@ O código é montado como volume, então alterações aparecem sem reconstruir a
 
    A aplicação fica em <http://localhost:8000/saude/> e o admin em <http://localhost:8000/admin/>.
 
+Sem `DJANGO_DEBUG=True` ou `DJANGO_HTTPS=False`, o site redireciona para HTTPS e os cookies só valem por HTTPS (ver `docs/seguranca.md`, seção "Sessão, cookies e HTTPS").
+
 Sem PostgreSQL instalado, dá para usar SQLite só para experimentar: `DATABASE_URL=sqlite:///db.sqlite3`. A CI sempre roda com PostgreSQL.
 
 ## Acessos
@@ -98,5 +111,7 @@ Marque com `@pytest.mark.regras` os testes das regras RN001, RN002, RN005, RN008
 ## Contribuir
 
 Antes de mexer em regras de negócio, leia [docs/dominio-casd.md](docs/dominio-casd.md), que reúne os fatos confirmados sobre o CASD (matrícula, acesso a dados nominais, calendário). O [CLAUDE.md](CLAUDE.md) resume as regras do projeto para quem usa o Claude Code.
+
+As decisões de segurança (login único e acesso ao admin) estão em [docs/seguranca.md](docs/seguranca.md).
 
 O fluxo de branches, commits e PRs está em [docs/configuracao-github.md](docs/configuracao-github.md), seção 9. Resumo: uma branch curta por issue (`tipo/RFxxx-descricao`), commits em Conventional Commits citando o requisito, PR revisado por outro integrante e CI verde.

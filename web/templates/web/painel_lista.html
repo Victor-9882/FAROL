@@ -6,7 +6,7 @@
   <p class="indicativo">Lista indicativa, para a Direção acompanhar (RN012). Não compartilhe fora da Direção (RN013).</p>
   {% if alertas is not None %}
     <div class="rolagem"><table>
-      <thead><tr><th>Aluno</th><th>Turma</th><th>Motivo</th>{% if alertas.0.area or alertas.0.ciclo %}<th>Área</th>{% endif %}</tr></thead>
+      <thead><tr><th>Aluno</th><th>Turma</th><th>Motivo</th>{% if alertas.0.area or alertas.0.ciclo %}<th>Área</th>{% endif %}<th>Intervenção</th></tr></thead>
       <tbody>
       {% for a in alertas %}
         <tr>
@@ -14,9 +14,10 @@
           <td>{{ a.aluno.turma.nome }}</td>
           <td>{{ a.motivo }}</td>
           {% if alertas.0.area or alertas.0.ciclo %}<td>{{ a.get_area_display|default:"Média das áreas" }}</td>{% endif %}
+          <td><a href="{% url 'web:intervencao_nova' a.aluno.matricula %}?alerta={{ a.pk }}">Registrar intervenção</a></td>
         </tr>
       {% empty %}
-        <tr><td colspan="4" class="vazio">Nenhum alerta ativo neste período.</td></tr>
+        <tr><td colspan="5" class="vazio">Nenhum alerta ativo neste período.</td></tr>
       {% endfor %}
       </tbody>
     </table></div>

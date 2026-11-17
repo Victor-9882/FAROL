@@ -2,6 +2,7 @@
 
 import pytest
 from django.contrib.auth import get_user_model
+from django.http import HttpRequest
 from django.urls import reverse
 
 from core.auditoria import historico_de, registrar_alteracoes
@@ -154,7 +155,7 @@ def test_reativar_devolve_o_acesso(client, cliente_diretor, membro):
     membro.is_active = False
     membro.save()
     _editar(cliente_diretor, membro, is_active="on")
-    assert client.login(username="membro", password=SENHA) is True
+    assert client.login(request=HttpRequest(), username="membro", password=SENHA) is True
 
 
 @pytest.mark.parametrize("acao", ["rebaixar", "desativar"])
@@ -212,7 +213,7 @@ def test_link_de_senha_funciona_uma_unica_vez(client, cliente_diretor, membro):
         url_final, {"new_password1": "outra-senha-987x", "new_password2": "outra-senha-987x"}
     )
     assert resp.status_code == 302 and resp["Location"] == reverse("web:login")
-    assert client.login(username="membro", password="outra-senha-987x")
+    assert client.login(request=HttpRequest(), username="membro", password="outra-senha-987x")
     client.logout()
     assert not client.get(caminho, follow=True).context["validlink"]
 
@@ -314,7 +315,7 @@ def test_link_de_senha_so_por_post(cliente_diretor, membro):
 
 def test_gerar_link_invalida_a_senha_atual(client, cliente_diretor, membro):
     cliente_diretor.post(reverse("web:usuario_link_senha", args=[membro.pk]))
-    assert not client.login(username="membro", password=SENHA)
+    assert not client.login(request=HttpRequest(), username="membro", password=SENHA)
     reg = RegistroAlteracao.objects.get()
     assert reg.valor_novo == "link de definição gerado; senha anterior invalidada"
 

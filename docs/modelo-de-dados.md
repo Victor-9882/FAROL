@@ -48,6 +48,8 @@ Registradas na SM #41, para atualizar o DER, o Diagrama de Classes e o Relatóri
 12. **`inteligencia.RegraAlerta`**. Existe só no Diagrama de Classes, não no DER; guarda os limiares no banco (RF018).
 13. **Tabela `PendenciaImportacao`** (RN003, NF006). Guarda as linhas de frequência, simulado e redação que não casaram com um aluno pela matrícula, até o Diretor associá-las ou descartá-las.
 
+14. **Tabela `relatorios.NotificacaoCiclo`** (RF017). Registra que o e-mail de fechamento de um ciclo já foi enviado, para o envio ocorrer uma só vez por ciclo. O DER não tem onde guardar isso.
+
 ## Cadastro (RF006)
 
 - **Colunas aceitas** (CSV `;` ou `,`, ou XLSX, primeira aba; cabeçalho sem distinção de caixa, acento ou espaço): `matricula`, `nome` (ou `nome_completo`, `aluno`), `turma` e, **opcional**, `data_ingresso` (ou `ingresso`, `data_de_ingresso`): se a coluna faltar ou a célula vier vazia, o aluno novo ingressa em 1º de janeiro do ano letivo informado e, em aluno existente, o ingresso não é conferido (preenchida e diferente, vira divergência). Datas em `dd/mm/aaaa` ou `aaaa-mm-dd`. Limites: 5 MB e 5.000 linhas.
@@ -97,10 +99,18 @@ Em todas as três, uma pendência já associada vale para o aluno escolhido nas 
 ## Frequência: grade "Presença Anual" (RF003, #14)
 
 - **Arquivo:** a planilha `Controle de Presença AAAA.xlsx`, aba "Presença Anual" (o formulário aceita outro nome, como "Nivelamento"). O cabeçalho é a primeira das dez linhas iniciais com `Nome` e `Matrícula`; cada coluna cujo cabeçalho é uma data (ou `dd/mm`, completada com o ano letivo) é um dia. As outras colunas (`Turma`, `% Presença`, `Faltas`) são ignoradas, assim como linhas sem matrícula e sem nome com P, F ou J (título, totais, médias). Até 500 colunas.
-- **Códigos (RN001, RN002):** `P` grava presente; `F` grava falta sem justificativa; `J` grava falta justificada; `S` (sem aula) não grava. A grade manda: reimportar troca F por J ou P conforme a planilha, com `RegistroAlteracao` por campo (NF009).
+- **Códigos (RN001, RN002):** `P` grava presente; `F` grava falta sem justificativa; `J` grava falta justificada; `S` (sem aula) não grava. A grade manda: reimportar troca F por J ou P conforme a planilha, com `RegistroAlteracao` por campo (NF009). Exceção (RF008, #17, provisória até a equipe confirmar): `F` sobre uma falta já justificada no FAROL não a desfaz; vale como `J` e o resumo avisa quantas foram mantidas (`justificativas_mantidas`). `P` continua valendo sobre a justificada.
 - **Calendário (RN005) e janela do aluno (RN004):** só entram dias letivos de `dias_letivos` e entre o ingresso e a saída. Avisos por dia: P, F ou J em dia não letivo ("o calendário está atualizado?") e S em dia letivo. Avisos gerais: registros fora da janela do aluno, dias letivos sem coluna na grade, códigos desconhecidos, colunas de outro ano, nenhum período letivo e "calendário definido até dd/mm".
 - **Resumo:** conta linhas de aluno (novo, com alteração, sem alteração, pendência, inconsistente: aluno repetido) e, à parte, registros criados, alterados e iguais, presenças, faltas e justificadas. A sobreposição lista os registros já existentes no período da grade; confirmar a conferência é confirmar a substituição (NF008). Aluno ausente da grade não é tocado (NF007).
 - **Pendência:** uma por linha (`referencia = "grade"`), com os códigos da linha em `dados`; associar grava os P, F e J aplicáveis para o aluno.
+
+## Justificativa de falta (RF008, #17)
+
+- **Tela:** `alunos/<matricula>/faltas/` (`web/justificativas.py`), só do Diretor (RN013), com link na ficha do aluno. Lista as faltas (`RegistroFrequencia` com `presente=False`) em dia letivo (`core.calendario`, RN005) e dentro da janela do aluno (RN004), da mais recente à mais antiga.
+- **Regra (`ingestao/justificativas.py`):** registrar a justificativa é aprová-la (RN002: "aprovada pela Direção"); a falta justificada conta como presença. Só se justifica falta que já existe como registro: a tela não cria `RegistroFrequencia`. Retirar a justificativa é permitido. Presença, dia não letivo e dia fora da janela são recusados.
+- **Sem campo novo e sem migração:** usa `RegistroFrequencia.justificada`. O motivo não é guardado (sem texto livre); a trilha é o `RegistroAlteracao` (autor, data e valor anterior, NF009). Repetir a ação não audita.
+- **Alerta:** ao mudar, a view regenera o alerta de frequência da semana (RF014); o mesmo registro é desativado ou reativado (NF005, NF007).
+- **Importação da grade:** `F` não desfaz a justificativa (ver "Códigos"); a decisão é provisória (pergunta B1) e fica isolada em `ingestao.frequencia._mantem_justificada`.
 
 ## Simulados: relatório do P+ (RF004, #15)
 
@@ -156,6 +166,13 @@ Em todas as três, uma pendência já associada vale para o aluno escolhido nas 
   - frequência por ciclo, alertas (inclusive os desativados), intervenções, redações e histórico de turmas.
 - **Gráficos:** SVG gerado no servidor (`web/graficos.py`), sem JavaScript nem CDN; escala com a tela (NF001) e escapa todo texto.
 
+## Relatório de auxílios (RF021, #33, SM #80)
+
+- **Nenhum modelo novo e nada gravado (opção A da SM #80).** Não existe `Beneficio`, nem campo de auxílio no `Aluno`: ser beneficiado é dado socioeconômico e nunca é persistido (NF015, escopo "não fará").
+- **Fluxo (`relatorios/auxilios/`, só Diretor):** o arquivo (só a coluna matrícula, até 1 MB) é lido em memória, o relatório é calculado na hora (`relatorios.auxilios.calcular`) e descartado com a resposta. Sem `RegistroImportacao`, `PendenciaImportacao`, `RegistroAlteracao`, sessão, log ou arquivo em disco. Para o upload não passar por arquivo temporário, a view usa só o tratador de memória.
+- **Conteúdo:** compara beneficiados e demais alunos do ano, no período de referência do painel: número de alunos, frequência, participação nas redações, classificação no último ciclo, alunos com alerta ativo e intervenções por desfecho. O bloco agregado não traz nome nem matrícula; a lista nominal é separada.
+- **Matrículas:** validadas com `validar_matricula` (outro ano e fora do padrão são recusadas, só com número da linha e motivo). Matrícula sem aluno é só contada.
+
 ## Limiares das regras (RF018, #28)
 
 - **Tela `regras/`:** todos veem as regras ativas, com o limiar e a descrição em linguagem simples (NF021), e os limiares anteriores. Só o Diretor altera (`regras/<tipo>/`).
@@ -163,11 +180,27 @@ Em todas as três, uma pendência já associada vale para o aluno escolhido nas 
 - **Pré-visualização obrigatória:** a tela mostra quantos alunos seriam sinalizados com o limiar atual e com o novo. Na frequência, conta as semanas do ciclo de referência; no desempenho, o ciclo de referência (`alertas.simular_*`, sem gravar). "Salvar" só vale para o mesmo valor pré-visualizado.
 - **Troca (`regras.alterar_limiar`):** desativa a regra vigente e cria outra, com a descrição gerada a partir de `config/regras_padrao.yaml`. Os alertas antigos continuam apontando para o limiar que os gerou. Audita com `RegistroAlteracao`: `ativa` da regra antiga e `limiar` anterior e novo da nova, com autor e data (NF009). Em seguida, os alertas do ano são regerados (`alertas.gerar_ano`).
 
+## Notificação de ciclo (RF017, #32)
+
+- **`relatorios.NotificacaoCiclo`** (`HistoricoPreservado`, diferença 14 da SM #41): `ciclo` (um para um) e `destinatarios` (só a contagem). Não guarda endereços nem o corpo; `criado_em` é a data do envio. É a garantia de idempotência: um e-mail por ciclo.
+- **Comando `notificar_ciclo`** (`--data AAAA-MM-DD`, `--reenviar`): envia o e-mail do ciclo mais recente já fechado (`data_fim < hoje`) e com resultados de simulado. Não regera alertas: rode `gerar_alertas` antes. Ciclos antigos não notificados são ignorados.
+- **Conteúdo:** só números agregados e nomes de turma (total, frequência, participação, queda, estagnados, evolução, sem avaliação, sem presença, alertas ativos), sem nome nem matrícula (RN013, NF013). Texto puro, com o aviso de que alertas são indicativos (RN012). O link do painel só aparece com `SITE_URL` definido.
+- **Destinatários:** usuários ativos com e-mail, exceto superusuários (Diretor e Membro). Uma mensagem por destinatário. Se o SMTP falhar, o registro é desfeito; sem destinatários, nada é registrado.
+
 ## Histórico de intervenções (RF020, #31)
 
-- **Tela `intervencoes/`:** só do Diretor (RN013, NF013); o Membro recebe 403. Somente leitura: sem editar nem excluir (NF007). Não há migração.
+- **Tela `intervencoes/`:** só do Diretor (RN013, NF013); o Membro recebe 403. A lista não edita nada nem exclui (NF007), mas leva ao registro do desfecho (RF019, #30). Não há migração.
 - **Escopo:** todas as intervenções, de todos os anos e gestões, inclusive de alunos não ativos e de usuários revogados. Ordem `-data, -id`, 50 por página; os links de página preservam os filtros.
 - **Filtros (GET):** `aluno` (matrícula exata ou parte do nome; é busca de consulta, não associação, RN003), `tipo`, `desfecho` (inclui `PENDENTE`, o desfecho ainda em branco) e período `de`/`ate` sobre `Intervencao.data`, inclusivo nas duas pontas. `de` posterior a `ate` é erro de formulário e a lista fica vazia.
+
+## Registro de intervenções (RF019, #30)
+
+- **Rotas:** `alunos/<matrícula>/intervencoes/nova/` registra; `intervencoes/<id>/desfecho/` registra ou atualiza o desfecho. As duas são só do Diretor (RN013, NF013), no GET e no POST. Não há migração.
+- **Campos:** tipo, data (não futura), responsável (começa com o nome do usuário logado), descrição, alerta de origem opcional e desfecho opcional. `aluno` e `usuario` (quem registrou) nunca vêm do POST. Só os alertas do próprio aluno podem ser a origem, inclusive os que não valem mais; `?alerta=<id>` pré-seleciona o alerta e é ignorado se inválido ou de outro aluno.
+- **Alunos:** `INVALIDO` não recebe intervenção (404); `DESLIGADO` e `EVADIDO` recebem.
+- **Auditoria (NF009):** criar não gera `RegistroAlteracao`, pois autor e data já ficam em `usuario` e `criado_em`. Mudar o desfecho grava uma linha (campo `desfecho`, valores anterior e novo, autor), sem texto livre.
+- **Depois de criada:** só o desfecho muda; desfecho definido pode trocar de valor, mas não volta a pendente. Sem exclusão (NF007).
+- **RN012:** registrar não altera a situação do aluno nem o alerta; a tela avisa que a intervenção não é punição.
 
 ## Suposições a confirmar
 

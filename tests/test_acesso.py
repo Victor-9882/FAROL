@@ -151,7 +151,8 @@ def test_logout_encerra_a_sessao(client, diretor):
     assert client.get(reverse("web:inicio")).status_code == 302
 
 
-def test_logout_anonimo_nao_redireciona_para_o_login_com_next(client):
+def test_logout_anonimo_nao_redireciona_para_o_login_com_next(client, db):
+    # `db`: o axes limpa tentativas expiradas ao sair, mesmo sem usuário autenticado.
     resposta = client.post(reverse("web:logout"))
     assert resposta.status_code == 302
     assert resposta["Location"] == reverse("web:login")

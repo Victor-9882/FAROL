@@ -1,0 +1,33 @@
+{% extends "web/base.html" %}
+{% block titulo %}Faltas · FAROL{% endblock %}
+{% block conteudo %}
+  <p><a href="{% url 'web:ficha' aluno.matricula %}">← Ficha do aluno</a></p>
+  <h1>Faltas e justificativas</h1>
+  <p class="suave">{{ aluno.nome }} · matrícula {{ aluno.matricula }} · {{ aluno.turma.nome }} ({{ aluno.turma.ano }})</p>
+  <p class="indicativo">A justificativa aprovada conta como presença (RN002). Registrar aqui é aprovar; a alteração fica auditada (NF009). Só dias letivos dentro do período do aluno no curso aparecem.</p>
+
+  <div class="rolagem"><table>
+    <thead><tr><th>Data</th><th>Situação</th><th>Ação</th></tr></thead>
+    <tbody>
+    {% for f in faltas %}
+      <tr>
+        <td>{{ f.data|date:"d/m/Y" }}</td>
+        <td>{% if f.justificada %}Justificada{% else %}<span class="queda">Falta</span>{% endif %}</td>
+        <td>
+          <form method="post" action="{% url 'web:faltas' aluno.matricula %}">
+            {% csrf_token %}
+            <input type="hidden" name="registro" value="{{ f.pk }}">
+            {% if f.justificada %}
+              <button type="submit" name="acao" value="retirar">Retirar justificativa</button>
+            {% else %}
+              <button type="submit" name="acao" value="justificar">Justificar</button>
+            {% endif %}
+          </form>
+        </td>
+      </tr>
+    {% empty %}
+      <tr><td colspan="3" class="vazio">Nenhuma falta registrada.</td></tr>
+    {% endfor %}
+    </tbody>
+  </table></div>
+{% endblock %}

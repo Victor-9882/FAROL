@@ -1,11 +1,13 @@
 from django.urls import path
 
 from . import (
+    auxilios,
     cadastro,
     calendario,
     ficha,
     frequencia,
     intervencoes,
+    justificativas,
     painel,
     pendencias,
     redacoes,
@@ -20,7 +22,15 @@ urlpatterns = [
     path("", painel.inicio, name="inicio"),
     path("painel/<slug:categoria>/", painel.painel_lista, name="painel_lista"),
     path("indicadores/", painel.indicadores, name="indicadores"),
+    path("relatorios/auxilios/", auxilios.relatorio, name="auxilios"),
+    path(
+        "relatorios/auxilios/modelo/<slug:formato>/",
+        auxilios.modelo,
+        name="auxilios_modelo",
+    ),
     path("intervencoes/", intervencoes.historico, name="intervencoes"),
+    path("intervencoes/<int:pk>/desfecho/", intervencoes.desfecho, name="intervencao_desfecho"),
+    path("alunos/<str:matricula>/intervencoes/nova/", intervencoes.nova, name="intervencao_nova"),
     path("regras/", regras.lista, name="regras"),
     path("regras/<slug:tipo>/", regras.editar, name="regra_editar"),
     path("entrar/", views.Login.as_view(), name="login"),
@@ -36,6 +46,7 @@ urlpatterns = [
     path("alunos/importar/modelo.csv", cadastro.cadastro_modelo_csv, name="cadastro_modelo_csv"),
     path("alunos/<str:matricula>/editar/", cadastro.aluno_editar, name="aluno_editar"),
     path("alunos/<str:matricula>/ficha/", ficha.ficha, name="ficha"),
+    path("alunos/<str:matricula>/faltas/", justificativas.faltas, name="faltas"),
     path("importacoes/", cadastro.importacoes, name="importacoes"),
     path("pendencias/", pendencias.pendencias, name="pendencias"),
     path("frequencia/importar/", frequencia.frequencia_importar, name="frequencia_importar"),
