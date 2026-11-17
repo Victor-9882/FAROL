@@ -99,10 +99,18 @@ Em todas as três, uma pendência já associada vale para o aluno escolhido nas 
 ## Frequência: grade "Presença Anual" (RF003, #14)
 
 - **Arquivo:** a planilha `Controle de Presença AAAA.xlsx`, aba "Presença Anual" (o formulário aceita outro nome, como "Nivelamento"). O cabeçalho é a primeira das dez linhas iniciais com `Nome` e `Matrícula`; cada coluna cujo cabeçalho é uma data (ou `dd/mm`, completada com o ano letivo) é um dia. As outras colunas (`Turma`, `% Presença`, `Faltas`) são ignoradas, assim como linhas sem matrícula e sem nome com P, F ou J (título, totais, médias). Até 500 colunas.
-- **Códigos (RN001, RN002):** `P` grava presente; `F` grava falta sem justificativa; `J` grava falta justificada; `S` (sem aula) não grava. A grade manda: reimportar troca F por J ou P conforme a planilha, com `RegistroAlteracao` por campo (NF009).
+- **Códigos (RN001, RN002):** `P` grava presente; `F` grava falta sem justificativa; `J` grava falta justificada; `S` (sem aula) não grava. A grade manda: reimportar troca F por J ou P conforme a planilha, com `RegistroAlteracao` por campo (NF009). Exceção (RF008, #17, provisória até a equipe confirmar): `F` sobre uma falta já justificada no FAROL não a desfaz; vale como `J` e o resumo avisa quantas foram mantidas (`justificativas_mantidas`). `P` continua valendo sobre a justificada.
 - **Calendário (RN005) e janela do aluno (RN004):** só entram dias letivos de `dias_letivos` e entre o ingresso e a saída. Avisos por dia: P, F ou J em dia não letivo ("o calendário está atualizado?") e S em dia letivo. Avisos gerais: registros fora da janela do aluno, dias letivos sem coluna na grade, códigos desconhecidos, colunas de outro ano, nenhum período letivo e "calendário definido até dd/mm".
 - **Resumo:** conta linhas de aluno (novo, com alteração, sem alteração, pendência, inconsistente: aluno repetido) e, à parte, registros criados, alterados e iguais, presenças, faltas e justificadas. A sobreposição lista os registros já existentes no período da grade; confirmar a conferência é confirmar a substituição (NF008). Aluno ausente da grade não é tocado (NF007).
 - **Pendência:** uma por linha (`referencia = "grade"`), com os códigos da linha em `dados`; associar grava os P, F e J aplicáveis para o aluno.
+
+## Justificativa de falta (RF008, #17)
+
+- **Tela:** `alunos/<matricula>/faltas/` (`web/justificativas.py`), só do Diretor (RN013), com link na ficha do aluno. Lista as faltas (`RegistroFrequencia` com `presente=False`) em dia letivo (`core.calendario`, RN005) e dentro da janela do aluno (RN004), da mais recente à mais antiga.
+- **Regra (`ingestao/justificativas.py`):** registrar a justificativa é aprová-la (RN002: "aprovada pela Direção"); a falta justificada conta como presença. Só se justifica falta que já existe como registro: a tela não cria `RegistroFrequencia`. Retirar a justificativa é permitido. Presença, dia não letivo e dia fora da janela são recusados.
+- **Sem campo novo e sem migração:** usa `RegistroFrequencia.justificada`. O motivo não é guardado (sem texto livre); a trilha é o `RegistroAlteracao` (autor, data e valor anterior, NF009). Repetir a ação não audita.
+- **Alerta:** ao mudar, a view regenera o alerta de frequência da semana (RF014); o mesmo registro é desativado ou reativado (NF005, NF007).
+- **Importação da grade:** `F` não desfaz a justificativa (ver "Códigos"); a decisão é provisória (pergunta B1) e fica isolada em `ingestao.frequencia._mantem_justificada`.
 
 ## Simulados: relatório do P+ (RF004, #15)
 
