@@ -166,6 +166,13 @@ Em todas as três, uma pendência já associada vale para o aluno escolhido nas 
   - frequência por ciclo, alertas (inclusive os desativados), intervenções, redações e histórico de turmas.
 - **Gráficos:** SVG gerado no servidor (`web/graficos.py`), sem JavaScript nem CDN; escala com a tela (NF001) e escapa todo texto.
 
+## Relatório de auxílios (RF021, #33, SM #80)
+
+- **Nenhum modelo novo e nada gravado (opção A da SM #80).** Não existe `Beneficio`, nem campo de auxílio no `Aluno`: ser beneficiado é dado socioeconômico e nunca é persistido (NF015, escopo "não fará").
+- **Fluxo (`relatorios/auxilios/`, só Diretor):** o arquivo (só a coluna matrícula, até 1 MB) é lido em memória, o relatório é calculado na hora (`relatorios.auxilios.calcular`) e descartado com a resposta. Sem `RegistroImportacao`, `PendenciaImportacao`, `RegistroAlteracao`, sessão, log ou arquivo em disco. Para o upload não passar por arquivo temporário, a view usa só o tratador de memória.
+- **Conteúdo:** compara beneficiados e demais alunos do ano, no período de referência do painel: número de alunos, frequência, participação nas redações, classificação no último ciclo, alunos com alerta ativo e intervenções por desfecho. O bloco agregado não traz nome nem matrícula; a lista nominal é separada.
+- **Matrículas:** validadas com `validar_matricula` (outro ano e fora do padrão são recusadas, só com número da linha e motivo). Matrícula sem aluno é só contada.
+
 ## Limiares das regras (RF018, #28)
 
 - **Tela `regras/`:** todos veem as regras ativas, com o limiar e a descrição em linguagem simples (NF021), e os limiares anteriores. Só o Diretor altera (`regras/<tipo>/`).
