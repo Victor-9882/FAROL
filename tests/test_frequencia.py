@@ -30,6 +30,7 @@ from ingestao.cadastro import COLUNAS as COLUNAS_CADASTRO
 from ingestao.cadastro import importar_cadastro
 from ingestao.calendario import TIPOS
 from ingestao.frequencia import aplicar_pendencia, importar_frequencia, ler_grade
+from ingestao.justificativas import justificar
 from ingestao.leitura import ArquivoInvalidoError, ler_tabela
 from tests.conftest import importar_em_dois_passos
 
@@ -274,6 +275,58 @@ def test_reimportar_substitui_e_audita(diretor, um_aluno):
     assert _registros("S260001")[date(2026, 3, 5)] == "F"
     campos = RegistroAlteracao.objects.filter(modelo="core.registrofrequencia")
     assert sorted(campos.values_list("campo", flat=True)) == ["justificada", "presente"]
+
+
+# D5 (pergunta B1, provisória): o F da grade não desfaz a justificativa registrada no FAROL
+# (RF008). Para reverter, ver `ingestao.frequencia._mantem_justificada`.
+
+
+@pytest.mark.regras
+def test_reimportar_f_nao_desfaz_justificativa(diretor, um_aluno):
+    _importar(_grade([UM], _semana("S260001", "PFPPP")), diretor)
+    terca = date(2026, 3, 3)
+    registro = RegistroFrequencia.objects.get(aluno=um_aluno, data=terca)
+    assert justificar(registro, autor=diretor)
+    auditorias = RegistroAlteracao.objects.count()
+    resumo = _importar(_grade([UM], _semana("S260001", "PFPPP")), diretor)
+    assert _registros("S260001")[terca] == "J"
+    assert resumo.registros_alterados == 0
+    assert (resumo.justificadas, resumo.faltas, resumo.justificativas_mantidas) == (1, 0, 1)
+    assert any("1 falta(s) já justificada(s) no FAROL" in aviso for _, aviso in resumo.avisos)
+    assert RegistroAlteracao.objects.count() == auditorias
+
+
+def test_justificativa_mantida_entra_na_assinatura(diretor, um_aluno):
+    _importar(_grade([UM], _semana("S260001", "PFPPP")), diretor)
+    sem = _importar(_grade([UM], _semana("S260001", "PFPPP")), diretor, gravar=False)
+    justificar(RegistroFrequencia.objects.get(aluno=um_aluno, data=date(2026, 3, 3)), autor=diretor)
+    com = _importar(_grade([UM], _semana("S260001", "PFPPP")), diretor, gravar=False)
+    assert sem.assinatura() != com.assinatura()
+
+
+def test_reimportar_p_sobre_justificada_vale_a_grade(diretor, um_aluno):
+    _importar(_grade([UM], _semana("S260001", "PFPPP")), diretor)
+    terca = date(2026, 3, 3)
+    registro = RegistroFrequencia.objects.get(aluno=um_aluno, data=terca)
+    justificar(registro, autor=diretor)
+    resumo = _importar(_grade([UM], _semana("S260001", "PPPPP")), diretor)
+    assert _registros("S260001")[terca] == "P" and resumo.registros_alterados == 1
+    assert resumo.justificativas_mantidas == 0
+    ultima = RegistroAlteracao.objects.filter(objeto_id=str(registro.pk)).order_by("-pk")
+    assert {(a.campo, a.valor_anterior, a.valor_novo) for a in ultima[:2]} == {
+        ("presente", "False", "True"),
+        ("justificada", "True", "False"),
+    }
+
+
+def test_pendencia_associada_nao_desfaz_justificativa(diretor, um_aluno):
+    registro = RegistroFrequencia.objects.create(
+        aluno=um_aluno, data=SEG, presente=False, justificada=True
+    )
+    pendencia = PendenciaImportacao(dados={"codigos": {"2026-03-02": "F"}})
+    assert aplicar_pendencia(pendencia, um_aluno, diretor) == ""
+    registro.refresh_from_db()
+    assert registro.justificada is True and not RegistroAlteracao.objects.exists()
 
 
 # --- Pendências (RN003) --------------------------------------------------------------

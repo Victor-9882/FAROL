@@ -167,6 +167,7 @@ class ResumoFrequencia(ResumoImportacao):
     presencas: int = 0
     faltas: int = 0
     justificadas: int = 0
+    justificativas_mantidas: int = 0  # F da grade sobre falta já justificada no FAROL (D5)
     dias_letivos: int = 0
     inicio: date | None = None
     fim: date | None = None
@@ -180,6 +181,7 @@ class ResumoFrequencia(ResumoImportacao):
             self.presencas,
             self.faltas,
             self.justificadas,
+            self.justificativas_mantidas,
         ]
 
 
@@ -191,6 +193,13 @@ def _no_aluno(aluno, dia) -> bool:
 def _valores(codigo) -> tuple[bool, bool]:
     """(presente, justificada) de um código P, F ou J."""
     return codigo == "P", codigo == "J"
+
+
+def _mantem_justificada(codigo, registro) -> bool:
+    """D5 (pergunta B1, provisória): o F da grade não desfaz a justificativa já registrada no
+    FAROL (RF008); vale como J. Para a grade mandar sempre, devolva False aqui e troque o aviso
+    de `_avisar` por um que conte as justificadas que voltarão a falta."""
+    return codigo == "F" and registro is not None and registro.justificada
 
 
 def importar_frequencia(grade: Grade, *, ano: int, autor, gravar: bool):
@@ -263,11 +272,14 @@ def _apurar(resumo, linhas_de_aluno, letivos, autor):
             if not _no_aluno(aluno, dia):
                 fora += 1
                 continue
+            registro = existentes.get((aluno.pk, dia))
+            if _mantem_justificada(codigo, registro):
+                codigo = "J"
+                resumo.justificativas_mantidas += 1
             presente, justificada = _valores(codigo)
             resumo.presencas += presente
             resumo.justificadas += justificada
             resumo.faltas += not presente and not justificada
-            registro = existentes.get((aluno.pk, dia))
             if registro is None:
                 novos.append(
                     RegistroFrequencia(
@@ -335,6 +347,15 @@ def _avisar(resumo, grade, letivos, s_letivo, nao_letivo, fora):
                 f"para {s_letivo[dia]} aluno(s)",
             )
         )
+    if resumo.justificativas_mantidas:
+        resumo.avisos.append(
+            (
+                0,
+                f"{resumo.justificativas_mantidas} falta(s) já justificada(s) no FAROL aparecem "
+                "como F na grade e continuam justificadas; para retirar a justificativa, use a "
+                "tela de faltas do aluno",
+            )
+        )
     if fora:
         resumo.avisos.append(
             (0, f"{fora} registro(s) antes do ingresso ou depois da saída do aluno")
@@ -376,8 +397,8 @@ def aplicar_pendencia(pendencia, aluno, autor) -> str:
         dia = date.fromisoformat(iso)
         if codigo == "S" or not _no_aluno(aluno, dia) or not eh_dia_letivo(dia):
             continue
-        presente, justificada = _valores(codigo)
         registro = RegistroFrequencia.objects.filter(aluno=aluno, data=dia).first()
+        presente, justificada = _valores("J" if _mantem_justificada(codigo, registro) else codigo)
         if registro is None:
             RegistroFrequencia.objects.create(
                 aluno=aluno, data=dia, presente=presente, justificada=justificada

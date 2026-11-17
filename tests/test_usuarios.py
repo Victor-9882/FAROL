@@ -2,6 +2,7 @@
 
 import pytest
 from django.contrib.auth import get_user_model
+from django.http import HttpRequest
 from django.urls import reverse
 
 from core.auditoria import historico_de, registrar_alteracoes
@@ -154,7 +155,7 @@ def test_reativar_devolve_o_acesso(client, cliente_diretor, membro):
     membro.is_active = False
     membro.save()
     _editar(cliente_diretor, membro, is_active="on")
-    assert client.login(username="membro", password=SENHA) is True
+    assert client.login(request=HttpRequest(), username="membro", password=SENHA) is True
 
 
 @pytest.mark.parametrize("acao", ["rebaixar", "desativar"])
@@ -193,13 +194,17 @@ def test_diretor_que_se_rebaixa_vai_para_o_inicio_e_perde_a_tela(client, diretor
     assert client.get(reverse("web:usuarios")).status_code == 403
 
 
+def _gerar_link(cliente, alvo):
+    """Gera o link pelo fluxo real (POST, redirecionamento) e devolve o caminho."""
+    resp = cliente.post(reverse("web:usuario_link_senha", args=[alvo.pk]), follow=True)
+    link = resp.context["link"]
+    return "/" + link.split("://", 1)[1].split("/", 1)[1]
+
+
 def test_link_de_senha_funciona_uma_unica_vez(client, cliente_diretor, membro):
     membro.set_unusable_password()
     membro.save()
-    resp = cliente_diretor.post(reverse("web:usuario_link_senha", args=[membro.pk]))
-    assert resp.status_code == 200
-    caminho = resp.context["link"].split("://", 1)[1].split("/", 1)[1]
-    caminho = "/" + caminho
+    caminho = _gerar_link(cliente_diretor, membro)
     client.logout()
     resp = client.get(caminho, follow=True)
     assert resp.status_code == 200 and resp.context["validlink"]
@@ -208,9 +213,98 @@ def test_link_de_senha_funciona_uma_unica_vez(client, cliente_diretor, membro):
         url_final, {"new_password1": "outra-senha-987x", "new_password2": "outra-senha-987x"}
     )
     assert resp.status_code == 302 and resp["Location"] == reverse("web:login")
-    assert client.login(username="membro", password="outra-senha-987x")
+    assert client.login(request=HttpRequest(), username="membro", password="outra-senha-987x")
     client.logout()
     assert not client.get(caminho, follow=True).context["validlink"]
+
+
+def test_link_de_usuario_revogado_e_invalido_e_nao_grava_senha(client, cliente_diretor, membro):
+    caminho = _gerar_link(cliente_diretor, membro)
+    membro.refresh_from_db()
+    membro.is_active = False
+    membro.save()
+    client.logout()
+    resp = client.get(caminho, follow=True)
+    assert not resp.context["validlink"]
+    membro.refresh_from_db()
+    assert not membro.has_usable_password()
+
+
+def test_revogado_entre_abrir_e_enviar_nao_grava_senha(client, cliente_diretor, membro):
+    caminho = _gerar_link(cliente_diretor, membro)
+    client.logout()
+    resp = client.get(caminho, follow=True)
+    assert resp.context["validlink"]
+    url_final = resp.redirect_chain[-1][0]
+    membro.refresh_from_db()
+    membro.is_active = False
+    membro.save()
+    resp = client.post(
+        url_final, {"new_password1": "outra-senha-987x", "new_password2": "outra-senha-987x"}
+    )
+    assert resp.status_code == 200 and not resp.context["validlink"]
+    membro.refresh_from_db()
+    assert not membro.has_usable_password()
+
+
+def test_gerar_link_redireciona_e_mostra_uma_vez(cliente_diretor, membro):
+    url = reverse("web:usuario_link_senha", args=[membro.pk])
+    resp = cliente_diretor.post(url)
+    assert resp.status_code == 302 and resp["Location"] == reverse(
+        "web:usuario_editar", args=[membro.pk]
+    )
+    resp = cliente_diretor.get(resp["Location"])
+    assert resp.context["link"]
+    assert "Cache-Control" in resp and "no-store" in resp["Cache-Control"]
+    resp = cliente_diretor.get(reverse("web:usuario_editar", args=[membro.pk]))
+    assert resp.context["link"] is None
+
+
+def test_recarregar_nao_gera_outro_link_nem_registro(client, cliente_diretor, membro):
+    resp = cliente_diretor.post(reverse("web:usuario_link_senha", args=[membro.pk]))
+    editar = resp["Location"]
+    resp = cliente_diretor.get(editar)
+    link = resp.context["link"]
+    caminho = "/" + link.split("://", 1)[1].split("/", 1)[1]
+    cliente_diretor.get(editar)
+    assert RegistroAlteracao.objects.filter(campo="senha").count() == 1
+    client.logout()
+    assert client.get(caminho, follow=True).context["validlink"]
+
+
+def test_sessao_guarda_so_o_pk(cliente_diretor, membro):
+    cliente_diretor.post(reverse("web:usuario_link_senha", args=[membro.pk]))
+    assert cliente_diretor.session["link_senha_para"] == membro.pk
+    assert "token" not in str(dict(cliente_diretor.session)).lower()
+
+
+def test_link_nao_aparece_na_edicao_de_outro_usuario(cliente_diretor, membro, diretor):
+    outro = Usuario.objects.create_user("outro", "outro@exemplo.org", SENHA)
+    cliente_diretor.post(reverse("web:usuario_link_senha", args=[membro.pk]))
+    resp = cliente_diretor.get(reverse("web:usuario_editar", args=[outro.pk]))
+    assert resp.context["link"] is None
+
+
+def test_nao_gera_link_para_inativo(client, cliente_diretor, membro):
+    membro.is_active = False
+    membro.save()
+    resp = cliente_diretor.post(reverse("web:usuario_link_senha", args=[membro.pk]))
+    assert resp.status_code == 302
+    membro.refresh_from_db()
+    assert membro.check_password(SENHA)
+    assert RegistroAlteracao.objects.count() == 0
+    assert "link_senha_para" not in cliente_diretor.session
+
+
+def test_falha_no_registro_nao_invalida_a_senha(cliente_diretor, membro, monkeypatch):
+    def falha(*args, **kwargs):
+        raise RuntimeError("falha simulada")
+
+    monkeypatch.setattr(RegistroAlteracao.objects, "create", falha)
+    cliente_diretor.raise_request_exception = False
+    cliente_diretor.post(reverse("web:usuario_link_senha", args=[membro.pk]))
+    membro.refresh_from_db()
+    assert membro.check_password(SENHA)
 
 
 def test_link_de_senha_so_por_post(cliente_diretor, membro):
@@ -221,14 +315,13 @@ def test_link_de_senha_so_por_post(cliente_diretor, membro):
 
 def test_gerar_link_invalida_a_senha_atual(client, cliente_diretor, membro):
     cliente_diretor.post(reverse("web:usuario_link_senha", args=[membro.pk]))
-    assert not client.login(username="membro", password=SENHA)
+    assert not client.login(request=HttpRequest(), username="membro", password=SENHA)
     reg = RegistroAlteracao.objects.get()
     assert reg.valor_novo == "link de definição gerado; senha anterior invalidada"
 
 
 def test_registro_do_link_nao_guarda_senha_nem_token(cliente_diretor, membro):
-    resp = cliente_diretor.post(reverse("web:usuario_link_senha", args=[membro.pk]))
-    token = resp.context["link"].rstrip("/").rsplit("/", 1)[1]
+    token = _gerar_link(cliente_diretor, membro).rstrip("/").rsplit("/", 1)[1]
     reg = RegistroAlteracao.objects.get()
     assert (reg.campo, reg.valor_anterior, reg.valor_novo) == (
         "senha",
