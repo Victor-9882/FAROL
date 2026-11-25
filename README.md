@@ -96,6 +96,8 @@ O primeiro Diretor é criado no terminal: `uv run python manage.py createsuperus
 Dali em diante, o Diretor gere usuários em `/usuarios/`: cria, altera o perfil, revoga o acesso e gera um link de uso único para a pessoa definir a própria senha (a senha anterior deixa de valer).
 Toda alteração fica registrada (quem, quando, valor anterior). Superusuários são geridos só no admin.
 
+Para testar a aplicação pela interface, use o [guia de validação para a Direção do CASDvest](docs/guia-validacao-direcao.md), com planilhas fictícias e resultados esperados.
+
 ## Testes e estilo
 
 ```bash
